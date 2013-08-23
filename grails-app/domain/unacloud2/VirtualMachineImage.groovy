@@ -1,14 +1,18 @@
 package unacloud2
 
 class VirtualMachineImage {
-
-    boolean avaliable
-	boolean rewritable
+	
+	String name
+    //boolean avaliable
+	boolean isPublic
+	boolean customizable
 	int fixedDiskSize
 	String user
 	String password
-	OperatingSystem OS
+	String volume
+	OperatingSystem operatingSystem
 	
+	static hasMany = [files:File ]
 	
 	static constraints = {
     }

@@ -48,7 +48,7 @@ class UserController {
 	}
 	def add() {
 		def u= new User(username: params.username, name:(params.name+" "+params.lastname),
-			 userType: params.userType, password:params.password, )
+			 userType: params.userType, password:params.password )
 		
 		u.save()
 		redirect(controller:"user" ,action:"index")

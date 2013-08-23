@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-   <g:validateSession></g:validateSession>
+   <g:validateSession>
    <head>
    		<meta charset="utf-8">
    	
@@ -61,8 +61,7 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li><a class="nav-header" href="${createLink(uri: '/functionalities', absolute: true)}">Functionalities</a></li>
-              <li><a href="#">My Images</a></li>
-              <li><a href="#">My Virtual Machines</a></li>
+              <li><a href="${createLink(uri: '/virtualMachineImage/', absolute: true)}">My Images</a></li>
               <li><a href="#">My Clusters</a></li>
               <li><a href="#">My Deployments</a></li>
               <g:if test="${session.user.userType.equals("Administrator")}">
@@ -82,4 +81,5 @@
         </div>
         </div>
    </body>
+   </g:validateSession>
 </html>

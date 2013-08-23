@@ -9,11 +9,9 @@ class User {
 	Collection<Template> userTemplates
 	Collection<UserPermss> userPermss
 	
-	static hasMany = {images:VirtualMachineImage}
-	
+	static hasMany = [images: VirtualMachineImage]
 	
 	static constraints = {
     }
-	
-	
+		
 }
