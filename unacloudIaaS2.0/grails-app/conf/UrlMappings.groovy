@@ -7,6 +7,7 @@ class UrlMappings {
 			}
 		}
 		"/"(view:"/index")
+		"/test/"(controller:"test", action:"index")
 		"/functionalities"(view:"/functionalities")
 		"/administration"(view:"/administration")
 		"/user/create"(view:"user/create")
