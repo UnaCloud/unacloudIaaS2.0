@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite errors="0" failures="1" hostname="Asistente-PC" id="0" name="GroupControllerTests" package="unacloud2" tests="1" time="2.107" timestamp="2013-09-02T20:25:42">
+      <properties />
+
+      <testcase classname="unacloud2.GroupControllerTests" name="testSomething" time="1.977">
+          <failure message="junit.framework.AssertionFailedError: Implement me" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: junit.framework.AssertionFailedError: Implement me
+	at unacloud2.GroupControllerTests.testSomething(GroupControllerTests.groovy:13)
+</failure>
+
+      </testcase>
+
+      <system-out><![CDATA[--Output from testSomething--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testSomething--
+]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="1" hostname="Asistente-PC" id="1" name="HypervisorControllerTests" package="unacloud2" tests="1" time="0.577" timestamp="2013-09-02T20:25:44">
+      <properties />
+
+      <testcase classname="unacloud2.HypervisorControllerTests" name="testSomething" time="0.196">
+          <failure message="junit.framework.AssertionFailedError: Implement me" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: junit.framework.AssertionFailedError: Implement me
+	at unacloud2.HypervisorControllerTests.testSomething(HypervisorControllerTests.groovy:13)
+</failure>
+
+      </testcase>
+
+      <system-out><![CDATA[--Output from testSomething--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testSomething--
+]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="1" hostname="Asistente-PC" id="2" name="LaboratoryControllerTests" package="unacloud2" tests="1" time="0.518" timestamp="2013-09-02T20:25:44">
+      <properties />
+
+      <testcase classname="unacloud2.LaboratoryControllerTests" name="testSomething" time="0.344">
+          <failure message="junit.framework.AssertionFailedError: Implement me" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: junit.framework.AssertionFailedError: Implement me
+	at unacloud2.LaboratoryControllerTests.testSomething(LaboratoryControllerTests.groovy:13)
+</failure>
+
+      </testcase>
+
+      <system-out><![CDATA[--Output from testSomething--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testSomething--
+]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="1" hostname="Asistente-PC" id="3" name="OperatingSystemControllerTests" package="unacloud2" tests="1" time="0.59" timestamp="2013-09-02T20:25:45">
+      <properties />
+
+      <testcase classname="unacloud2.OperatingSystemControllerTests" name="testSomething" time="0.436">
+          <failure message="junit.framework.AssertionFailedError: Implement me" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: junit.framework.AssertionFailedError: Implement me
+	at unacloud2.OperatingSystemControllerTests.testSomething(OperatingSystemControllerTests.groovy:15)
+</failure>
+
+      </testcase>
+
+      <system-out><![CDATA[--Output from testSomething--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testSomething--
+]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="1" hostname="Asistente-PC" id="4" name="TestControllerTests" package="unacloud2" tests="1" time="0.488" timestamp="2013-09-02T20:25:46">
+      <properties />
+
+      <testcase classname="unacloud2.TestControllerTests" name="testSomething" time="0.302">
+          <failure message="junit.framework.AssertionFailedError: Implement me" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: junit.framework.AssertionFailedError: Implement me
+	at unacloud2.TestControllerTests.testSomething(TestControllerTests.groovy:17)
+</failure>
+
+      </testcase>
+
+      <system-out><![CDATA[--Output from testSomething--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testSomething--
+]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="1" hostname="Asistente-PC" id="5" name="VirtualMachineImageControllerTests" package="unacloud2" tests="1" time="0.552" timestamp="2013-09-02T20:25:46">
+      <properties />
+
+      <testcase classname="unacloud2.VirtualMachineImageControllerTests" name="testSomething" time="0.549">
+          <failure message="junit.framework.AssertionFailedError: Implement me" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: junit.framework.AssertionFailedError: Implement me
+	at unacloud2.VirtualMachineImageControllerTests.testSomething(VirtualMachineImageControllerTests.groovy:13)
+</failure>
+
+      </testcase>
+
+      <system-out><![CDATA[--Output from testSomething--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testSomething--
+]]></system-err>
+
+  </testsuite>
+</testsuites>
