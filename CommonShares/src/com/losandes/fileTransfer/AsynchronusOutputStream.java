@@ -45,7 +45,6 @@ public class AsynchronusOutputStream extends FilterOutputStream{
         super(os);
         buffers=new ArrayBlockingQueue<Buffer>(size,true);
         new Thread(){
-            private long  escrito=0;
             @Override
             public void run() {
                 while(!exception){
@@ -56,7 +55,6 @@ public class AsynchronusOutputStream extends FilterOutputStream{
                         try {
                             out.write(b.buffer, b.ini, b.length);
                             out.flush();
-                            escrito+=b.length;
                         } catch (IOException ex) {
                             ex.printStackTrace();
                             excep=ex;

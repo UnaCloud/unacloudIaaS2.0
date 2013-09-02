@@ -6,7 +6,6 @@ package com.losandes.dataChannel;
 
 import com.losandes.fileTransfer.Destination;
 import com.losandes.utils.ByteUtils;
-import com.losandes.utils.Constants;
 import com.losandes.utils.Log;
 import com.losandes.utils.VariableManager;
 import java.io.IOException;

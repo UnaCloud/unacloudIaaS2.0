@@ -34,9 +34,6 @@ Translated to C by Bonnie Toy 5/88
 */
 
 
-import java.net.*;
-import java.io.*;
-import java.util.*;
 
 
 public class Linpack {
@@ -68,7 +65,8 @@ public class Linpack {
     return (System.currentTimeMillis() - second_orig)/1000;
   }
 
-  public void run_benchmark() 
+  @SuppressWarnings("unused")
+public void run_benchmark() 
   {
     double mflops_result = 0.0;
     double residn_result = 0.0;

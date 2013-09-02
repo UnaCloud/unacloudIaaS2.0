@@ -21,7 +21,8 @@ public class VariableManager {
      * map used to save variables values. It is used to improve response time
      */
     private final static Map<String, Object> map = new TreeMap<String, Object>() {
-        @Override
+        private static final long serialVersionUID = 795845389075916030L;
+		@Override
         public Object put(String key, Object value) {
             key = key.replace("=", "");
             Object c = super.put(key, value);

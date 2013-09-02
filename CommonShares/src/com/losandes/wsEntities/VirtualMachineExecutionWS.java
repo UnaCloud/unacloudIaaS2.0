@@ -14,20 +14,13 @@ import java.util.Date;
  */
 public class VirtualMachineExecutionWS implements Serializable {
 
-    private static long serialVersionUID = 10010101L;
+	private static final long serialVersionUID = 6477669535131451902L;
 
     /**
      * @return the serialVersionUID
      */
     public static long getSerialVersionUID() {
         return serialVersionUID;
-    }
-
-    /**
-     * @param aSerialVersionUID the serialVersionUID to set
-     */
-    public static void setSerialVersionUID(long aSerialVersionUID) {
-        serialVersionUID = aSerialVersionUID;
     }
 
     private String virtualMachineExecutionCode;

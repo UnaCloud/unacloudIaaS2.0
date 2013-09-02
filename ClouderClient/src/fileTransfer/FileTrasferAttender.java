@@ -41,7 +41,7 @@ public class FileTrasferAttender {
             long idTransferencia = Long.parseLong(message[3]);
             String ruta = message[4];
             int nParticiones = Integer.parseInt(message[6]);
-            long tamaño = Long.parseLong(message[5]);
+            long tamano = Long.parseLong(message[5]);
             
             try{
                 boolean limpiarDirectorio=Boolean.parseBoolean(message[7]);
@@ -55,17 +55,16 @@ public class FileTrasferAttender {
 
             String[] destinos = Arrays.copyOfRange(message,8,message.length);
             try {
-                TransferenciaArchivo ta = new TransferenciaArchivo(destinos, idTransferencia, nParticiones, new File(ruta),tamaño);
+                TransferenciaArchivo ta = new TransferenciaArchivo(destinos, idTransferencia, nParticiones, new File(ruta),tamano);
                 System.out.println("Put transfer "+idTransferencia+" "+ta);
                 TreeDistributionChannelManager.transfers.put(idTransferencia, ta);
                 abc.writeUTF(OK_MESSAGE);
-            } catch (IOException ex) {
-                try {
+            } catch( ConnectionException | IOException ex){
+            	try {
                     abc.writeUTF(ERROR_MESSAGE);
                 } catch (ConnectionException ex1) {
                     Logger.getLogger(FileTrasferAttender.class.getName()).log(Level.SEVERE, null, ex1);
                 }
-            } catch( ConnectionException ex){
             }
         }
         else if(tipoTransferencia==PM_DELETE_FILE){

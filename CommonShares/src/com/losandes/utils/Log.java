@@ -5,16 +5,11 @@
 
 package com.losandes.utils;
 
-import java.util.Date;
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
-import java.io.BufferedReader;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.Socket;
-import static com.losandes.utils.Constants.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *

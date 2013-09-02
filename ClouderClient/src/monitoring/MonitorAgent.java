@@ -104,12 +104,13 @@ public class MonitorAgent extends SigarCommandBase {
              date=new Date();
              java.sql.Timestamp timest = new java.sql.Timestamp(date.getTime());
              UUID=java.util.UUID.randomUUID().toString();
-             com.sun.security.auth.module.NTSystem NTSystem = new com.sun.security.auth.module.NTSystem();
+             //com.sun.security.auth.module.NTSystem NTSystem = new com.sun.security.auth.module.NTSystem();
              //Evalua una sola CPU
              org.hyperic.sigar.CpuInfo[] infos = this.sigar.getCpuInfoList();
              org.hyperic.sigar.CpuInfo CPU1 = infos[0];
              //System.out.println("Iniciando Carga de Batch Inicial");
-             conexionBD.CargarBatchInicial(UUID,timest,monitor.network.getHostname(),NTSystem.getDomain(),monitor.operatingSystem.getOperatingSystemName(),
+             String domain="Corregir domain";
+             conexionBD.CargarBatchInicial(UUID,timest,monitor.network.getHostname(),domain,monitor.operatingSystem.getOperatingSystemName(),
                      monitor.operatingSystem.getOperatingSystemVersion(),monitor.operatingSystem.getOperatingSystemArchitect(),monitor.cpu.getCPUModel(),
                      monitor.cpu.getCPUVendor(),monitor.cpu.getCPUCores(),CPU1.getTotalSockets(),monitor.cpu.getCPUMhz(),CPU1.getCoresPerSocket(),
                      monitor.memory.getRAMMemorySize(),monitor.memory.getSwapMemorySize(),monitor.hardDisk.getHardDiskSpace(),monitor.hardDisk.getHardDiskFileSystem(),

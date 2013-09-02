@@ -32,9 +32,9 @@ public class TransferenciaArchivo {
     private ArrayList<Destination> destinos;
     boolean conected =false;
     boolean dtCnt =false;
-    final long tamaño;
+    final long tamano;
     File archivo;
-    public TransferenciaArchivo(String[] ipDestinos,long idTransferencia,int nParticiones,File archivo,long tamaño)throws IOException{
+    public TransferenciaArchivo(String[] ipDestinos,long idTransferencia,int nParticiones,File archivo,long tamano)throws IOException{
         this.archivo=archivo;
         Log.print("Abrir transfernecia "+idTransferencia+" "+archivo+" "+Arrays.toString(ipDestinos));
         this.idTransferencia=idTransferencia;
@@ -42,7 +42,7 @@ public class TransferenciaArchivo {
         archivo.getParentFile().mkdirs();
         archivo.delete();
         rafarchivo=new RandomAccessFile(archivo,"rw");
-        this.tamaño=tamaño;
+        this.tamano=tamano;
     }
 
     public void connect(Socket s,DataInputStream dis){
@@ -89,7 +89,7 @@ public class TransferenciaArchivo {
                 rafarchivo.write(buffer,0, e);
                 for(Destination d:destinos)d.sendBytes(buffer, e);
                 cent+=e;
-                if(cent==tamaño)break;
+                if(cent==tamano)break;
             }
             Log.print("ArchivoRecibido");
             rafarchivo.close();

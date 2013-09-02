@@ -6,7 +6,12 @@ package com.losandes.communication.security.utils;
  */
 public class ConnectionException extends Exception{
 
-    public ConnectionException(String msg) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4029595910497232247L;
+
+	public ConnectionException(String msg) {
         super(msg);
     }
 
