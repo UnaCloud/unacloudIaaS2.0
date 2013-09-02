@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="1" hostname="Asistente-PC" name="unacloud2.GroupControllerTests" tests="1" time="2.107" timestamp="2013-09-02T20:25:42">
+<testsuite errors="0" failures="1" hostname="Asistente-PC" name="unacloud2.GroupControllerTests" tests="1" time="2.474" timestamp="2013-09-02T22:58:13">
   <properties />
-  <testcase classname="unacloud2.GroupControllerTests" name="testSomething" time="1.977">
+  <testcase classname="unacloud2.GroupControllerTests" name="testSomething" time="2.244">
     <failure message="junit.framework.AssertionFailedError: Implement me" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: junit.framework.AssertionFailedError: Implement me
 	at unacloud2.GroupControllerTests.testSomething(GroupControllerTests.groovy:13)
 </failure>

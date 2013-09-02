@@ -13,15 +13,18 @@ public class MainTest {
 	public static void main(String[] args){
 		long l=System.currentTimeMillis();
 		try {
-			URL url=new URL("http://157.253.219.45:8080/test/");
+			//http://localhost:8080/Unacloud2/test?token=asd
+			URL url=new URL("http://localhost:8080/Unacloud2/test");
 			HttpURLConnection http = (HttpURLConnection)url.openConnection();
 			http.setRequestMethod("POST");
 			http.setDoOutput(true);
 			//http.setDoInput(false);
 			OutputStream os=http.getOutputStream();
 			PrintWriter pw=new PrintWriter(os);
-			pw.println("token=hola&mundo");
+			pw.println("token=holamundo");
+			pw.flush();
 			pw.close();
+			http.connect();
 			BufferedReader br=new BufferedReader(new InputStreamReader(http.getInputStream()));
 			for(String h;(h=br.readLine())!=null;)System.out.println(h);
 			http.disconnect();

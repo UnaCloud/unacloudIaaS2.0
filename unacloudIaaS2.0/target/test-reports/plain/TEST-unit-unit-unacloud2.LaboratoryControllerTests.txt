@@ -1,5 +1,5 @@
 Testsuite: unacloud2.LaboratoryControllerTests
-Tests run: 1, Failures: 1, Errors: 0, Time elapsed: 0,518 sec
+Tests run: 1, Failures: 1, Errors: 0, Time elapsed: 0,387 sec
 ------------- Standard Output ---------------
 --Output from testSomething--
 ------------- ---------------- ---------------
@@ -7,7 +7,7 @@ Tests run: 1, Failures: 1, Errors: 0, Time elapsed: 0,518 sec
 --Output from testSomething--
 ------------- ---------------- ---------------
 
-Testcase: testSomething took 0,343 sec
+Testcase: testSomething took 0,215 sec
 	FAILED
 junit.framework.AssertionFailedError: Implement me
 junit.framework.AssertionFailedError: junit.framework.AssertionFailedError: Implement me

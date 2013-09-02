@@ -15,8 +15,8 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:mysql://157.253.236.161/uciaas2dev?useUnicode=yes&characterEncoding=UTF-8"
+            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+            url = "jdbc:mysql://157.253.236.161:3306/uciaas2dev?useUnicode=yes&characterEncoding=UTF-8"
         }
     }
     test {
