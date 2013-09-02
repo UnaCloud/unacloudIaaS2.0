@@ -11,7 +11,6 @@ import fileTransfer.UnicastSender;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 import monitoring.PhysicalMachineMonitor;
 import physicalmachine.OperatingSystem;
