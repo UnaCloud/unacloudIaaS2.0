@@ -1,13 +1,16 @@
 package fileTransfer;
 
+import com.losandes.communication.messages.UnaCloudMessage;
 import com.losandes.communication.security.utils.AbstractCommunicator;
 import com.losandes.dataChannel.DataServerSocket;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+
 import com.losandes.utils.Log;
 
 /**
@@ -22,9 +25,9 @@ public class UnicastSender {
      * @param conexion The connection to be used to stablish the file retrieval process
      * @throws Exception If there is an error reading the requested folder
      */
-    public void attendFileRetrieveRequest(String[] solicitud, AbstractCommunicator conexion) throws Exception {
-        Log.print("Entró");
-        String ruta = solicitud[2],longid=solicitud[3];
+    public void attendFileRetrieveRequest(UnaCloudMessage solicitud, AbstractCommunicator conexion) throws Exception {
+        Log.print("Entro");
+        String ruta = solicitud.getString(2),longid=solicitud.getString(3);
         long id = Long.parseLong(longid);
         File archivosAEnviar[] = getFolderFiles(ruta);
         String[] respuesta = new String[2 + archivosAEnviar.length * 2];

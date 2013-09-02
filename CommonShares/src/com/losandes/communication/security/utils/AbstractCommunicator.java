@@ -6,7 +6,11 @@ import java.io.IOException;
 import java.net.Socket;
 import java.security.InvalidKeyException;
 import java.security.Key;
+
 import javax.crypto.Cipher;
+
+import com.losandes.communication.messages.UnaCloudMessage;
+
 import static com.losandes.utils.Constants.*;
 
 /**
@@ -104,8 +108,8 @@ public abstract class AbstractCommunicator {
      * @return An array containing the next message from the server
      * @throws ConnectionException Throws an exception if there is an error reading the message
      */
-    public String[] readUTFList()throws ConnectionException{
-         return readString().split(MESSAGE_SEPARATOR_TOKEN);
+    public UnaCloudMessage readUTFList()throws ConnectionException{
+         return new UnaCloudMessage(readString().split(MESSAGE_SEPARATOR_TOKEN));
     }
 
     /**

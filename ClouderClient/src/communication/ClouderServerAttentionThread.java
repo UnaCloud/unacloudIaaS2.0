@@ -1,14 +1,18 @@
 package communication;
 
+import com.losandes.communication.messages.UnaCloudMessage;
 import com.losandes.communication.security.utils.AbstractCommunicator;
+
 import configuration.VirtualMachineConfigurator;
 import execution.PersistentExecutionManager;
 import fileTransfer.FileTrasferAttender;
 import fileTransfer.UnicastSender;
+
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+
 import monitoring.PhysicalMachineMonitor;
 import physicalmachine.OperatingSystem;
 import static com.losandes.utils.Constants.*;
@@ -46,65 +50,63 @@ public class ClouderServerAttentionThread extends Thread {
         try {
             //receiving a operation request from the Clouder Server
             //spliting the message in a processable vector
-            String[] clouderServerRequestSplitted = communication.readUTFList();
-            System.out.println(Arrays.toString(clouderServerRequestSplitted));
+            UnaCloudMessage clouderServerRequest = communication.readUTFList();
+            System.out.println(clouderServerRequest);
+            
             //clouderClientOperationResult is the result variable for responding to Clouder Server
             // operationDomain = {VIRTUAL_MACHINE_OPERATION, PHYSICAL_MACHINE_OPERATION}
-            int operationDomain = 0;
-            if (clouderServerRequestSplitted[0] != null && !clouderServerRequestSplitted[0].equals("")) {
-                operationDomain = Integer.parseInt(clouderServerRequestSplitted[0]);
-            }
-            if (operationDomain != 0 && operationDomain < 7) {
-                if (operationDomain == VIRTUAL_MACHINE_OPERATION) {
-                    VIRTUAL_MACHINE_OPERATION(clouderServerRequestSplitted);
-                } else if (operationDomain == PHYSICAL_MACHINE_OPERATION) {
-                    PHYSICAL_MACHINE_OPERATION(clouderServerRequestSplitted, communication);
-                } else if (operationDomain == ARTHUR_OPERATION) {
-                    String rutaVMX = clouderServerRequestSplitted[1];
-                    String rutaMaquina = clouderServerRequestSplitted[2];
-                    String operacion = clouderServerRequestSplitted[3];
-                    if (new File(rutaVMX).exists() && new File(rutaMaquina).exists() && rutaMaquina.toLowerCase().endsWith("vmx") && rutaVMX.toLowerCase().endsWith("vmrun.exe") && operacion.length() < 10);
-                    rutaVMX = rutaVMX.replaceAll(";|\n|\r|$", "");
-                    rutaMaquina = rutaMaquina.replaceAll(";|\n|\r|$", "");
-                    String snapshot = clouderServerRequestSplitted[4];
-                    try {
-                        if (operacion.equals("fileWrite")) {
-                            Runtime.getRuntime().exec(DOUBLE_QUOTE + rutaVMX + DOUBLE_QUOTE + " -gu root -gp un14nd35c0m17 copyFileFromHostToGuest \"" + rutaMaquina + "\" \"E:/GRID/masterSGE/Aniversario.rar\"  /usr/local/Aniversario.rar").waitFor();
-                        } else if (operacion.contains("start")) {
-                            if (snapshot.equals("1")) {
-                                Runtime.getRuntime().exec("\"" + rutaVMX + "\" revertToSnapshot  \"" + rutaMaquina + "\" \"AutoProtect Snapshot/AutoProtect Snapshot/AutoProtect Snapshot/AutoProtect Snapshot/AutoProtect Snapshot\"").waitFor();
-                            }
-                            Process p = Runtime.getRuntime().exec("\"" + rutaVMX + "\" " + operacion + " \"" + rutaMaquina + "\" nogui");
-                        } else {
-                            Process p = Runtime.getRuntime().exec("\"" + rutaVMX + "\" " + operacion + " \"" + rutaMaquina + "\"");
+            switch (clouderServerRequest.getInteger(0)) {
+			case VIRTUAL_MACHINE_OPERATION:
+				VIRTUAL_MACHINE_OPERATION(clouderServerRequest);
+				break;
+			case PHYSICAL_MACHINE_OPERATION:
+				PHYSICAL_MACHINE_OPERATION(clouderServerRequest, communication);
+				break;
+			case ARTHUR_OPERATION:
+				String rutaVMX = clouderServerRequest.getString(1);
+                String rutaMaquina = clouderServerRequest.getString(2);
+                String operacion = clouderServerRequest.getString(3);
+                if (new File(rutaVMX).exists() && new File(rutaMaquina).exists() && rutaMaquina.toLowerCase().endsWith("vmx") && rutaVMX.toLowerCase().endsWith("vmrun.exe") && operacion.length() < 10);
+                rutaVMX = rutaVMX.replaceAll(";|\n|\r|$", "");
+                rutaMaquina = rutaMaquina.replaceAll(";|\n|\r|$", "");
+                String snapshot = clouderServerRequest.getString(4);
+                try {
+                    if (operacion.equals("fileWrite")) {
+                        Runtime.getRuntime().exec(DOUBLE_QUOTE + rutaVMX + DOUBLE_QUOTE + " -gu root -gp un14nd35c0m17 copyFileFromHostToGuest \"" + rutaMaquina + "\" \"E:/GRID/masterSGE/Aniversario.rar\"  /usr/local/Aniversario.rar").waitFor();
+                    } else if (operacion.contains("start")) {
+                        if (snapshot.equals("1")) {
+                            Runtime.getRuntime().exec("\"" + rutaVMX + "\" revertToSnapshot  \"" + rutaMaquina + "\" \"AutoProtect Snapshot/AutoProtect Snapshot/AutoProtect Snapshot/AutoProtect Snapshot/AutoProtect Snapshot\"").waitFor();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        Process p = Runtime.getRuntime().exec("\"" + rutaVMX + "\" " + operacion + " \"" + rutaMaquina + "\" nogui");
+                    } else {
+                        Process p = Runtime.getRuntime().exec("\"" + rutaVMX + "\" " + operacion + " \"" + rutaMaquina + "\"");
                     }
-                } else if (operationDomain == UPDATE_OPERATION) {
-                    clouderAttention.close();
-                    try {
-                        Runtime.getRuntime().exec("javaw -jar ClientUpdater.jar 6");
-                    } catch (Exception e) {
-                    }
-                    System.exit(6);
-                } else if (operationDomain == STOP_CLIENT) {
-                    clouderAttention.close();
-                    System.exit(0);
-                } else if (operationDomain == VIRTUAL_MACHINE_CONFIGURATION) {
-                    new VirtualMachineConfigurator().attendConfigurationRequest(clouderServerRequestSplitted, communication);
-                } else if (operationDomain == GET_VERSION) {
-                    communication.writeUTF("1.30");
-                } else {
-                    //TODO manejar error
-                    //System.err.println(clouderClientOperationResult);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } else {
-                // clouderClientOperationResult += ERROR_MESSAGE + "The Clouder Server request is null or an invalid number: " + operationDomain;
-                // System.err.println(clouderClientOperationResult);
-            }
+                break;
+			case UPDATE_OPERATION:
+				clouderAttention.close();
+                try {
+                    Runtime.getRuntime().exec("javaw -jar ClientUpdater.jar 6");
+                } catch (Exception e) {
+                }
+                System.exit(6);
+                break;
+			case STOP_CLIENT:
+				clouderAttention.close();
+                System.exit(0);
+				break;
+			case VIRTUAL_MACHINE_CONFIGURATION:
+				new VirtualMachineConfigurator().attendConfigurationRequest(clouderServerRequest, communication);
+			case GET_VERSION:
+				communication.writeUTF("1.30");
+			default:
+				//clouderClientOperationResult += ERROR_MESSAGE + "The Clouder Server request is null or an invalid number: " + operationDomain;
+                //System.err.println(clouderClientOperationResult);
+				break;
+			}
             communication.close();
-
         } catch (Exception ex) {
             ex.printStackTrace();
             // System.err.println("The communication process with Clouder Server failed in ClouderServerAttentionThread: " + ex.getMessage());
@@ -115,79 +117,68 @@ public class ClouderServerAttentionThread extends Thread {
      * Method responsible for attending requests for operations over virtual machines
      * @param clouderServerRequestSplitted Server request
      */
-    private void VIRTUAL_MACHINE_OPERATION(String[] clouderServerRequestSplitted) {
+    private void VIRTUAL_MACHINE_OPERATION(UnaCloudMessage message) {
         String clouderClientOperationResult = "";
         System.out.println("The Clouder Server operation request is virtual machine type");
         //virtualOperationType = {VM_TURN_ON, VM_TURN_OFF, VM_RESTART, VM_STATE}
-        int virtualOperationType = -1;
-        if (clouderServerRequestSplitted[1] != null && !clouderServerRequestSplitted[1].equals("")) {
-            virtualOperationType = Integer.parseInt(clouderServerRequestSplitted[1]);
-        }
-        String virtualMachineCode = null;
-        if (clouderServerRequestSplitted[2] != null && !clouderServerRequestSplitted[2].equals("")) {
-            virtualMachineCode = clouderServerRequestSplitted[2];
-        }
-        if (virtualMachineCode == null || virtualOperationType == -1) {
-            //TODO reportar el error.
-            return;
-            //return "ERROR";
+        int virtualOperationType = message.getInteger(1);
+        String virtualMachineCode = message.getString(2);
+        if (virtualMachineCode == null || virtualOperationType == -1){
+        	return;
         }
         switch (virtualOperationType) {
             case VM_TURN_ON:
                 System.out.println("The Clouder Server operation request is VM_TURN_ON");
                 clouderClientOperationResult = "VM_TURN_ON";
-                if (clouderServerRequestSplitted.length > 11) {
-                    int hypervisorName = Integer.parseInt(clouderServerRequestSplitted[3]);
-                    int vmCores = Integer.parseInt(clouderServerRequestSplitted[4]);
-                    int vmMemory = Integer.parseInt(clouderServerRequestSplitted[5]);
-                    String vmPath = clouderServerRequestSplitted[6];
-                    String hypervisorPath = clouderServerRequestSplitted[7];
-                    int executionTime = Integer.parseInt(clouderServerRequestSplitted[8]);
-                    String vmIP = clouderServerRequestSplitted[9];
-                    String persistent = clouderServerRequestSplitted[10];
-                    String checkPoint = clouderServerRequestSplitted[11];
-                    String snapshotRoute = clouderServerRequestSplitted[12];
+                if (message.length > 11) {
+                    int hypervisorName = message.getInteger(3);
+                    int vmCores = message.getInteger(4);
+                    int vmMemory = message.getInteger(5);
+                    String vmPath = message.getString(6);
+                    String hypervisorPath = message.getString(7);
+                    int executionTime = message.getInteger(8);
+                    String vmIP = message.getString(9);
+                    String persistent = message.getString(10);
+                    String checkPoint = message.getString(11);
+                    String snapshotRoute = message.getString(12);
                     PersistentExecutionManager.addExecution(vmPath, hypervisorPath, vmIP, virtualMachineCode, executionTime, vmCores, vmMemory, hypervisorName, persistent, checkPoint);
                 } else {
-                    clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + clouderServerRequestSplitted.length;
+                    clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + message.length;
                 }
                 break;
-
             case VM_TURN_OFF:
                 clouderClientOperationResult = "VM_TURN_OFF";
-                if (clouderServerRequestSplitted.length > 5) {
-                    int hypervisorName = Integer.parseInt(clouderServerRequestSplitted[3]);
-                    String vmPath = clouderServerRequestSplitted[4];
-                    String hypervisorPath = clouderServerRequestSplitted[5];
+                if (message.length > 5) {
+                    int hypervisorName = message.getInteger(3);
+                    String vmPath = message.getString(4);
+                    String hypervisorPath = message.getString(5);
                     PersistentExecutionManager.removeExecution(hypervisorName, vmPath, hypervisorPath, virtualMachineCode);
                 } else {
-                    clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + clouderServerRequestSplitted.length;
+                    clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + message.length;
                 }
                 break;
-
             case VM_RESTART:
                 clouderClientOperationResult = "VM_RESTART";
-                if (clouderServerRequestSplitted.length > 5) {
-                    int hypervisorName = Integer.parseInt(clouderServerRequestSplitted[3]);
-                    String vmPath = clouderServerRequestSplitted[4];
-                    String hypervisorPath = clouderServerRequestSplitted[5];
+                if (message.length > 5) {
+                    int hypervisorName = message.getInteger(3);
+                    String vmPath = message.getString(4);
+                    String hypervisorPath = message.getString(5);
                     PersistentExecutionManager.restartMachine(hypervisorName, vmPath, hypervisorPath, virtualMachineCode);
                 } else {
-                    clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + clouderServerRequestSplitted.length;
+                    clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + message.length;
                 }
                 break;
             case VM_TIME:
                 System.out.println("The Clouder Server operation request is VM_TIME");
                 clouderClientOperationResult = "VM_TIME";
-                if (clouderServerRequestSplitted.length > 4) {
-                    int executionTime = Integer.parseInt(clouderServerRequestSplitted[3]);
-                    String id = clouderServerRequestSplitted[4];
+                if (message.length > 4) {
+                    int executionTime = message.getInteger(3);
+                    String id = message.getString(4);
                     PersistentExecutionManager.extendsVMTime(id, executionTime);
                 } else {
-                    clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + clouderServerRequestSplitted.length;
+                    clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + message.length;
                 }
                 break;
-
             default:
                 clouderClientOperationResult += ERROR_MESSAGE + "The Clouder Server virtual machine operation request is invalid: " + virtualOperationType;
             //System.err.println(clouderClientOperationResult);
@@ -199,40 +190,30 @@ public class ClouderServerAttentionThread extends Thread {
      * @param clouderServerRequestSplitted Server request
      * @param con Channel used to interact with UnaCloud server to recieve or send additional data
      */
-    private void PHYSICAL_MACHINE_OPERATION(String[] clouderServerRequestSplitted, AbstractCommunicator con) {
+    private void PHYSICAL_MACHINE_OPERATION(UnaCloudMessage message, AbstractCommunicator con) {
         String clouderClientOperationResult = "";
         System.out.println("The Clouder Server operation request is physical machine type");
         // clouderServerRequestSplitted[1] = {PM_TURN_OFF, PM_RESTART, PM_LOGOUT, PM_MONITOR}
-        int physicalOperationType = 0;
-        if (clouderServerRequestSplitted.length > 1) {
-            if (clouderServerRequestSplitted[1] != null && !clouderServerRequestSplitted[1].equals("")) {
-                physicalOperationType = Integer.parseInt(clouderServerRequestSplitted[1]);
-            }
-        }
-        OperatingSystem opeSys = null;
+        int physicalOperationType = message.getInteger(1);
         switch (physicalOperationType) {
             case PM_TURN_OFF:
                 clouderClientOperationResult = "PM_TURN_OFF";
-                opeSys = new OperatingSystem();
-                clouderClientOperationResult += MESSAGE_SEPARATOR_TOKEN + opeSys.turnOff();
+                clouderClientOperationResult += MESSAGE_SEPARATOR_TOKEN + new OperatingSystem().turnOff();
                 break;
-
             case PM_RESTART:
                 clouderClientOperationResult = "PM_RESTART";
-                opeSys = new OperatingSystem();
-                clouderClientOperationResult += MESSAGE_SEPARATOR_TOKEN + opeSys.restart();
+                clouderClientOperationResult += MESSAGE_SEPARATOR_TOKEN + new OperatingSystem().restart();
                 break;
             case PM_LOGOUT:
                 clouderClientOperationResult = "PM_LOGOUT";
-                opeSys = new OperatingSystem();
-                clouderClientOperationResult += MESSAGE_SEPARATOR_TOKEN + opeSys.logOut();
+                clouderClientOperationResult += MESSAGE_SEPARATOR_TOKEN + new OperatingSystem().logOut();
                 break;
             case PM_WRITE_FILE:
                 clouderClientOperationResult = "PM_WRITE_FILE";
-                FileTrasferAttender.attendFileOperation(clouderServerRequestSplitted, con);
+                FileTrasferAttender.attendFileOperation(message, con);
                 break;
             case PM_TURN_ON:
-                String[] macs = Arrays.copyOfRange(clouderServerRequestSplitted, 2, clouderServerRequestSplitted.length);
+                String[] macs = message.getStrings(2,message.length);
                 for (String mac : macs) {
                     try {
                         Runtime.getRuntime().exec("wol.exe " + mac.replace(":",""));
@@ -241,38 +222,36 @@ public class ClouderServerAttentionThread extends Thread {
                 }
                 break;
             case PM_MONITOR:
-                if (clouderServerRequestSplitted.length > 2) {
-                    String op = clouderServerRequestSplitted[2];
+                if (message.length > 2) {
+                    String op = message.getString(2);
                     if (op.equals("STOP")) {
                         PhysicalMachineMonitor.stop();
-                    } else if (op.equals("START") && clouderServerRequestSplitted.length > 4) {
-                        int fm = Integer.parseInt(clouderServerRequestSplitted[3]);
-                        int fr = Integer.parseInt(clouderServerRequestSplitted[4]);
+                    } else if (op.equals("START") && message.length > 4) {
+                        int fm = message.getInteger(3);
+                        int fr = message.getInteger(4);
                         PhysicalMachineMonitor.start(fm, fr);
                     }
-
                 }
                 break;
             case PM_RETRIEVE_FOLDER:
                 System.out.println("The Clouder Server operation request is MACHINE_RESTORE");
                 clouderClientOperationResult = "MACHINE_RESTORE";
-                if (clouderServerRequestSplitted.length > 2) {
-                    System.out.println("Atendiendo MAchineStore");
+                if (message.length > 2) {
+                    System.out.println("Atendiendo MachineStore");
                     try{
-                        new UnicastSender().attendFileRetrieveRequest(clouderServerRequestSplitted, communication);
+                        new UnicastSender().attendFileRetrieveRequest(message, communication);
                     }catch(Exception e){
                         clouderClientOperationResult += ERROR_MESSAGE + " "+e.getMessage();
                     }
                     
                 } else {
-                    clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + clouderServerRequestSplitted.length;
+                    clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + message.length;
                 }
-
                 break;
             default:
                 clouderClientOperationResult += ERROR_MESSAGE + "The Clouder Server physical machine operation request is invalid: " + physicalOperationType;
             //System.err.println(clouderClientOperationResult);
         }
     }
-}//end of ClouderServerAttentionThread
+}
 

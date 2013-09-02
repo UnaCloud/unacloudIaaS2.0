@@ -1,10 +1,13 @@
 package physicalmachine;
 
+import com.losandes.communication.messages.UnaCloudMessage;
 import com.losandes.communication.security.utils.AbstractCommunicator;
 import com.losandes.communication.security.utils.ConnectionException;
 import com.losandes.communication.security.SecureSocket;
 import com.losandes.utils.VariableManager;
+
 import java.io.PrintWriter;
+
 import static com.losandes.utils.Constants.*;
 
 /**
@@ -33,10 +36,10 @@ public class PhysicalMachineState {
                 ac.writeUTF(clientMessage);
                 if(readReportParameters){
                     System.out.println("ac respuesta");
-                    String[] parameters = ac.readUTFList();
+                    UnaCloudMessage message=ac.readUTFList();
                     System.out.println("respuesta recibida");
-                    REPORT_DELAY=Integer.parseInt(parameters[0]);
-                    REPORT_FAIL_LIMIT=Integer.parseInt(parameters[1]);
+                    REPORT_DELAY=message.getInteger(0);
+                    REPORT_FAIL_LIMIT=message.getInteger(1);
                 }
                 ac.close();
             } else {

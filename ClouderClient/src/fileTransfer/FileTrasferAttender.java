@@ -5,14 +5,18 @@
 
 package fileTransfer;
 
+import com.losandes.communication.messages.UnaCloudMessage;
 import com.losandes.communication.security.utils.AbstractCommunicator;
 import com.losandes.communication.security.utils.ConnectionException;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import com.losandes.utils.Log;
+
 import static com.losandes.utils.Constants.*;
 /**
  * Class responsible for attend file operations requests over the physical machine file system
@@ -25,8 +29,8 @@ public class FileTrasferAttender {
      * @param message The request to be attended
      * @param abc The abstract communicator used to attend the request
      */
-    public static void attendFileOperation(String[] message,AbstractCommunicator abc){
-        Log.print(Arrays.toString(message));
+    public static void attendFileOperation(UnaCloudMessage message,AbstractCommunicator abc){
+        Log.print(message.toString());
         //message[0] = PHYSICAL MACHINE OPERATION
         //message[1] = PM_WRITE_FILE
         //message[2] = TIPO TRANSFERENCIA
@@ -36,15 +40,14 @@ public class FileTrasferAttender {
         //message[6] = NUMERO PARTICIONES
         //message[7] = limpiar directorio
         //message[8...] = IP Destinos
-        int tipoTransferencia = Integer.parseInt(message[2]);
+        int tipoTransferencia = message.getInteger(2);
         if(tipoTransferencia==PM_WRITE_FILE_TREE_DISB){
-            long idTransferencia = Long.parseLong(message[3]);
-            String ruta = message[4];
-            int nParticiones = Integer.parseInt(message[6]);
-            long tamano = Long.parseLong(message[5]);
-            
+            long idTransferencia = message.getLong(3);
+            String ruta = message.getString(4);
+            long tamano = message.getLong(5);
+            int nParticiones = message.getInteger(6);
             try{
-                boolean limpiarDirectorio=Boolean.parseBoolean(message[7]);
+                boolean limpiarDirectorio=Boolean.parseBoolean(message.getString(7));
                 if(limpiarDirectorio){
                     for(File f:new File(ruta).getParentFile().listFiles()){
                         if(f.getName().endsWith(".vmx")||f.getName().endsWith(".vmdk")||f.getName().endsWith(".vmxf")||f.getName().endsWith(".vmsn")||f.getName().endsWith(".vmsd")||f.getName().endsWith(".nvram"))f.delete();
@@ -53,7 +56,7 @@ public class FileTrasferAttender {
             }catch(Exception ex){
             }
 
-            String[] destinos = Arrays.copyOfRange(message,8,message.length);
+            String[] destinos = message.getStrings(8,message.length);
             try {
                 TransferenciaArchivo ta = new TransferenciaArchivo(destinos, idTransferencia, nParticiones, new File(ruta),tamano);
                 System.out.println("Put transfer "+idTransferencia+" "+ta);
@@ -68,7 +71,7 @@ public class FileTrasferAttender {
             }
         }
         else if(tipoTransferencia==PM_DELETE_FILE){
-            String ruta = message[3];
+            String ruta = message.getString(3);
             File c = new File(ruta);
             if(ruta.endsWith("lck")){
                 deleteFolder(c.getParentFile());
