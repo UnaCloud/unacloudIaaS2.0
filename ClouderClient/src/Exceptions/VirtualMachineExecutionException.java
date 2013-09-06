@@ -8,6 +8,7 @@ public class VirtualMachineExecutionException extends Exception{
 
     public VirtualMachineExecutionException(String message){
         super(message);
+        
     }
 
 

@@ -4,7 +4,6 @@ import com.losandes.communication.security.utils.AbstractCommunicator;
 import com.losandes.communication.security.utils.ConnectionException;
 import com.losandes.communication.security.SecureSocket;
 import com.losandes.utils.VariableManager;
-import java.lang.annotation.Inherited;
 import static com.losandes.utils.Constants.*;
 
 /**
