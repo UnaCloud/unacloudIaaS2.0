@@ -6,7 +6,8 @@ class UrlMappings {
 				// apply constraints here
 			}
 		}
-		"/"(view:"/index")
+		"/"(controller:"user", action:"home")
+		"/login"(view:"/index")
 		"/test/"(controller:"test", action:"index")
 		"/functionalities"(view:"/functionalities")
 		"/administration"(view:"/administration")
