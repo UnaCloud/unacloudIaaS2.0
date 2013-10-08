@@ -5,7 +5,8 @@
    </head>
    <body>
    	<div class="hero-unit span9" >
-   		<g:form name="clusterDeploy" class="form-horizontal" controller="cluster" action="deploy" >
+   		<g:form name="clusterDeploy" class="form-horizontal" controller="deployment" action="deploy" >
+   			<input type= hidden name="id" value="${cluster.id}" >
    			<div id="remaining" class="alert alert-info">
    			<table>
    			<tr>
@@ -24,7 +25,7 @@
    			</table>
    			</div>
    			<br>
-   			<g:each in="${images}" status="i" var="image" >
+   			<g:each in="${cluster.getOrderedImages()}" status="i" var="image" >
    			<div class="control-group">
    			<h5>${image.name }</h5>
     		</div>
@@ -42,16 +43,16 @@
     		</tr>
     		<tr>
     		<td>
-    		<input name="instacesFor${image.id }" class="input-small" type="text">
+    		<input name="instances" class="input-small" type="text">
 	    	</td>
     		<td>
-    		<select name="RAMFor${image.id }" class="input-small" > 
-    			<option>
+    		<select name="RAM" class="input-small" > 
+    			<option value="${512}">${512}</option>
     		</select> 
     		</td>
     		<td>
-    		<select name="coresFor${image.id }" class="input-small" > 
-    			<option>
+    		<select name="cores" class="input-small" > 
+    			<option value="${1}">${1}</option>
     		</select>
     		</td>
     		</tr>
@@ -74,11 +75,19 @@
     		</table>
     		<br>
     		</g:each>
+    		<div class="control-group">
+   			<label class="control-label">Execution Time</label>
+	    		<div class="controls">
+	    			<select name="time" class="input-small">
+    					<option value="${60*60*1000}">1 hour</option>
+    					<option value="${2*60*60*1000}">2 hours</option>
+    				</select>
+	    		</div>
+    		</div>
     		
     		<div class="controls">
   			<g:submitButton name="deploy" class="btn" value="Deploy" />
    			</div>
-   			
    		</g:form>
    	</div>
    </body>

@@ -6,14 +6,14 @@ class ClusterController {
 		if(!session.user){
 			
 			flash.message="You must log in first"
-			redirect(uri:"/", absolute:true)
+			redirect(uri:"/login", absolute:true)
 			return false
 		}
 		session.user.refresh()
 	}
 	
     def index() { 
-		[clusters: session.user.userClusters]
+		[clusters: session.user.getOrderedClusters()]
 	}
 	
 	def newCluster(){
@@ -40,10 +40,24 @@ class ClusterController {
 	}
 	
 	def deployOptions(){
-		[images: Cluster.get(params.id).getOrderedImages(), limit: 20, limitHA: 2]	
+		[cluster: Cluster.get(params.id),limit: 20, limitHA: 2]	
 	}
 	
-	def deploy(){
-		
+	def delete(){
+		def cluster = Cluster.get(params.id)
+		if (!cluster) {
+		redirect(action:"index")
+		}
+		else if (cluster.isDeployed()) {
+		redirect(action:"index")
+		}
+		else{
+			def user= User.get(session.user.id)
+			user.userClusters.remove(cluster)
+			user.save()
+			cluster.delete()
+			redirect(action:"index")
+		}
 	}
+		
 }

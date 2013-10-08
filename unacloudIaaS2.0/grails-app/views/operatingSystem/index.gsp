@@ -21,10 +21,10 @@
  <g:each in="${oss}" status="i" var="os">   
   <tr>
     <td>
-      ${os.id }
+      <small>${os.id }</small>
     </td>
     <td>
-      ${os.name }
+      <small>${os.name }</small>
     </td>
     <td >
     <div class="row-fluid text-center">

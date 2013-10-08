@@ -14,4 +14,14 @@ class Cluster {
 		ArrayList <VirtualMachineImage> array = new ArrayList(images).sort(c)
 		return array
 	}
+	
+	def isDeployed(){
+		boolean isDeployed=false
+		def deployments= Deployment.findByStatusNotEqual(Deployment.FINISHED)
+		deployments.each (){
+			if(it.cluster.cluster==this)
+				isDeployed=true
+		}
+		return isDeployed
+	}
 }

@@ -23,16 +23,19 @@
  <g:each in="${images}" status="i" var="image">   
   <tr>
     <td>
-      ${image.name}
+      <small>${image.name}</small>
     </td>
     <td>
-   		${image.volume }
+   		<small>${image.volume }</small>
     </td>
     
     <td >
     <div class="row-fluid text-center">
-    <g:link action="edit" params="${[name: image.name]}"><i class="icon-pencil"></i></g:link>
-    <g:link action="delete" params="${[name: image.name]}"><i class="icon-remove-sign"></i></g:link>
+    <g:link action="edit" params="${[id: image.id]}"><i class="icon-pencil"></i></g:link>
+    <g:link action="delete" params="${[id: image.id]}"><i class="icon-remove-sign"></i></g:link>
+    <g:if test="${image.customizable }">
+    <g:link controller="deployment" action="deployImage" params="${[id: image.id]}"><i class="icon-play"></i></g:link>
+    </g:if>
     </div>
     </td>
   </tr>

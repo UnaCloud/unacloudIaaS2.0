@@ -6,7 +6,7 @@
 <body>
 <div class="span9">
 	<div class="hero-unit">
-        <h3 class="text-center">Functionalities </h3>
+        <h3 class="text-center">New Image </h3>
         <br>
         <div class="row-fluid text-center">
         	<div class="span4">

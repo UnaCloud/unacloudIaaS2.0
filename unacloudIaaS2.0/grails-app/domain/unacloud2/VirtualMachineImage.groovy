@@ -11,9 +11,24 @@ class VirtualMachineImage {
 	String password
 	String volume
 	OperatingSystem operatingSystem
+	String accessProtocol
 	
 	static hasMany = [files:File ]
 	
 	static constraints = {
+		
+	
     }
+	
+	def isDeployed(){
+		boolean isDeployed=false
+		def deployments= Deployment.findByStatusNotEqual(Deployment.FINISHED)
+		deployments.each (){
+			it.cluster.images.each(){
+				if(it.image==this)
+					isDeployed=true
+			}
+		}
+		return isDeployed
+	}
 }

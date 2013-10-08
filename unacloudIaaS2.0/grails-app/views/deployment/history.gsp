@@ -1,0 +1,62 @@
+<html>
+   <head>
+      <meta name="layout" content="main"/>
+      <r:require modules="bootstrap"/>
+   </head>
+<body>
+
+<div class="hero-unit span9">
+
+<table class="table table-bordered table-condensed text-center" style="background:white">
+  <g:if test="${session.user.userType == 'Administrator'}">
+  <tr class="info">
+  	<td class="info" colspan="7">
+  	<input type="checkbox" name="View All" ><small>&nbsp;View All</small>
+  	</td>
+  </tr>
+  </g:if>
+  
+  <tr>
+  <th>Cluster</th>
+  <th>Images</th>
+  <th>Instances</th>
+  <th>Start Time</th>
+  <th>Stop Time</th>
+  </tr>
+ 
+ <g:each in="${deployments}" status="i" var="deployment">   
+  <tr>
+    <td rowspan="${deployment.cluster.images.size()}">
+      <small><g:if test="${deployment.cluster.cluster!=null }">
+      ${deployment.cluster.cluster.name}
+      </g:if>
+      <g:if test="${deployment.cluster.cluster==null }">
+      None
+      </g:if>
+      </small>
+    </td>
+    
+    <g:each in="${deployment.cluster.images}" status="j" var="image">
+   		
+    <td>
+   	<small>${image.image.name }</small>		    
+    </td>
+    <td>
+    <small>${image.virtualMachines.size() }</small>
+    </td>
+    <td>
+    <small>${deployment.startTime }</small>
+    </td>
+    <td>
+    <small>${deployment.stopTime }</small>
+    </td>
+    </tr>
+  	<tr>
+    
+    </g:each>
+  
+  </tr>
+</g:each>
+</table>
+</div>
+</body>

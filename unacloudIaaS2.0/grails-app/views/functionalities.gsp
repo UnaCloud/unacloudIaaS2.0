@@ -18,7 +18,7 @@
         		<p>My Clusters</p>
         	</div>
             <div class="span4">
-        		<g:link controller="cluster" action="index"><g:img file="deployment.png"/></g:link>
+        		<g:link controller="deployment" action="index"><g:img file="deployment.png"/></g:link>
         		<p>My Deployments</p>
         	</div>
         </div>

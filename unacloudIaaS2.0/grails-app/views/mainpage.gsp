@@ -6,7 +6,7 @@
 <body>
 <div class="span9">
 	<div class="hero-unit">
-        <h3 class="text-center">Welcome to UnaCloud </h3>
+        <h3 class="text-center"> Welcome ${session.user.name.split(" ")[0]} </h3>
         <br>
         
         <div class="row-fluid text-center">

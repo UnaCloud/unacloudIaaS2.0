@@ -16,7 +16,6 @@
   <th>Username</th>
   <th>User Role</th>
   <th>Images</th>
-  <th>Virtual Machines</th>
   <th>Clusters</th>
   <th>Options</th>
   </tr>
@@ -24,19 +23,25 @@
  <g:each in="${users}" status="i" var="user">   
   <tr>
     <td>
-      ${user.username }
+      <small>${user.username }</small>
     </td>
     <td>
-      ${user.userType }
+      <small>${user.userType }</small>
     </td>
     <td>
-      None
+    <ul>
+    <g:each in="${user.getOrderedImages()}" var="image">
+      <li><small>${image.name }</small></li>
+    </g:each>
+    </ul>
     </td>
     <td>
-      None
-    </td>
-    <td>
-      None
+    <ul>
+    <g:each in="${user.getOrderedClusters()}" var="cluster">
+      <li><small>${cluster.name }</small></li>
+    </g:each>
+    </ul>
+    
     </td>
     <td >
     <div class="row-fluid text-center">

@@ -8,8 +8,8 @@
 <table class="table table-bordered table-condensed text-center" style="background:white">
   <tr class="info">
   	<td class="info" colspan="6">
-  	<a href="${createLink(uri: '/group/create', absolute: true)}"><i class="icon-plus-sign"></i></a>
-  	</td>
+  	 <g:link action="addInstancesOptions" params="${[id: image.id]}"><i class="icon-plus-sign"></i></g:link>
+    </td>
   </tr>
   	
   <tr>
@@ -21,12 +21,12 @@
  <g:each in="${groups}" status="i" var="group">   
   <tr>
     <td>
-      ${group.name}
+     <small>${group.name}</small> 
     </td>
     <td>
     <ul>
       <g:each in="${group.users}" status="j" var="user">
-      	<li>${user.username }</li>
+      	<li><small>${user.username }</small></li>
       </g:each>
     </ul>
     </td>

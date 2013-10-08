@@ -5,7 +5,7 @@ class UserController {
 	def beforeInterceptor = [action:{
 		if(!session.user){
 			flash.message="You must log in first"
-			redirect(uri:"/", absolute:true)
+			redirect(uri:"/login", absolute:true)
 			return false
 		}
 		else if(!(session.user.userType.equals("Administrator"))){
@@ -98,7 +98,7 @@ class UserController {
 		else
 		{
 			flash.message="Wrong username or password"
-			redirect(uri: '/', absolute: true)	
+			redirect(uri: '/login', absolute: true)	
 		}
 	}
 	

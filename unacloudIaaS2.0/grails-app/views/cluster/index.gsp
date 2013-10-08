@@ -11,6 +11,7 @@
   <tr class="info">
   	<td class="info" colspan="6">
   	<a href="${createLink(uri:"/cluster/newCluster", absolute: true)}"><i class="icon-plus-sign"></i></a>
+  	<a href="${createLink(action:"history", controller:"deployment")}"><i class="icon-calendar"></i></a>
   	</td>
   </tr>
   	
@@ -18,18 +19,17 @@
   <th>Cluster Name</th>
   <th>Images</th>
   <th>Options</th>
-  <th>Deployment</th>
   </tr>
  
  <g:each in="${clusters}" status="i" var="cluster">   
   <tr>
     <td>
-      ${cluster.name}
+      <small>${cluster.name}</small>
     </td>
     <td>
     <ul>
    		<g:each in="${cluster.getOrderedImages()}" status="j" var="image">
-   			<li>${image.name}
+   			<li><small>${image.name}</small>
    		</g:each>
     </ul>
     </td>
@@ -38,19 +38,11 @@
     <div class="row-fluid text-center">
     <g:link action="edit" params="${[id: cluster.id]}"><i class="icon-pencil"></i></g:link>
     <g:link action="delete" params="${[id: cluster.id]}"><i class="icon-remove-sign"></i></g:link>
+     <g:link action="deployOptions" params="${[id: cluster.id]}"><i class="icon-play"></i></g:link>
+    
     </div>
     </td>
-    <td>
-    <div class="row-fluid text-center">
-    <g:link action="deployOptions" params="${[id: cluster.id]}"> 
-   		<input type="button" value="Deploy" class="button"/> 
-   	</g:link>
-   	
-    <g:link action="history"> 
-   		<input type="button" value="History" class="button"/> 
-   	</g:link>	
-   	</div>
-    </td>
+    
   </tr>
 </g:each>
 </table>

@@ -21,10 +21,10 @@
  <g:each in="${hypervisors}" status="i" var="hypervisor">   
   <tr>
     <td>
-      ${hypervisor.id }
+      <small>${hypervisor.id }</small>
     </td>
     <td>
-      ${hypervisor.name }
+      <small>${hypervisor.name }</small>
     </td>
     <td >
     <div class="row-fluid text-center">

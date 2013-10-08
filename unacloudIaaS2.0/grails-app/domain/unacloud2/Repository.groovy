@@ -7,5 +7,6 @@ class Repository {
 	String root
 	Collection<VirtualMachineImage> images	
     static constraints = {
-    }
+	}
+	
 }

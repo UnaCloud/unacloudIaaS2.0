@@ -41,6 +41,12 @@
 	    		</div>
     		</div>
     		<div class="control-group">
+   			<label class="control-label">Access Protocol</label>
+	    		<div class="controls">
+	    			<input name="accessProtocol" type="text">
+	    		</div>
+    		</div>
+    		<div class="control-group">
    			<label class="control-label">Public</label>
 	    		<div class="controls">
 	    			<g:checkBox name="isPublic" value="${false}"/>
