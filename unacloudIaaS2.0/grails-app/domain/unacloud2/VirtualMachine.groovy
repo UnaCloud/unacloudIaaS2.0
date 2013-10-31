@@ -14,7 +14,7 @@ class VirtualMachine {
 	Date startTime
 	Date stopTime
 	int status
-	
+	String message
 	
 	static COPYING=1
 	static CONFIGURING=2
@@ -25,7 +25,7 @@ class VirtualMachine {
 		
 	static constraints = {
     }
-	
+	def dataSource
 	def remainingTime(){
 		long millisTime=(stopTime.getTime()-System.currentTimeMillis())/1000
 		String s = ""+millisTime%60;

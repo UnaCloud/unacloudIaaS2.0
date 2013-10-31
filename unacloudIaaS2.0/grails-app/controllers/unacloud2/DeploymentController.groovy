@@ -98,6 +98,7 @@ class DeploymentController {
 			user.deployments=[]
 		user.deployments.add(dep)
 		user.save(failOnError: true)
+		dep.deploy();
 		redirect(controller:"deployment")
 		}
 		else{
@@ -105,7 +106,6 @@ class DeploymentController {
 			redirect( controller: "cluster",action: "index" )
 		}
 	
-		
 	}
 	
 	def history(){

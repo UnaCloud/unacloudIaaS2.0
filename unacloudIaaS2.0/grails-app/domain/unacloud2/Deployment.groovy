@@ -7,6 +7,7 @@ class Deployment {
 	Date startTime
 	Date stopTime
 	int status
+	
 	int totalVMs
 	
 	static DEPLOYING=1
@@ -36,5 +37,10 @@ class Deployment {
 			}
 		}
 		return false
+	}
+	def	deploy(){
+		def promise = task{
+			System.out.println("Hola mundo deploy");
+		}
 	}
 }
