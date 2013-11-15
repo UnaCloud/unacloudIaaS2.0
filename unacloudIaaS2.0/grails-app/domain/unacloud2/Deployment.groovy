@@ -38,9 +38,49 @@ class Deployment {
 		}
 		return false
 	}
+	
+	
 	def	deploy(){
-		def promise = task{
-			System.out.println("Hola mundo deploy");
+		runAsync{
+			copyVMs()
+			sleep(10000)
+			configureVMs()
+			sleep(10000)
+			deployVMs()	
+		}
+	}
+	
+	
+	def copyVMs(){
+		for(image in cluster.images) {
+			for(vm in image.virtualMachines){
+				if(vm.status ==VirtualMachine.COPYING){
+					vm.status = VirtualMachine.CONFIGURING
+					vm.save()
+				}
+			}
+		}
+	}
+	
+	def configureVMs(){
+		for(image in cluster.images) {
+			for(vm in image.virtualMachines){
+				if(vm.status ==VirtualMachine.CONFIGURING){
+					vm.status = VirtualMachine.DEPLOYING
+					vm.save()
+				}
+			}
+		}
+	}
+	
+	def deployVMs(){
+		for(image in cluster.images) {
+			for(vm in image.virtualMachines){
+				if(vm.status ==VirtualMachine.DEPLOYING){
+					vm.status = VirtualMachine.DEPLOYED
+					vm.save()
+				}
+			}
 		}
 	}
 }

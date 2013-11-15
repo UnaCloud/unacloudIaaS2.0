@@ -23,9 +23,6 @@ class VirtualMachine {
 	static FAILED=5
 	static FINISHED=6
 		
-	static constraints = {
-    }
-	def dataSource
 	def remainingTime(){
 		long millisTime=(stopTime.getTime()-System.currentTimeMillis())/1000
 		String s = ""+millisTime%60;
