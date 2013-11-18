@@ -12,6 +12,8 @@ class VirtualMachineImage {
 	String volume
 	OperatingSystem operatingSystem
 	String accessProtocol
+	Date startTime
+	Date stopTime
 	
 	static hasMany = [files:File ]
 	
