@@ -43,23 +43,6 @@ public class Constants {
     public static final int COPYING_STATE= 5;
     public static final int ERROR_STATE= 6;
 
-    //UnaCloud Server operation request constants
-    public static final int VIRTUAL_MACHINE_OPERATION = 1;
-    public static final int PHYSICAL_MACHINE_OPERATION = 2;
-    //UnaCloud Client operation request constants
-    public static final int DATABASE_OPERATION = 1;
-    public static final int REGISTRATION_OPERATION = 2;
-    public static final int ARTHUR_OPERATION = 3;
-    public static final int UPDATE_OPERATION = 4;
-    public static final int VIRTUAL_MACHINE_CONFIGURATION=5;
-
-    public static final String VMC_COMMAND="comandMachine";
-    public static final String VMC_START="StartMachine";
-    public static final String VMC_STOP="StopMachine";
-    public static final String VMC_WRITE_FILE="EscribirArchivoMaquina";
-    public static final String VMC_TRANSFER_FILE="RecibirArchivoUnicast";
-    public static final String VMC_TAKE_SNAPSHOT="takeSnapshot";
-
     public static final int STOP_CLIENT=6;
     public static final int GET_VERSION=7;
     //UnaCloud Client database operation request constants
@@ -67,13 +50,8 @@ public class Constants {
     public static final int TURN_ON_DB = 1;
     public static final int LOGIN_DB = 2;
     public static final int LOGOUT_DB = 3;
-    public static final int REPORT_DB = 4;
     public static final int VIRTUAL_MACHINE_STATE_DB = 5;
     public static final int VIRTUAL_MACHINE_CPU_STATE = 6;
-    //UnaCloud Client registration operation request constants
-    public static final int NEW_REG = 0;
-    public static final int UPDATE_REG = 1;
-    public static final int ERASE_REG = 2;
     //UnaCloud Server virtual machine operation request constants
     public static final int VM_TURN_ON = 1;
     public static final int VM_TURN_OFF = 2;
@@ -110,6 +88,7 @@ public class Constants {
     //UnaCloud Client VMware Workstation constants
     public static final int VMW=1;
     public static final int PLAYER=2;
+    public static final int VIRTUAL_BOX=3;
     public static final String VMW_RUN_FILE="\\vmrun.exe";
     public static final String VMW_VMX_EXTENSION=".vmx";
     public static final String VMW_TURN_ON="start";

@@ -93,6 +93,12 @@ public abstract class AbstractCommunicator {
     public void writeUTF(String ... msg)throws ConnectionException{
         writeString(makeMessage(msg));
     }
+    public void writeUTF(Object ... msg)throws ConnectionException{
+        if(msg==null)return;
+        String[] par=new String[msg.length];
+        for(int e=0;e<par.length;e++)par[e]=""+msg[e];
+        writeUTF(par);
+    }
 
     /**
      * Read a string message from the socket input stream

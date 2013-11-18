@@ -101,7 +101,6 @@ public class VariableManager {
             try {
                 BufferedReader br = new BufferedReader(new FileReader(fileVars));
                 for (String h, j[]; (h = br.readLine()) != null;) {
-                    System.out.println(h);
                     j = h.split("=");
                     if (j[0].startsWith("String.")) {
                         map.put(j[0], j[1]);

@@ -41,7 +41,6 @@ public class DataServerSocket {
     public static void init() {
         try {
             if (ss == null) {
-                System.out.println("Socket abierto en " + VariableManager.getIntValue("DATA_SOCKET"));
                 ss = new ServerSocket(VariableManager.getIntValue("DATA_SOCKET"));
                 Destination.FILE_TRANSFER_SOCKET=VariableManager.getIntValue("FILE_TRANSFER_SOCKET");
                 new Thread() {
