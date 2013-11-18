@@ -1,5 +1,6 @@
 package communication;
 
+import com.losandes.communication.messages.UnaCloudAbstractMessage;
 import com.losandes.communication.messages.UnaCloudMessage;
 import com.losandes.communication.security.utils.AbstractCommunicator;
 
@@ -17,8 +18,8 @@ import physicalmachine.OperatingSystem;
 import static com.losandes.utils.Constants.*;
 
 /**
- * @author Eduardo Rosales
- * Responsible for attending or discarding a Clouder Server operation request in a thread
+ * @author Eduardo Rosales Responsible for attending or discarding a Clouder
+ * Server operation request in a thread
  */
 public class ClouderServerAttentionThread extends Thread {
 
@@ -26,14 +27,15 @@ public class ClouderServerAttentionThread extends Thread {
      * Abstract comunnicator used to recieve the request and send a response
      */
     private AbstractCommunicator communication;
-
     /**
      * Owner of this object. Used to attend upgrade and stop requests
      */
     private Closeable clouderAttention;
 
     /**
-     * Constructs an attention thread for a given communicator channel. Recieves an owner object for stop requests
+     * Constructs an attention thread for a given communicator channel. Recieves
+     * an owner object for stop requests
+     *
      * @param clientSocket
      * @param cca The owner of this object
      */
@@ -43,68 +45,44 @@ public class ClouderServerAttentionThread extends Thread {
     }
 
     /**
-     * Responsible for attending or discarding the Clouder Server operation request
+     * Responsible for attending or discarding the Clouder Server operation
+     * request
      */
     public void run() {
         try {
             //receiving a operation request from the Clouder Server
             //spliting the message in a processable vector
             UnaCloudMessage clouderServerRequest = communication.readUTFList();
-            System.out.println(clouderServerRequest);
-            
             //clouderClientOperationResult is the result variable for responding to Clouder Server
             // operationDomain = {VIRTUAL_MACHINE_OPERATION, PHYSICAL_MACHINE_OPERATION}
             switch (clouderServerRequest.getInteger(0)) {
-			case VIRTUAL_MACHINE_OPERATION:
-				VIRTUAL_MACHINE_OPERATION(clouderServerRequest);
-				break;
-			case PHYSICAL_MACHINE_OPERATION:
-				PHYSICAL_MACHINE_OPERATION(clouderServerRequest, communication);
-				break;
-			case ARTHUR_OPERATION:
-				String rutaVMX = clouderServerRequest.getString(1);
-                String rutaMaquina = clouderServerRequest.getString(2);
-                String operacion = clouderServerRequest.getString(3);
-                if (new File(rutaVMX).exists() && new File(rutaMaquina).exists() && rutaMaquina.toLowerCase().endsWith("vmx") && rutaVMX.toLowerCase().endsWith("vmrun.exe") && operacion.length() < 10);
-                rutaVMX = rutaVMX.replaceAll(";|\n|\r|$", "");
-                rutaMaquina = rutaMaquina.replaceAll(";|\n|\r|$", "");
-                String snapshot = clouderServerRequest.getString(4);
-                try {
-                    if (operacion.equals("fileWrite")) {
-                        Runtime.getRuntime().exec(DOUBLE_QUOTE + rutaVMX + DOUBLE_QUOTE + " -gu root -gp un14nd35c0m17 copyFileFromHostToGuest \"" + rutaMaquina + "\" \"E:/GRID/masterSGE/Aniversario.rar\"  /usr/local/Aniversario.rar").waitFor();
-                    } else if (operacion.contains("start")) {
-                        if (snapshot.equals("1")) {
-                            Runtime.getRuntime().exec("\"" + rutaVMX + "\" revertToSnapshot  \"" + rutaMaquina + "\" \"AutoProtect Snapshot/AutoProtect Snapshot/AutoProtect Snapshot/AutoProtect Snapshot/AutoProtect Snapshot\"").waitFor();
-                        }
-                        Process p = Runtime.getRuntime().exec("\"" + rutaVMX + "\" " + operacion + " \"" + rutaMaquina + "\" nogui");
-                    } else {
-                        Process p = Runtime.getRuntime().exec("\"" + rutaVMX + "\" " + operacion + " \"" + rutaMaquina + "\"");
+                case UnaCloudAbstractMessage.VIRTUAL_MACHINE_OPERATION:
+                    VIRTUAL_MACHINE_OPERATION(clouderServerRequest);
+                    break;
+                case UnaCloudAbstractMessage.PHYSICAL_MACHINE_OPERATION:
+                    PHYSICAL_MACHINE_OPERATION(clouderServerRequest, communication);
+                    break;
+                case UnaCloudAbstractMessage.UPDATE_OPERATION:
+                    clouderAttention.close();
+                    try {
+                        Runtime.getRuntime().exec("javaw -jar ClientUpdater.jar 6");
+                    } catch (Exception e) {
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-			case UPDATE_OPERATION:
-				clouderAttention.close();
-                try {
-                    Runtime.getRuntime().exec("javaw -jar ClientUpdater.jar 6");
-                } catch (Exception e) {
-                }
-                System.exit(6);
-                break;
-			case STOP_CLIENT:
-				clouderAttention.close();
-                System.exit(0);
-				break;
-			case VIRTUAL_MACHINE_CONFIGURATION:
-				new VirtualMachineConfigurator().attendConfigurationRequest(clouderServerRequest, communication);
-			case GET_VERSION:
-				communication.writeUTF("1.30");
-			default:
-				//clouderClientOperationResult += ERROR_MESSAGE + "The Clouder Server request is null or an invalid number: " + operationDomain;
-                //System.err.println(clouderClientOperationResult);
-				break;
-			}
+                    System.exit(6);
+                    break;
+                case STOP_CLIENT:
+                    clouderAttention.close();
+                    System.exit(0);
+                    break;
+                case UnaCloudAbstractMessage.VIRTUAL_MACHINE_CONFIGURATION:
+                    new VirtualMachineConfigurator().attendConfigurationRequest(clouderServerRequest, communication);
+                case GET_VERSION:
+                    communication.writeUTF("1.30");
+                default:
+                    //clouderClientOperationResult += ERROR_MESSAGE + "The Clouder Server request is null or an invalid number: " + operationDomain;
+                    //System.err.println(clouderClientOperationResult);
+                    break;
+            }
             communication.close();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -113,22 +91,20 @@ public class ClouderServerAttentionThread extends Thread {
     }
 
     /**
-     * Method responsible for attending requests for operations over virtual machines
+     * Method responsible for attending requests for operations over virtual
+     * machines
+     *
      * @param clouderServerRequestSplitted Server request
      */
     private void VIRTUAL_MACHINE_OPERATION(UnaCloudMessage message) {
-        String clouderClientOperationResult = "";
-        System.out.println("The Clouder Server operation request is virtual machine type");
         //virtualOperationType = {VM_TURN_ON, VM_TURN_OFF, VM_RESTART, VM_STATE}
         int virtualOperationType = message.getInteger(1);
         String virtualMachineCode = message.getString(2);
-        if (virtualMachineCode == null || virtualOperationType == -1){
-        	return;
+        if (virtualMachineCode == null || virtualOperationType == -1) {
+            return;
         }
         switch (virtualOperationType) {
             case VM_TURN_ON:
-                System.out.println("The Clouder Server operation request is VM_TURN_ON");
-                clouderClientOperationResult = "VM_TURN_ON";
                 if (message.length > 11) {
                     int hypervisorName = message.getInteger(3);
                     int vmCores = message.getInteger(4);
@@ -141,57 +117,47 @@ public class ClouderServerAttentionThread extends Thread {
                     String checkPoint = message.getString(11);
                     String snapshotRoute = message.getString(12);
                     PersistentExecutionManager.addExecution(vmPath, hypervisorPath, vmIP, virtualMachineCode, executionTime, vmCores, vmMemory, hypervisorName, persistent, checkPoint);
-                } else {
-                    clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + message.length;
                 }
                 break;
             case VM_TURN_OFF:
-                clouderClientOperationResult = "VM_TURN_OFF";
                 if (message.length > 5) {
                     int hypervisorName = message.getInteger(3);
                     String vmPath = message.getString(4);
                     String hypervisorPath = message.getString(5);
                     PersistentExecutionManager.removeExecution(hypervisorName, vmPath, hypervisorPath, virtualMachineCode);
-                } else {
-                    clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + message.length;
                 }
                 break;
             case VM_RESTART:
-                clouderClientOperationResult = "VM_RESTART";
                 if (message.length > 5) {
                     int hypervisorName = message.getInteger(3);
                     String vmPath = message.getString(4);
                     String hypervisorPath = message.getString(5);
                     PersistentExecutionManager.restartMachine(hypervisorName, vmPath, hypervisorPath, virtualMachineCode);
-                } else {
-                    clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + message.length;
                 }
                 break;
             case VM_TIME:
                 System.out.println("The Clouder Server operation request is VM_TIME");
-                clouderClientOperationResult = "VM_TIME";
                 if (message.length > 4) {
                     int executionTime = message.getInteger(3);
                     String id = message.getString(4);
                     PersistentExecutionManager.extendsVMTime(id, executionTime);
-                } else {
-                    clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + message.length;
                 }
                 break;
             default:
-                clouderClientOperationResult += ERROR_MESSAGE + "The Clouder Server virtual machine operation request is invalid: " + virtualOperationType;
             //System.err.println(clouderClientOperationResult);
         }
     }
 
     /**
-     * Method responsible for attending requests for operations over the physical machine
+     * Method responsible for attending requests for operations over the
+     * physical machine
+     *
      * @param clouderServerRequestSplitted Server request
-     * @param con Channel used to interact with UnaCloud server to recieve or send additional data
+     * @param con Channel used to interact with UnaCloud server to recieve or
+     * send additional data
      */
     private void PHYSICAL_MACHINE_OPERATION(UnaCloudMessage message, AbstractCommunicator con) {
         String clouderClientOperationResult = "";
-        System.out.println("The Clouder Server operation request is physical machine type");
         // clouderServerRequestSplitted[1] = {PM_TURN_OFF, PM_RESTART, PM_LOGOUT, PM_MONITOR}
         int physicalOperationType = message.getInteger(1);
         switch (physicalOperationType) {
@@ -212,10 +178,10 @@ public class ClouderServerAttentionThread extends Thread {
                 FileTrasferAttender.attendFileOperation(message, con);
                 break;
             case PM_TURN_ON:
-                String[] macs = message.getStrings(2,message.length);
+                String[] macs = message.getStrings(2, message.length);
                 for (String mac : macs) {
                     try {
-                        Runtime.getRuntime().exec("wol.exe " + mac.replace(":",""));
+                        Runtime.getRuntime().exec("wol.exe " + mac.replace(":", ""));
                     } catch (IOException ex) {
                     }
                 }
@@ -233,16 +199,14 @@ public class ClouderServerAttentionThread extends Thread {
                 }
                 break;
             case PM_RETRIEVE_FOLDER:
-                System.out.println("The Clouder Server operation request is MACHINE_RESTORE");
                 clouderClientOperationResult = "MACHINE_RESTORE";
                 if (message.length > 2) {
-                    System.out.println("Atendiendo MachineStore");
-                    try{
+                    try {
                         new UnicastSender().attendFileRetrieveRequest(message, communication);
-                    }catch(Exception e){
-                        clouderClientOperationResult += ERROR_MESSAGE + " "+e.getMessage();
+                    } catch (Exception e) {
+                        clouderClientOperationResult += ERROR_MESSAGE + " " + e.getMessage();
                     }
-                    
+
                 } else {
                     clouderClientOperationResult += ERROR_MESSAGE + "invalid number of parameters: " + message.length;
                 }
@@ -253,4 +217,3 @@ public class ClouderServerAttentionThread extends Thread {
         }
     }
 }
-

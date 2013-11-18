@@ -154,19 +154,12 @@ public class PersistentExecutionManager {
      */
     private static String startUpMachine(String vmxroute, String hypervisorPath, String vmIP, String id, long executionTime, int vmCores, int vmMemory, int hypervisorName, String persistent) {
         Hypervisor v=HypervisorFactory.getHypervisor(hypervisorName, hypervisorPath,vmxroute);
-        if (vmCores != 0 && vmMemory != 0) {
-            try {
-                v.preconfigureVirtualMachine(vmCores, vmMemory,persistent);
-            } catch (HypervisorOperationException ex) {
-
-            }
-        }
         try {
-            v.turnOnVirtualMachine();
+            v.preconfigureAndStartVirtualMachine(vmCores, vmMemory,persistent);
             Schedule timeExec = new Schedule(hypervisorName, hypervisorPath, VMW_TURN_OFF, vmxroute);
             programedShutdowns.put(id,timeExec);
             timer.schedule(timeExec,executionTime);
-            new VirtualMachineStateViewer(id, hypervisorPath, vmIP, vmxroute, hypervisorName);
+            new VirtualMachineStateViewer(id,v,vmIP);
             MachineMonitor.addMachineExecution(id,vmxroute,vmCores);
         } catch (HypervisorOperationException e) {
             Log.print("Error al levantar la máquina " + e.getMessage());

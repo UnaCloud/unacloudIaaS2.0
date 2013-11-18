@@ -1,5 +1,6 @@
 package virtualmachine;
 
+import com.losandes.communication.messages.configuration.ExecuteCommandRequest;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,9 +20,9 @@ public class HypervisorFactory {
     /**
      * Map that contains a relation between hypervisor names and hypervisor objects
      */
-    private static Map<String,Hypervisor> map = new HashMap<String, Hypervisor>();
+    private static Map<String,Hypervisor> map = new HashMap<>();
 
-    /**
+    /**111
      * Uses the map to search for hypervisor instances, if there is not an entry for the given name then it is loaded dinamically using java´s reflection API. If there is an associated object, then a new instance is returned by using the method getInstance from Hypervisor abstract class.
      * @param hypervisorName The hypervisor name to be instantiated
      * @param executablePath The executable route that represents the given hypervisor.
@@ -33,7 +34,7 @@ public class HypervisorFactory {
         if(c==null)try {
             Object b=Class.forName("virtualmachine."+hypervisorName).newInstance();
             if(b instanceof Hypervisor)map.put(hypervisorName, c=(Hypervisor)b);
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
         }
         if(c!=null){
             Hypervisor h=c.getInstance();
@@ -54,6 +55,7 @@ public class HypervisorFactory {
     public static Hypervisor getHypervisor(final int hypervisorName, String executablePath, String virtualMachinePath){
         if(hypervisorName==VMW)return getHypervisor("VMwareWorkstation",executablePath, virtualMachinePath);
         else if(hypervisorName == PLAYER)return getHypervisor("VMwarePlayer", executablePath, virtualMachinePath);
+        else if(hypervisorName == VIRTUAL_BOX)return getHypervisor("VirtualBox", executablePath, virtualMachinePath);
         return new VoidHypervisor(executablePath+"");
     }
 
@@ -64,10 +66,6 @@ public class HypervisorFactory {
         String hypervisorName;
         public VoidHypervisor(String hypervisorName) {
             this.hypervisorName = hypervisorName;
-        }
-        @Override
-        public void turnOnVirtualMachine() throws HypervisorOperationException {
-            throw new HypervisorOperationException("Hypervisor "+hypervisorName+" not found");
         }
         @Override
         public void turnOffVirtualMachine() throws HypervisorOperationException {
@@ -82,12 +80,11 @@ public class HypervisorFactory {
             return this;
         }
         @Override
-        public void preconfigureVirtualMachine(int coreNumber, int ramSize,String persitant) throws HypervisorOperationException {
-            throw new HypervisorOperationException("Hypervisor "+hypervisorName+" not found");
+        public void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, String persistent) throws HypervisorOperationException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
-
         @Override
-        public void executeCommandOnMachine(String user, String pass, String command) throws HypervisorOperationException {
+        public void executeCommandOnMachine(String user, String pass, ExecuteCommandRequest command) throws HypervisorOperationException {
             throw new HypervisorOperationException("Hypervisor "+hypervisorName+" not found");
         }
 
@@ -100,6 +97,15 @@ public class HypervisorFactory {
         public void takeSnapshotOnMachine(String snapshotname) throws HypervisorOperationException {
             throw new HypervisorOperationException("Hypervisor "+hypervisorName+" not found");
         }
-    }
 
+        @Override
+        public int getHypervisorId() {
+            return -1;
+        }
+
+        @Override
+        public void changeVirtualMachineMac()  throws HypervisorOperationException{
+            throw new HypervisorOperationException("Hypervisor "+hypervisorName+" not found");
+        }
+    }
 }

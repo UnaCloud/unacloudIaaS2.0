@@ -1,5 +1,7 @@
 package com.losandes.communication.messages;
 
+import static com.losandes.utils.Constants.MESSAGE_SEPARATOR_TOKEN;
+
 import java.util.Arrays;
 
 public class UnaCloudMessage {
@@ -7,6 +9,10 @@ public class UnaCloudMessage {
 	public int length;
 	public UnaCloudMessage(String[] tokens) {
 		this.tokens = tokens;
+		length=tokens==null?0:tokens.length;
+	}
+	public UnaCloudMessage(String tokenString) {
+		this.tokens = tokenString.split(MESSAGE_SEPARATOR_TOKEN);
 		length=tokens==null?0:tokens.length;
 	}
 	public int getInteger(int pos){

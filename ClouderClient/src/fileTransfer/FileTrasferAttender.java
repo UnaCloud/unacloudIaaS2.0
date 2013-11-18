@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import com.losandes.utils.Log;
 
 import static com.losandes.utils.Constants.*;
+import java.util.HashSet;
 /**
  * Class responsible for attend file operations requests over the physical machine file system
  * @author Clouder
@@ -49,8 +50,19 @@ public class FileTrasferAttender {
             try{
                 boolean limpiarDirectorio=Boolean.parseBoolean(message.getString(7));
                 if(limpiarDirectorio){
+                    String[] formats=new String[]{".vmx",".vmdk",".vmxf",".vmsn",".vmsd",".nvram",".vbox",".vbox-prev",".vdi"};
                     for(File f:new File(ruta).getParentFile().listFiles()){
-                        if(f.getName().endsWith(".vmx")||f.getName().endsWith(".vmdk")||f.getName().endsWith(".vmxf")||f.getName().endsWith(".vmsn")||f.getName().endsWith(".vmsd")||f.getName().endsWith(".nvram"))f.delete();
+                        for(String format:formats)if(f.getName().endsWith(format)){
+                            f.delete();
+                            break;
+                        }
+                    }
+                    File snapshots=new File(new File(ruta).getParentFile(),"Snapshots");
+                    if(snapshots.exists()&&snapshots.isDirectory())for(File vdi:snapshots.listFiles()){
+                        for(String format:formats)if(vdi.getName().endsWith(format)){
+                            vdi.delete();
+                            break;
+                        }
                     }
                 }
             }catch(Exception ex){

@@ -1,5 +1,6 @@
 package virtualmachine;
 
+import com.losandes.communication.messages.configuration.ExecuteCommandRequest;
 import java.io.File;
 
 /**
@@ -17,7 +18,14 @@ public abstract class Hypervisor {
      * Path to this hypervisor managed vitual machine
      */
     private String virtualMachinePath;
+    
+    /**
+     * This is the virtual machine name
+     */
+    private String virtualMachineName;
 
+    public abstract int getHypervisorId();
+    
     protected Hypervisor() {
     }
 
@@ -27,8 +35,10 @@ public abstract class Hypervisor {
         this.executablePath = executablePath;
     }
 
-    protected void setVirtualMachinePath(String virtualMachinePath) {
-        this.virtualMachinePath = virtualMachinePath;
+    protected final void setVirtualMachinePath(String virtualMachinePath) {
+        this.virtualMachinePath = virtualMachinePath.replace("\"", "");
+        String filename=new File(this.virtualMachinePath).getName();
+        setVirtualMachineName(filename.substring(0,filename.lastIndexOf(".")));
     }
 
     public String getExecutablePath() {
@@ -39,31 +49,32 @@ public abstract class Hypervisor {
         return virtualMachinePath;
     }
 
+    public String getVirtualMachineName() {
+        return virtualMachineName;
+    }
+
+    public void setVirtualMachineName(String virtualMachineName) {
+        this.virtualMachineName = virtualMachineName;
+    }
+    
+    
+    //public abstract void preconfigureVirtualMachine(int coreNumber, int ramSize, String persistent) throws HypervisorOperationException;
+
     /**
-     * Configures the managed virtual machine with the given core number, ram size and persistent properties
-     * @param coreNumber the core number to configure the virtual machine
+     * Configures the managed virtual machine with the given core number, ram size and persistent properties. Then it starts it.
+     * @param coreNumber the core number to configure the virtual machine.
      * @param ramSize the ram size to configure the virtual machine
      * @param persistent The persistent property
      * @throws HypervisorOperationException if there is an error configuring the virtual machine settings
      */
-    public abstract void preconfigureVirtualMachine(int coreNumber, int ramSize, String persistent) throws HypervisorOperationException;
-
+    public abstract void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, String persistent) throws HypervisorOperationException;
+    
     /**
      * Turn on the managed virtual machine
      * @throws HypervisorOperationException if there is an error starting up the virtual machine
      */
-    public abstract void turnOnVirtualMachine() throws HypervisorOperationException;
-
-    /**
-     * Configures the settings for this managed virtual machine and the starts it. It just call preconfigureVirtualMachine method and turnOffVirtualMachine;
-     * @param coreNumber the core number to configure the virtual machine
-     * @param ramSize the ram size to configure the virtual machine
-     * @param persistent The persistent property
-     * @throws HypervisorOperationException if there is an error configuring the virtual machine settings or starting it
-     */
-    public final void turnOnVirtualMachine(int coreNumber, int ramSize, String persistant) throws HypervisorOperationException {
-        preconfigureVirtualMachine(coreNumber, ramSize, persistant);
-        turnOffVirtualMachine();
+    public final void turnOnVirtualMachine() throws HypervisorOperationException{
+        preconfigureAndStartVirtualMachine(0,0,null);
     }
 
     /**
@@ -85,7 +96,7 @@ public abstract class Hypervisor {
      * @param command The command to be executed
      * @throws HypervisorOperationException If there is an error executing the command
      */
-    public abstract void executeCommandOnMachine(String user, String pass, String command) throws HypervisorOperationException;
+    public abstract void executeCommandOnMachine(String user, String pass, ExecuteCommandRequest command) throws HypervisorOperationException;
 
     public abstract void takeSnapshotOnMachine(String snapshotname) throws HypervisorOperationException;
 
@@ -98,7 +109,8 @@ public abstract class Hypervisor {
      * @throws HypervisorOperationException If there is an error copying the file
      */
     public abstract void copyFileOnVirtualMachine(String user, String pass, String destinationRoute, File sourceFile) throws HypervisorOperationException;
-
+    
+    public abstract void changeVirtualMachineMac() throws HypervisorOperationException;
     /**
      * Returns an instance for this hypervisor class
      * @return an instance for this hypervisor class

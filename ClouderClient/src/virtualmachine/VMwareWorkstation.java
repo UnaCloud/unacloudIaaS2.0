@@ -4,6 +4,7 @@
  */
 package virtualmachine;
 
+import com.losandes.communication.messages.configuration.ExecuteCommandRequest;
 import execution.LocalProcessExecutor;
 import static com.losandes.utils.Constants.*;
 import com.losandes.utils.Log;
@@ -14,16 +15,16 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import physicalmachine.Network;
-import physicalmachine.PhysicalMachine;
 
 /**
  * Implementation of hypervisor abstract class to give support for
@@ -31,16 +32,8 @@ import physicalmachine.PhysicalMachine;
  *
  * @author Clouder
  */
-public class VMwareWorkstation extends Hypervisor {
 
-    @Override
-    protected void setVirtualMachinePath(String virtualMachinePath) {
-        virtualMachinePath = virtualMachinePath.replace("\"", "");
-        if (!virtualMachinePath.contains(VMW_VMX_EXTENSION)) {
-            virtualMachinePath += VMW_VMX_EXTENSION;
-        }
-        super.setVirtualMachinePath(virtualMachinePath);
-    }
+public class VMwareWorkstation extends Hypervisor {
 
     @Override
     protected void setExecutablePath(String executablePath) {
@@ -53,15 +46,6 @@ public class VMwareWorkstation extends Hypervisor {
             }
         }
         super.setExecutablePath(executablePath);
-    }
-
-    @Override
-    public void turnOnVirtualMachine() throws HypervisorOperationException {
-        correctDataStores();
-        String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T","ws","start",getVirtualMachinePath(),"nogui");
-        if (h.contains(ERROR_MESSAGE)) {
-            throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
-        }
     }
 
     @Override
@@ -85,17 +69,32 @@ public class VMwareWorkstation extends Hypervisor {
         return new VMwareWorkstation();
     }
 
-    @Override
-    public void preconfigureVirtualMachine(int coreNumber, int ramSize, String persistant) throws HypervisorOperationException {
-        Context vmx = new Context(getVirtualMachinePath());
-        vmx.changeVMXFileContext(String.valueOf(coreNumber).toString(), String.valueOf(ramSize).toString(), persistant != null && persistant.equals("true"));
-    }
 
     @Override
-    public void executeCommandOnMachine(String user, String pass, String command) throws HypervisorOperationException {
+    public void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, String persistant) throws HypervisorOperationException {
+        if(coreNumber!=0&&ramSize!=0){
+            Context vmx = new Context(getVirtualMachinePath());
+            vmx.changeVMXFileContext(String.valueOf(coreNumber).toString(), String.valueOf(ramSize).toString(), persistant != null && persistant.equals("true"));
+        }
+        correctDataStores();
+        String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T","ws","start",getVirtualMachinePath(),"nogui");
+        if (h.contains(ERROR_MESSAGE)) {
+            throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
+        }
+    }
+    
+
+    @Override
+    public void executeCommandOnMachine(String user, String pass, ExecuteCommandRequest command) throws HypervisorOperationException {
         pass = pass.replace(" ", "").replace("\"", "");
         user = user.replace(" ", "").replace("\"", "");
-        String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T","ws","-gu",user,"-gp",pass,"runProgramInGuest",getVirtualMachinePath(),command);
+        List<String> com=new ArrayList<>();
+        Collections.addAll(com, getExecutablePath(),"-T","ws","-gu",user,"-gp",pass,"runProgramInGuest",getVirtualMachinePath());
+        com.add(command.getExecName());
+        Collections.addAll(com,command.getVars());
+        System.out.println(Arrays.toString(command.getVars()));
+        System.out.println(Arrays.toString(com.toArray(new String[0])));
+        String h = LocalProcessExecutor.executeCommandOutput(com.toArray(new String[0]));
         if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
         }
@@ -199,5 +198,12 @@ public class VMwareWorkstation extends Hypervisor {
             } catch (SQLException ex) {
             }
         }
+    }
+
+    @Override
+    public int getHypervisorId() {
+        return VMW;
+    }
+    public void changeVirtualMachineMac() throws HypervisorOperationException {
     }
 }

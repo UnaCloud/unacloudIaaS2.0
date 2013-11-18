@@ -1,6 +1,7 @@
 package configuration;
 
 import com.losandes.communication.messages.UnaCloudMessage;
+import com.losandes.communication.messages.configuration.ChangeVirtualMachineMacMessage;
 import com.losandes.communication.security.utils.AbstractCommunicator;
 import com.losandes.communication.security.utils.ConnectionException;
 import com.losandes.utils.VariableManager;
@@ -14,6 +15,13 @@ import java.net.*;
 import virtualmachine.Hypervisor;
 import virtualmachine.HypervisorFactory;
 import static com.losandes.utils.Constants.*;
+import static com.losandes.communication.messages.configuration.ConfigurationAbstractMessage.*;
+import com.losandes.communication.messages.configuration.ExecuteCommandMessage;
+import com.losandes.communication.messages.configuration.RecieveFileMessage;
+import com.losandes.communication.messages.configuration.StartVirtualMachineMessage;
+import com.losandes.communication.messages.configuration.StopVirtualMachineMessage;
+import com.losandes.communication.messages.configuration.TakeSnapshotMessage;
+import com.losandes.communication.messages.configuration.WriteFileOnVirtualMachineMessage;
 
 import virtualmachine.HypervisorOperationException;
 
@@ -33,21 +41,18 @@ public class VirtualMachineConfigurator {
      * @param solicitud The UnaCloud server request
      * @param con The channel to interact with UnaCloud server
      */
-    private void writeFileOnVirtualMachine(UnaCloudMessage solicitud, AbstractCommunicator con) {
+    private void writeFileOnVirtualMachine(WriteFileOnVirtualMachineMessage message, AbstractCommunicator con) {
         try {
-            String hypervisor = solicitud.getString(2), destinationMachine = solicitud.getString(3), login = solicitud.getString(4), pass = solicitud.getString(5), destinationFileRute = solicitud.getString(6), rutaVMRUN = solicitud.getString(7);
             temporalFile.getParentFile().mkdirs();
             FileOutputStream fos = new FileOutputStream(temporalFile);
             recieveFileOverChannel(fos, con);
-            System.out.println("archivo recibido");
             try {
-                HypervisorFactory.getHypervisor(Integer.parseInt(hypervisor), rutaVMRUN, destinationMachine).copyFileOnVirtualMachine(login, pass, destinationFileRute, temporalFile);
+                HypervisorFactory.getHypervisor(Integer.parseInt(message.getHypervisor()),message.getRutaVMRUN(),message.getDestinationMachine()).copyFileOnVirtualMachine(message.getLogin(),message.getPass(),message.getDestinationFileRute(),temporalFile);
                 con.writeUTF("Archivo copiado exitosamente");
             } catch (HypervisorOperationException ex) {
                 con.writeUTF("Error copiando el archivo " + ex.getMessage());
             }
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -77,12 +82,10 @@ public class VirtualMachineConfigurator {
      * @param solicitud The UnaCloud server request
      * @param con The channel to interact with UnaCloud server
      */
-    private void recieveUnicastFile(UnaCloudMessage solicitud, AbstractCommunicator con) {
-        System.out.println("recibirArchivoUnicast");
+    private void recieveUnicastFile(RecieveFileMessage solicitud, AbstractCommunicator con) {
 	try {
-            String rutaArchivo = solicitud.getString(2);
-            new File(rutaArchivo).getParentFile().mkdirs();
-            File c = new File(rutaArchivo);
+            new File(solicitud.getFilePath()).getParentFile().mkdirs();
+            File c = new File(solicitud.getFilePath());
             con.writeUTF("OK");
             FileOutputStream fos = new FileOutputStream(c);
             recieveFileOverChannel(fos, con);
@@ -90,7 +93,6 @@ public class VirtualMachineConfigurator {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Termino recibirArchivoUnicast");
     }
 
 
@@ -100,10 +102,9 @@ public class VirtualMachineConfigurator {
      * @param con The channel to interact with UnaCloud server
      * @throws ConnectionException
      */
-    private void startVirtualMachine(UnaCloudMessage solicitud, AbstractCommunicator con) throws ConnectionException {
-        String hypervisor = solicitud.getString(2), destinationMachine = solicitud.getString(3), rutaVMRUN = solicitud.getString(4);
+    private void startVirtualMachine(StartVirtualMachineMessage solicitud, AbstractCommunicator con) throws ConnectionException {
         try {
-            HypervisorFactory.getHypervisor(Integer.parseInt(hypervisor), rutaVMRUN, destinationMachine).turnOnVirtualMachine();
+            HypervisorFactory.getHypervisor(Integer.parseInt(solicitud.getHypervisor()),solicitud.getRutaVMRUN(), solicitud.getDestinationMachine()).turnOnVirtualMachine();
             Log.print2("Maquina encendida exitosamente");
             con.writeUTF("Maquina encendida exitosamente");
         } catch (HypervisorOperationException ex) {
@@ -111,17 +112,31 @@ public class VirtualMachineConfigurator {
             con.writeUTF(ex.getMessage());
         }
     }
-
+    /**
+     * Attends a request to start a virtual machine
+     * @param solicitud The UnaCloud server request
+     * @param con The channel to interact with UnaCloud server
+     * @throws ConnectionException
+     */
+    private void changeVirtualMachineMac(ChangeVirtualMachineMacMessage solicitud, AbstractCommunicator con) throws ConnectionException {
+        try {
+            HypervisorFactory.getHypervisor(Integer.parseInt(solicitud.getHypervisor()),solicitud.getRutaVMRUN(), solicitud.getDestinationMachine()).changeVirtualMachineMac();
+            Log.print2("Maquina encendida exitosamente");
+            con.writeUTF("Maquina encendida exitosamente");
+        } catch (HypervisorOperationException ex) {
+            Log.print2("Error Starting Machine:"+ ex.getMessage());
+            con.writeUTF(ex.getMessage());
+        }
+    }
     /**
      * Attends a request to take a snapshot on a virtual machine
      * @param solicitud The UnaCloud server request
      * @param con The channel to interact with UnaCloud server
      * @throws ConnectionException
      */
-    private void takeSnapshotOnVirtualMachine(UnaCloudMessage solicitud, AbstractCommunicator con) throws ConnectionException {
-        String hypervisor = solicitud.getString(2), destinationMachine = solicitud.getString(3), rutaVMRUN = solicitud.getString(4), snapshotname=solicitud.getString(5);
+    private void takeSnapshotOnVirtualMachine(TakeSnapshotMessage solicitud, AbstractCommunicator con) throws ConnectionException {
         try {
-            HypervisorFactory.getHypervisor(Integer.parseInt(hypervisor), rutaVMRUN, destinationMachine).takeSnapshotOnMachine(snapshotname);
+            HypervisorFactory.getHypervisor(Integer.parseInt(solicitud.getHypervisor()),solicitud.getRutaVMRUN(),solicitud.getDestinationMachine()).takeSnapshotOnMachine(solicitud.getSnapshotname());
             Log.print2("Maquina snapshot");
             con.writeUTF("Snapshot tomado");
         } catch (HypervisorOperationException ex) {
@@ -129,23 +144,19 @@ public class VirtualMachineConfigurator {
             con.writeUTF(ex.getMessage());
         }
     }
-
-
+    
     /**
      * Attends a request to execute commands on a virtual machine
      * @param solicitud The UnaCloud server request
      * @param con The channel to interact with UnaCloud server
      * @throws ConnectionException
      */
-    private void executeCommandsOnVirtualMachine(UnaCloudMessage solicitud, AbstractCommunicator con) throws ConnectionException {
-        String hypervisor = solicitud.getString(2), destinationMachine = solicitud.getString(3), user = solicitud.getString(4), pass = solicitud.getString(5), rutaVMRUN = solicitud.getString(6);
-        int numeroComandos = solicitud.getInteger(7);
-        String respuesta[] = new String[numeroComandos];
-        Hypervisor v = HypervisorFactory.getHypervisor(Integer.parseInt(hypervisor), rutaVMRUN, destinationMachine);
-        for (int e = 0; e < numeroComandos; e++) {
-            String comando = solicitud.getString(8 + e);
+    private void executeCommandsOnVirtualMachine(ExecuteCommandMessage solicitud, AbstractCommunicator con) throws ConnectionException {
+        String respuesta[] = new String[solicitud.getComandos().length];
+        Hypervisor v = HypervisorFactory.getHypervisor(solicitud.getHypervisor(),solicitud.getRutaVMRUN(),solicitud.getDestinationMachine());
+        for (int e = 0; e < solicitud.getComandos().length; e++){
             try {
-                v.executeCommandOnMachine(user, pass, comando);
+                v.executeCommandOnMachine(solicitud.getUser(),solicitud.getPass(), solicitud.getComandos()[e]);
                 respuesta[e] = "Successful execution";
             } catch (HypervisorOperationException ex) {
                 respuesta[e] = ex.getMessage();
@@ -160,10 +171,9 @@ public class VirtualMachineConfigurator {
      * @param con The channel to interact with UnaCloud server
      * @throws ConnectionException
      */
-    private void stopVirtualMachine(UnaCloudMessage solicitud, AbstractCommunicator con) throws ConnectionException {
-        String hypervisor = solicitud.getString(2), destinationMachine = solicitud.getString(3), rutaVMRUN = solicitud.getString(4);
+    private void stopVirtualMachine(StopVirtualMachineMessage solicitud, AbstractCommunicator con) throws ConnectionException {
         try {
-            HypervisorFactory.getHypervisor(Integer.parseInt(hypervisor), rutaVMRUN, destinationMachine).turnOffVirtualMachine();
+            HypervisorFactory.getHypervisor(Integer.parseInt(solicitud.getHypervisor()),solicitud.getRutaVMRUN(),solicitud.getDestinationMachine()).turnOffVirtualMachine();
             con.writeUTF("Maquina apagada exitosamente");
         } catch (HypervisorOperationException ex) {
             con.writeUTF(ex.getMessage());
@@ -181,25 +191,28 @@ public class VirtualMachineConfigurator {
         try {
         	switch (solicitud.getString(1)) {
 			case VMC_TRANSFER_FILE:
-				recieveUnicastFile(solicitud, con);
-				break;
+                            recieveUnicastFile(new RecieveFileMessage(solicitud), con);
+                            break;
 			case VMC_WRITE_FILE:
-				writeFileOnVirtualMachine(solicitud, con);
-				break;
+                            writeFileOnVirtualMachine(new WriteFileOnVirtualMachineMessage(solicitud), con);
+                            break;
 			case VMC_START:
-				startVirtualMachine(solicitud, con);
-				break;
+                            startVirtualMachine(new StartVirtualMachineMessage(solicitud), con);
+                            break;
 			case VMC_STOP:
-				stopVirtualMachine(solicitud, con);
-				break;
+                            stopVirtualMachine(new StopVirtualMachineMessage(solicitud), con);
+                            break;
 			case VMC_COMMAND:
-				executeCommandsOnVirtualMachine(solicitud, con);
-				break;
+                            executeCommandsOnVirtualMachine(new ExecuteCommandMessage(solicitud), con);
+                            break;
+                        case VMC_CHANGE_MAC:
+                            changeVirtualMachineMac(new ChangeVirtualMachineMacMessage(solicitud), con);
+                            break;
 			case VMC_TAKE_SNAPSHOT:
-				takeSnapshotOnVirtualMachine(solicitud, con);
-				break;
+                            takeSnapshotOnVirtualMachine(new TakeSnapshotMessage(solicitud), con);
+                            break;
 			default:
-				return false;
+                            return false;
 			}
             return true;
         } catch (Throwable ex) {

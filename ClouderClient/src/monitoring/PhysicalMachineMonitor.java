@@ -29,8 +29,8 @@ public class PhysicalMachineMonitor{
 			try {
 				if (monitorear) {
 					int monitorFrecuency = VariableManager.getIntValue("MONITOR_FREQUENCY");
-					int monitorRegisterFrecuency = VariableManager.getIntValue("MONITOR_REGISTER_FREQUENCY");
-					start(monitorFrecuency, monitorRegisterFrecuency);
+					int windowSize = VariableManager.getIntValue("MONITOR_REGISTER_FREQUENCY");
+					start(monitorFrecuency, windowSize);
 				}
 			} catch (Exception e) {
 				monitorear = false;
@@ -41,16 +41,15 @@ public class PhysicalMachineMonitor{
 
 	/**
 	 * Starts this monitor with the given monitor and register frequency
-	 * @param registerFrecuency time in seconds between each physical machine
+	 * @param frecuency time in seconds between each physical machine
 	 *        measure
-	 * @param dbFrecuency time in secconds between each data comit
+	 * @param windowSize time in secconds between each data comit
 	 */
-	public static void start(final int registerFrecuency, final int dbFrecuency) {
-		System.out.println("start monitoreo");
+	public static void start(final int frecuency, final int windowSize) {
 		if (monitor == null) {
 			monitor = new MonitorAgent();
 			try {
-				monitor.CargarDatosIniciales();
+				monitor.doInitialLoad();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -59,7 +58,7 @@ public class PhysicalMachineMonitor{
 				public void run() {
 					try {
 						while (monitor != null)
-							monitor.iniciarMonitoreo(dbFrecuency, registerFrecuency);
+							monitor.startMonitoring(frecuency,windowSize);
 					} catch (Throwable ex) {
 						ex.printStackTrace();
 					}

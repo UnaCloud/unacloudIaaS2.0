@@ -2,8 +2,8 @@ dataSource {
     pooled = true
     driverClassName = "com.mysql.jdbc.Driver"
 	dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
-	username = "root"
-    password = "root"
+	username = "iaasdev"
+    password = "8jQepk91YDTXI1p8UNk1"
 }
 hibernate {
 	show_sql=true
@@ -16,7 +16,7 @@ environments {
     development {
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:mysql://localhost/unacloud2?useUnicode=yes&characterEncoding=UTF-8"
+            url = "jdbc:mysql://157.253.236.161/uciaas2dev?useUnicode=yes&characterEncoding=UTF-8"
         }
     }
     test {

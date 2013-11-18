@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.losandes.utils.Log;
 import static com.losandes.utils.Constants.*;
+import virtualmachine.Hypervisor;
 
 /**
  * This class is responsible for checking if a VMware virtual machine has been correctly deployed. That is, if the virtual machines has started and if it has well configured its IP address
@@ -24,22 +25,27 @@ public class VirtualMachineStateViewer {
      * @param vmPath The path of the virtual machine that must be checked
      * @param hypervisorName The type of hypervisor used to deploy the virtual machine
      */
-    public VirtualMachineStateViewer(String virtualMachineCode,String hypervisorPath,String vmIP,String vmPath,int hypervisorName) {
+    public VirtualMachineStateViewer(String virtualMachineCode,Hypervisor v,String vmIP){
         ServerMessageSender.reportVirtualMachineState(virtualMachineCode,DEPLOYING_STATE,"Starting virtual machine");
-        boolean encendio=false,red=false;
-        for(int e=0;e<2&&!encendio;e++){
-            if(vmrunListVerification(hypervisorPath, vmPath)){
-                encendio=true;
+        /*boolean encendio=false,red=false;
+        if(v.getHypervisorId()==VIRTUAL_BOX){
+            encendio=true;
+        }else{
+            for(int e=0;e<2&&!encendio;e++){
+                if(vmrunListVerification(v.getExecutablePath(),v.getExecutablePath())){
+                    encendio=true;
+                }
+                try{Thread.sleep(10000);}catch(Exception ex){}
             }
-            try{Thread.sleep(10000);}catch(Exception ex){}
-        }
-        if(encendio)for(int e=0;e<12&&!red;e++){
+        }*/
+        boolean encendio=true,red=false;
+        if(encendio)for(int e=0;e<8&&!red;e++){
             if(pingVerification(vmIP))red=true;
             if(!red)try{Thread.sleep(30000);}catch(Exception ex){}
         }
         if(encendio&&red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,ON_STATE,"Machine started");
         else{
-            PersistentExecutionManager.removeExecution(hypervisorName, vmPath, hypervisorPath, virtualMachineCode);
+            PersistentExecutionManager.removeExecution(v.getHypervisorId(),v.getVirtualMachinePath(),v.getExecutablePath(),virtualMachineCode);
             if(encendio&&!red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,ERROR_STATE,"Machine not configured");
             else if(!encendio&&red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,ERROR_STATE,"Machine didn't start");
             else if(!encendio&&!red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,ERROR_STATE,"Machine didn't start");
