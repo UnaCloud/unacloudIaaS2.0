@@ -8,7 +8,7 @@ class Deployment {
 	Date stopTime
 	int status
 	
-	int totalVMs
+	//int totalVMs
 	
 	static DEPLOYING=1
 	static FINISHED=2

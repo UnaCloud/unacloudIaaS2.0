@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 class DeployedImage {
 	VirtualMachineImage image
+	
+	boolean highAvaliavility
+	
 	static hasMany = [virtualMachines: VirtualMachine]
     static constraints = {
     }
