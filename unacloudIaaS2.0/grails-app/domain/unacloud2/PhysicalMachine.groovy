@@ -4,7 +4,7 @@ class PhysicalMachine {
 
     String name
 	boolean withUser
-	int slots
+	int maxVirtualMachinesOn
 	int cores
 	int ram
 	int hardDisk
@@ -14,6 +14,7 @@ class PhysicalMachine {
 	String mac
 	OperatingSystem operatingSystem
 	MachineState state
+	static hasMany = {VirtualMachine}
 	static belongsTo ={laboratory: Laboratory}
 	static constraints = {
     }
