@@ -3,6 +3,7 @@ package unacloud2
 class PhysicalMachine {
 
     String name
+	boolean withUser
 	int slots
 	int cores
 	int ram
@@ -12,6 +13,7 @@ class PhysicalMachine {
 	IP ip
 	String mac
 	OperatingSystem operatingSystem
+	
 	
 	static belongsTo ={laboratory: Laboratory}
 	static constraints = {
