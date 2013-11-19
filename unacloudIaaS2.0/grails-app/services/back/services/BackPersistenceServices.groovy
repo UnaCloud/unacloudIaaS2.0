@@ -1,4 +1,4 @@
-package back.services
+package back.services;
 
 import static com.losandes.utils.Constants.ERROR_STATE;
 import static com.losandes.utils.Constants.OFF_STATE;
@@ -14,23 +14,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-
 import unacloud2.AllocationPolicy;
 import unacloud2.DeployedCluster;
 import groovy.sql.Sql;
-import com.losandes.beans.Elasticrule;
-import com.losandes.beans.NodeStateLog;
-import com.losandes.beans.Physicalmachine;
-import com.losandes.beans.Virtualmachine;
-import com.losandes.beans.Virtualmachineexecution;
 import com.losandes.utils.VirtualMachineCPUStates;
 /**
  * Prueba la implementacion de la interfaz SecurityServiceTest proveida por la aplicación
  * @author German Sotelo
  */
-class BackServicesService {
+class BackPersistenceServices {
 	
 	static transactional = false
 	
@@ -54,22 +46,6 @@ class BackServicesService {
 			Logger.getLogger(PersistenceServices.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-	def InsertNodeStateLog(String machineName, String option, String value ){
-		NodeStateLog n = em.find(NodeStateLog.class, machineName);
-		em.getTransaction().begin();
-		if(n==null){
-			n=new NodeStateLog();
-			n.setPhysicalMachineName(machineName);
-			em.persist(n);
-			em.flush();
-			return;
-		}
-		if (option.equals("ClientState"))
-			n.setClientState(value);
-		else if (option.equals("ServicesNotRunning"))
-			n.setServicesNotRunning(value);
-	}
-	
 	def logginPhysicalMachineUser(String machineId, String user){
 		if(user!=null&&user.equals("null"))user=null;
 		def db = new Sql(dataSource);
@@ -125,7 +101,7 @@ class BackServicesService {
 	}
 
 	public void updateVirtualMachineCPUState(Object virtualMachineExecutionCode, VirtualMachineCPUStates cpuState) {
-		Virtualmachineexecution vme = (Virtualmachineexecution)em.find(Virtualmachineexecution.class,virtualMachineExecutionCode);
+		/*Virtualmachineexecution vme = (Virtualmachineexecution)em.find(Virtualmachineexecution.class,virtualMachineExecutionCode);
 		if(vme!=null){
 			em.getTransaction().begin();
 			vme.getVirtualmachine().setCpustate(cpuState.ordinal());
@@ -163,13 +139,13 @@ class BackServicesService {
 			}
 			
 		}
-		System.out.println(virtualMachineExecutionCode+" is "+cpuState);
+		System.out.println(virtualMachineExecutionCode+" is "+cpuState);*/
 	}
 
 	public String[] getAllPhysicalMachines() {
 		List l = em.createNativeQuery("SELECT pm.* FROM PhysicalMachine pm ;",Physicalmachine.class).setHint("toplink.refresh", "true").getResultList();
 		String[] ret = new String[l.size()];
-		for(int e=0;e<l.size();e++)ret[e]=((Physicalmachine)l.get(e)).getPhysicalmachinename();
+		//for(int e=0;e<l.size();e++)ret[e]=((Physicalmachine)l.get(e)).getPhysicalmachinename();
 		return ret;
 	}
 

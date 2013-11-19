@@ -4,7 +4,8 @@
  */
 package communication;
 
-import com.losandes.persistence.PersistenceServices;
+import back.services.BackPersistenceServices;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
+
 import static com.losandes.utils.Constants.*;
 
 /**
@@ -27,11 +29,11 @@ public class MachineStateManager {
     
     public MachineStateManager() {
         long l = System.currentTimeMillis();
-        String[] pms=new PersistenceServices().getAllPhysicalMachines();
+        String[] pms=new BackPersistenceServices().getAllPhysicalMachines();
         for(String m:pms){
             syncLastReports.put(m, l);
         }
-        new PersistenceServices().updatePhysicalMachineState(ON_STATE, pms);
+        new BackPersistenceServices().updatePhysicalMachineState(ON_STATE, pms);
 
         TimerTask tt = new TimerTask() {
             public void run() {
@@ -45,7 +47,7 @@ public class MachineStateManager {
     public void reportMachine(String machineId) {
         synchronized (syncLastReports){
             if(!syncLastReports.containsKey(machineId)){
-                new PersistenceServices().updatePhysicalMachineState(ON_STATE, machineId);
+            	new BackPersistenceServices().updatePhysicalMachineState(ON_STATE, machineId);
             }
             syncLastReports.put(machineId, System.currentTimeMillis());
         }
@@ -74,7 +76,7 @@ public class MachineStateManager {
             for(String h:aDesconectar)syncLastReports.remove(h);
         }
         if(!aDesconectar.isEmpty()) {
-            if(!aDesconectar.isEmpty())new PersistenceServices().updatePhysicalMachineState(OFF_STATE, aDesconectar.toArray(new String[0]));
+            if(!aDesconectar.isEmpty())new BackPersistenceServices().updatePhysicalMachineState(OFF_STATE, aDesconectar.toArray(new String[0]));
         }
     }
 }

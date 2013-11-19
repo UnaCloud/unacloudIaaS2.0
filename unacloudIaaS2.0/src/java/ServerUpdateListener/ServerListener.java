@@ -5,9 +5,6 @@
 package ServerUpdateListener;
 
 import cloudclientversionmanager.VersionManager;
-import com.losandes.communication.security.SecureClientStream;
-import com.losandes.communication.security.SecureServerSocket;
-import com.losandes.communication.security.SecureServerStream;
 import com.losandes.utils.VariableManager;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -57,8 +54,9 @@ public class ServerListener extends Thread {
                             String priMod=br.readLine();
                             String priExp=br.readLine();
                             if(pubMod!=null&&pubExp!=null&&priExp!=null&&priMod!=null){
-                                SecureServerStream.setKeys(priMod,priExp);
-                                SecureClientStream.setKeys(pubMod,pubExp);
+                            	//TODO rehacer el esquema de seguridad
+                                /*SecureServerStream.setKeys(priMod,priExp);
+                                SecureClientStream.setKeys(pubMod,pubExp);*/
                                 pw.println("true");
                                 System.out.println("exit(0)");
                                 System.exit(0);

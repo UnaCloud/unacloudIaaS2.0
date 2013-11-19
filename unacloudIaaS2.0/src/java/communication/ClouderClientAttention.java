@@ -16,10 +16,10 @@ import static com.losandes.utils.Constants.TURN_OFF_DB;
 import static com.losandes.utils.Constants.TURN_ON_DB;
 import static com.losandes.utils.Constants.VIRTUAL_MACHINE_CPU_STATE;
 import static com.losandes.utils.Constants.VIRTUAL_MACHINE_STATE_DB;
+import back.services.BackPersistenceServices;
 
 import com.losandes.communication.messages.UnaCloudAbstractMessage;
 import com.losandes.communication.messages.UnaCloudMessage;
-import com.losandes.persistence.PersistenceServices;
 import com.losandes.utils.VirtualMachineCPUStates;
 
 /**
@@ -49,7 +49,7 @@ public class ClouderClientAttention{
                 if (operationDomain == UnaCloudAbstractMessage.DATABASE_OPERATION) {
                     int OperationType = clouderServerRequest.getInteger(1);
                     String physicalMachineName = clouderServerRequest.getString(2);
-                    PersistenceServices persistence = new PersistenceServices();
+                    BackPersistenceServices persistence = new BackPersistenceServices();
                     switch (OperationType) {
                         case TURN_ON_DB:
                             persistence.updatePhysicalMachineState(ON_STATE,physicalMachineName);

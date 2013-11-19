@@ -217,6 +217,7 @@ public class PersistentExecutionManager {
         try{
             BufferedReader br = new BufferedReader(new FileReader(executionsFile));
             for(String h;(h=br.readLine())!=null;)temp.add(h);
+            br.close();
         }catch(Exception e){}
         return temp.toArray(new String[0]);
     }
