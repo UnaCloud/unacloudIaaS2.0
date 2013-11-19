@@ -21,7 +21,7 @@ class Deployment {
 		def totalVMs =0
 		cluster.images.each {
 			it.virtualMachines.each {
-				if(it.status!= VirtualMachine.FINISHED)
+				if(it.status!= MachineState.FINISHED)
 				totalVMs++
 			}
 		}
@@ -31,7 +31,7 @@ class Deployment {
 	def isActive(){
 		for(image in cluster.images) {
 			for(vm in image.virtualMachines){
-				if(!(vm.status ==VirtualMachine.FINISHED)){
+				if(!(vm.status ==MachineState.FINISHED)){
 					return true
 				}
 			}
@@ -54,8 +54,8 @@ class Deployment {
 	def copyVMs(){
 		for(image in cluster.images) {
 			for(vm in image.virtualMachines){
-				if(vm.status ==VirtualMachine.COPYING){
-					vm.status = VirtualMachine.CONFIGURING
+				if(vm.status ==MachineState.COPYING){
+					vm.status = MachineState.CONFIGURING
 					vm.save()
 				}
 			}
@@ -65,8 +65,8 @@ class Deployment {
 	def configureVMs(){
 		for(image in cluster.images) {
 			for(vm in image.virtualMachines){
-				if(vm.status ==VirtualMachine.CONFIGURING){
-					vm.status = VirtualMachine.DEPLOYING
+				if(vm.status ==MachineState.CONFIGURING){
+					vm.status = MachineState.DEPLOYING
 					vm.save()
 				}
 			}
@@ -76,8 +76,8 @@ class Deployment {
 	def deployVMs(){
 		for(image in cluster.images) {
 			for(vm in image.virtualMachines){
-				if(vm.status ==VirtualMachine.DEPLOYING){
-					vm.status = VirtualMachine.DEPLOYED
+				if(vm.status ==MachineState.DEPLOYING){
+					vm.status = MachineState.DEPLOYED
 					vm.save()
 				}
 			}

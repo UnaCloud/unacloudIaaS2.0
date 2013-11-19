@@ -13,16 +13,9 @@ class VirtualMachine {
 	IP ip
 	Date startTime
 	Date stopTime
-	int status
+	MachineState status
 	String message
 	
-	static COPYING=1
-	static CONFIGURING=2
-	static DEPLOYING=3
-	static DEPLOYED=4
-	static FAILED=5
-	static FINISHED=6
-		
 	def remainingTime(){
 		long millisTime=(stopTime.getTime()-System.currentTimeMillis())/1000
 		String s = ""+millisTime%60;

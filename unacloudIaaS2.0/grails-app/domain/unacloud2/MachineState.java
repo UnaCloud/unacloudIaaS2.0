@@ -2,5 +2,5 @@ package unacloud2;
 
 public enum MachineState {
 
-	ON,OFF
+	ON,OFF,COPYING,CONFIGURING,DEPLOYING,DEPLOYED,FAILED,FINISHED
 }

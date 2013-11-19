@@ -28,7 +28,7 @@ class DeploymentController {
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +(60*60*1000))
 		IP ip= new IP(ip: "10.0.0.1",used: true)
-		def virtualMachine = new VirtualMachine(message: "Deploying", name: image.name+"-"+1 ,ram:512 , cores:1 ,disk: image.fixedDiskSize ,ip: ip , status: VirtualMachine.COPYING, startTime: new Date(), stopTime: stopTime )
+		def virtualMachine = new VirtualMachine(message: "Deploying", name: image.name+"-"+1 ,ram:512 , cores:1 ,disk: image.fixedDiskSize ,ip: ip , status: MachineState.COPYING, startTime: new Date(), stopTime: stopTime )
 		ip.save()
 		DeployedImage depImage= new DeployedImage(image:image)
 		depImage.virtualMachines=[]
