@@ -13,8 +13,7 @@ class PhysicalMachine {
 	IP ip
 	String mac
 	OperatingSystem operatingSystem
-	
-	
+	MachineState state
 	static belongsTo ={laboratory: Laboratory}
 	static constraints = {
     }
