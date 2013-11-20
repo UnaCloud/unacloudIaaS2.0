@@ -1,5 +1,5 @@
 package unacloud2;
 
 public enum VirtualMachineStateEnum {
-	LOCK,FREE
+	NO_COPY,LOCK,FREE
 }

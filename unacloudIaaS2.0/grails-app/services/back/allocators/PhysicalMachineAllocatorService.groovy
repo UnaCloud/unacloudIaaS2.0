@@ -3,6 +3,7 @@ package back.allocators
 import unacloud2.DeployedCluster;
 import unacloud2.DeployedImage;
 import unacloud2.PhysicalMachine;
+import unacloud2.PhysicalMachineRepository;
 import unacloud2.VirtualMachineExecution;
 
 class PhysicalMachineAllocatorService {
@@ -16,7 +17,7 @@ class PhysicalMachineAllocatorService {
 		int a=0;
 		for(VirtualMachineExecution vme:deployedImage.virtualMachines){
 			while(a<l.size){
-				//vme.
+				PhysicalMachineRepository repo=l.get(a).repositories;
 			}
 		}
 	}
