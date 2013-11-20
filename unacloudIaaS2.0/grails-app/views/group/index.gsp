@@ -8,7 +8,7 @@
 <table class="table table-bordered table-condensed text-center" style="background:white">
   <tr class="info">
   	<td class="info" colspan="6">
-  	 <g:link action="addInstancesOptions" params="${[id: image.id]}"><i class="icon-plus-sign"></i></g:link>
+  	 <g:link action="create"><i class="icon-plus-sign"></i></g:link>
     </td>
   </tr>
   	

@@ -2,6 +2,8 @@ package unacloud2
 
 class ClusterController {
 	
+	ClusterService clusterService
+	
 	def beforeInterceptor = {
 		if(!session.user){
 			
@@ -22,20 +24,8 @@ class ClusterController {
 	
 	def save(){
 		def cluster = new Cluster( name: params.name)
-		cluster.images=[]
-		if(params.images.getClass().equals(Long))
-		cluster.images.add(VirtualMachineImage.get(params.images))
-		else{
-		for(image in params.images){
-			cluster.images.add(VirtualMachineImage.get(image))
-		}
-		}
-		cluster.save()
-		def user= User.get(session.user.id)
-		if(user.userClusters==null)
-			user.userClusters
-		user.userClusters.add(cluster)
-		user.save()
+		def user = User.get(id)
+		clusterService.saveCluster(params.images, cluster, user)
 		redirect(action: 'index')
 	}
 	
@@ -53,9 +43,7 @@ class ClusterController {
 		}
 		else{
 			def user= User.get(session.user.id)
-			user.userClusters.remove(cluster)
-			user.save()
-			cluster.delete()
+			clusterService.deleteCluster(cluster, user)
 			redirect(action:"index")
 		}
 	}

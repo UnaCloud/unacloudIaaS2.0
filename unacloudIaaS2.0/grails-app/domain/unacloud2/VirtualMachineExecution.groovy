@@ -14,6 +14,7 @@ class VirtualMachineExecution {
 	Date stopTime
 	VirtualMachineExecutionStateEnum status
 	String message
+	VirtualMachine virtualMachine
 	
 	def remainingTime(){
 		long millisTime=(stopTime.getTime()-System.currentTimeMillis())/1000

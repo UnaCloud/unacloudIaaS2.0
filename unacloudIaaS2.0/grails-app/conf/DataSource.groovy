@@ -3,7 +3,7 @@ dataSource {
     driverClassName = "com.mysql.jdbc.Driver"
 	dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
 	username = "iaasdev"
-    password = "8jQepk91YDTXI1p8UNk1"
+    password = "2fsGR5T1vJV3mJ9QXaw4"
 }
 hibernate {
 	show_sql=true
@@ -16,7 +16,7 @@ environments {
     development {
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:mysql://157.253.236.161/uciaas2dev?useUnicode=yes&characterEncoding=UTF-8"
+            url = "jdbc:mysql://157.253.204.12/iaas2dev?useUnicode=yes&characterEncoding=UTF-8"
         }
     }
     test {

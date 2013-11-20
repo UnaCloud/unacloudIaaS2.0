@@ -1,7 +1,9 @@
 package unacloud2
 
 class GroupController {
-
+	
+	GroupService groupService
+	
 	def beforeInterceptor = {
 		if(!session.user){
 			flash.message="You must log in first"
@@ -24,27 +26,19 @@ class GroupController {
 	}
 	
 	def add(){
-		def g= new Grupo(name:(params.name))
-		g.users = []
-		if(params.users.getClass().equals(String))
-		g.users.add(User.findByUsername(params.users))
-		else{
-		for(username in params.users){
-			g.users.add(User.findByUsername(username))
-		}
-		}
-		g.save()
+		def group= new Grupo(name:(params.name))
+		def users= params.users
+		groupService.addGroup(group, users)
 		redirect(controller:"group" ,action:"index")
 	}
 	def delete() {
-		redirect(controller:"user", action: "validateSession")
 		def group = Grupo.findByName(params.name)
 		if (!group) {
 		redirect(action:list)
 		}
 		
 		else{
-		group.delete()
+		groupService.deleteGroup(group)
 		redirect(controller:"group" ,action:"index")
 	
 		}
@@ -59,20 +53,9 @@ class GroupController {
 	}
 	
 	def setValues(){
-		UserController.validateSession()
 		System.out.println(params.oldName)
 		def group = Grupo.findByName(params.oldName)
-		group.putAt("name", params.name)
-		Set newUsers= []
-		if(params.users.getClass().equals(String))
-		newUsers.add(User.findByUsername(params.users))
-		
-		else{
-		for(username in params.users){
-			newUsers.add(User.findByUsername(username))
-		}
-		}
-		group.putAt("users", newUsers)
+		groupService.setValues(group, params.users,params.name)
 		redirect(action:"index")
 	}
 }

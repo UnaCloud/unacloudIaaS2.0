@@ -1,12 +1,8 @@
 package unacloud2
 
-import java.nio.file.Path
-
-import org.apache.commons.io.FileUtils;
-
 class VirtualMachineImageController {
 	
-	def imagePath = 'C:\\images\\'
+	VirtualMachineImageService virtualMachineImageService
 	
 	def beforeInterceptor = {
 		if(!session.user){
@@ -74,45 +70,22 @@ class VirtualMachineImageController {
 	def upload(){
 		
 		def files = request.multiFileMap.files
-		
-		def i= new VirtualMachineImage( fixedDiskSize: 0, volume: "", name: params.name , customizable: (params.customizable!=null),
-			isPublic: (params.isPublic!= null), accessProtocol: params.accessProtocol , operatingSystem: OperatingSystem.get(params.osId), user: params.user, password: params.password)
-		i.save()
-		
+		def user= User.get(session.user.id)
 		files.each {
 			if(it.isEmpty()){
-			flash.message = 'file cannot be empty'
-			render(view: 'newUploadImage')
+				flash.message = 'file cannot be empty'
+				render(view: 'newUploadImage')
 			}
-			
 			else{ 
-				def e=it.getOriginalFilename()
-				if(!(e.endsWith("vmx")|| e.endsWith("vmdk")) ){
-					flash.message = 'invalid file type'
-					render(view: 'newUploadImage')
-				}
-				else{
-				java.io.File newFile= new java.io.File(imagePath+i.name+"_"+session.user.username+"\\"+it.getOriginalFilename())
-				newFile.mkdirs()
-				it.transferTo(newFile)
-				if(i.isPublic){
-				def templateFile= new java.io.File(imagePath+"imageTemplates\\"+i.name+"_"+session.user.username+"\\"+it.getOriginalFilename())
-				FileUtils.copyFile(newFile, templateFile)
-				def tf= new File(fileName: (it.getOriginalFilename()), route: (imagePath+"imageTemplates\\"+i.name+"_"+session.user.username+"\\"+it.getOriginalFilename()), templateFile: true)
-				tf.image= i
-				tf.save()
-				}
-				def f= new File( fileName: (it.getOriginalFilename()), route: (imagePath+i.name+"_"+session.user.username+"\\"+it.getOriginalFilename()), templateFile: false)
-				f.image= i
-				f.save()
-				}
+			def e=it.getOriginalFilename()
+			if(!(e.endsWith("vmx")|| e.endsWith("vmdk")) ){
+				flash.message = 'invalid file type'
+				render(view: 'newUploadImage')
 			}
+			}	
 		}
-		User u= User.findById(session.user.id)
-		if(u.images==null)
-			u.images
-		u.images.add(i)
-		u.save()
+		
+		virtualMachineImageService.uploadImage(files, 0, params.name, (params.isPublic!=null), params.accessProtocol, params.osId, user, params.password)	
 		
 		redirect(action: 'index')
 	}

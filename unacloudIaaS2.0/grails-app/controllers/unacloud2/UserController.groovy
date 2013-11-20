@@ -2,6 +2,8 @@ package unacloud2
 
 class UserController {
 	
+	UserService userService
+	 
 	def beforeInterceptor = [action:{
 		if(!session.user){
 			flash.message="You must log in first"
@@ -46,10 +48,8 @@ class UserController {
 		}
 	}
 	def add() {
-		def u= new User(username: params.username, name:(params.name+" "+params.lastname),
-			 userType: params.userType, password:params.password )
-		
-		u.save()
+		userService.addUser(params.username, params.name+" "+params.lastname, params.userType,
+			 params.password )
 		redirect(controller:"user" ,action:"index")
 	}
 	
@@ -59,7 +59,7 @@ class UserController {
         redirect(action:"list")
 		}
 		else{
-		user.delete();
+		userService.deleteUser(user)
 		redirect(controller:"user" ,action:"index")
 	
 		}
@@ -79,10 +79,7 @@ class UserController {
 	
 	def setValues(){
 		def user = User.findByUsername(params.oldUsername)
-		user.putAt("username", params.username)
-		user.putAt("password", params.password)
-		user.putAt("name", (params.name+" "+params.lastname))
-		user.putAt("userType", params.userType)
+		userService.setValues(user,params.username, params.password,params.name+" "+params.lastname, params.userType)
 		redirect(action:"index")
 	}
 	
