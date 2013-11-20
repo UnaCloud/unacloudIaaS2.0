@@ -1,10 +1,11 @@
 package back.allocators
 
+import unacloud2.DeployedCluster;
 import unacloud2.Deployment;
 
 class IpDirectionAllocatorService {
 
-    def allocateIPsRandomly(Deployment deployment){
+    def allocateIPsRandomly(DeployedCluster deployment){
     	//deployment.
 	}
 	
