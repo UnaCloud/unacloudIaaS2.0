@@ -13,7 +13,8 @@ class PhysicalMachine {
 	PhysicalMachineStateEnum state
 	OperatingSystem operatingSystem
 	
-	static hasMany = {VirtualMachine}
+	static hasMany = {repo: PhysicalMachineRepository}
+	
 	static belongsTo ={laboratory: Laboratory}
 	static constraints = {
     }

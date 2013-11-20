@@ -7,7 +7,7 @@ class PhysicalMachineRepository {
 	String name
 	int capacity
 	String path
-	static hasMany= {images: VirtualMachine}
+	static hasMany= {virtualMachines: VirtualMachine}
 	static belongsTo = {phyMachine: PhysicalMachine}
 	
     static constraints = {
