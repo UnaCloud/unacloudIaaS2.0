@@ -6,7 +6,7 @@ class VirtualMachine {
 	String folderName
 	long size
 	VirtualMachineStateEnum state
-	static belongsTo = { repo: PhysicalMachineRepository}
+	static belongsTo = [ repo: PhysicalMachineRepository]
 	
     static constraints = {
     }
