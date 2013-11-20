@@ -2,16 +2,10 @@ package unacloud2
 
 class Deployment {
 	
-	
 	DeployedCluster cluster
 	Date startTime
 	Date stopTime
-	int status
-	
-	//int totalVMs
-	
-	static DEPLOYING=1
-	static FINISHED=2
+	DeploymentStateEnum status
 	
 	static constraints = {
 		
