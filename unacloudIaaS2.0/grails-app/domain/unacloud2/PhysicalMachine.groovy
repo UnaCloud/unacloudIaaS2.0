@@ -4,10 +4,8 @@ class PhysicalMachine {
 
     String name
 	boolean withUser
-	int maxVirtualMachinesOn
 	int cores
 	int ram
-	int hardDisk
 	boolean highAvaliability
 	String hypervisorPath
 	IP ip

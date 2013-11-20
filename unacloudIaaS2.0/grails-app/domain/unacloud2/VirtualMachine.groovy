@@ -4,7 +4,7 @@ class VirtualMachine {
 	
 	VirtualMachineImage image
 	String folderName
-	int size
+	long size
 	VirtualMachineStateEnum state
 	static belongsTo = { repo: PhysicalMachineRepository}
 	

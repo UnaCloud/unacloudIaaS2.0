@@ -8,7 +8,6 @@ class VirtualMachineExecution {
 
     String name
 	int cores	
-	int disk
 	int ram
 	IP ip
 	Date startTime

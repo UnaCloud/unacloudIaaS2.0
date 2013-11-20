@@ -3,13 +3,11 @@ package unacloud2
 class VirtualMachineImage {
 	
 	String name
-    //boolean avaliable
+    boolean avaliable
 	boolean isPublic
-	boolean customizable
-	int fixedDiskSize
+	long fixedDiskSize
 	String user
 	String password
-	String volume
 	OperatingSystem operatingSystem
 	String accessProtocol
 	Date startTime
@@ -18,8 +16,6 @@ class VirtualMachineImage {
 	static hasMany = [files:File ]
 	
 	static constraints = {
-		
-	
     }
 	
 	def isDeployed(){
