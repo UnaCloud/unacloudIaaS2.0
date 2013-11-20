@@ -7,20 +7,20 @@ class DeployedImage {
 	
 	boolean highAvaliavility
 	
-	static hasMany = [virtualMachines: VirtualMachine]
+	static hasMany = [virtualMachines: VirtualMachineExecution]
     static constraints = {
     }
 	
-	ArrayList <VirtualMachine> getOrderedVMs(){
+	ArrayList <VirtualMachineExecution> getOrderedVMs(){
 		VirtualMachineComparator c= new VirtualMachineComparator()
-		ArrayList <VirtualMachine> array = new ArrayList(virtualMachines).sort(c)
+		ArrayList <VirtualMachineExecution> array = new ArrayList(virtualMachines).sort(c)
 		return array
 	}
 	
 	def numberOfActiveMachines(){
 		def counter=0
 		virtualMachines.each {
-			if (!(it.status==VirtualMachine.FINISHED))
+			if (!(it.status==VirtualMachineExecution.FINISHED))
 			counter++
 		}
 		return counter

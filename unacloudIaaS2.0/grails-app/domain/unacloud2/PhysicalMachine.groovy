@@ -12,8 +12,9 @@ class PhysicalMachine {
 	String hypervisorPath
 	IP ip
 	String mac
+	PhysicalMachineStateEnum state
 	OperatingSystem operatingSystem
-	MachineState state
+	
 	static hasMany = {VirtualMachine}
 	static belongsTo ={laboratory: Laboratory}
 	static constraints = {

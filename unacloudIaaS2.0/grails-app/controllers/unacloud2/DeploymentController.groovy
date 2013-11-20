@@ -28,7 +28,7 @@ class DeploymentController {
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +(60*60*1000))
 		IP ip= new IP(ip: "10.0.0.1",used: true)
-		def virtualMachine = new VirtualMachine(message: "Deploying", name: image.name+"-"+1 ,ram:512 , cores:1 ,disk: image.fixedDiskSize ,ip: ip , status: MachineState.COPYING, startTime: new Date(), stopTime: stopTime )
+		def virtualMachine = new VirtualMachineExecution(message: "Deploying", name: image.name+"-"+1 ,ram:512 , cores:1 ,disk: image.fixedDiskSize ,ip: ip , status: VirtualMachine.COPYING, startTime: new Date(), stopTime: stopTime )
 		ip.save()
 		DeployedImage depImage= new DeployedImage(image:image)
 		depImage.virtualMachines=[]
@@ -75,7 +75,7 @@ class DeploymentController {
 					long stopTimeMillis= new Date().getTime()
 					def stopTime= new Date(stopTimeMillis +Integer.parseInt(params.time))
 					
-					def virtualMachine = new VirtualMachine(message: "Deploying",name: iName+"-"+j ,ram: iRAM, cores:iCores,disk:0,ip: iIP,status: VirtualMachine.DEPLOYING,startTime: new Date(),stopTime: stopTime )
+					def virtualMachine = new VirtualMachineExecution(message: "Deploying",name: iName+"-"+j ,ram: iRAM, cores:iCores,disk:0,ip: iIP,status: VirtualMachine.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 					virtualMachine.save(failOnError: true)
 					depImage.virtualMachines.add(virtualMachine)
 			}
@@ -117,9 +117,9 @@ class DeploymentController {
 		params.each {
 			if (it.key.contains("hostname")){
 				if (it.value.contains("on")){
-					VirtualMachine vm = VirtualMachine.get((it.key - "hostname") as Integer)
+					VirtualMachineExecution vm = VirtualMachineExecution.get((it.key - "hostname") as Integer)
 					vm.stopTime=new Date()
-					vm.status= VirtualMachine.FINISHED
+					vm.status= VirtualMachineExecution.FINISHED
 					vm.save()
 				}
 			}
@@ -150,7 +150,7 @@ class DeploymentController {
 					long stopTimeMillis= new Date().getTime()
 					def stopTime= new Date(stopTimeMillis +Integer.parseInt(params.time))
 					
-					def virtualMachine = new VirtualMachine(message: "Deploying",name: iName+"-"+i ,ram: iRAM, cores:iCores,disk:0,ip: iIP,status: VirtualMachine.DEPLOYING,startTime: new Date(),stopTime: stopTime )
+					def virtualMachine = new VirtualMachineExecution(message: "Deploying",name: iName+"-"+i ,ram: iRAM, cores:iCores,disk:0,ip: iIP,status: VirtualMachine.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 					virtualMachine.save(failOnError: true)
 					depImage.virtualMachines.add(virtualMachine)
 			}
