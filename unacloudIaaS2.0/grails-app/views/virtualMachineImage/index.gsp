@@ -16,7 +16,6 @@
   	
   <tr>
   <th>Image Name</th>
-  <th>Volume</th>
   <th>Options</th>
   </tr>
  
@@ -25,17 +24,11 @@
     <td>
       <small>${image.name}</small>
     </td>
-    <td>
-   		<small>${image.volume }</small>
-    </td>
-    
     <td >
     <div class="row-fluid text-center">
     <g:link action="edit" params="${[id: image.id]}"><i class="icon-pencil"></i></g:link>
     <g:link action="delete" params="${[id: image.id]}"><i class="icon-remove-sign"></i></g:link>
-    <g:if test="${image.customizable }">
     <g:link controller="deployment" action="deployImage" params="${[id: image.id]}"><i class="icon-play"></i></g:link>
-    </g:if>
     </div>
     </td>
   </tr>
