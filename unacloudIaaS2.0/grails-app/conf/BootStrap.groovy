@@ -11,7 +11,7 @@ class BootStrap {
 		}
 		
 		if(Laboratory.count() ==0){
-			new Laboratory(name: 'TestLab', highAvaliability: false,networkQuality: NetworkQualityEnum.ETHERNET100MBPS)	
+			new Laboratory(name: 'TestLab', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS).save()	
 		}
 		
 		if(OperatingSystem.count() ==0){
