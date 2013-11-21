@@ -45,7 +45,7 @@ public class VirtualMachineStateViewer {
         }
         if(encendio&&red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,ON_STATE,"Machine started");
         else{
-            PersistentExecutionManager.removeExecution(v.getHypervisorId(),v.getVirtualMachinePath(),v.getExecutablePath(),virtualMachineCode);
+            PersistentExecutionManager.removeExecution(virtualMachineCode);
             if(encendio&&!red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,ERROR_STATE,"Machine not configured");
             else if(!encendio&&red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,ERROR_STATE,"Machine didn't start");
             else if(!encendio&&!red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,ERROR_STATE,"Machine didn't start");

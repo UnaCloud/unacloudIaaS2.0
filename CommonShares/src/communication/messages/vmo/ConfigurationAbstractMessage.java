@@ -1,14 +1,15 @@
-package communication.messages.vmo.configuration;
+package communication.messages.vmo;
 
 import communication.UnaCloudMessage;
-import communication.UnaCloudAbstractMessage;
+import communication.messages.VirtualMachineOperationMessage;
 
 /**
  *
  * @author Clouder
  */
-public abstract class ConfigurationAbstractMessage extends UnaCloudAbstractMessage{
-    public static final String VMC_COMMAND="comandMachine";
+public abstract class ConfigurationAbstractMessage extends VirtualMachineOperationMessage{
+    private static final long serialVersionUID = 952598485411183393L;
+	public static final String VMC_COMMAND="comandMachine";
     public static final String VMC_START="StartMachine";
     public static final String VMC_STOP="StopMachine";
     public static final String VMC_WRITE_FILE="EscribirArchivoMaquina";
@@ -17,11 +18,14 @@ public abstract class ConfigurationAbstractMessage extends UnaCloudAbstractMessa
     public static final String VMC_CHANGE_MAC="changeMac";
     String configurationOperation;
     public ConfigurationAbstractMessage(String configurationOperation){
-        super(VIRTUAL_MACHINE_OPERATION,VIRTUAL_MACHINE_CONFIGURATION);
+        super(VIRTUAL_MACHINE_OPERATION);
         this.configurationOperation=configurationOperation;
     }
     public ConfigurationAbstractMessage(String configurationOperation,UnaCloudMessage message){
-        super(VIRTUAL_MACHINE_OPERATION,VIRTUAL_MACHINE_CONFIGURATION, message);
+        super(VIRTUAL_MACHINE_CONFIGURATION, message);
         this.configurationOperation=configurationOperation;
     }
+    public String getConfigurationOperation() {
+		return configurationOperation;
+	}
 }

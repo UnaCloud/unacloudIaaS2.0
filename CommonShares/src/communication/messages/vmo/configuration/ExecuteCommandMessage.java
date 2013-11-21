@@ -5,7 +5,7 @@
 package communication.messages.vmo.configuration;
 
 import communication.UnaCloudMessage;
-import static communication.messages.vmo.configuration.ConfigurationAbstractMessage.VMC_COMMAND;
+import communication.messages.vmo.ConfigurationAbstractMessage;
 
 import java.util.Arrays;
 
@@ -14,7 +14,8 @@ import java.util.Arrays;
  * @author Clouder
  */
 public class ExecuteCommandMessage extends ConfigurationAbstractMessage{
-    int hypervisor;
+    private static final long serialVersionUID = 7165273786101203396L;
+	int hypervisor;
     String destinationMachine,user,pass,rutaVMRUN;
     ExecuteCommandRequest[] comandos;
     public ExecuteCommandMessage(int hypervisor, String destinationMachine, String user, String pass, String rutaVMRUN, String configurationOperation) {

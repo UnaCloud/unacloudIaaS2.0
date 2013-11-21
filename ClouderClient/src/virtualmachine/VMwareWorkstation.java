@@ -52,11 +52,11 @@ public class VMwareWorkstation extends Hypervisor {
     }
 
     @Override
-    public void turnOffVirtualMachine() throws HypervisorOperationException {
+    public void turnOffVirtualMachine(){
         String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T","ws","stop",getVirtualMachinePath());
-        if (h.contains(ERROR_MESSAGE)) {
+        /*if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
-        }
+        }*/
     }
 
     @Override
@@ -132,74 +132,6 @@ public class VMwareWorkstation extends Hypervisor {
             fis.close();
             fos.close();
         } catch (Throwable th) {
-        }
-    }
-
-    public static void main(String... args) throws Exception {
-    }
-
-    public static void startUpServices() {
-        Log.print2("startUpServices");
-        TreeSet<String> serviciosALevantar = new TreeSet<String>();
-        serviciosALevantar.add("VMware Authorization Service");
-        serviciosALevantar.add("hcmon");
-        serviciosALevantar.add("VMware NAT Service");
-        serviciosALevantar.add("VMware Workstation Server");
-        String servicios = "";
-        try {
-            PrintWriter pw = new PrintWriter("./logServicios.txt");
-            pw.println(new Date() + " " + System.currentTimeMillis());
-            Process p = Runtime.getRuntime().exec("net start");
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            for (String h; (h = br.readLine()) != null;) {
-                serviciosALevantar.remove(h.trim());
-                if (h.toLowerCase().contains("vmware")) {
-                    servicios += h + "\r\n";
-                }
-            }
-            br.close();
-
-            pw.println("levantando " + serviciosALevantar.size());
-            if (!serviciosALevantar.isEmpty()) {
-                try {
-                    for (String servs : serviciosALevantar) {
-                        pw.println("net start \"" + servs + "\"");
-                        p = Runtime.getRuntime().exec("net start \"" + servs + "\"");
-                        br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                        for (String h; (h = br.readLine()) != null;) {
-                            pw.println(h);
-                        }
-                        br.close();
-                        br = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-                        for (String h; (h = br.readLine()) != null;) {
-                            pw.println(h);
-                        }
-                        br.close();
-                        p.waitFor();
-                    }
-                    pw.println("termine bien");
-                } catch (Exception ex) {
-                    ex.printStackTrace(pw);
-                }
-            }
-            pw.close();
-        } catch (Exception e) {
-        }
-        Connection con=null;
-        try {
-            con = DriverManager.getConnection("jdbc:mysql://157.253.236.160:3306/clouder", "temporal", "q3hju3qhy3y4dfg62");
-            PreparedStatement ps = con.prepareStatement("update `clouder`.`nodestatelog` set `CLIENTSTATE`=?,`SERVICESNOTRUNNING`=? where `PHYSICALMACHINE_PHYSICALMACHINENAME`=?;");
-            ps.setString(1,"Ok");
-            ps.setString(2,servicios);
-            ps.setString(3,Network.getHostname());
-            ps.executeUpdate();
-            con.close();
-        }catch(SQLException ex){
-        }finally{
-            if(con!=null)try {
-                con.close();
-            } catch (SQLException ex) {
-            }
         }
     }
 

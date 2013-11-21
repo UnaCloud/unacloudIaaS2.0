@@ -5,14 +5,15 @@
 package communication.messages.vmo.configuration;
 
 import communication.UnaCloudMessage;
-import static communication.messages.vmo.configuration.ConfigurationAbstractMessage.VMC_STOP;
+import communication.messages.vmo.ConfigurationAbstractMessage;
 
 /**
  *
  * @author Clouder
  */
 public class StopVirtualMachineMessage extends ConfigurationAbstractMessage{
-    String hypervisor, destinationMachine, rutaVMRUN;
+    private static final long serialVersionUID = -3195250527020527796L;
+	String hypervisor, destinationMachine, rutaVMRUN;
 
     public StopVirtualMachineMessage(String hypervisor, String destinationMachine, String rutaVMRUN) {
         super(VMC_STOP);

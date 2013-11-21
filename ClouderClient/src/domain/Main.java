@@ -1,29 +1,31 @@
 package domain;
 
-import com.losandes.dataChannel.DataServerSocket;
-
-import monitoring.PhysicalMachineStateReporter;
-import communication.ClouderClientAttention;
-import communication.UnaCloudAbstractMessage;
-import communication.security.utils.ConnectionException;
-import execution.PersistentExecutionManager;
-import fileTransfer.TreeDistributionChannelManager;
+import static com.losandes.utils.Constants.FATAL_ERROR_MESSAGE;
+import static com.losandes.utils.Constants.LOGIN_DB;
+import static com.losandes.utils.Constants.LOGOUT_DB;
+import static com.losandes.utils.Constants.MESSAGE_SEPARATOR_TOKEN;
+import static com.losandes.utils.Constants.TURN_OFF_DB;
+import static com.losandes.utils.Constants.TURN_ON;
+import static com.losandes.utils.Constants.TURN_ON_DB;
 
 import java.util.Arrays;
 import java.util.Date;
 
 import monitoring.PhysicalMachineMonitor;
+import monitoring.PhysicalMachineStateReporter;
 import physicalmachine.Network;
 import physicalmachine.OperatingSystem;
 import physicalmachine.PhysicalMachineState;
 
+import com.losandes.dataChannel.DataServerSocket;
 import com.losandes.utils.Log;
 import com.losandes.utils.VariableManager;
+import communication.ClouderClientAttention;
+import communication.UnaCloudAbstractMessage;
 
-import static com.losandes.utils.Constants.*;
 import execution.LocalProcessExecutor;
-import physicalmachine.PhysicalMachine;
-import virtualmachine.VMwareWorkstation;
+import execution.PersistentExecutionManager;
+import fileTransfer.TreeDistributionChannelManager;
 
 /**
  * @author Eduardo Rosales
@@ -31,6 +33,9 @@ import virtualmachine.VMwareWorkstation;
  *
  */
 public class Main {
+	
+	public static final int DATABASE_OPERATION = 1;
+    public static final int REGISTRATION_OPERATION = 2;
 
     /**
      * Responsible for sorting and starting the Clouder Client
@@ -48,11 +53,10 @@ public class Main {
         PhysicalMachineState state = new PhysicalMachineState();
         switch (mainCase) {
             case TURN_OFF_DB:
-                String turnOffMessage = UnaCloudAbstractMessage.DATABASE_OPERATION + MESSAGE_SEPARATOR_TOKEN + TURN_OFF_DB + MESSAGE_SEPARATOR_TOKEN + Network.getHostname();
+                String turnOffMessage = DATABASE_OPERATION + MESSAGE_SEPARATOR_TOKEN + TURN_OFF_DB + MESSAGE_SEPARATOR_TOKEN + Network.getHostname();
                 state.reportPhysicalMachine(turnOffMessage,false);
                 break;
             case TURN_ON_DB:
-                VMwareWorkstation.startUpServices();
                 System.out.println("Clouder Client Started at2: " + new Date());
                 String turnOnMessage = UnaCloudAbstractMessage.DATABASE_OPERATION + MESSAGE_SEPARATOR_TOKEN + TURN_ON + MESSAGE_SEPARATOR_TOKEN + Network.getHostname();
                 System.out.println("Clouder Client Started at3: " + new Date());

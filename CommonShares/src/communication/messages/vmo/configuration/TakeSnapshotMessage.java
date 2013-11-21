@@ -1,18 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package communication.messages.vmo.configuration;
 
 import communication.UnaCloudMessage;
-import static communication.messages.vmo.configuration.ConfigurationAbstractMessage.VMC_TAKE_SNAPSHOT;
+import communication.messages.vmo.ConfigurationAbstractMessage;
 
 /**
  *
  * @author Clouder
  */
 public class TakeSnapshotMessage extends ConfigurationAbstractMessage{
-    String hypervisor, destinationMachine, rutaVMRUN, snapshotname;
+    private static final long serialVersionUID = 6574606218582664239L;
+	String hypervisor, destinationMachine, rutaVMRUN, snapshotname;
 
     public TakeSnapshotMessage(String hypervisor, String destinationMachine, String rutaVMRUN, String snapshotname) {
         super(VMC_TAKE_SNAPSHOT);
@@ -49,5 +46,4 @@ public class TakeSnapshotMessage extends ConfigurationAbstractMessage{
         rutaVMRUN = message.getString(4);
         snapshotname=message.getString(5);
     }
-    
 }

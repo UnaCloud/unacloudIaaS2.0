@@ -5,15 +5,15 @@
 package communication.messages.vmo.configuration;
 
 import communication.UnaCloudMessage;
-import static communication.messages.vmo.configuration.ConfigurationAbstractMessage.VMC_START;
-import static communication.messages.vmo.configuration.ConfigurationAbstractMessage.VMC_TRANSFER_FILE;
+import communication.messages.vmo.ConfigurationAbstractMessage;
 
 /**
  *
  * @author Clouder
  */
 public class StartVirtualMachineMessage extends ConfigurationAbstractMessage{
-    String hypervisor, destinationMachine, rutaVMRUN;
+    private static final long serialVersionUID = 7658193628205227858L;
+	String hypervisor, destinationMachine, rutaVMRUN;
 
     public StartVirtualMachineMessage(String hypervisor, String destinationMachine, String rutaVMRUN) {
         super(VMC_START);

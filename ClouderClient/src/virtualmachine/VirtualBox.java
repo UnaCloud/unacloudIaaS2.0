@@ -28,13 +28,13 @@ class VirtualBox extends Hypervisor {
     }
     
     @Override
-    public void turnOffVirtualMachine() throws HypervisorOperationException {
+    public void turnOffVirtualMachine(){
         sleep(2000);
         String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "controlvm", getVirtualMachineName(), "poweroff");
         unregisterVirtualMachine();
-        if (h.contains(ERROR_MESSAGE)) {
+        /*if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
-        }
+        }*/
     }
     private void registerVirtualMachine(){
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "registervm", getVirtualMachinePath());

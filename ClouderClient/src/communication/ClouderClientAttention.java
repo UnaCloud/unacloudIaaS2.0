@@ -18,6 +18,8 @@ import static com.losandes.utils.Constants.*;
  * Responsible for listening to the Clouder Server
  */
 public class ClouderClientAttention implements Closeable{
+	
+	public static int POOL_THREAD_SIZE = 2;
 
 	private ServerSocket serverSocket;
     /**
@@ -46,9 +48,8 @@ public class ClouderClientAttention implements Closeable{
         try {
         	serverSocket = new ServerSocket(localPort);
             while (true) {
-                Socket sSocket;
                 try {
-                    sSocket = serverSocket.accept();
+                	Socket sSocket = serverSocket.accept();
                     poolExe.execute(new ClouderServerAttentionThread(sSocket, this));
                 } catch (IOException ex) {
                     Log.print("Can't process message " + localPort + " . " + ex.getLocalizedMessage());
@@ -68,5 +69,4 @@ public class ClouderClientAttention implements Closeable{
         } catch (Exception e) {
         }
     }
-}//end of ClouderClientAttention
-
+}

@@ -1,17 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package communication.messages.vmo.configuration;
 
 import communication.UnaCloudMessage;
+import communication.messages.vmo.ConfigurationAbstractMessage;
 
-/**
- *
- * @author Clouder
- */
 public class ChangeVirtualMachineMacMessage extends ConfigurationAbstractMessage{
-    String hypervisor, destinationMachine, rutaVMRUN;
+    private static final long serialVersionUID = -1790598953894863802L;
+	String hypervisor, destinationMachine, rutaVMRUN;
 
     public ChangeVirtualMachineMacMessage(String hypervisor, String destinationMachine, String rutaVMRUN) {
         super(VMC_CHANGE_MAC);

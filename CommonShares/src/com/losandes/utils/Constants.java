@@ -58,7 +58,7 @@ public class Constants {
     public static final int PM_DELETE_FILE = 3;
     
     //UnaCloud Client server socket communication constants
-    public static int POOL_THREAD_SIZE = 5;
+    
     //UnaCloud Client location constants
     public static final String BIN="bin";
     public static final String SERVER_PARAMETERS="server_parameters";

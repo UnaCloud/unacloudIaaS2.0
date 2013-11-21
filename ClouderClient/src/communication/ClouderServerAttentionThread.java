@@ -16,10 +16,12 @@ import communication.messages.PhysicalMachineOperationMessage;
 import communication.messages.VirtualMachineOperationMessage;
 import communication.messages.pmo.PhysicalMachineMonitorMessage;
 import communication.messages.pmo.PhysicalMachineTurnOnMessage;
+import communication.messages.vmo.ConfigurationAbstractMessage;
 import communication.messages.vmo.VirtualMachineAddTimeMessage;
 import communication.messages.vmo.VirtualMachineRestartMessage;
 import communication.messages.vmo.VirtualMachineTurnOffMessage;
 import communication.messages.vmo.VirtualMachineTurnOnMessage;
+import configuration.VirtualMachineConfigurator;
 import execution.PersistentExecutionManager;
 
 /**
@@ -55,11 +57,11 @@ public class ClouderServerAttentionThread extends Thread {
      * request
      */
     public void run() {
-        try(ObjectInputStream ois=new ObjectInputStream(communication.getInputStream());PrintWriter pw=new PrintWriter(communication.getOutputStream())){
+        try(ObjectInputStream ois=new ObjectInputStream(communication.getInputStream());PrintWriter pw=new PrintWriter(communication.getOutputStream(),true)){
         	for(UnaCloudAbstractMessage clouderServerRequest;(clouderServerRequest = UnaCloudAbstractMessage.fromMessage((UnaCloudMessage)ois.readObject()))!=null;){
         		switch (clouderServerRequest.getMainOp()) {
 	                case UnaCloudAbstractMessage.VIRTUAL_MACHINE_OPERATION:
-	                    attendVirtualMachineOperation(clouderServerRequest);
+	                    attendVirtualMachineOperation(clouderServerRequest,ois,pw);
 	                    break;
 	                case UnaCloudAbstractMessage.PHYSICAL_MACHINE_OPERATION:
 	                    attendPhysicalMachineOperation(clouderServerRequest);
@@ -67,10 +69,8 @@ public class ClouderServerAttentionThread extends Thread {
 	                case UnaCloudAbstractMessage.AGENT_OPERATION:
 	                    attendAgentOperation(clouderServerRequest);
 	                    break;
-	                case UnaCloudAbstractMessage.VIRTUAL_MACHINE_CONFIGURATION:
-	                	//TODO do something
-	                    //new VirtualMachineConfigurator().attendConfigurationRequest(clouderServerRequest, communication);
 	                default:
+	                	//TODO do something
 	                    //clouderClientOperationResult += ERROR_MESSAGE + "The Clouder Server request is null or an invalid number: " + operationDomain;
 	                    //System.err.println(clouderClientOperationResult);
 	                    break;
@@ -88,7 +88,7 @@ public class ClouderServerAttentionThread extends Thread {
      *
      * @param clouderServerRequestSplitted Server request
      */
-    private void attendVirtualMachineOperation(UnaCloudAbstractMessage message) {
+    private void attendVirtualMachineOperation(UnaCloudAbstractMessage message,ObjectInputStream ois,PrintWriter pw) {
         switch (message.getSubOp()) {
             case VirtualMachineOperationMessage.VM_TURN_ON:
                 VirtualMachineTurnOnMessage turnOn=(VirtualMachineTurnOnMessage)message;
@@ -96,7 +96,7 @@ public class ClouderServerAttentionThread extends Thread {
                 break;
             case VirtualMachineOperationMessage.VM_TURN_OFF:
             	VirtualMachineTurnOffMessage turnOff=(VirtualMachineTurnOffMessage)message;
-                PersistentExecutionManager.removeExecution(turnOff);
+                PersistentExecutionManager.removeExecution(turnOff.getVirtualMachineExecutionId());
                 break;
             case VirtualMachineOperationMessage.VM_RESTART:
             	VirtualMachineRestartMessage restart=(VirtualMachineRestartMessage)message;
@@ -106,6 +106,8 @@ public class ClouderServerAttentionThread extends Thread {
             	VirtualMachineAddTimeMessage time=(VirtualMachineAddTimeMessage)message;
                 PersistentExecutionManager.extendsVMTime(time);
                 break;
+            case VirtualMachineOperationMessage.VIRTUAL_MACHINE_CONFIGURATION:
+                new VirtualMachineConfigurator().attendConfigurationRequest((ConfigurationAbstractMessage)message, ois,pw);
             default:
         }
     }

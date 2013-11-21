@@ -27,9 +27,9 @@ class VMwarePlayer extends Hypervisor{
     }
 
     @Override
-    public void turnOffVirtualMachine() throws HypervisorOperationException{
+    public void turnOffVirtualMachine(){
         String h=LocalProcessExecutor.executeCommandOutput(getExecutablePath() + " -T player stop "+getVirtualMachinePath());
-        if(h.contains(ERROR_MESSAGE))throw new HypervisorOperationException(h.length()<100?h:h.substring(0,100));
+        //if(h.contains(ERROR_MESSAGE))throw new HypervisorOperationException(h.length()<100?h:h.substring(0,100));
     }
 
     @Override

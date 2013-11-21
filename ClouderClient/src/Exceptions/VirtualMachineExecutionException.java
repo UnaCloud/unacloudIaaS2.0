@@ -6,7 +6,9 @@ package Exceptions;
  */
 public class VirtualMachineExecutionException extends Exception{
 
-    public VirtualMachineExecutionException(String message){
+    private static final long serialVersionUID = 1323530370930637999L;
+
+	public VirtualMachineExecutionException(String message){
         super(message);
         
     }

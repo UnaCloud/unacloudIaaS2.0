@@ -70,8 +70,7 @@ public class HypervisorFactory {
             this.hypervisorName = hypervisorName;
         }
         @Override
-        public void turnOffVirtualMachine() throws HypervisorOperationException {
-            throw new HypervisorOperationException("Hypervisor "+hypervisorName+" not found");
+        public void turnOffVirtualMachine(){
         }
         @Override
         public void restartVirtualMachine() throws HypervisorOperationException {

@@ -96,8 +96,7 @@ public class Context {
                 splittedString.add(vmxParameters[r][0] + " = " + DOUBLE_QUOTE + vmxParameters[r][1] + DOUBLE_QUOTE + " ");
             }
         }
-        //System.out.print(vmxToString);
         convertStrignToVMX(vmxFile.getPath(), splittedString);
         return OK_MESSAGE;
     }
-}//end of VMXFiles
+}

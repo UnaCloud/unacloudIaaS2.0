@@ -3,11 +3,12 @@ package communication.messages.vmo;
 import communication.UnaCloudMessage;
 import communication.messages.VirtualMachineOperationMessage;
 
-public class VirtualMachineTurnOnMessage extends VirtualMachineOperationMessage{
+public class VirtualMachineTurnOnMessage extends VirtualMachineOperationMessage implements Comparable<VirtualMachineTurnOnMessage>{
 	int hypervisorName,vmCores,vmMemory;
     String vmPath,hypervisorPath;
     int executionTime;
     String vmIP,persistent,checkPoint,snapshotRoute;
+    long shutdownTime; 
     public VirtualMachineTurnOnMessage() {
 		super(VM_TURN_ON);
 	}
@@ -54,5 +55,18 @@ public class VirtualMachineTurnOnMessage extends VirtualMachineOperationMessage{
 	}
 	public String getSnapshotRoute() {
 		return snapshotRoute;
+	}
+	public long getShutdownTime() {
+		return shutdownTime;
+	}
+	public void setShutdownTime(long shutdownTime) {
+		this.shutdownTime = shutdownTime;
+	}
+	@Override
+	public int compareTo(VirtualMachineTurnOnMessage o) {
+		return getVirtualMachineExecutionId().compareTo(o.getVirtualMachineExecutionId());
+	}
+	public void setExecutionTime(int executionTime) {
+		this.executionTime = executionTime;
 	}
 }
