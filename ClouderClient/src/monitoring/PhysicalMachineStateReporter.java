@@ -3,7 +3,7 @@ package monitoring;
 import com.losandes.utils.VariableManager;
 
 import communication.AbstractGrailsCommunicator;
-import communication.messages.UnaCloudAbstractMessage;
+import communication.UnaCloudAbstractMessage;
 import communication.security.utils.AbstractCommunicator;
 import communication.security.utils.ConnectionException;
 import static com.losandes.utils.Constants.*;

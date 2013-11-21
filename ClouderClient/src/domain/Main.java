@@ -4,7 +4,7 @@ import com.losandes.dataChannel.DataServerSocket;
 
 import monitoring.PhysicalMachineStateReporter;
 import communication.ClouderClientAttention;
-import communication.messages.UnaCloudAbstractMessage;
+import communication.UnaCloudAbstractMessage;
 import communication.security.utils.ConnectionException;
 import execution.PersistentExecutionManager;
 import fileTransfer.TreeDistributionChannelManager;

@@ -5,7 +5,6 @@ import static com.losandes.utils.Constants.VIRTUAL_MACHINE_STATE_DB;
 import physicalmachine.Network;
 
 import com.losandes.utils.VirtualMachineCPUStates;
-import communication.messages.UnaCloudAbstractMessage;
 
 /**
  * Class used to send quickly messages to UnaCloud server

@@ -15,12 +15,12 @@ public abstract class UnaCloudAbstractMessage{
     //UnaCloud Server operation request constants
     public static final int VIRTUAL_MACHINE_OPERATION = 1;
     public static final int PHYSICAL_MACHINE_OPERATION = 2;
+    public static final int AGENT_OPERATION = 3;
     
     //UnaCloud Client operation request constants
     public static final int DATABASE_OPERATION = 1;
     public static final int REGISTRATION_OPERATION = 2;
-    public static final int ARTHUR_OPERATION = 3;
-    public static final int UPDATE_OPERATION = 4;
+    
     public static final int VIRTUAL_MACHINE_CONFIGURATION=5;
     
     private int mainOp;

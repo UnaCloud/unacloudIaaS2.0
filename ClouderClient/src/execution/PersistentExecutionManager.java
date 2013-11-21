@@ -5,6 +5,11 @@
 package execution;
 
 import communication.ServerMessageSender;
+import communication.messages.vmo.VirtualMachineAddTimeMessage;
+import communication.messages.vmo.VirtualMachineRestartMessage;
+import communication.messages.vmo.VirtualMachineTurnOffMessage;
+import communication.messages.vmo.VirtualMachineTurnOnMessage;
+
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -14,8 +19,11 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TreeMap;
+
 import monitoring.VirtualMachineStateViewer;
+
 import com.losandes.utils.Log;
+
 import physicalmachine.MachineMonitor;
 import virtualmachine.Hypervisor;
 import virtualmachine.HypervisorFactory;
@@ -87,13 +95,13 @@ public class PersistentExecutionManager {
      * @param persistent If the virtual machine must persist its files after machine stop or if it must rollback to its initial status
      * @param checkPoint The name of the checkpoint that must be taken to secure this virtual machine execution, null if no checkpoint is needed
      */
-    public static void addExecution(String vmxroute, String hypervisorPath, String vmIP, String id, long executionTime, int vmCores, int vmMemory, int hypervisorName, String persistent,String checkPoint) {
+    public static void addExecution(VirtualMachineTurnOnMessage turnOnMessage) {
         try{
             PrintWriter pw = new PrintWriter(new FileOutputStream(executionsFile,true));
-            pw.println(vmxroute+";"+id+";"+(System.currentTimeMillis()+executionTime*3600000)+";"+hypervisorPath+";"+vmIP+";"+checkPoint);
+            pw.println(turnOnMessage.getVmPath()+";"+turnOnMessage.getVirtualMachineExecutionId()+";"+(System.currentTimeMillis()+turnOnMessage.getExecutionTime()*3600000)+";"+turnOnMessage.getHypervisorPath()+";"+turnOnMessage.getVmIP()+";"+turnOnMessage.getCheckPoint());
             pw.close();
         }catch(Exception e){}
-        startUpMachine(vmxroute, hypervisorPath, vmIP, id, executionTime*3600000l, vmCores, vmMemory, hypervisorName, persistent);
+        startUpMachine(turnOnMessage);
     }
 
     /**
@@ -104,13 +112,13 @@ public class PersistentExecutionManager {
      * @param id The id of the virtual machine execution to be removed
      * @return
      */
-    public static String removeExecution(int hypervisorName, String vmPath, String hypervisorPath, String id) {
+    public static String removeExecution(VirtualMachineTurnOffMessage turnOffMEssage) {
         ArrayList<String> execs=new ArrayList<String>();
-        for(String h:getExecutions())if(!h.split(";")[1].equals(id))execs.add(h);
+        for(String h:getExecutions())if(!h.split(";")[1].equals(turnOffMEssage.getVirtualMachineExecutionId()))execs.add(h);
         setExecutions(execs);
-        Hypervisor v=HypervisorFactory.getHypervisor(hypervisorName, hypervisorPath,vmPath);
+        Hypervisor v=HypervisorFactory.getHypervisor(turnOffMEssage.getHypervisorName(),turnOffMEssage.getHypervisorPath(),turnOffMEssage.getVmPath());
         try{
-            programedShutdowns.remove(id).cancel();
+            programedShutdowns.remove(turnOffMEssage.getVirtualMachineExecutionId()).cancel();
         }catch(Exception e){}
         try {
             v.turnOffVirtualMachine();
@@ -128,13 +136,13 @@ public class PersistentExecutionManager {
      * @param id The id of the virtual machine execution to be removed     *
      * @return
      */
-    public static String restartMachine(int hypervisorName, String vmPath, String hypervisorPath, String id) {
+    public static String restartMachine(VirtualMachineRestartMessage restartMessage) {
         String result = "";
-        Hypervisor v=HypervisorFactory.getHypervisor(hypervisorName, hypervisorPath,vmPath);
+        Hypervisor v=HypervisorFactory.getHypervisor(restartMessage.getHypervisorName(),restartMessage.getHypervisorPath(),restartMessage.getVmPath());
         try {
             v.restartVirtualMachine();
         } catch (HypervisorOperationException ex) {
-            ServerMessageSender.reportVirtualMachineState(id, ERROR_STATE, ex.getMessage());
+            ServerMessageSender.reportVirtualMachineState(restartMessage.getVirtualMachineExecutionId(), ERROR_STATE, ex.getMessage());
         }
         return result;
     }
@@ -152,19 +160,19 @@ public class PersistentExecutionManager {
      * @param persistent If the virtual machine must persist its files after machine stop or if it must rollback to its initial status
      * @return
      */
-    private static String startUpMachine(String vmxroute, String hypervisorPath, String vmIP, String id, long executionTime, int vmCores, int vmMemory, int hypervisorName, String persistent) {
-        Hypervisor v=HypervisorFactory.getHypervisor(hypervisorName, hypervisorPath,vmxroute);
+    private static String startUpMachine(VirtualMachineTurnOnMessage turnOnMessage) {
+        Hypervisor v=HypervisorFactory.getHypervisor(turnOnMessage.getHypervisorName(),turnOnMessage.getHypervisorPath(),turnOnMessage.getVmPath());
         try {
-            v.preconfigureAndStartVirtualMachine(vmCores, vmMemory,persistent);
-            Schedule timeExec = new Schedule(hypervisorName, hypervisorPath, VMW_TURN_OFF, vmxroute);
-            programedShutdowns.put(id,timeExec);
-            timer.schedule(timeExec,executionTime);
-            new VirtualMachineStateViewer(id,v,vmIP);
-            MachineMonitor.addMachineExecution(id,vmxroute,vmCores);
+            v.preconfigureAndStartVirtualMachine(turnOnMessage.getVmCores(),turnOnMessage.getVmMemory(),turnOnMessage.getPersistent());
+            Schedule timeExec = new Schedule(turnOnMessage.getHypervisorName(),turnOnMessage.getHypervisorPath(),VMW_TURN_OFF,turnOnMessage.getVmPath());
+            programedShutdowns.put(turnOnMessage.getVirtualMachineExecutionId(),timeExec);
+            timer.schedule(timeExec,turnOnMessage.getExecutionTime());
+            new VirtualMachineStateViewer(turnOnMessage.getVirtualMachineExecutionId(),v,turnOnMessage.getVmIP());
+            MachineMonitor.addMachineExecution(turnOnMessage.getVirtualMachineExecutionId(),turnOnMessage.getVmPath(),turnOnMessage.getVmCores());
         } catch (HypervisorOperationException e) {
             Log.print("Error al levantar la máquina " + e.getMessage());
-            removeExecution(hypervisorName, vmxroute, hypervisorPath, id);
-            ServerMessageSender.reportVirtualMachineState(id, ERROR_STATE, e.getMessage());
+            removeExecution(turnOnMessage.getHypervisorName(), turnOnMessage.getVmPath(), turnOnMessage.getHypervisorPath(),turnOnMessage.getVirtualMachineExecutionId());
+            ServerMessageSender.reportVirtualMachineState(turnOnMessage.getVirtualMachineExecutionId(), ERROR_STATE, e.getMessage());
             return ERROR_MESSAGE + e.getMessage();
         }
         return "";
@@ -195,16 +203,16 @@ public class PersistentExecutionManager {
      * @param id The execution id to find the correspondig virtual machine
      * @param executionTime The aditional time that must be added to the virtual machine execution
      */
-    public static void extendsVMTime(String id,int executionTime) {
-        Log.print("extendsVMTime "+id+" "+ executionTime);
-        Schedule timeExec=programedShutdowns.remove(id);
+    public static void extendsVMTime(VirtualMachineAddTimeMessage timeMessage) {
+        Log.print("extendsVMTime "+timeMessage.getVirtualMachineExecutionId()+" "+timeMessage.getExecutionTime());
+        Schedule timeExec=programedShutdowns.remove(timeMessage.getVirtualMachineExecutionId());
         int hypervisorName = timeExec.getHypervisorName();
         String hypervisorPath = timeExec.getHypervisorPath();
         String virtualMachinePath = timeExec.getVirtualMachinePath();
         timeExec.cancel();
         timeExec = new Schedule(hypervisorName, hypervisorPath, VMW_TURN_OFF, virtualMachinePath);
-        programedShutdowns.put(id, timeExec);
-        timer.schedule(timeExec, executionTime);
+        programedShutdowns.put(timeMessage.getVirtualMachineExecutionId(), timeExec);
+        timer.schedule(timeExec, timeMessage.getExecutionTime());
         Log.print("extendedVMTime");
     }
 
