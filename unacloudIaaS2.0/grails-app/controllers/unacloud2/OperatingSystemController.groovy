@@ -2,6 +2,7 @@ package unacloud2
 
 class OperatingSystemController {
 	
+	OperatingSystemService operatingSystemService
 	def beforeInterceptor = {
 		if(!session.user){
 			flash.message="You must log in first"
@@ -20,8 +21,7 @@ class OperatingSystemController {
 	}
 	
 	def add() {
-		def o= new OperatingSystem(name:params.name , configurer:params.configurer )
-		o.save()
+		operatingSystemService.addOS(params.name, params.configurer)
 		redirect(action:"index")
 	}
 	
@@ -31,7 +31,7 @@ class OperatingSystemController {
         redirect(action:"list")
 		}
 		else{
-			os.delete()
+			operatingSystemService.deleteOS(os)
 			redirect(action:"index")
 		}
 	}
@@ -49,8 +49,7 @@ class OperatingSystemController {
 	
 	def setValues(){
 		def os = OperatingSystem.get(params.id)
-		os.putAt("name", params.name)
-		os.putAt("configurer", params.configurer)
+		operatingSystemService.setValues(os,params.name,params.configurer)
 		redirect(action:"index")
 	}
 	

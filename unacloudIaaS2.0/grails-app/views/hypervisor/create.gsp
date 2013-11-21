@@ -13,6 +13,13 @@
 	    		</div>
     		</div>
     		
+    		<div class="control-group">
+   			<label class="control-label">Hypervisor Version</label>
+	    		<div class="controls">
+	    			<input name="hyperVersion" type="text">
+	    		</div>
+    		</div>
+    		
     		<div class="controls">
   			<g:submitButton name="createHyp" class="btn" value="Create" />
    			</div>

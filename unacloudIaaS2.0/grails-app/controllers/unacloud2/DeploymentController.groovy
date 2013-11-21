@@ -4,7 +4,7 @@ import java.util.regex.Pattern.Start;
 
 class DeploymentController {
 	 
-	DeploymentService depService
+	DeploymentService deploymentService
 	def beforeInterceptor = {
 		if(!session.user){
 			
@@ -27,7 +27,7 @@ class DeploymentController {
 		def image= VirtualMachineImage.get(params.id)
 		def user= User.get(session.user.id)
 		if (!image.isDeployed()){
-			depService.deployImage(image, user)
+			deploymentService.deployImage(image, user)
 			redirect(action: "index")
 		}
 		else
@@ -42,7 +42,7 @@ class DeploymentController {
 		Cluster cluster= Cluster.get(params.id)
 		User user= User.get(session.user.id)
 		if(!cluster.isDeployed()){
-			depService.deploy(cluster, user, params.instances, params.ram, params.cores, params.time)
+			deploymentService.deploy(cluster, user, params.instances, params.RAM, params.cores, params.time)
 			redirect(controller:"deployment")
 		}
 		else{
@@ -58,23 +58,24 @@ class DeploymentController {
 	}
 	
 	def stop(){
+		def user= User.get(session.user.id)
 		params.each {
 			if (it.key.contains("hostname")){
 				if (it.value.contains("on")){
 					VirtualMachineExecution vm = VirtualMachineExecution.get((it.key - "hostname") as Integer)
-					depService.stopVirtualMachineExecution(vm)
+					deploymentService.stopVirtualMachineExecution(vm)
 					
 				}
 			}
 		}
-		depService.stopDeployments()
+		deploymentService.stopDeployments(user)
 		redirect(action:"index")
 	}
 	
 	def addInstances(){
 		def depImage=DeployedImage.get(params.id)
 		def instance=params.instances.toInteger()
-		depService.addInstances(depImage, instance, params.time)
+		deploymentService.addInstances(depImage, instance, params.time)
 		redirect(action: "index")
 	}
 }

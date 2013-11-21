@@ -2,6 +2,8 @@ package unacloud2
 
 class HypervisorController {
 	
+	HypervisorService hypervisorService
+	
 	def beforeInterceptor = {
 		if(!session.user){
 			flash.message="You must log in first"
@@ -20,8 +22,7 @@ class HypervisorController {
 	}
 	
 	def add() {
-		def h= new Hypervisor(name:params.name )
-		h.save()
+		hypervisorService.addHypervisor(params.name, params.hyperVersion)
 		redirect(action:"index")
 	}
 	
@@ -31,8 +32,7 @@ class HypervisorController {
         redirect(action:"list")
 		}
 		else{
-			
-			hypervisor.delete()
+			hypervisorService.deleteHypervisor(hypervisor)
 			redirect(action:"index")
 		}
 	}
@@ -50,7 +50,7 @@ class HypervisorController {
 	
 	def setValues(){
 		def hypervisor = Hypervisor.get(params.id)
-		hypervisor.putAt("name", params.name)
+		hypervisorService.setValues(hypervisor, params.name)
 		redirect(action:"index")
 	}
 	

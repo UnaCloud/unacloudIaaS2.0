@@ -36,4 +36,33 @@ class VirtualMachineImageService {
 		user.images.add(i)
 		user.save()
     }
+	
+	def deleteImage(User user, VirtualMachineImage image){
+		user.images.remove(image)
+		user.save()
+		image.delete()
+	}
+	
+	def newPublic(name, VirtualMachineImage publicImage, User user){
+		def i= new VirtualMachineImage( fixedDiskSize: 0, name: name, isPublic: false, accessProtocol: publicImage.accessProtocol ,operatingSystem: publicImage.operatingSystem, user: publicImage.user, password: publicImage.password)
+		i.save(onFailError:true)
+		def files= publicImage.files
+		def imagePath= 'C:\\images\\'
+		files.each
+		{
+		if (it.templateFile){
+		def file= new java.io.File(imagePath+"imageTemplates\\"+publicImage.name+"_"+user.username+"\\"+it.fileName)
+		def newFile= new java.io.File(imagePath+i.name+"_"+user.username+"\\"+it.fileName)
+		FileUtils.copyFile(file, newFile)
+		def f= new File( fileName: (it.fileName), route: (imagePath+i.name+"_"+user.username+"\\"+it.fileName))
+		f.image= i
+		f.save(onFailError:true)
+		}
+		}
+		if(user.images==null)
+			user.images
+		user.images.add(i)
+		user.save()
+		
+	}
 }

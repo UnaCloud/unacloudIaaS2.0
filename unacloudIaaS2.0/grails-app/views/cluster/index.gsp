@@ -36,8 +36,7 @@
     
     <td >
     <div class="row-fluid text-center">
-    <g:link action="edit" params="${[id: cluster.id]}"><i class="icon-pencil"></i></g:link>
-    <g:link action="delete" params="${[id: cluster.id]}"><i class="icon-remove-sign"></i></g:link>
+     <g:link action="delete" params="${[id: cluster.id]}"><i class="icon-remove-sign"></i></g:link>
      <g:link action="deployOptions" params="${[id: cluster.id]}"><i class="icon-play"></i></g:link>
     
     </div>

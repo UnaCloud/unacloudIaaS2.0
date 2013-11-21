@@ -16,6 +16,10 @@ class VirtualMachineExecution {
 	String message
 	PhysicalMachine executionNode
 	
+	static constraints = {
+		executionNode nullable: true
+	}
+	
 	def remainingTime(){
 		long millisTime=(stopTime.getTime()-System.currentTimeMillis())/1000
 		String s = ""+millisTime%60;
@@ -25,4 +29,6 @@ class VirtualMachineExecution {
         if(m.length()==1)m="0"+m;
         return h+"h:"+m+"m:"+s+"s"
 	}
+	
+	
 }

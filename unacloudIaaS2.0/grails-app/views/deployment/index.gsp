@@ -1,3 +1,4 @@
+<%@page import="unacloud2.VirtualMachineExecutionStateEnum"%>
 <html>
    <head>
       <meta name="layout" content="main"/>
@@ -65,22 +66,22 @@ function reload()
     <small>${image.image.accessProtocol }</small>
     </td> 
     <g:each in="${image.getOrderedVMs() }" status="k" var="virtualMachine">  
-   	<g:if test="${ virtualMachine.status!= virtualMachine.FINISHED}">
+   	<g:if test="${ virtualMachine.status!= VirtualMachineExecutionStateEnum.FINISHED}">
    	<td >
    	<input type="checkbox" name="hostname${virtualMachine.id}" class="hostname${i} all">
    	<small>${virtualMachine.name }</small>
     </td>
     <td>
-    <g:if test="${virtualMachine.status== virtualMachine.CONFIGURING || virtualMachine.status== virtualMachine.COPYING}">
+    <g:if test="${virtualMachine.status== VirtualMachineExecutionStateEnum.CONFIGURING || virtualMachine.status== VirtualMachineExecutionStateEnum.COPYING}">
      <g:img file="blue.png"/>
      </g:if>
-     <g:if test="${virtualMachine.status==virtualMachine.DEPLOYING}">
+     <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.DEPLOYING}">
      <g:img file="amber.png"/>
      </g:if>
-     <g:if test="${virtualMachine.status==virtualMachine.DEPLOYED}">
+     <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.DEPLOYED}">
      <g:img file="green.png"/>
      </g:if>
-    <g:if test="${virtualMachine.status==virtualMachine.FAILED}">
+    <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.FAILED}">
      <g:img file="red.png"/>
      </g:if>
     </td>

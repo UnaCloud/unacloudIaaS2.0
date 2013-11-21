@@ -2,6 +2,8 @@ package unacloud2
 
 class LaboratoryController {
 	
+	LaboratoryService laboratoryService
+	
 	def beforeInterceptor = {
 		if(!session.user){
 			flash.message="You must log in first"
@@ -27,13 +29,7 @@ class LaboratoryController {
 		[lab: Laboratory.get(params.id),oss: OperatingSystem.list()]
 	}
 	def addMachine(){
-		def ip=new IP(ip:params.ip, used:true)
-		ip.save()
-		def physicalMachine = new PhysicalMachine( name:params.name, slots:2, cores:params.cores, 
-			ram: params.ram, hardDisk: params.disk, highAvaliability:false, hypervisorPath:params.hyperPath,
-			ip:ip, operatingSystem: OperatingSystem.get(params.osId), mac:params.mac)
-		physicalMachine.save()
-		Laboratory.get(params.labId).physicalMachines.add(physicalMachine)
+		laboratoryService.addMachine(params.ip, params.name, params.cores, params.ram, params.disk, params.hyperPath, params.osId, params.mac, params.labId)
 		redirect(action:"getLab", params:[id:params.labId])
 	}
 	def editMachine(){
@@ -49,19 +45,7 @@ class LaboratoryController {
 	
 	def setValues(){
 		def machine = PhysicalMachine.get(params.id)
-		machine.putAt("name", params.name)
-		if(!machine.ip.ip.equals(params.ip)){
-			machine.ip.delete()
-			def newIp= new IP(ip:params.ip, used:true)
-			newIp.save()
-			machine.putAt("ip", newIp)
-		}
-		machine.putAt("operatingSystem", OperatingSystem.get(params.osId))
-		machine.putAt("cores", Integer.parseInt(params.cores))
-		machine.putAt("mac", params.mac)
-		machine.putAt("ram", Integer.parseInt(params.ram))
-		machine.putAt("hardDisk", Integer.parseInt(params.disk))
-		machine.putAt("hypervisorPath", params.hyperPath)
+		laboratoryService.setValues(machine, params.name, params.ip, params.osId, params.cores, params.mac, params.ram, params.disk, params.hyperPath)
 		redirect(action:"getLab", params:[id: params.labId])
 	}
 	

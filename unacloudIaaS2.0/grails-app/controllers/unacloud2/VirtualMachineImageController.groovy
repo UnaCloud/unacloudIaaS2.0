@@ -42,28 +42,8 @@ class VirtualMachineImageController {
 	
 	def newPublic(){
 		def publicImage = VirtualMachineImage.get(params.pImage)
-		 
-		def i= new VirtualMachineImage( fixedDiskSize: 0, volume: "", name: params.name, customizable: (params.customizable!=null),
-			isPublic: false, accessProtocol: publicImage.accessProtocol ,operatingSystem: publicImage.operatingSystem, user: publicImage.user, password: publicImage.password) 	
-		i.save()
-		def files= publicImage.files
-		files.each 
-		{
-		if (it.templateFile){
-		def file= new java.io.File(imagePath+"imageTemplates\\"+publicImage.name+"_"+session.user.username+"\\"+it.fileName)
-		def newFile= new java.io.File(imagePath+i.name+"_"+session.user.username+"\\"+it.fileName)
-		FileUtils.copyFile(file, newFile)
-		def f= new File( fileName: (it.fileName), route: (imagePath+i.name+"_"+session.user.username+"\\"+it.fileName))
-		f.image= i
-		f.save()
-		}
-		}
-		User u= User.findById(session.user.id)
-		if(u.images==null)
-			u.images
-		u.images.add(i)
-		u.save()
-		
+		def user = User.get(session.user.id) 
+		virtualMachineImageService.newPublic(params.name, publicImage, user)
 		redirect(action: 'index')
 	}
 	
@@ -84,7 +64,6 @@ class VirtualMachineImageController {
 			}
 			}	
 		}
-		
 		virtualMachineImageService.uploadImage(files, 0, params.name, (params.isPublic!=null), params.accessProtocol, params.osId, params.user, params.password,user)	
 		
 		redirect(action: 'index')
@@ -104,9 +83,8 @@ class VirtualMachineImageController {
 			}
 			if (!isUsed){	
 				def user= User.get(session.user.id)
-				user.images.remove(image)
-				user.save()
-				image.delete()
+				
+				virtualMachineImageService.deleteImage(user, image)
 				redirect(action:"index")
 			}
 			else{

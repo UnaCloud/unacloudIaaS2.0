@@ -30,7 +30,7 @@ class User {
 	def getActiveDeployments(){
 		ArrayList activeDeployments= new ArrayList()
 		for (deployment in deployments){
-			if(!(deployment.status==(Deployment.FINISHED)))
+			if(!(deployment.status==(DeploymentStateEnum.FINISHED)))
 				activeDeployments.add(deployment)
 		}
 		return activeDeployments

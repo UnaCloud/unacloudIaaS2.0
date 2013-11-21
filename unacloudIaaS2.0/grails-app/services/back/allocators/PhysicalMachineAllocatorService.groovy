@@ -7,13 +7,14 @@ import unacloud2.PhysicalMachine;
 import unacloud2.VirtualMachineExecution;
 
 class PhysicalMachineAllocatorService {
+	
     def allocatePhysicalMachinesRandomly(DeployedCluster deployment){
 		for(DeployedImage di:deployment.images){
 			allocatePhysicalMachines(di);
 		}
 	}
 	def allocatePhysicalMachines(DeployedImage deployedImage){
-		List<PhysicalMachine> l=PhysicalMachine.findAll();
+		List<PhysicalMachine> l=PhysicalMachine.list();
 		Collections.shuffle(l);
 		int a=0;
 		for(VirtualMachineExecution vme:deployedImage.virtualMachines){

@@ -3,7 +3,7 @@ package unacloud2
 class Hypervisor {
 	
 	String name
-	String version
+	String hypervisorVersion
 	
     static constraints = {
 		

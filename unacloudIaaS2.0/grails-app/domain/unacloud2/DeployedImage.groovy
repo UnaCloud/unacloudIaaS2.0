@@ -20,7 +20,7 @@ class DeployedImage {
 	def numberOfActiveMachines(){
 		def counter=0
 		virtualMachines.each {
-			if (!(it.status==VirtualMachineExecution.FINISHED))
+			if (!(it.status==VirtualMachineExecutionStateEnum.FINISHED))
 			counter++
 		}
 		return counter

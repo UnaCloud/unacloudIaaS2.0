@@ -6,8 +6,10 @@ class Cluster {
 	
 	String name
 	static hasMany = [images: VirtualMachineImage]
-	static constraints = {
-    }	
+	static mapping = {
+		images cascade: 'all-delete-orphan'
+	}
+	
 	
 	ArrayList <PhysicalMachine> getOrderedImages(){
 		VirtualMachineImageComparator c= new VirtualMachineImageComparator()
@@ -17,11 +19,12 @@ class Cluster {
 	
 	def isDeployed(){
 		boolean isDeployed=false
-		def deployments= Deployment.findByStatusNotEqual(Deployment.FINISHED)
+		def deployments= Deployment.findByStatusNotEqual(DeploymentStateEnum.FINISHED)
 		deployments.each (){
 			if(it.cluster.cluster==this)
 				isDeployed=true
 		}
 		return isDeployed
-	}
+	}	
+	
 }
