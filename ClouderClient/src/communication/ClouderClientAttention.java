@@ -1,14 +1,16 @@
 package communication;
 
-import com.losandes.communication.security.utils.AbstractCommunicator;
-import com.losandes.communication.security.utils.ConnectionException;
-import com.losandes.communication.security.SecureServerSocket;
 import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
 import com.losandes.utils.Log;
 import com.losandes.utils.VariableManager;
+
 import java.io.Closeable;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import static com.losandes.utils.Constants.*;
 
 /**
@@ -17,11 +19,7 @@ import static com.losandes.utils.Constants.*;
  */
 public class ClouderClientAttention implements Closeable{
 
-    /**
-     * Secure server socket used to listen to UnaCloud server requests
-     */
-    private SecureServerSocket clouderClientServerSocket;
-
+	private ServerSocket serverSocket;
     /**
      * Port to be used by the listening server socket
      */
@@ -46,13 +44,13 @@ public class ClouderClientAttention implements Closeable{
      */
     public final void connect() {
         try {
-            clouderClientServerSocket = new SecureServerSocket(localPort);
+        	serverSocket = new ServerSocket(localPort);
             while (true) {
-                AbstractCommunicator sSocket;
+                Socket sSocket;
                 try {
-                    sSocket = clouderClientServerSocket.accept();
+                    sSocket = serverSocket.accept();
                     poolExe.execute(new ClouderServerAttentionThread(sSocket, this));
-                } catch (ConnectionException ex) {
+                } catch (IOException ex) {
                     Log.print("Can't process message " + localPort + " . " + ex.getLocalizedMessage());
                 }
             }
@@ -66,7 +64,7 @@ public class ClouderClientAttention implements Closeable{
      */
     public void close() {
         try {
-            clouderClientServerSocket.close();
+        	serverSocket.close();
         } catch (Exception e) {
         }
     }

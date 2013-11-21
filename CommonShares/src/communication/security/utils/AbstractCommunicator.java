@@ -1,4 +1,4 @@
-package com.losandes.communication.security.utils;
+package communication.security.utils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -9,8 +9,7 @@ import java.security.Key;
 
 import javax.crypto.Cipher;
 
-import com.losandes.communication.messages.UnaCloudMessage;
-
+import communication.UnaCloudMessage;
 import static com.losandes.utils.Constants.*;
 
 /**

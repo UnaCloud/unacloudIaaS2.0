@@ -1,9 +1,7 @@
-package com.losandes.communication.messages.configuration;
+package communication.messages.vmo.configuration;
 
-import com.losandes.communication.messages.UnaCloudAbstractMessage;
-import static com.losandes.communication.messages.UnaCloudAbstractMessage.VIRTUAL_MACHINE_CONFIGURATION;
-import static com.losandes.communication.messages.UnaCloudAbstractMessage.VIRTUAL_MACHINE_OPERATION;
-import com.losandes.communication.messages.UnaCloudMessage;
+import communication.UnaCloudMessage;
+import communication.UnaCloudAbstractMessage;
 
 /**
  *

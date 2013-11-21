@@ -1,9 +1,13 @@
 package virtualmachine;
 
-import com.losandes.communication.messages.configuration.ExecuteCommandRequest;
+import communication.messages.vmo.configuration.ExecuteCommandRequest;
+
 import static com.losandes.utils.Constants.*;
+
 import java.io.File;
+
 import execution.LocalProcessExecutor;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

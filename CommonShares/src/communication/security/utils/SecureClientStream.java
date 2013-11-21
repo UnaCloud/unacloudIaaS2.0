@@ -1,4 +1,4 @@
-package com.losandes.communication.security.utils;
+package communication.security.utils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

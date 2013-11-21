@@ -2,28 +2,27 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.losandes.communication.messages.configuration;
+package communication.messages.vmo.configuration;
 
-import com.losandes.communication.messages.UnaCloudMessage;
-import static com.losandes.communication.messages.configuration.ConfigurationAbstractMessage.VMC_START;
-import static com.losandes.communication.messages.configuration.ConfigurationAbstractMessage.VMC_TRANSFER_FILE;
+import communication.UnaCloudMessage;
+import static communication.messages.vmo.configuration.ConfigurationAbstractMessage.VMC_STOP;
 
 /**
  *
  * @author Clouder
  */
-public class StartVirtualMachineMessage extends ConfigurationAbstractMessage{
+public class StopVirtualMachineMessage extends ConfigurationAbstractMessage{
     String hypervisor, destinationMachine, rutaVMRUN;
 
-    public StartVirtualMachineMessage(String hypervisor, String destinationMachine, String rutaVMRUN) {
-        super(VMC_START);
+    public StopVirtualMachineMessage(String hypervisor, String destinationMachine, String rutaVMRUN) {
+        super(VMC_STOP);
         this.hypervisor = hypervisor;
         this.destinationMachine = destinationMachine;
         this.rutaVMRUN = rutaVMRUN;
     }
         
-    public StartVirtualMachineMessage(UnaCloudMessage message){
-        super(VMC_START,message);
+    public StopVirtualMachineMessage(UnaCloudMessage message){
+        super(VMC_STOP,message);
     }
 
     public String getHypervisor() {

@@ -4,8 +4,8 @@ package monitoring;
  *
  * @author jcadavid
  */
-import com.losandes.communication.messages.monitoring.MonitorReport;
 import com.losandes.utils.VariableManager;
+import communication.messages.monitoring.MonitorReport;
 
 public class MonitorAgent {
     public static void main(String...args){

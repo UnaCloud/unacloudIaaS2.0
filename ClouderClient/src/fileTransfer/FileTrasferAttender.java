@@ -5,10 +5,6 @@
 
 package fileTransfer;
 
-import com.losandes.communication.messages.UnaCloudMessage;
-import com.losandes.communication.security.utils.AbstractCommunicator;
-import com.losandes.communication.security.utils.ConnectionException;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -17,7 +13,11 @@ import java.util.logging.Logger;
 
 import com.losandes.utils.Log;
 
+import communication.UnaCloudMessage;
+import communication.security.utils.AbstractCommunicator;
+import communication.security.utils.ConnectionException;
 import static com.losandes.utils.Constants.*;
+
 import java.util.HashSet;
 /**
  * Class responsible for attend file operations requests over the physical machine file system

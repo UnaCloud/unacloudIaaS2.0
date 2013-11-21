@@ -1,4 +1,4 @@
-package com.losandes.communication.messages;
+package communication;
 
 import static com.losandes.utils.Constants.MESSAGE_SEPARATOR_TOKEN;
 

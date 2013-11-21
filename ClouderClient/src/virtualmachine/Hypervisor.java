@@ -1,6 +1,7 @@
 package virtualmachine;
 
-import com.losandes.communication.messages.configuration.ExecuteCommandRequest;
+import communication.messages.vmo.configuration.ExecuteCommandRequest;
+
 import java.io.File;
 
 /**

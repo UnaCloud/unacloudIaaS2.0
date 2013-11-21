@@ -1,4 +1,4 @@
-package com.losandes.communication.security.utils;
+package communication.security.utils;
 
 /**
  * Exception used when there is a connection error with UnaCloud server

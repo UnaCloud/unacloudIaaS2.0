@@ -2,28 +2,28 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.losandes.communication.messages.configuration;
+package communication.messages.vmo.configuration;
 
-import com.losandes.communication.messages.UnaCloudMessage;
-import static com.losandes.communication.messages.configuration.ConfigurationAbstractMessage.VMC_CHANGE_MAC;
-import static com.losandes.communication.messages.configuration.ConfigurationAbstractMessage.VMC_START;
+import communication.UnaCloudMessage;
+import static communication.messages.vmo.configuration.ConfigurationAbstractMessage.VMC_START;
+import static communication.messages.vmo.configuration.ConfigurationAbstractMessage.VMC_TRANSFER_FILE;
 
 /**
  *
  * @author Clouder
  */
-public class ChangeVirtualMachineMacMessage extends ConfigurationAbstractMessage{
+public class StartVirtualMachineMessage extends ConfigurationAbstractMessage{
     String hypervisor, destinationMachine, rutaVMRUN;
 
-    public ChangeVirtualMachineMacMessage(String hypervisor, String destinationMachine, String rutaVMRUN) {
-        super(VMC_CHANGE_MAC);
+    public StartVirtualMachineMessage(String hypervisor, String destinationMachine, String rutaVMRUN) {
+        super(VMC_START);
         this.hypervisor = hypervisor;
         this.destinationMachine = destinationMachine;
         this.rutaVMRUN = rutaVMRUN;
     }
         
-    public ChangeVirtualMachineMacMessage(UnaCloudMessage message){
-        super(VMC_CHANGE_MAC,message);
+    public StartVirtualMachineMessage(UnaCloudMessage message){
+        super(VMC_START,message);
     }
 
     public String getHypervisor() {

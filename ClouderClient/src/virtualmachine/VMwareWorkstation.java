@@ -4,10 +4,12 @@
  */
 package virtualmachine;
 
-import com.losandes.communication.messages.configuration.ExecuteCommandRequest;
 import execution.LocalProcessExecutor;
 import static com.losandes.utils.Constants.*;
+
 import com.losandes.utils.Log;
+import communication.messages.vmo.configuration.ExecuteCommandRequest;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,6 +26,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeSet;
+
 import physicalmachine.Network;
 
 /**

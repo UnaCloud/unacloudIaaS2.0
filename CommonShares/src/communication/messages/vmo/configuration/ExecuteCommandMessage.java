@@ -2,10 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.losandes.communication.messages.configuration;
+package communication.messages.vmo.configuration;
 
-import com.losandes.communication.messages.UnaCloudMessage;
-import static com.losandes.communication.messages.configuration.ConfigurationAbstractMessage.VMC_COMMAND;
+import communication.UnaCloudMessage;
+import static communication.messages.vmo.configuration.ConfigurationAbstractMessage.VMC_COMMAND;
+
 import java.util.Arrays;
 
 /**

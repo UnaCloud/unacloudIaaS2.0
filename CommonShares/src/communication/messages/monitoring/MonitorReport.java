@@ -1,4 +1,4 @@
-package com.losandes.communication.messages.monitoring;
+package communication.messages.monitoring;
 
 import java.sql.Timestamp;
 

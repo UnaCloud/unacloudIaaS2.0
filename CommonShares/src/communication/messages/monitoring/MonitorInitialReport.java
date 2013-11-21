@@ -1,7 +1,8 @@
-package com.losandes.communication.messages.monitoring;
+package communication.messages.monitoring;
 
-import com.losandes.communication.messages.UnaCloudAbstractMessage;
-import com.losandes.communication.messages.UnaCloudMessage;
+import communication.UnaCloudAbstractMessage;
+import communication.UnaCloudMessage;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 

@@ -1,9 +1,5 @@
 package configuration;
 
-import com.losandes.communication.messages.UnaCloudMessage;
-import com.losandes.communication.messages.configuration.ChangeVirtualMachineMacMessage;
-import com.losandes.communication.security.utils.AbstractCommunicator;
-import com.losandes.communication.security.utils.ConnectionException;
 import com.losandes.utils.VariableManager;
 import com.losandes.utils.Log;
 
@@ -15,14 +11,17 @@ import java.net.*;
 import virtualmachine.Hypervisor;
 import virtualmachine.HypervisorFactory;
 import static com.losandes.utils.Constants.*;
-import static com.losandes.communication.messages.configuration.ConfigurationAbstractMessage.*;
-import com.losandes.communication.messages.configuration.ExecuteCommandMessage;
-import com.losandes.communication.messages.configuration.RecieveFileMessage;
-import com.losandes.communication.messages.configuration.StartVirtualMachineMessage;
-import com.losandes.communication.messages.configuration.StopVirtualMachineMessage;
-import com.losandes.communication.messages.configuration.TakeSnapshotMessage;
-import com.losandes.communication.messages.configuration.WriteFileOnVirtualMachineMessage;
-
+import static communication.messages.vmo.configuration.ConfigurationAbstractMessage.*;
+import communication.UnaCloudMessage;
+import communication.messages.vmo.configuration.ChangeVirtualMachineMacMessage;
+import communication.messages.vmo.configuration.ExecuteCommandMessage;
+import communication.messages.vmo.configuration.RecieveFileMessage;
+import communication.messages.vmo.configuration.StartVirtualMachineMessage;
+import communication.messages.vmo.configuration.StopVirtualMachineMessage;
+import communication.messages.vmo.configuration.TakeSnapshotMessage;
+import communication.messages.vmo.configuration.WriteFileOnVirtualMachineMessage;
+import communication.security.utils.AbstractCommunicator;
+import communication.security.utils.ConnectionException;
 import virtualmachine.HypervisorOperationException;
 
 /**

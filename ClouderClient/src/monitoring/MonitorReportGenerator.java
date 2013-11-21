@@ -1,7 +1,8 @@
 package monitoring;
 
-import com.losandes.communication.messages.monitoring.MonitorReport;
-import com.losandes.communication.messages.monitoring.MonitorInitialReport;
+import communication.messages.monitoring.MonitorInitialReport;
+import communication.messages.monitoring.MonitorReport;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
