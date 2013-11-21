@@ -7,14 +7,14 @@ class Cluster {
 	String name
 	static hasMany = [images: VirtualMachineImage]
 	static mapping = {
+		
 		images cascade: 'all-delete-orphan'
 	}
 	
 	
-	ArrayList <PhysicalMachine> getOrderedImages(){
-		VirtualMachineImageComparator c= new VirtualMachineImageComparator()
-		ArrayList <VirtualMachineImage> array = new ArrayList(images).sort(c)
-		return array
+	List <PhysicalMachine> getOrderedImages(){
+		return images.sort()
+		
 	}
 	
 	def isDeployed(){

@@ -1,6 +1,6 @@
 package unacloud2
 
-class VirtualMachineImage {
+class VirtualMachineImage implements Comparable<VirtualMachineImage>{
 	
 	String name
     boolean avaliable
@@ -18,7 +18,7 @@ class VirtualMachineImage {
 	
 	def isDeployed(){
 		boolean isDeployed=false
-		def deployments= Deployment.findByStatusNotEqual(Deployment.FINISHED)
+		def deployments= Deployment.findByStatusNotEqual(DeploymentStateEnum.FINISHED)
 		deployments.each (){
 			it.cluster.images.each(){
 				if(it.image==this)
@@ -26,5 +26,10 @@ class VirtualMachineImage {
 			}
 		}
 		return isDeployed
+	}
+
+	@Override
+	public int compareTo(VirtualMachineImage o) {
+		return Long.compare(id,o.id);
 	}
 }

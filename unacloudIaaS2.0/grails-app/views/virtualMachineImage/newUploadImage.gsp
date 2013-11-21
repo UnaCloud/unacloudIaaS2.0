@@ -52,12 +52,6 @@
 	    			<g:checkBox name="isPublic" value="${false}"/>
 	    		</div>
     		</div>
-    		<div class="control-group">
-   			<label class="control-label">Customizable</label>
-	    		<div class="controls">
-	    			<g:checkBox name="customizable" value="${false}"/>
-	    		</div>
-    		</div>
     		<div class="controls">
   			<g:submitButton name="createUser" class="btn" value="Submit" />
    			</div>

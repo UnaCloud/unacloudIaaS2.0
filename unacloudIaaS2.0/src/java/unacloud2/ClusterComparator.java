@@ -1,9 +1,6 @@
 package unacloud2;
 import java.util.Comparator;
 
-import unacloud2.PhysicalMachine;
-
-
 public class ClusterComparator implements Comparator<Cluster>{
 
 	@Override

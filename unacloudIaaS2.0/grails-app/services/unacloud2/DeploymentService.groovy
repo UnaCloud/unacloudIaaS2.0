@@ -23,7 +23,7 @@ class DeploymentService {
 		cluster.images=[]
 		cluster.images.add(depImage)
 		depImage.save()
-		Deployment dep= new Deployment(cluster: cluster, startTime: new Date(), stopTime: stopTime, totalVMs: 1, status: DeploymentStateEnum.DEPLOYING)
+		Deployment dep= new Deployment(cluster: cluster, startTime: new Date(), stopTime: stopTime, totalVMs: 1, status: DeploymentStateEnum.ACTIVE)
 		cluster.save()
 		dep.save()
 		if(user.deployments==null)
@@ -44,7 +44,7 @@ class DeploymentService {
 			   def iIP= new IP(ip: "10.0.1."+j)
 			   iIP.save(failOnError: true)
 			   long stopTimeMillis= new Date().getTime()
-			   def stopTime= new Date(stopTimeMillis +Integer.parseInt(time.getAt(i)))
+			   def stopTime= new Date(stopTimeMillis +Integer.parseInt(time))
 			   def iName=image.name
 			   def virtualMachine = new VirtualMachineExecution(message: "Deploying", name: iName +"-"+j ,ram: iRAM.getAt(i), cores:iCores.getAt(i),disk:0,ip: iIP,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 			   depImage.virtualMachines.add(virtualMachine)

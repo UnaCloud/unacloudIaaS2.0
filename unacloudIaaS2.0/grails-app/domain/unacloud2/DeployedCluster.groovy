@@ -6,4 +6,7 @@ class DeployedCluster {
     static constraints = {
 		cluster nullable: true
     }
+	static mapping = {
+		sort 'cluster_id':'desc'
+	}
 }
