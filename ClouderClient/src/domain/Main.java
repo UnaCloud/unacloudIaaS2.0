@@ -57,9 +57,7 @@ public class Main {
                 state.reportPhysicalMachine(turnOffMessage,false);
                 break;
             case TURN_ON_DB:
-                System.out.println("Clouder Client Started at2: " + new Date());
                 String turnOnMessage = UnaCloudAbstractMessage.DATABASE_OPERATION + MESSAGE_SEPARATOR_TOKEN + TURN_ON + MESSAGE_SEPARATOR_TOKEN + Network.getHostname();
-                System.out.println("Clouder Client Started at3: " + new Date());
                 PhysicalMachineMonitor.restart();
                 state.reportPhysicalMachine(turnOnMessage,true);
                 DataServerSocket.init();

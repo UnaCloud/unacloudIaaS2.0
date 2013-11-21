@@ -4,14 +4,14 @@ import communication.ClouderClientAttention;
 
 class UnaCloudServicesController {
 
-    def index() { 
-		render "hola"
-	}
-	def clouderClientAttention(){
+    def clouderClientAttention(){
 		String request=params.req
 		println request
 		println params.type
 		render "hola2"
 		//render ClouderClientAttention.attendRequest(request)
+	}
+	def agentVersion(){
+		render "2.0.0"
 	}
 }

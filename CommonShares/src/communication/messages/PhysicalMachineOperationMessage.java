@@ -4,6 +4,7 @@ import communication.UnaCloudAbstractMessage;
 import communication.UnaCloudMessage;
 
 public abstract class PhysicalMachineOperationMessage extends UnaCloudAbstractMessage{
+	private static final long serialVersionUID = 6749899457514674239L;
 	public static final int PM_INIT = 1;
     public static final int PM_TURN_OFF = 1;
     public static final int PM_RESTART = 2;

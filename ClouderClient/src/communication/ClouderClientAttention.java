@@ -12,7 +12,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * @author Eduardo Rosales
  * Responsible for listening to the Clouder Server
  */
 public class ClouderClientAttention implements Closeable{

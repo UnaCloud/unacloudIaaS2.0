@@ -5,7 +5,6 @@ import static com.losandes.utils.Constants.ERROR_MESSAGE;
 import communication.AbstractGrailsCommunicator;
 
 /**
- * @author Eduardo Rosales
  * Responsible for reporting the physical machine state to Clouder Server
  */
 public class PhysicalMachineState {

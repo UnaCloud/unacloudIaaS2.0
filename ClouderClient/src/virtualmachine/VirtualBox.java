@@ -17,8 +17,6 @@ import java.util.logging.Logger;
 /**
  * Implementation of hypervisor abstract class to give support for VMwarePlayer
  * hypervisor.
- *
- * @author Clouder
  */
 class VirtualBox extends Hypervisor {
 

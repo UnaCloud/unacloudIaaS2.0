@@ -4,6 +4,7 @@ import communication.UnaCloudMessage;
 import communication.messages.PhysicalMachineOperationMessage;
 
 public class PhysicalMachineMonitorMessage extends PhysicalMachineOperationMessage{
+	private static final long serialVersionUID = -6593319992803639653L;
 	String operation;
 	int monitorFrequency;
     int registerFrequency;
