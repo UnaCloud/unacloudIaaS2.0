@@ -5,20 +5,20 @@
 
 package fileTransfer;
 
+import static com.losandes.utils.Constants.ERROR_MESSAGE;
+import static com.losandes.utils.Constants.OK_MESSAGE;
+import static com.losandes.utils.Constants.PM_DELETE_FILE;
+import static com.losandes.utils.Constants.PM_WRITE_FILE_TREE_DISB;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.losandes.utils.Log;
-
 import communication.UnaCloudMessage;
 import communication.security.utils.AbstractCommunicator;
 import communication.security.utils.ConnectionException;
-import static com.losandes.utils.Constants.*;
-
-import java.util.HashSet;
 /**
  * Class responsible for attend file operations requests over the physical machine file system
  * @author Clouder

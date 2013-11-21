@@ -1,12 +1,9 @@
 package monitoring;
 
-import com.losandes.utils.VariableManager;
+import static com.losandes.utils.Constants.LOGIN_DB;
 
 import communication.AbstractGrailsCommunicator;
 import communication.UnaCloudAbstractMessage;
-import communication.security.utils.AbstractCommunicator;
-import communication.security.utils.ConnectionException;
-import static com.losandes.utils.Constants.*;
 
 /**
  * Class responsible for report this physical machine status. Every 30 seconds this class sends a keep alive message to UnaCloud server.

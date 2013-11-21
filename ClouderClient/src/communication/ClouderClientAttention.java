@@ -11,8 +11,6 @@ import java.io.Closeable;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import static com.losandes.utils.Constants.*;
-
 /**
  * @author Eduardo Rosales
  * Responsible for listening to the Clouder Server

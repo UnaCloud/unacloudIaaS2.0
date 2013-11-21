@@ -4,30 +4,20 @@
  */
 package virtualmachine;
 
-import execution.LocalProcessExecutor;
-import static com.losandes.utils.Constants.*;
+import static com.losandes.utils.Constants.ERROR_MESSAGE;
+import static com.losandes.utils.Constants.VMW;
 
-import com.losandes.utils.Log;
-import communication.messages.vmo.configuration.ExecuteCommandRequest;
-
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.TreeSet;
 
-import physicalmachine.Network;
+import communication.messages.vmo.configuration.ExecuteCommandRequest;
+
+import execution.LocalProcessExecutor;
 
 /**
  * Implementation of hypervisor abstract class to give support for

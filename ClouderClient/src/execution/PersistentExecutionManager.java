@@ -18,7 +18,6 @@ import physicalmachine.MachineMonitor;
 import virtualmachine.Hypervisor;
 import virtualmachine.HypervisorFactory;
 import virtualmachine.HypervisorOperationException;
-
 import communication.ServerMessageSender;
 import communication.messages.vmo.VirtualMachineAddTimeMessage;
 import communication.messages.vmo.VirtualMachineRestartMessage;
@@ -177,7 +176,8 @@ public class PersistentExecutionManager {
      * Loads the stored virtual machine executions when the physical machine start.
      * Each loaded execution used to turn on the corresponding virtual machine
      */
-    public static void loadExecutions(){
+    @SuppressWarnings("unchecked")
+	public static void loadExecutions(){
     	Map<String,VirtualMachineTurnOnMessage> lastShutdowns=null;
         try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream(executionsFile))){
         	lastShutdowns=(Map<String,VirtualMachineTurnOnMessage>)ois.readObject();

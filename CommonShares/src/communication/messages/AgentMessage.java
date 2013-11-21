@@ -4,6 +4,7 @@ import communication.UnaCloudAbstractMessage;
 import communication.UnaCloudMessage;
 
 public abstract class AgentMessage extends UnaCloudAbstractMessage{
+	private static final long serialVersionUID = 2295996510707565731L;
 	public static final int UPDATE_OPERATION = 4;
 	public static final int STOP_CLIENT=6;
 	public static final int GET_VERSION=7;

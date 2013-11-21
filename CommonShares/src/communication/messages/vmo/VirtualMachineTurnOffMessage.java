@@ -4,6 +4,7 @@ import communication.UnaCloudMessage;
 import communication.messages.VirtualMachineOperationMessage;
 
 public class VirtualMachineTurnOffMessage extends VirtualMachineOperationMessage{
+	private static final long serialVersionUID = -8728929759121643688L;
 	int hypervisorName;
     String vmPath;
     String hypervisorPath;

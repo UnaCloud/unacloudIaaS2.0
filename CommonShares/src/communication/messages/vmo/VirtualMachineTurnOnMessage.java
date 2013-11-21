@@ -4,6 +4,7 @@ import communication.UnaCloudMessage;
 import communication.messages.VirtualMachineOperationMessage;
 
 public class VirtualMachineTurnOnMessage extends VirtualMachineOperationMessage implements Comparable<VirtualMachineTurnOnMessage>{
+	private static final long serialVersionUID = -5116988985857543662L;
 	int hypervisorName,vmCores,vmMemory;
     String vmPath,hypervisorPath;
     int executionTime;
