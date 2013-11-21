@@ -16,7 +16,8 @@ import java.sql.Timestamp;
  */
 public class MonitorInitialReport extends UnaCloudAbstractMessage implements Serializable{
 
-    private String UUID;
+	private static final long serialVersionUID = -2738566841932331498L;
+	private String UUID;
     private Timestamp timest;
     private String hostname;
     private String operatingSystemName;

@@ -72,7 +72,9 @@ public class MonitorReportGenerator extends SigarCommandBase {
 
     private static class RepetitionCounter extends HashMap<String, Integer> {
 
-        public void add(String input) {
+		private static final long serialVersionUID = -5259022218756213835L;
+
+		public void add(String input) {
             Integer n = get(input);
             if (n == null) {
                 n = 0;

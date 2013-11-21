@@ -34,13 +34,13 @@ public class HardDisk extends SigarWrapper {
     public HardDisk() {
         try {
             FileSystem[] fslist = sigar.getFileSystemList();
-            for (FileSystem fs : fslist)if(fs.getType()==fs.TYPE_LOCAL_DISK){
+            for (FileSystem fs : fslist)if(fs.getType()==FileSystem.TYPE_LOCAL_DISK){
                 if (fs instanceof NfsFileSystem) {
                     NfsFileSystem nfs = (NfsFileSystem) fs;
                     if (!nfs.ping())continue;
                 }
                 long used,avail,total;
-                FileSystemUsage usage = this.sigar.getFileSystemUsage(fs.getDirName());
+                FileSystemUsage usage = sigar.getFileSystemUsage(fs.getDirName());
                 used = usage.getTotal() - usage.getFree();
                 avail = usage.getAvail();
                 total = usage.getTotal();

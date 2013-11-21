@@ -82,7 +82,7 @@ public abstract class Hypervisor {
      * turns off the managed virtual machine
      * @throws HypervisorOperationException If there is an error stoping the virtual machine
      */
-    public abstract void turnOffVirtualMachine() throws HypervisorOperationException;
+    public abstract void turnOffVirtualMachine();
 
     /**
      * Restarts the managed virtual machine

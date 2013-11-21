@@ -5,11 +5,10 @@
 
 package physicalmachine;
 
-import com.losandes.utils.Log;
+import java.io.File;
+
 import com.losandes.utils.VirtualMachineCPUStates;
 import communication.ServerMessageSender;
-import java.io.File;
-import java.util.Arrays;
 /**
  *
  * @author Clouder

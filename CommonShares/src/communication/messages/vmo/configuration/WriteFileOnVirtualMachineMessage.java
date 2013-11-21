@@ -5,14 +5,11 @@
 package communication.messages.vmo.configuration;
 
 import communication.UnaCloudMessage;
-import static communication.messages.vmo.configuration.ConfigurationAbstractMessage.VMC_WRITE_FILE;
+import communication.messages.vmo.ConfigurationAbstractMessage;
 
-/**
- *
- * @author Clouder
- */
 public class WriteFileOnVirtualMachineMessage extends ConfigurationAbstractMessage{
-    String hypervisor,destinationMachine, login, pass, destinationFileRute, rutaVMRUN;
+    private static final long serialVersionUID = -3385074820303929989L;
+	String hypervisor,destinationMachine, login, pass, destinationFileRute, rutaVMRUN;
 
     public WriteFileOnVirtualMachineMessage(String hypervisor, String destinationMachine, String login, String pass, String destinationFileRute, String rutaVMRUN) {
         super(VMC_WRITE_FILE);

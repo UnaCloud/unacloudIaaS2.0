@@ -5,14 +5,15 @@
 package communication.messages.vmo.configuration;
 
 import communication.UnaCloudMessage;
-import static communication.messages.vmo.configuration.ConfigurationAbstractMessage.VMC_TRANSFER_FILE;
+import communication.messages.vmo.ConfigurationAbstractMessage;
 
 /**
  *
  * @author Clouder
  */
 public class RecieveFileMessage extends ConfigurationAbstractMessage{
-    String filePath;
+    private static final long serialVersionUID = -8277788120446128061L;
+	String filePath;
 
     public RecieveFileMessage(String rutaArchivo) {
         super(VMC_TRANSFER_FILE);

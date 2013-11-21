@@ -44,8 +44,8 @@ public class Memory extends SigarWrapper {
 
     public Memory() {
         try {
-            mem = this.sigar.getMem();
-            swap = this.sigar.getSwap();
+            mem = sigar.getMem();
+            swap = sigar.getSwap();
             rAMMemorySize= mem.getRam();
             rAMMemoryFree= mem.getFree()/1024/1024;
             rAMMemoryUsed = mem.getUsed()/1024/1024;

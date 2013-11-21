@@ -5,7 +5,9 @@ package virtualmachine;
  * @author Clouder
  */
 public class HypervisorOperationException extends Exception{
-    protected HypervisorOperationException(String message) {
+    private static final long serialVersionUID = -7248252531368729009L;
+
+	protected HypervisorOperationException(String message) {
         super(message);
     }
 }

@@ -1,9 +1,7 @@
 package execution;
 
 import java.util.TimerTask;
-import virtualmachine.Hypervisor;
 import virtualmachine.HypervisorFactory;
-import virtualmachine.HypervisorOperationException;
 
 /**
  * @author Eduardo Rosales
@@ -35,12 +33,7 @@ public class Schedule extends TimerTask {
      * Responsible for undeploying a virtual machine execution in an executionTime
      */
     public void run() {
-        Hypervisor v=HypervisorFactory.getHypervisor(getHypervisorName(), getHypervisorPath(), getVirtualMachinePath());
-        try{
-            v.turnOffVirtualMachine();
-        }catch(HypervisorOperationException hoe){
-            
-        }
+    	HypervisorFactory.getHypervisor(getHypervisorName(), getHypervisorPath(), getVirtualMachinePath()).turnOffVirtualMachine();
     }
 
     /**

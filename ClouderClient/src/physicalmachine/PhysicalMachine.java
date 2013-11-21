@@ -62,7 +62,7 @@ public class PhysicalMachine {
                 + operatingSystem.getOperatingSystemName() + MESSAGE_SEPARATOR_TOKEN
                 + operatingSystem.getOperatingSystemVersion() + MESSAGE_SEPARATOR_TOKEN
                 + operatingSystem.getOperatingSystemArchitect() + MESSAGE_SEPARATOR_TOKEN
-                + operatingSystem.getUserName() + MESSAGE_SEPARATOR_TOKEN;        
+                + OperatingSystem.getUserName() + MESSAGE_SEPARATOR_TOKEN;        
         return monitor;
     }
 

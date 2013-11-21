@@ -43,8 +43,6 @@ public class Constants {
     public static final int COPYING_STATE= 5;
     public static final int ERROR_STATE= 6;
 
-    public static final int STOP_CLIENT=6;
-    public static final int GET_VERSION=7;
     //UnaCloud Client database operation request constants
     public static final int TURN_OFF_DB = 0;
     public static final int TURN_ON_DB = 1;
@@ -52,29 +50,15 @@ public class Constants {
     public static final int LOGOUT_DB = 3;
     public static final int VIRTUAL_MACHINE_STATE_DB = 5;
     public static final int VIRTUAL_MACHINE_CPU_STATE = 6;
-    //UnaCloud Server virtual machine operation request constants
-    public static final int VM_TURN_ON = 1;
-    public static final int VM_TURN_OFF = 2;
-    public static final int VM_RESTART = 3;
-    public static final int VM_STATE = 4;
-    public static final int VM_TIME = 5;
     //UnaCloud Server physical machine operation request constants
-    public static final int PM_INIT = 1;
-    public static final int PM_TURN_OFF = 1;
-    public static final int PM_RESTART = 2;
-    public static final int PM_LOGOUT = 3;
-    public static final int PM_MONITOR = 4;
-    public static final int PM_WRITE_FILE = 6;
-    public static final int PM_TURN_ON = 7;
-    public static final int PM_RETRIEVE_FOLDER = 8;
-
+    
     public static final int PM_WRITE_FILE_MULTICAST = 0;//*
     public static final int PM_WRITE_FILE_UNICAST = 1;
     public static final int PM_WRITE_FILE_TREE_DISB = 2;
     public static final int PM_DELETE_FILE = 3;
     
     //UnaCloud Client server socket communication constants
-    public static int POOL_THREAD_SIZE = 5;
+    
     //UnaCloud Client location constants
     public static final String BIN="bin";
     public static final String SERVER_PARAMETERS="server_parameters";

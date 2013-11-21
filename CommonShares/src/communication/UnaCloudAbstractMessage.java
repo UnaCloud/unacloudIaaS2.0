@@ -4,6 +4,8 @@
  */
 package communication;
 
+import java.io.Serializable;
+
 import communication.messages.PhysicalMachineOperationMessage;
 import communication.messages.VirtualMachineOperationMessage;
 
@@ -11,17 +13,15 @@ import communication.messages.VirtualMachineOperationMessage;
  *
  * @author Clouder
  */
-public abstract class UnaCloudAbstractMessage{
-    //UnaCloud Server operation request constants
-    public static final int VIRTUAL_MACHINE_OPERATION = 1;
-    public static final int PHYSICAL_MACHINE_OPERATION = 2;
+public abstract class UnaCloudAbstractMessage implements Serializable{
     
-    //UnaCloud Client operation request constants
+	private static final long serialVersionUID = 567714696423776118L;
+	public static final int VIRTUAL_MACHINE_OPERATION = 1;
+    public static final int PHYSICAL_MACHINE_OPERATION = 2;
+    public static final int AGENT_OPERATION = 3;
+    
     public static final int DATABASE_OPERATION = 1;
     public static final int REGISTRATION_OPERATION = 2;
-    public static final int ARTHUR_OPERATION = 3;
-    public static final int UPDATE_OPERATION = 4;
-    public static final int VIRTUAL_MACHINE_CONFIGURATION=5;
     
     private int mainOp;
     private int subOp;
