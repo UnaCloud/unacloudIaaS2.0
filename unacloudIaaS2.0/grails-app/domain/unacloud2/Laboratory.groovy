@@ -4,10 +4,11 @@ class Laboratory {
 
     String name
 	boolean highAvaliability
-	String networkQuality
+	NetworkQualityEnum networkQuality
 	static hasMany = [physicalMachines: PhysicalMachine]
 	
 	static constraints = {
+		
       
 	}
 	

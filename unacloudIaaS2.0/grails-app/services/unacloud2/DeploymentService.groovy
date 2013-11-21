@@ -1,5 +1,8 @@
 package unacloud2
 
+import back.allocators.PhysicalMachineAllocatorService;
+
+
 class DeploymentService {
 
    def deployImage(VirtualMachineImage image, User user){
@@ -26,25 +29,32 @@ class DeploymentService {
 		user.save(failOnError: true)
 	}
    
-   	def deploy(Cluster cluster, User user,int instance, int iRAM, int iCores, long time){
+   	def deploy(Cluster cluster, User user, instance,  iRAM, iCores, time){
 	   
 	   DeployedCluster depCluster= new DeployedCluster(cluster: cluster)
 	   depCluster.images=[]
 	   cluster.images.eachWithIndex(){ image,i->
 		   def depImage= new DeployedImage(image:image)
 		   depImage.virtualMachines= []
-		   for(int j=0;j<instance;j++){
+		   for(int j=0;j<instance.getAt(i);j++){
 				   def iIP= new IP(ip: "10.0.1."+j)
 				   iIP.save(failOnError: true)
 				   long stopTimeMillis= new Date().getTime()
-				   def stopTime= new Date(stopTimeMillis +Integer.parseInt(time))
+				   def stopTime= new Date(stopTimeMillis +Integer.parseInt(time.getAt(i)))
 				   def iName=image.name
-				   def virtualMachine = new VirtualMachineExecution(message: "Deploying", name: iName +"-"+j ,ram: iRAM, cores:iCores,disk:0,ip: iIP,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
-				   virtualMachine.save(failOnError: true)
+				   def virtualMachine = new VirtualMachineExecution(message: "Deploying", name: iName +"-"+j ,ram: iRAM.getAt(i), cores:iCores.getAt(i),disk:0,ip: iIP,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 				   depImage.virtualMachines.add(virtualMachine)
 		   }
 		   depImage.save(failOnError: true)
 		   depCluster.images.add(depImage)
+	   }
+	   PhysicalMachineAllocatorService physicalMachineAllocatorService
+	   physicalMachineAllocatorService.allocatePhysicalMachinesRandomly(depCluster)
+	   for (image in depCluster.images){
+		   for(vm in image.virtualMachines){
+			   vm.save(failOnError: true)
+		   }
+		   image.save(failOnError: true)
 	   }
 	   depCluster.save(failOnError: true)
 	   long stopTimeMillis= new Date().getTime()
@@ -90,7 +100,8 @@ class DeploymentService {
 					def virtualMachine = new VirtualMachineExecution(message: "Deploying",name: iName+"-"+i ,ram: iRAM, cores:iCores,disk:0,ip: iIP,status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
 					virtualMachine.save(failOnError: true)
 					depImage.virtualMachines.add(virtualMachine)
-			}
+		}
+		
 		depImage.save(failOnError: true)	
 	}
 }

@@ -3,15 +3,16 @@ package unacloud2
 import java.nio.file.Path
 
 import org.apache.commons.io.FileUtils
+import org.junit.internal.runners.statements.FailOnTimeout;
 
 class VirtualMachineImageService {
 
-    def uploadImage(files, diskSize, name, isPublic, accessProtocol, operatingSystemId, User user, password) {
+    def uploadImage(files, diskSize, name, isPublic, accessProtocol, operatingSystemId, username, password,User user) {
 		
 		def i= new VirtualMachineImage( fixedDiskSize: diskSize, name: name , avaliable: true,
 			isPublic: isPublic, accessProtocol: accessProtocol , operatingSystem: OperatingSystem.get(operatingSystemId),
-			user: user, password: password)
-		i.save()
+			user: username, password: password)
+		i.save(failOnError: true)
 		def imagePath= 'C:\\images\\'
 		files.each {
 			def e=it.getOriginalFilename()
@@ -23,7 +24,7 @@ class VirtualMachineImageService {
 			FileUtils.copyFile(newFile, templateFile)
 			def tf= new File(fileName: (it.getOriginalFilename()), route: (imagePath+"imageTemplates\\"+i.name+"_"+ user.username+"\\"+it.getOriginalFilename()), templateFile: true)
 			tf.image= i
-			tf.save()
+			tf.save(failOnError: true)
 			}
 			def f= new File( fileName: (it.getOriginalFilename()), route: (imagePath+i.name+"_"+user.username+"\\"+it.getOriginalFilename()), templateFile: false)
 			f.image= i

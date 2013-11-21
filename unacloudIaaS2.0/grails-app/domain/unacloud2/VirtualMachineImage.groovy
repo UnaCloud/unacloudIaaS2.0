@@ -10,8 +10,6 @@ class VirtualMachineImage {
 	String password
 	OperatingSystem operatingSystem
 	String accessProtocol
-	Date startTime
-	Date stopTime
 	
 	static hasMany = [files:File ]
 	

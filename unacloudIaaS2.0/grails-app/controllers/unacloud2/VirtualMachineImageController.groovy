@@ -85,7 +85,7 @@ class VirtualMachineImageController {
 			}	
 		}
 		
-		virtualMachineImageService.uploadImage(files, 0, params.name, (params.isPublic!=null), params.accessProtocol, params.osId, user, params.password)	
+		virtualMachineImageService.uploadImage(files, 0, params.name, (params.isPublic!=null), params.accessProtocol, params.osId, params.user, params.password,user)	
 		
 		redirect(action: 'index')
 	}

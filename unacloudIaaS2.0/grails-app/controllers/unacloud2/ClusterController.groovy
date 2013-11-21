@@ -24,7 +24,7 @@ class ClusterController {
 	
 	def save(){
 		def cluster = new Cluster( name: params.name)
-		def user = User.get(id)
+		def user = User.get(session.user.id)
 		clusterService.saveCluster(params.images, cluster, user)
 		redirect(action: 'index')
 	}

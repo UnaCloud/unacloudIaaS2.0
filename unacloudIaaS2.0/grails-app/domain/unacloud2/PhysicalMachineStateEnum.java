@@ -1,6 +1,6 @@
 package unacloud2;
 
 public enum PhysicalMachineStateEnum {
-	ON,OFF,DISABLE
+	ON,OFF,DISABLED
 
 }
