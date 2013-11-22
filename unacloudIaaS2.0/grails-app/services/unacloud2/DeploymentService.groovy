@@ -12,9 +12,7 @@ class DeploymentService {
 		
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +(60*60*1000))
-		IP ip= new IP(ip: "10.0.0.1",used: true)
-		def virtualMachine = new VirtualMachineExecution(message: "Deploying", name: image.name+"-"+1 ,ram:512 , cores:1 ,disk: image.fixedDiskSize ,ip: ip , status: VirtualMachineExecutionStateEnum.COPYING, startTime: new Date(), stopTime: stopTime )
-		ip.save()
+		def virtualMachine = new VirtualMachineExecution(message: "Deploying", name: image.name+"-"+1 ,ram:512 , cores:1 ,disk: image.fixedDiskSize , status: VirtualMachineExecutionStateEnum.COPYING, startTime: new Date(), stopTime: stopTime )
 		DeployedImage depImage= new DeployedImage(image:image)
 		depImage.virtualMachines=[]
 		depImage.virtualMachines.add(virtualMachine)
@@ -70,6 +68,7 @@ class DeploymentService {
 	   
 	def stopVirtualMachineExecution(VirtualMachineExecution vm){
 		vm.stopTime=new Date()
+		vm.ip.used=false
 		vm.status= VirtualMachineExecutionStateEnum.FINISHED
 		vm.save()
 	}
@@ -92,12 +91,10 @@ class DeploymentService {
 		def iCores= depImage.getDeployedCores()
 		def index=depImage.virtualMachines.size()
 		for(int i=index;i<instance+index;i++){
-					def iIP= new IP(ip: "10.0.1."+i)
-					iIP.save(failOnError: true)
 					long stopTimeMillis= new Date().getTime()
 					def stopTime= new Date(stopTimeMillis +Integer.parseInt(time))
-					
-					def virtualMachine = new VirtualMachineExecution(message: "Deploying",name: iName+"-"+i ,ram: iRAM, cores:iCores,disk:0,ip: iIP,status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
+					def virtualMachine = new VirtualMachineExecution(message: "Deploying",name: iName+"-"+i ,ram: iRAM, cores:iCores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
+					physicalMachineAllocatorService.allocatePhysicalMachine(virtualMachine)
 					virtualMachine.save(failOnError: true)
 					depImage.virtualMachines.add(virtualMachine)
 		}
