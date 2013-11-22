@@ -4,6 +4,8 @@ class Laboratory {
 
     String name
 	boolean highAvaliability
+	IPPool virtualMachinesIPs
+	
 	NetworkQualityEnum networkQuality
 	static hasMany = [physicalMachines: PhysicalMachine]
 	

@@ -1,3 +1,5 @@
+import unacloud2.IP
+import unacloud2.IPPool;
 import unacloud2.Laboratory;
 import unacloud2.NetworkQualityEnum;
 import unacloud2.OperatingSystem;
@@ -14,8 +16,16 @@ class BootStrap {
 		}
 		
 		if(Laboratory.count() ==0){
-			new Laboratory(name: 'TestLab', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS).save()	
-		}
+			IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.202.1', mask: '255.255.255.0').save()
+			virtualIpPool.ips= []
+			for(int i=0;i<39;i++){
+				def virtualIp= new IP(used:false, ip: ('157.253.202.'+111+i)).save()	
+				virtualIpPool.ips.add(virtualIp)
+			}
+			virtualIpPool.save()
+			new Laboratory( virtualMachinesIPs: virtualIpPool, name: 'Wuaira 1', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS).save()	
+		
+	    }
 		
 		if(OperatingSystem.count() ==0){
 			new OperatingSystem(name:'Windows 7',configurer:'Windows').save()
