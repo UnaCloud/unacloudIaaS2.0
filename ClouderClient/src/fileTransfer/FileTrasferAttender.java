@@ -37,7 +37,7 @@ public class FileTrasferAttender {
         //message[2] = TIPO TRANSFERENCIA
         //message[3] = ID_TRANSFERENCIA
         //message[4] = RUTA
-        //message[5] = TAMAÃ‘O
+        //message[5] = TAMAÑO
         //message[6] = NUMERO PARTICIONES
         //message[7] = limpiar directorio
         //message[8...] = IP Destinos
