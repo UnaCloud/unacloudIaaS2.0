@@ -20,6 +20,7 @@ class PhysicalMachineAllocatorService {
 		for(VirtualMachineExecution vme:deployedImage.virtualMachines){
 			if(a<l.size){
 				vme.executionNode = l.get(a++);
+				//vme.executionNode.laboratory.
 			}
 		}
 	}

@@ -1,9 +1,5 @@
 package monitoring;
 
-import static com.losandes.utils.Constants.LOGIN_DB;
-
-import communication.AbstractGrailsCommunicator;
-import communication.UnaCloudAbstractMessage;
 
 /**
  * Class responsible for report this physical machine status. Every 30 seconds this class sends a keep alive message to UnaCloud server.
@@ -11,24 +7,15 @@ import communication.UnaCloudAbstractMessage;
  */
 public class PhysicalMachineStateReporter extends Thread{
 
-    /**
-     * Period time for the reporing process
-     */
-    private final int sleepTime;
-
-    /**
-     * Id to be used to report this physical machine, It corresponds to the physical machine name
-     */
-    private final String id;
+	private int REPORT_DELAY=30000;
+	private int REPORT_FAIL_LIMIT=5;
 
     /**
      * Constructs a physical machine reporter
      * @param id Id to be used to report this physical machine, It corresponds to the physical machine name
      * @param sleep How much should the reporter wait between reports
      */
-    public PhysicalMachineStateReporter(String id,int sleep){
-        this.sleepTime = sleep;
-        this.id=id;
+    public PhysicalMachineStateReporter(){
     }
 
     /**
@@ -36,20 +23,13 @@ public class PhysicalMachineStateReporter extends Thread{
      */
     @Override
     public void run() {
-       int fails = 0;
-       if(!AbstractGrailsCommunicator.checkServerStatus()){
-    	   return ;
-       }
        while(true){
            try{
-               String username=MonitorReportGenerator.getUserName();
-               AbstractGrailsCommunicator.doRequest(UnaCloudAbstractMessage.DATABASE_OPERATION,LOGIN_DB,id,username);
-               fails=0;
+               PhysicalMachineState.reportPhyisicalMachineLoggin(MonitorReportGenerator.getUserName());
            }catch(Exception sce){
-               fails++;
            }
            try{
-               sleep(sleepTime);
+               sleep(REPORT_DELAY);
            }catch(Exception e){
         	   break;
            }

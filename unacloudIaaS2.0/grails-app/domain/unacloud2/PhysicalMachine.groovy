@@ -14,9 +14,7 @@ class PhysicalMachine {
 	String mac
 	PhysicalMachineStateEnum state
 	OperatingSystem operatingSystem
+	Date lastReport
 	
 	static belongsTo =[laboratory: Laboratory]
-	static constraints = {
-    }
-	
 }

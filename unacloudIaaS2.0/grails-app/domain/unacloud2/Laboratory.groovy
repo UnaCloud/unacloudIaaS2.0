@@ -7,15 +7,9 @@ class Laboratory {
 	NetworkQualityEnum networkQuality
 	static hasMany = [physicalMachines: PhysicalMachine]
 	
-	static constraints = {
-		
-      
-	}
-	
 	ArrayList <PhysicalMachine> getOrderedMachines(){
 		PhysicalMachineComparator c= new PhysicalMachineComparator()
 		ArrayList <PhysicalMachine> array = new ArrayList(physicalMachines).sort(c)
 		return array
 	}
-	
 }

@@ -35,7 +35,7 @@ public class ClouderClientAttention implements Closeable{
     public ClouderClientAttention() {
         poolExe = Executors.newFixedThreadPool(POOL_THREAD_SIZE);
         localPort = VariableManager.getIntValue("CLOUDER_CLIENT_PORT");
-        connect();
+        
     }
 
     /**

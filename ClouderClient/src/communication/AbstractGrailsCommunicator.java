@@ -12,6 +12,21 @@ import java.net.URL;
 
 public class AbstractGrailsCommunicator{
 	private static String serverUrl="https://localhost:8080/Unacloud2";
+	public static void pushRequestInfo(String serviceName,String...params){
+		try {
+			String urlParams=null;
+			for(int e=0,i=params.length/2;e<i;e+=2)urlParams=(urlParams==null?"?":"&")+params[e]+"="+params[e+1];
+			URL url=new URL(serverUrl+"/"+serviceName+"/"+urlParams);
+			HttpURLConnection http = (HttpURLConnection)url.openConnection();
+			http.setRequestMethod("GET");
+			http.connect();
+			http.disconnect();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	public static String doRequest(String serviceName,String message){
 		String ret="";
 		try {
