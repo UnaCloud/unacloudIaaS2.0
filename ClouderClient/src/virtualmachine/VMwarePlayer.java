@@ -1,15 +1,13 @@
 package virtualmachine;
-import communication.messages.vmo.configuration.ExecuteCommandRequest;
-
-import static com.losandes.utils.Constants.*;
+import static com.losandes.utils.Constants.ERROR_MESSAGE;
+import static com.losandes.utils.Constants.PLAYER;
 
 import java.io.File;
-
-import execution.LocalProcessExecutor;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import execution.LocalProcessExecutor;
 /**
  * Implementation of hypervisor abstract class to give support for VMwarePlayer hypervisor.
  * @author Clouder
@@ -27,8 +25,8 @@ class VMwarePlayer extends Hypervisor{
     }
 
     @Override
-    public void turnOffVirtualMachine(){
-        String h=LocalProcessExecutor.executeCommandOutput(getExecutablePath() + " -T player stop "+getVirtualMachinePath());
+    public void stopVirtualMachine(){
+        LocalProcessExecutor.executeCommandOutput(getExecutablePath() + " -T player stop "+getVirtualMachinePath());
         //if(h.contains(ERROR_MESSAGE))throw new HypervisorOperationException(h.length()<100?h:h.substring(0,100));
     }
 
@@ -53,15 +51,14 @@ class VMwarePlayer extends Hypervisor{
         if(h.contains(ERROR_MESSAGE))throw new HypervisorOperationException(h.length()<100?h:h.substring(0,100));
     }
 
-    
     @Override
-    public void executeCommandOnMachine(String user, String pass, ExecuteCommandRequest command) throws HypervisorOperationException {
-        pass = pass.replace(" ", "").replace("\"", "");
+    public void executeCommandOnMachine(String user, String pass,String command, String... args) throws HypervisorOperationException {
+    	pass = pass.replace(" ", "").replace("\"", "");
         user = user.replace(" ", "").replace("\"", "");
         List<String> com=new ArrayList<>();
         Collections.addAll(com, getExecutablePath(),"-T","ws","-gu",user,"-gp",pass,"runProgramInGuest",getVirtualMachinePath());
-        com.add(command.getExecName());
-        Collections.addAll(com,command.getVars());
+        com.add(command);
+        Collections.addAll(com,args);
         String h = LocalProcessExecutor.executeCommandOutput(com.toArray(new String[0]));
         if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));

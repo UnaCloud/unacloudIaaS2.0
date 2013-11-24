@@ -20,7 +20,7 @@ import communication.messages.vmo.ConfigurationAbstractMessage;
 import communication.messages.vmo.VirtualMachineAddTimeMessage;
 import communication.messages.vmo.VirtualMachineRestartMessage;
 import communication.messages.vmo.VirtualMachineTurnOffMessage;
-import communication.messages.vmo.VirtualMachineTurnOnMessage;
+import communication.messages.vmo.VirtualMachineStartMessage;
 import configuration.VirtualMachineConfigurator;
 import execution.PersistentExecutionManager;
 
@@ -91,7 +91,7 @@ public class ClouderServerAttentionThread extends Thread {
     private void attendVirtualMachineOperation(UnaCloudAbstractMessage message,ObjectInputStream ois,PrintWriter pw) {
         switch (message.getSubOp()) {
             case VirtualMachineOperationMessage.VM_TURN_ON:
-                VirtualMachineTurnOnMessage turnOn=(VirtualMachineTurnOnMessage)message;
+                VirtualMachineStartMessage turnOn=(VirtualMachineStartMessage)message;
                 PersistentExecutionManager.addExecution(turnOn);
                 break;
             case VirtualMachineOperationMessage.VM_TURN_OFF:

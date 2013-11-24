@@ -1,7 +1,5 @@
 package virtualmachine;
 
-import communication.messages.vmo.configuration.ExecuteCommandRequest;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -70,7 +68,7 @@ public class HypervisorFactory {
             this.hypervisorName = hypervisorName;
         }
         @Override
-        public void turnOffVirtualMachine(){
+        public void stopVirtualMachine(){
         }
         @Override
         public void restartVirtualMachine() throws HypervisorOperationException {
@@ -85,8 +83,8 @@ public class HypervisorFactory {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
         @Override
-        public void executeCommandOnMachine(String user, String pass, ExecuteCommandRequest command) throws HypervisorOperationException {
-            throw new HypervisorOperationException("Hypervisor "+hypervisorName+" not found");
+        public void executeCommandOnMachine(String user, String pass,String command, String... args)throws HypervisorOperationException {
+        	throw new HypervisorOperationException("Hypervisor "+hypervisorName+" not found");
         }
 
         @Override

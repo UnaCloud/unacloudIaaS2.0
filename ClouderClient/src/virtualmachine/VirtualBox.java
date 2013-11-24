@@ -1,18 +1,16 @@
 package virtualmachine;
 
-import communication.messages.vmo.configuration.ExecuteCommandRequest;
-
-import static com.losandes.utils.Constants.*;
+import static com.losandes.utils.Constants.ERROR_MESSAGE;
+import static com.losandes.utils.Constants.VIRTUAL_BOX;
 
 import java.io.File;
-
-import execution.LocalProcessExecutor;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import execution.LocalProcessExecutor;
 
 /**
  * Implementation of hypervisor abstract class to give support for VMwarePlayer
@@ -26,9 +24,9 @@ class VirtualBox extends Hypervisor {
     }
     
     @Override
-    public void turnOffVirtualMachine(){
+    public void stopVirtualMachine(){
         sleep(2000);
-        String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "controlvm", getVirtualMachineName(), "poweroff");
+        LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "controlvm", getVirtualMachineName(), "poweroff");
         unregisterVirtualMachine();
         /*if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
@@ -73,15 +71,13 @@ class VirtualBox extends Hypervisor {
         sleep(30000);
         LocalProcessExecutor.executeCommandOutput("wmic","process","where","name=\"VBoxHeadless.exe\"","CALL","setpriority","64");
     }
-    
-
     @Override
-    public void executeCommandOnMachine(String user, String pass, ExecuteCommandRequest command) throws HypervisorOperationException {
-        pass = pass.replace(" ", "").replace("\"", "");
+    public void executeCommandOnMachine(String user, String pass,String command, String... args) throws HypervisorOperationException {
+    	pass = pass.replace(" ", "").replace("\"", "");
         user = user.replace(" ", "").replace("\"", "");
         List<String> com = new ArrayList<>();
-        Collections.addAll(com, getExecutablePath(), "--nologo", "guestcontrol", getVirtualMachineName(), "execute", "--image", command.getExecName(), "--username", user, "--password", pass, "--wait-exit", "--");
-        Collections.addAll(com, command.getVars());
+        Collections.addAll(com, getExecutablePath(), "--nologo", "guestcontrol", getVirtualMachineName(), "execute", "--image", command, "--username", user, "--password", pass, "--wait-exit", "--");
+        Collections.addAll(com, args);
         String h = LocalProcessExecutor.executeCommandOutput(com.toArray(new String[0]));
         if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
@@ -103,7 +99,7 @@ class VirtualBox extends Hypervisor {
     @Override
     public void takeSnapshotOnMachine(String snapshotname) throws HypervisorOperationException {
         registerVirtualMachine();
-        String h=LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"snapshot",getVirtualMachineName(),"take",snapshotname);
+        LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"snapshot",getVirtualMachineName(),"take",snapshotname);
         unregisterVirtualMachine();
     }
 
