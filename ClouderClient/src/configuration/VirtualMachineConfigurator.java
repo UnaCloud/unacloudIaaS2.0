@@ -111,7 +111,7 @@ public class VirtualMachineConfigurator {
 	 */
 	private String startVirtualMachine(StartVirtualMachineMessage solicitud) {
 		try {
-			HypervisorFactory.getHypervisor(Integer.parseInt(solicitud.getHypervisor()), solicitud.getRutaVMRUN(), solicitud.getDestinationMachine()).turnOnVirtualMachine();
+			HypervisorFactory.getHypervisor(Integer.parseInt(solicitud.getHypervisor()), solicitud.getRutaVMRUN(), solicitud.getDestinationMachine()).startVirtualMachine();
 			return ("Maquina encendida exitosamente");
 		} catch (HypervisorOperationException ex) {
 			Log.print2("Error Starting Machine:" + ex.getMessage());
@@ -163,7 +163,7 @@ public class VirtualMachineConfigurator {
 		Hypervisor v = HypervisorFactory.getHypervisor(solicitud.getHypervisor(), solicitud.getRutaVMRUN(), solicitud.getDestinationMachine());
 		for (int e = 0; e < solicitud.getComandos().length; e++) {
 			try {
-				v.executeCommandOnMachine(solicitud.getUser(), solicitud.getPass(), solicitud.getComandos()[e]);
+				v.executeCommandOnMachine(solicitud.getUser(), solicitud.getPass(), solicitud.getComandos()[e].getExecName(),solicitud.getComandos()[e].getVars());
 				respuesta[e] = "Successful execution";
 			} catch (HypervisorOperationException ex) {
 				respuesta[e] = ex.getMessage();
@@ -180,7 +180,7 @@ public class VirtualMachineConfigurator {
 	 * @throws ConnectionException
 	 */
 	private String stopVirtualMachine(StopVirtualMachineMessage solicitud) {
-		HypervisorFactory.getHypervisor(Integer.parseInt(solicitud.getHypervisor()), solicitud.getRutaVMRUN(), solicitud.getDestinationMachine()).turnOffVirtualMachine();
+		HypervisorFactory.getHypervisor(Integer.parseInt(solicitud.getHypervisor()), solicitud.getRutaVMRUN(), solicitud.getDestinationMachine()).stopVirtualMachine();
 		return ("Maquina apagada exitosamente");
 	}
 

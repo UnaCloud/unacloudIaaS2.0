@@ -33,7 +33,7 @@ public class Schedule extends TimerTask {
      * Responsible for undeploying a virtual machine execution in an executionTime
      */
     public void run() {
-    	HypervisorFactory.getHypervisor(getHypervisorName(), getHypervisorPath(), getVirtualMachinePath()).turnOffVirtualMachine();
+    	HypervisorFactory.getHypervisor(getHypervisorName(), getHypervisorPath(), getVirtualMachinePath()).stopVirtualMachine();
     }
 
     /**

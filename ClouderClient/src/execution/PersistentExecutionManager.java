@@ -21,7 +21,7 @@ import virtualmachine.HypervisorOperationException;
 import communication.ServerMessageSender;
 import communication.messages.vmo.VirtualMachineAddTimeMessage;
 import communication.messages.vmo.VirtualMachineRestartMessage;
-import communication.messages.vmo.VirtualMachineTurnOnMessage;
+import communication.messages.vmo.VirtualMachineStartMessage;
 
 /**
  * Responsible for managing virtual machine executions. This class is responsible to schedule virtual machine startups and
@@ -39,7 +39,7 @@ public class PersistentExecutionManager {
      */
     private static final String executionsFile = "executions.txt";
     
-    private static Map<String,VirtualMachineTurnOnMessage> turnOnMachinesList=new TreeMap<>();
+    private static Map<String,VirtualMachineStartMessage> turnOnMachinesList=new TreeMap<>();
 
     /**
      * A map containing a map between virtual machine ids and its scheduled TimerTask to stop it.
@@ -66,7 +66,7 @@ public class PersistentExecutionManager {
      * @param persistent If the virtual machine must persist its files after machine stop or if it must rollback to its initial status
      * @param checkPoint The name of the checkpoint that must be taken to secure this virtual machine execution, null if no checkpoint is needed
      */
-    public static void addExecution(VirtualMachineTurnOnMessage turnOnMessage) {
+    public static void addExecution(VirtualMachineStartMessage turnOnMessage) {
     	startUpMachine(turnOnMessage);
     }
 
@@ -76,13 +76,13 @@ public class PersistentExecutionManager {
      * @return
      */
     public static String removeExecution(String virtualMachineExecutionId) {
-    	VirtualMachineTurnOnMessage turnOnMessage=null;
+    	VirtualMachineStartMessage turnOnMessage=null;
     	try{
     		turnOnMessage=turnOnMachinesList.remove(virtualMachineExecutionId);
             programedShutdowns.remove(virtualMachineExecutionId).cancel();
         }catch(Exception e){}
     	if(turnOnMessage!=null){
-        	HypervisorFactory.getHypervisor(turnOnMessage.getHypervisorName(),turnOnMessage.getHypervisorPath(),turnOnMessage.getVmPath()).turnOffVirtualMachine();
+        	HypervisorFactory.getHypervisor(turnOnMessage.getHypervisorName(),turnOnMessage.getHypervisorPath(),turnOnMessage.getVmPath()).stopVirtualMachine();
             return "";
     	}
     	return "";
@@ -112,7 +112,7 @@ public class PersistentExecutionManager {
      * @param turnOnMessage
      * @return
      */
-    private static String startUpMachine(VirtualMachineTurnOnMessage turnOnMessage){
+    private static String startUpMachine(VirtualMachineStartMessage turnOnMessage){
     	turnOnMessage.setShutdownTime(System.currentTimeMillis()+turnOnMessage.getExecutionTime()*3600000);
         Hypervisor v=HypervisorFactory.getHypervisor(turnOnMessage.getHypervisorName(),turnOnMessage.getHypervisorPath(),turnOnMessage.getVmPath());
         try {
@@ -121,7 +121,7 @@ public class PersistentExecutionManager {
             new VirtualMachineStateViewer(turnOnMessage.getVirtualMachineExecutionId(),v,turnOnMessage.getVmIP());
             MachineMonitor.addMachineExecution(turnOnMessage.getVirtualMachineExecutionId(),turnOnMessage.getVmPath(),turnOnMessage.getVmCores());
         } catch (HypervisorOperationException e) {
-			HypervisorFactory.getHypervisor(turnOnMessage.getHypervisorName(),turnOnMessage.getHypervisorPath(),turnOnMessage.getVmPath()).turnOffVirtualMachine();
+			HypervisorFactory.getHypervisor(turnOnMessage.getHypervisorName(),turnOnMessage.getHypervisorPath(),turnOnMessage.getVmPath()).stopVirtualMachine();
             ServerMessageSender.reportVirtualMachineState(turnOnMessage.getVirtualMachineExecutionId(), ERROR_STATE, e.getMessage());
             return ERROR_MESSAGE + e.getMessage();
         }
@@ -154,13 +154,13 @@ public class PersistentExecutionManager {
      * @param executionTime The aditional time that must be added to the virtual machine execution
      */
     public static void extendsVMTime(VirtualMachineAddTimeMessage timeMessage) {
-    	VirtualMachineTurnOnMessage turnOnMessage=turnOnMachinesList.get(timeMessage.getVirtualMachineExecutionId());
+    	VirtualMachineStartMessage turnOnMessage=turnOnMachinesList.get(timeMessage.getVirtualMachineExecutionId());
     	turnOnMessage.setExecutionTime(timeMessage.getExecutionTime());
         programedShutdowns.remove(timeMessage.getVirtualMachineExecutionId()).cancel();
         programShutdown(turnOnMessage);
         saveExecutions();
     }
-    private static boolean programShutdown(VirtualMachineTurnOnMessage turnOnMessage){
+    private static boolean programShutdown(VirtualMachineStartMessage turnOnMessage){
     	Schedule timeExec = new Schedule(turnOnMessage.getHypervisorName(),turnOnMessage.getHypervisorPath(),VMW_TURN_OFF,turnOnMessage.getVmPath());
         programedShutdowns.put(turnOnMessage.getVirtualMachineExecutionId(),timeExec);
         timer.schedule(timeExec,new Date(turnOnMessage.getShutdownTime()));
@@ -178,9 +178,9 @@ public class PersistentExecutionManager {
      */
     @SuppressWarnings("unchecked")
 	public static void loadExecutions(){
-    	Map<String,VirtualMachineTurnOnMessage> lastShutdowns=null;
+    	Map<String,VirtualMachineStartMessage> lastShutdowns=null;
         try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream(executionsFile))){
-        	lastShutdowns=(Map<String,VirtualMachineTurnOnMessage>)ois.readObject();
+        	lastShutdowns=(Map<String,VirtualMachineStartMessage>)ois.readObject();
         } catch (Exception ex){}
         if(lastShutdowns!=null){
         	

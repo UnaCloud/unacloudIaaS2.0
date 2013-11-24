@@ -1,7 +1,5 @@
 package virtualmachine;
 
-import communication.messages.vmo.configuration.ExecuteCommandRequest;
-
 import java.io.File;
 
 /**
@@ -74,7 +72,7 @@ public abstract class Hypervisor {
      * Turn on the managed virtual machine
      * @throws HypervisorOperationException if there is an error starting up the virtual machine
      */
-    public final void turnOnVirtualMachine() throws HypervisorOperationException{
+    public final void startVirtualMachine() throws HypervisorOperationException{
         preconfigureAndStartVirtualMachine(0,0,null);
     }
 
@@ -82,7 +80,7 @@ public abstract class Hypervisor {
      * turns off the managed virtual machine
      * @throws HypervisorOperationException If there is an error stoping the virtual machine
      */
-    public abstract void turnOffVirtualMachine();
+    public abstract void stopVirtualMachine();
 
     /**
      * Restarts the managed virtual machine
@@ -97,7 +95,7 @@ public abstract class Hypervisor {
      * @param command The command to be executed
      * @throws HypervisorOperationException If there is an error executing the command
      */
-    public abstract void executeCommandOnMachine(String user, String pass, ExecuteCommandRequest command) throws HypervisorOperationException;
+    public abstract void executeCommandOnMachine(String user, String pass, String command,String...args) throws HypervisorOperationException;
 
     public abstract void takeSnapshotOnMachine(String snapshotname) throws HypervisorOperationException;
 
