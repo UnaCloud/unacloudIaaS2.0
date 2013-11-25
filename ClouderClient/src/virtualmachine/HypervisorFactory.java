@@ -1,7 +1,5 @@
 package virtualmachine;
 
-import communication.messages.vmo.configuration.ExecuteCommandRequest;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +53,7 @@ public class HypervisorFactory {
      * @return A managed hypervisor for the given integer
      */
     public static Hypervisor getHypervisor(final int hypervisorName, String executablePath, String virtualMachinePath){
-        if(hypervisorName==VMW)return getHypervisor("VMwareWorkstation",executablePath, virtualMachinePath);
+        if(hypervisorName == VMW)return getHypervisor("VMwareWorkstation",executablePath, virtualMachinePath);
         else if(hypervisorName == PLAYER)return getHypervisor("VMwarePlayer", executablePath, virtualMachinePath);
         else if(hypervisorName == VIRTUAL_BOX)return getHypervisor("VirtualBox", executablePath, virtualMachinePath);
         return new VoidHypervisor(executablePath+"");
@@ -70,7 +68,7 @@ public class HypervisorFactory {
             this.hypervisorName = hypervisorName;
         }
         @Override
-        public void turnOffVirtualMachine(){
+        public void stopVirtualMachine(){
         }
         @Override
         public void restartVirtualMachine() throws HypervisorOperationException {
@@ -81,12 +79,12 @@ public class HypervisorFactory {
             return this;
         }
         @Override
-        public void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, String persistent) throws HypervisorOperationException {
+        public void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, boolean persistent) throws HypervisorOperationException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
         @Override
-        public void executeCommandOnMachine(String user, String pass, ExecuteCommandRequest command) throws HypervisorOperationException {
-            throw new HypervisorOperationException("Hypervisor "+hypervisorName+" not found");
+        public void executeCommandOnMachine(String user, String pass,String command, String... args)throws HypervisorOperationException {
+        	throw new HypervisorOperationException("Hypervisor "+hypervisorName+" not found");
         }
 
         @Override

@@ -11,13 +11,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import communication.messages.vmo.configuration.ExecuteCommandRequest;
-
-import execution.LocalProcessExecutor;
+import virtualMachineExecution.LocalProcessExecutor;
 
 /**
  * Implementation of hypervisor abstract class to give support for
@@ -42,8 +39,8 @@ public class VMwareWorkstation extends Hypervisor {
     }
 
     @Override
-    public void turnOffVirtualMachine(){
-        String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T","ws","stop",getVirtualMachinePath());
+    public void stopVirtualMachine(){
+        LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T","ws","stop",getVirtualMachinePath());
         /*if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
         }*/
@@ -64,10 +61,10 @@ public class VMwareWorkstation extends Hypervisor {
 
 
     @Override
-    public void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, String persistant) throws HypervisorOperationException {
+    public void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, boolean persistant) throws HypervisorOperationException {
         if(coreNumber!=0&&ramSize!=0){
             Context vmx = new Context(getVirtualMachinePath());
-            vmx.changeVMXFileContext(String.valueOf(coreNumber).toString(), String.valueOf(ramSize).toString(), persistant != null && persistant.equals("true"));
+            vmx.changeVMXFileContext(String.valueOf(coreNumber).toString(), String.valueOf(ramSize).toString(), persistant);
         }
         correctDataStores();
         String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T","ws","start",getVirtualMachinePath(),"nogui");
@@ -76,17 +73,14 @@ public class VMwareWorkstation extends Hypervisor {
         }
     }
     
-
     @Override
-    public void executeCommandOnMachine(String user, String pass, ExecuteCommandRequest command) throws HypervisorOperationException {
-        pass = pass.replace(" ", "").replace("\"", "");
+    public void executeCommandOnMachine(String user, String pass,String command, String... args) throws HypervisorOperationException {
+    	pass = pass.replace(" ", "").replace("\"", "");
         user = user.replace(" ", "").replace("\"", "");
         List<String> com=new ArrayList<>();
         Collections.addAll(com, getExecutablePath(),"-T","ws","-gu",user,"-gp",pass,"runProgramInGuest",getVirtualMachinePath());
-        com.add(command.getExecName());
-        Collections.addAll(com,command.getVars());
-        System.out.println(Arrays.toString(command.getVars()));
-        System.out.println(Arrays.toString(com.toArray(new String[0])));
+        com.add(command);
+        Collections.addAll(com,args);
         String h = LocalProcessExecutor.executeCommandOutput(com.toArray(new String[0]));
         if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));

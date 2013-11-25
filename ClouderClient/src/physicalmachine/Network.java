@@ -18,12 +18,14 @@
 package physicalmachine;
 
 import java.net.InetAddress;
-import execution.LocalProcessExecutor;
 import java.net.UnknownHostException;
+
 import org.hyperic.sigar.NetInterfaceConfig;
 import org.hyperic.sigar.SigarException;
 import org.hyperic.sigar.cmd.Shell;
 import org.hyperic.sigar.cmd.SigarCommandBase;
+
+import virtualMachineExecution.LocalProcessExecutor;
 import static com.losandes.utils.Constants.*;
 
 /**

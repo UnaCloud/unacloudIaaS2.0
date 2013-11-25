@@ -1,6 +1,6 @@
 package physicalmachine;
 
-import execution.LocalProcessExecutor;
+import virtualMachineExecution.LocalProcessExecutor;
 import static com.losandes.utils.Constants.*;
 
 /**
