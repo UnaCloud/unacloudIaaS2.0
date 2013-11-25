@@ -8,7 +8,7 @@ public class VirtualMachineStartMessage extends VirtualMachineOperationMessage i
 	int hypervisorName,vmCores,vmMemory;
     String vmPath,hypervisorPath;
     int executionTime;
-    String virtualMachineIP,virtualMachineNetMask,checkPoint,snapshotRoute;
+    String virtualMachineIP,virtualMachineNetMask,snapshotRoute;
     boolean persistent;
     long shutdownTime;
     
@@ -28,7 +28,6 @@ public class VirtualMachineStartMessage extends VirtualMachineOperationMessage i
         executionTime = message.getInteger(8);
         virtualMachineIP = message.getString(9);
         persistent = Boolean.parseBoolean(message.getString(10));
-        checkPoint = message.getString(11);
         snapshotRoute = message.getString(12);
     }
 	public int getHypervisorName() {
@@ -54,9 +53,6 @@ public class VirtualMachineStartMessage extends VirtualMachineOperationMessage i
 	}
 	public boolean isPersistent() {
 		return persistent;
-	}
-	public String getCheckPoint() {
-		return checkPoint;
 	}
 	public String getSnapshotRoute() {
 		return snapshotRoute;
@@ -89,4 +85,41 @@ public class VirtualMachineStartMessage extends VirtualMachineOperationMessage i
 	public String getConfiguratorClass() {
 		return configuratorClass;
 	}
+	public String getVirtualMachineIP() {
+		return virtualMachineIP;
+	}
+	public void setVirtualMachineIP(String virtualMachineIP) {
+		this.virtualMachineIP = virtualMachineIP;
+	}
+	public void setHypervisorName(int hypervisorName) {
+		this.hypervisorName = hypervisorName;
+	}
+	public void setVmCores(int vmCores) {
+		this.vmCores = vmCores;
+	}
+	public void setVmMemory(int vmMemory) {
+		this.vmMemory = vmMemory;
+	}
+	public void setVmPath(String vmPath) {
+		this.vmPath = vmPath;
+	}
+	public void setHypervisorPath(String hypervisorPath) {
+		this.hypervisorPath = hypervisorPath;
+	}
+	public void setVirtualMachineNetMask(String virtualMachineNetMask) {
+		this.virtualMachineNetMask = virtualMachineNetMask;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+	public void setConfiguratorClass(String configuratorClass) {
+		this.configuratorClass = configuratorClass;
+	}
+	
 }

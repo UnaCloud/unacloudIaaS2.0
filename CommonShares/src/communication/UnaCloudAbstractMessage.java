@@ -39,17 +39,10 @@ public abstract class UnaCloudAbstractMessage implements Serializable{
         return mainOp;
     }
 
-    public void setMainOp(int mainOp) {
-        this.mainOp = mainOp;
-    }
-
     public int getSubOp() {
         return subOp;
     }
 
-    public void setSubOp(int subOp) {
-        this.subOp = subOp;
-    }
     protected abstract void processMessage(UnaCloudMessage message);
     public static UnaCloudAbstractMessage fromMessage(UnaCloudMessage message){
     	switch(message.getInteger(0)){
