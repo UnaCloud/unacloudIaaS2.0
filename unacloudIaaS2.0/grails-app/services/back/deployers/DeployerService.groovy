@@ -9,11 +9,11 @@ import unacloud2.*;
 
 class DeployerService {
 	
-	//TransferService transferService
+	TransferService transferService
 	
     def	deploy(Deployment deployment){
 		runAsync{
-			//transferService.transferVM(deployment.cluster)
+			transferService.transferVM(deployment.cluster)
 			sleep(10000)
 			deployVMs(deployment.cluster);	
 		}

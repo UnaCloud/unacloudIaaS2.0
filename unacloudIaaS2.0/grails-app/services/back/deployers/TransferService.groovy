@@ -4,7 +4,7 @@ import unacloud2.*;
 
 class TransferService {
 
-    def transferVMs(DeployedCluster cluster) {
+    def transferVM(DeployedCluster cluster) {
 		for(image in cluster.images) {
 			for(vm in image.virtualMachines){
 					if(vm.status ==MachineState.COPYING){
