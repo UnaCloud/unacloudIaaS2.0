@@ -68,19 +68,7 @@ public abstract class AbstractVirtualMachineConfigurator {
 				configurator.setStartMessage(startMessage);
 				configurator.start();
 			}
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
