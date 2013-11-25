@@ -27,6 +27,7 @@ public class PhysicalMachineStateReporter extends Thread{
            try{
                PhysicalMachineState.reportPhyisicalMachineLoggin(MonitorReportGenerator.getUserName());
            }catch(Exception sce){
+        	   sce.printStackTrace();
            }
            try{
                sleep(REPORT_DELAY);
