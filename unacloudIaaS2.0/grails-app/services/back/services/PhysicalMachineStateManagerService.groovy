@@ -9,23 +9,28 @@ class PhysicalMachineStateManagerService {
 		PhysicalMachine pm=PhysicalMachine.findByName(hostname)
 		if(pm!=null){
 			Date currentTime=new Date();
-			if(pm.state!=PhysicalMachineStateEnum.DISABLED&&pm.lastReport!=null&&(currentTime.getTime()-pm.lastReport.getTime())>5*60000)pm.state=PhysicalMachineStateEnum.OFF;
-			pm.lastReport=currentTime;
-			pm.save()
+			if(pm.state!=PhysicalMachineStateEnum.DISABLED){
+				pm.state=PhysicalMachineStateEnum.ON;
+				pm.lastReport=currentTime;
+				pm.save()
+			}
+			
 		}
 	}
 	def reportPhysicalMachine(String hostname){
 		PhysicalMachine pm=PhysicalMachine.findByName(hostname)
 		if(pm!=null){
 			Date currentTime=new Date();
-			if(pm.state!=PhysicalMachineStateEnum.DISABLED&&pm.lastReport!=null&&(currentTime.getTime()-pm.lastReport.getTime())>5*60000)pm.state=PhysicalMachineStateEnum.OFF;
-			pm.lastReport=currentTime;
-			pm.save()
+			if(pm.state!=PhysicalMachineStateEnum.DISABLED){
+				pm.state=PhysicalMachineStateEnum.ON;
+				pm.lastReport=currentTime;
+				pm.save()
+			}
 		}
 	}
 	def turnOffPhysicalMachine(String hostname){
 		PhysicalMachine pm=PhysicalMachine.findByName(hostname)
-		if(pm!=null){
+		if(pm!=null&&pm.state!=PhysicalMachineStateEnum.DISABLED){
 			pm.state=PhysicalMachineStateEnum.OFF;
 			pm.save()
 		}
