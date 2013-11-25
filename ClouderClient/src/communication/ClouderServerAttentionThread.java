@@ -3,10 +3,9 @@ package communication;
 import static com.losandes.utils.Constants.ERROR_MESSAGE;
 import static com.losandes.utils.Constants.MESSAGE_SEPARATOR_TOKEN;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.PrintWriter;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import monitoring.PhysicalMachineMonitor;
@@ -14,17 +13,18 @@ import physicalmachine.OperatingSystem;
 import virtualMachineConfiguration.AbstractVirtualMachineConfigurator;
 import virtualMachineExecution.PersistentExecutionManager;
 import communication.messages.AgentMessage;
+import communication.messages.InvalidOperationResponse;
 import communication.messages.PhysicalMachineOperationMessage;
 import communication.messages.VirtualMachineOperationMessage;
 import communication.messages.pmo.PhysicalMachineMonitorMessage;
 import communication.messages.pmo.PhysicalMachineTurnOnMessage;
 import communication.messages.vmo.VirtualMachineAddTimeMessage;
 import communication.messages.vmo.VirtualMachineRestartMessage;
-import communication.messages.vmo.VirtualMachineTurnOffMessage;
+import communication.messages.vmo.VirtualMachineStopMessage;
 import communication.messages.vmo.VirtualMachineStartMessage;
 
 /**
- * @author Eduardo Rosales Responsible for attending or discarding a Clouder
+ * Responsible for attending or discarding a Clouder
  * Server operation request in a thread
  */
 public class ClouderServerAttentionThread extends Thread {
@@ -35,20 +35,14 @@ public class ClouderServerAttentionThread extends Thread {
     private Socket communication;
     
     /**
-     * Owner of this object. Used to attend upgrade and stop requests
-     */
-    private Closeable clouderAttention;
-
-    /**
      * Constructs an attention thread for a given communicator channel. Recieves
      * an owner object for stop requests
      *
      * @param clientSocket
      * @param cca The owner of this object
      */
-    public ClouderServerAttentionThread(Socket clientSocket, Closeable cca) {
+    public ClouderServerAttentionThread(Socket clientSocket) {
         communication = clientSocket;
-        clouderAttention = cca;
     }
 
     /**
@@ -56,11 +50,11 @@ public class ClouderServerAttentionThread extends Thread {
      * request
      */
     public void run() {
-        try(ObjectInputStream ois=new ObjectInputStream(communication.getInputStream());PrintWriter pw=new PrintWriter(communication.getOutputStream(),true)){
-        	for(UnaCloudAbstractMessage clouderServerRequest;(clouderServerRequest = UnaCloudAbstractMessage.fromMessage((UnaCloudMessage)ois.readObject()))!=null;){
+        try(ObjectInputStream ois=new ObjectInputStream(communication.getInputStream());ObjectOutputStream oos=new ObjectOutputStream(communication.getOutputStream())){
+        	for(UnaCloudAbstractMessage clouderServerRequest;(clouderServerRequest = (UnaCloudAbstractMessage)ois.readObject())!=null;){
         		switch (clouderServerRequest.getMainOp()) {
 	                case UnaCloudAbstractMessage.VIRTUAL_MACHINE_OPERATION:
-	                    attendVirtualMachineOperation(clouderServerRequest,ois,pw);
+	                    oos.writeObject(attendVirtualMachineOperation(clouderServerRequest,ois,oos));
 	                    break;
 	                case UnaCloudAbstractMessage.PHYSICAL_MACHINE_OPERATION:
 	                    attendPhysicalMachineOperation(clouderServerRequest);
@@ -79,40 +73,30 @@ public class ClouderServerAttentionThread extends Thread {
             ex.printStackTrace();
             // System.err.println("The communication process with Clouder Server failed in ClouderServerAttentionThread: " + ex.getMessage());
         }
-    }
+     }
 
     /**
      * Method responsible for attending requests for operations over virtual machines
      * @param clouderServerRequestSplitted Server request
      */
-    private void attendVirtualMachineOperation(UnaCloudAbstractMessage message,ObjectInputStream ois,PrintWriter pw) {
+    private UnaCloudAbstractResponse attendVirtualMachineOperation(UnaCloudAbstractMessage message,ObjectInputStream ois,ObjectOutputStream pw) {
         switch (message.getSubOp()) {
             case VirtualMachineOperationMessage.VM_START:
-            	AbstractVirtualMachineConfigurator.startVirtualMachine((VirtualMachineStartMessage)message);
-                break;
+            	return AbstractVirtualMachineConfigurator.startVirtualMachine((VirtualMachineStartMessage)message);
             case VirtualMachineOperationMessage.VM_STOP:
-            	VirtualMachineTurnOffMessage turnOff=(VirtualMachineTurnOffMessage)message;
-                PersistentExecutionManager.removeExecution(turnOff.getVirtualMachineExecutionId());
-                break;
+            	return PersistentExecutionManager.removeExecution(((VirtualMachineStopMessage)message).getVirtualMachineExecutionId());
             case VirtualMachineOperationMessage.VM_RESTART:
-            	VirtualMachineRestartMessage restart=(VirtualMachineRestartMessage)message;
-                PersistentExecutionManager.restartMachine(restart);
-                break;
+            	return PersistentExecutionManager.restartMachine((VirtualMachineRestartMessage)message);
             case VirtualMachineOperationMessage.VM_TIME:
-            	VirtualMachineAddTimeMessage time=(VirtualMachineAddTimeMessage)message;
-                PersistentExecutionManager.extendsVMTime(time);
-                break;
+            	return PersistentExecutionManager.extendsVMTime((VirtualMachineAddTimeMessage)message);
             default:
+            	return new InvalidOperationResponse("Invalid virtual machine operation: "+message.getSubOp());
         }
     }
     private String attendAgentOperation(UnaCloudAbstractMessage message) {
     	switch (message.getSubOp()) {
     		case AgentMessage.UPDATE_OPERATION:
-    			try {
-					clouderAttention.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+    			ClouderClientAttention.close();
     			try {
                     Runtime.getRuntime().exec("javaw -jar ClientUpdater.jar 6");
                 } catch (Exception e) {
@@ -120,11 +104,7 @@ public class ClouderServerAttentionThread extends Thread {
                 System.exit(6);
     			break;
     		case AgentMessage.STOP_CLIENT:
-				try {
-					clouderAttention.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+    			ClouderClientAttention.close();
     			System.exit(0);
     			break;
     		case AgentMessage.GET_VERSION:

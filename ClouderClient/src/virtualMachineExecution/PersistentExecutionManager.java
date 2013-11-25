@@ -19,6 +19,7 @@ import virtualmachine.Hypervisor;
 import virtualmachine.HypervisorFactory;
 import virtualmachine.HypervisorOperationException;
 import communication.ServerMessageSender;
+import communication.UnaCloudAbstractResponse;
 import communication.messages.vmo.VirtualMachineAddTimeMessage;
 import communication.messages.vmo.VirtualMachineRestartMessage;
 import communication.messages.vmo.VirtualMachineStartMessage;
@@ -75,7 +76,7 @@ public class PersistentExecutionManager {
      * @param turnOffMEssage
      * @return
      */
-    public static String removeExecution(String virtualMachineExecutionId) {
+    public static UnaCloudAbstractResponse removeExecution(String virtualMachineExecutionId) {
     	VirtualMachineStartMessage turnOnMessage=null;
     	try{
     		turnOnMessage=turnOnMachinesList.remove(virtualMachineExecutionId);
@@ -83,9 +84,9 @@ public class PersistentExecutionManager {
         }catch(Exception e){}
     	if(turnOnMessage!=null){
         	HypervisorFactory.getHypervisor(turnOnMessage.getHypervisorName(),turnOnMessage.getHypervisorPath(),turnOnMessage.getVmPath()).stopVirtualMachine();
-            return "";
+            //return "";
     	}
-    	return "";
+    	return null;
     }
 
     /**
@@ -96,15 +97,14 @@ public class PersistentExecutionManager {
      * @param id The id of the virtual machine execution to be removed     *
      * @return
      */
-    public static String restartMachine(VirtualMachineRestartMessage restartMessage) {
-        String result = "";
+    public static UnaCloudAbstractResponse restartMachine(VirtualMachineRestartMessage restartMessage) {
         Hypervisor v=HypervisorFactory.getHypervisor(restartMessage.getHypervisorName(),restartMessage.getHypervisorPath(),restartMessage.getVmPath());
         try {
             v.restartVirtualMachine();
         } catch (HypervisorOperationException ex) {
             ServerMessageSender.reportVirtualMachineState(restartMessage.getVirtualMachineExecutionId(), ERROR_STATE, ex.getMessage());
         }
-        return result;
+        return null;
     }
 
     /**
@@ -153,12 +153,13 @@ public class PersistentExecutionManager {
      * @param id The execution id to find the correspondig virtual machine
      * @param executionTime The aditional time that must be added to the virtual machine execution
      */
-    public static void extendsVMTime(VirtualMachineAddTimeMessage timeMessage) {
+    public static UnaCloudAbstractResponse extendsVMTime(VirtualMachineAddTimeMessage timeMessage) {
     	VirtualMachineStartMessage turnOnMessage=turnOnMachinesList.get(timeMessage.getVirtualMachineExecutionId());
     	turnOnMessage.setExecutionTime(timeMessage.getExecutionTime());
         programedShutdowns.remove(timeMessage.getVirtualMachineExecutionId()).cancel();
         programShutdown(turnOnMessage);
         saveExecutions();
+        return null;
     }
     private static boolean programShutdown(VirtualMachineStartMessage turnOnMessage){
     	Schedule timeExec = new Schedule(turnOnMessage.getHypervisorName(),turnOnMessage.getHypervisorPath(),VMW_TURN_OFF,turnOnMessage.getVmPath());

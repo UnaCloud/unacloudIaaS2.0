@@ -1,12 +1,13 @@
 package unacloud2
 
 import back.allocators.PhysicalMachineAllocatorService;
+import back.deployers.DeployerService;
 
 
 class DeploymentService {
    
 	PhysicalMachineAllocatorService physicalMachineAllocatorService
-	
+	DeployerService deployerService
 	
    def deployImage(VirtualMachineImage image, User user){
 		
@@ -63,7 +64,7 @@ class DeploymentService {
 		   user.deployments=[]
 	   user.deployments.add(dep)
 	   user.save(failOnError: true)
-	   dep.deploy();
+	   deployerService.deploy();
    }
 	   
 	def stopVirtualMachineExecution(VirtualMachineExecution vm){

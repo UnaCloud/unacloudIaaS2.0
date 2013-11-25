@@ -3,7 +3,12 @@ package communication;
 import static com.losandes.utils.Constants.MESSAGE_SEPARATOR_TOKEN;
 
 import java.util.Arrays;
-
+/**
+ * Not used
+ * TODO do something with this class
+ * @author G
+ *
+ */
 public class UnaCloudMessage {
 	String[] tokens;
 	public int length;

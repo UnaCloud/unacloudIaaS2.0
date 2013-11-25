@@ -1,16 +1,16 @@
 package virtualMachineConfiguration;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 import communication.messages.vmo.VirtualMachineStartMessage;
+import communication.messages.vmo.VirtualMachineStartResponse;
 import virtualMachineExecution.PersistentExecutionManager;
 import virtualmachine.Hypervisor;
 import virtualmachine.HypervisorFactory;
 import virtualmachine.HypervisorOperationException;
 
-public abstract class AbstractVirtualMachineConfigurator {
+public abstract class AbstractVirtualMachineConfigurator extends Thread{
 	private static Random r=new Random();
 	Hypervisor hypervisor;
 	VirtualMachineStartMessage startMessage;
@@ -31,8 +31,9 @@ public abstract class AbstractVirtualMachineConfigurator {
     public abstract void configureDHCP() throws HypervisorOperationException;
     public abstract void configureHostTable() throws HypervisorOperationException;
     public abstract void doPostConfigure();
-	public final void start(){
-		try {
+    @Override
+    public void run() {
+    	try {
 			hypervisor.changeVirtualMachineMac();
 			hypervisor.startVirtualMachine();
 		    configureHostname();
@@ -46,7 +47,7 @@ public abstract class AbstractVirtualMachineConfigurator {
 		} catch (HypervisorOperationException e) {
 			e.printStackTrace();
 		}
-	}
+    }
 	public final void waitTime(long time){
         try {
             Thread.sleep(time);
@@ -57,20 +58,33 @@ public abstract class AbstractVirtualMachineConfigurator {
 		return new File("temp/"+r.nextLong()+".txt");
 	}
 	
-	public static void startVirtualMachine(VirtualMachineStartMessage startMessage){
+	public static VirtualMachineStartResponse startVirtualMachine(VirtualMachineStartMessage startMessage){
+		VirtualMachineStartResponse resp=new VirtualMachineStartResponse();
 		Hypervisor hypervisor=HypervisorFactory.getHypervisor(startMessage.getHypervisorName(),startMessage.getHypervisorPath(),startMessage.getVmPath());
-		try {
-			Class<?> configuratorClass=Class.forName("virtualMachineConfiguration."+startMessage.getConfiguratorClass());
-			Object configuratorObject=configuratorClass.getConstructor().newInstance();
-			if(configuratorObject instanceof AbstractVirtualMachineConfigurator){
-				AbstractVirtualMachineConfigurator configurator=(AbstractVirtualMachineConfigurator)configuratorObject;
-				configurator.setHypervisor(hypervisor);
-				configurator.setStartMessage(startMessage);
-				configurator.start();
+		if(hypervisor==null){
+			resp.setState(VirtualMachineStartResponse.VirtualMachineState.FAILED);
+			resp.setMessage("Hypervisor not found name:"+startMessage.getHypervisorName()+" path:"+startMessage.getHypervisorPath());
+		}else{
+			try {
+				Class<?> configuratorClass=Class.forName("virtualMachineConfiguration."+startMessage.getConfiguratorClass());
+				Object configuratorObject=configuratorClass.getConstructor().newInstance();
+				if(configuratorObject instanceof AbstractVirtualMachineConfigurator){
+					AbstractVirtualMachineConfigurator configurator=(AbstractVirtualMachineConfigurator)configuratorObject;
+					configurator.setHypervisor(hypervisor);
+					configurator.setStartMessage(startMessage);
+					configurator.start();
+					resp.setState(VirtualMachineStartResponse.VirtualMachineState.STARTING);
+					resp.setMessage("Starting virtual machine...");
+				}else{
+					resp.setState(VirtualMachineStartResponse.VirtualMachineState.FAILED);
+					resp.setMessage("Invalid virtual machine configurator.");
+				}
+				
+			} catch (Exception e) {
+				resp.setState(VirtualMachineStartResponse.VirtualMachineState.FAILED);
+				resp.setMessage("Configurator class error: "+e.getMessage());
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		return resp;
 	}
 }
-

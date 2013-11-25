@@ -14,9 +14,6 @@ public abstract class VirtualMachineOperationMessage extends UnaCloudAbstractMes
 	public VirtualMachineOperationMessage(int subOperation){
 		super(VIRTUAL_MACHINE_OPERATION,subOperation);
 	}
-	public VirtualMachineOperationMessage(int subOperation,UnaCloudMessage message){
-		super(VIRTUAL_MACHINE_OPERATION,subOperation,message);
-	}
 	public static UnaCloudAbstractMessage fromMessage(UnaCloudMessage message){
 		return null;
 	}

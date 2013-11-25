@@ -74,22 +74,4 @@ public class AbstractGrailsCommunicator{
 	public static void main(String[] args){
 		doRequest("Hola mundop!");
 	}
-	public static boolean checkServerStatus(){
-		try{
-			URL url=new URL(serverUrl);
-			HttpURLConnection http = (HttpURLConnection)url.openConnection();
-			http.setRequestMethod("GET");
-			try(OutputStream os=http.getOutputStream();BufferedReader br=new BufferedReader(new InputStreamReader(http.getInputStream()));){
-				for(String h;(h=br.readLine())!=null;);
-			}
-			http.disconnect();
-		} catch (MalformedURLException e){
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
 }

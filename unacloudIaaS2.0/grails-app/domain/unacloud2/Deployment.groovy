@@ -7,8 +7,7 @@ class Deployment {
 	Date stopTime
 	DeploymentStateEnum status
 	
-	static constraints = {
-		
+	static constraints = {	
     }
 	
 	def getTotalActiveVMs(){
@@ -34,47 +33,4 @@ class Deployment {
 	}
 	
 	
-	def	deploy(){
-		runAsync{
-			copyVMs()
-			sleep(10000)
-			configureVMs()
-			sleep(10000)
-			deployVMs()	
-		}
-	}
-	
-	
-	def copyVMs(){
-		for(image in cluster.images) {
-			for(vm in image.virtualMachines){
-				if(vm.status ==VirtualMachineExecutionStateEnum.COPYING){
-					vm.status = VirtualMachineExecutionStateEnum.CONFIGURING
-					vm.save()
-				}
-			}
-		}
-	}
-	
-	def configureVMs(){
-		for(image in cluster.images) {
-			for(vm in image.virtualMachines){
-				if(vm.status ==VirtualMachineExecutionStateEnum.CONFIGURING){
-					vm.status = VirtualMachineExecutionStateEnum.DEPLOYING
-					vm.save()
-				}
-			}
-		}
-	}
-	
-	def deployVMs(){
-		for(image in cluster.images) {
-			for(vm in image.virtualMachines){
-				if(vm.status == VirtualMachineExecutionStateEnum.DEPLOYING){
-					vm.status = VirtualMachineExecutionStateEnum.DEPLOYED
-					vm.save()
-				}
-			}
-		}
-	}
 }

@@ -1,6 +1,5 @@
 package communication.messages.pmo;
 
-import communication.UnaCloudMessage;
 import communication.messages.PhysicalMachineOperationMessage;
 
 public class PhysicalMachineMonitorMessage extends PhysicalMachineOperationMessage{
@@ -10,14 +9,6 @@ public class PhysicalMachineMonitorMessage extends PhysicalMachineOperationMessa
     int registerFrequency;
 	public PhysicalMachineMonitorMessage() {
 		super(PM_MONITOR);
-	}
-	@Override
-	protected void processMessage(UnaCloudMessage message) {
-		operation = message.getString(2);
-		if(message.length>4){
-			monitorFrequency = message.getInteger(3);
-		    registerFrequency = message.getInteger(4);
-		}
 	}
 	public String getOperation() {
 		return operation;

@@ -50,7 +50,7 @@ public class Main {
             }.start();
             new TreeDistributionChannelManager();
             System.out.println("paso reporter4");
-            new ClouderClientAttention().connect();
+            ClouderClientAttention.getInstance().connect();
         }
     }
 }

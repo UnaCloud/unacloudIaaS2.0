@@ -1,7 +1,6 @@
 package communication.messages.monitoring;
 
 import communication.UnaCloudAbstractMessage;
-import communication.UnaCloudMessage;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -198,8 +197,4 @@ public class MonitorInitialReport extends UnaCloudAbstractMessage implements Ser
         return "MonitorInitialReport{" + "UUID=" + UUID + ", timest=" + timest + ", hostname=" + hostname + ", operatingSystemName=" + operatingSystemName + ", operatingSystemVersion=" + operatingSystemVersion + ", operatingSystemArchitect=" + operatingSystemArchitect + ", cPUModel=" + cPUModel + ", cPUVendor=" + cPUVendor + ", cPUCores=" + cPUCores + ", totalSockets=" + totalSockets + ", cPUMhz=" + cPUMhz + ", coresPerSocket=" + coresPerSocket + ", rAMMemorySize=" + rAMMemorySize + ", swapMemorySize=" + swapMemorySize + ", hardDiskSpace=" + hardDiskSpace + ", hardDiskFileSystem=" + hardDiskFileSystem + ", networkMACAddress=" + networkMACAddress + '}';
     }
 
-    @Override
-    public void processMessage(UnaCloudMessage message) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
