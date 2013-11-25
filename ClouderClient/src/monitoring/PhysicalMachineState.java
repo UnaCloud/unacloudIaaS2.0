@@ -11,9 +11,9 @@ import communication.AbstractGrailsCommunicator;
  */
 public class PhysicalMachineState {
     public static void reportPhyisicalMachineState(int physicalMachineState){
-    	AbstractGrailsCommunicator.doRequest("back/machinestate","hostname",Network.getHostname(),"operation",""+physicalMachineState);
+    	AbstractGrailsCommunicator.pushInfo("machineState/reportPhysicalMachineState","hostname",Network.getHostname(),"operation",""+physicalMachineState);
     }
     public static void reportPhyisicalMachineLoggin(String user){
-    	AbstractGrailsCommunicator.doRequest("back/machinestate","hostname",Network.getHostname(),"operation",""+Constants.LOGIN_DB,"hostuser",user);
+    	AbstractGrailsCommunicator.pushInfo("machineState/reportPhysicalMachineState","hostname",Network.getHostname(),"operation",""+Constants.LOGIN_DB,"hostuser",user);
     }
 }

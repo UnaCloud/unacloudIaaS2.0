@@ -1,12 +1,12 @@
 package unacloudservices
 
-class UnaCloudServicesController {
+import back.services.PhysicalMachineStateManagerService;
 
+class UnaCloudServicesController {
+	PhysicalMachineStateManagerService physicalMachineStateManagerService;
     def clouderClientAttention(){
-		String request=params.req
-		println request
 		println params.type
-		render "hola2"
+		physicalMachineStateManagerService.reportPhysicalMachine("", "")
 		//render ClouderClientAttention.attendRequest(request)
 	}
 	def agentVersion(){

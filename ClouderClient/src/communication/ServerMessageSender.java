@@ -24,7 +24,7 @@ public class ServerMessageSender {
      * @return if the message could be sent or not
      */
     public static boolean sendMessage(Object ... message){
-    	return AbstractGrailsCommunicator.doRequest(message)!=null;
+    	return AbstractGrailsCommunicator.pushInfo("UnaCloudServices/clouderClientAttention",message);
     }
 
     /**

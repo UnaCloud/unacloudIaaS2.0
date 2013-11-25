@@ -1,4 +1,4 @@
-package back
+package unacloudservices
 
 import static com.losandes.utils.Constants.LOGIN_DB;
 import static com.losandes.utils.Constants.LOGOUT_DB;
@@ -15,40 +15,40 @@ import com.losandes.utils.VirtualMachineCPUStates;
 import back.services.PhysicalMachineStateManagerService;
 
 class MachineStateController {
-
-    def reportPhysicalMachine(){
-		String hostname=params['hostname'],hostuser=params['hostuser'];
-		PhysicalMachineStateManagerService.reportPhysicalMachine(hostname,hostuser);
+	PhysicalMachineStateManagerService physicalMachineStateManagerService;
+	def index(){
+		render "hola"
 	}
 	def reportPhysicalMachineState(){
 		String strOperation=params['operation']
 		String hostname=params['hostname']
+		println "reportPhysicalMachineState "+strOperation+" "+hostname
 		if(strOperation.matches("[0-9]+")){
 			int operation=Integer.parseInt(strOperation);
 			switch (operation) {
 				case TURN_ON_DB:
-					persistence.updatePhysicalMachineState(ON_STATE,hostname);
+					physicalMachineStateManagerService.reportPhysicalMachine(hostname)
 					break;
 				case TURN_OFF_DB:
-					persistence.updatePhysicalMachineState(OFF_STATE,hostname);
+					physicalMachineStateManagerService.turnOffPhysicalMachine(hostname)
 					break;
 				case LOGIN_DB:
 					String hostuser=params['hostuser']
-					persistence.logginPhysicalMachineUser(hostname,hostuser);
-					machineManager.reportMachine(hostname);
+					physicalMachineStateManagerService.reportPhysicalMachine(hostname,hostuser)
 					break;
 				case LOGOUT_DB:
-					persistence.logginPhysicalMachineUser(hostname, NOTHING_AVAILABLE);
+					physicalMachineStateManagerService.reportPhysicalMachine(hostname,null)
 					break;
 				case VIRTUAL_MACHINE_STATE_DB:
-					/*persistence.updateVirtualMachineState(clouderServerRequest.getString(3),clouderServerRequest.getInteger(4),clouderServerRequest.getString(5));*/
-					machineManager.reportMachine(hostname);
+					//TODO no se que hace.
+					//persistence.updateVirtualMachineState(clouderServerRequest.getString(3),clouderServerRequest.getInteger(4),clouderServerRequest.getString(5));
+					//machineManager.reportMachine(hostname);
 					break;
 				case VIRTUAL_MACHINE_CPU_STATE:
-					persistence.updateVirtualMachineCPUState(clouderServerRequest.getString(3),VirtualMachineCPUStates.valueOf(clouderServerRequest.getString(4)));
+					//persistence.updateVirtualMachineCPUState(clouderServerRequest.getString(3),VirtualMachineCPUStates.valueOf(clouderServerRequest.getString(4)));
 					break;
 			}
-			
+			render "succeeded"
 		}
 	}
 }
