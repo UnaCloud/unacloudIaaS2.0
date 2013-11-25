@@ -9,7 +9,7 @@ public class VirtualMachineTurnOffMessage extends VirtualMachineOperationMessage
     String vmPath;
     String hypervisorPath;
     public VirtualMachineTurnOffMessage() {
-		super(VM_TURN_OFF);
+		super(VM_STOP);
 	}
     @Override
     protected void processMessage(UnaCloudMessage message) {

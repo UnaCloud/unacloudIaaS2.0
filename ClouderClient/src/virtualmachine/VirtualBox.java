@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import execution.LocalProcessExecutor;
+import virtualMachineExecution.LocalProcessExecutor;
 
 /**
  * Implementation of hypervisor abstract class to give support for VMwarePlayer
@@ -54,7 +54,7 @@ class VirtualBox extends Hypervisor {
     }
 
     @Override
-    public void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, String persistent) throws HypervisorOperationException {
+    public void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, boolean persistent) throws HypervisorOperationException {
         registerVirtualMachine();
         if (hasSnapshot()) {
             LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "snapshot", getVirtualMachineName(), "restorecurrent");

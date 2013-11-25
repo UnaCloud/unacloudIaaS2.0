@@ -53,7 +53,7 @@ public class HypervisorFactory {
      * @return A managed hypervisor for the given integer
      */
     public static Hypervisor getHypervisor(final int hypervisorName, String executablePath, String virtualMachinePath){
-        if(hypervisorName==VMW)return getHypervisor("VMwareWorkstation",executablePath, virtualMachinePath);
+        if(hypervisorName == VMW)return getHypervisor("VMwareWorkstation",executablePath, virtualMachinePath);
         else if(hypervisorName == PLAYER)return getHypervisor("VMwarePlayer", executablePath, virtualMachinePath);
         else if(hypervisorName == VIRTUAL_BOX)return getHypervisor("VirtualBox", executablePath, virtualMachinePath);
         return new VoidHypervisor(executablePath+"");
@@ -79,7 +79,7 @@ public class HypervisorFactory {
             return this;
         }
         @Override
-        public void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, String persistent) throws HypervisorOperationException {
+        public void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, boolean persistent) throws HypervisorOperationException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
         @Override

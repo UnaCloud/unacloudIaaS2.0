@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import execution.LocalProcessExecutor;
+import virtualMachineExecution.LocalProcessExecutor;
 /**
  * Implementation of hypervisor abstract class to give support for VMwarePlayer hypervisor.
  * @author Clouder
@@ -42,10 +42,10 @@ class VMwarePlayer extends Hypervisor{
     }
 
     @Override
-    public void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, String persistant) throws HypervisorOperationException {
+    public void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, boolean persistant) throws HypervisorOperationException {
         if(coreNumber!=0&&ramSize!=0){
             Context vmx = new Context(getVirtualMachinePath());
-            vmx.changeVMXFileContext(String.valueOf(coreNumber).toString(), String.valueOf(ramSize).toString(),persistant!=null&&persistant.equals("true"));
+            vmx.changeVMXFileContext(String.valueOf(coreNumber).toString(), String.valueOf(ramSize).toString(),persistant);
         }
         String h=LocalProcessExecutor.executeCommandOutput(getExecutablePath() + " -T player start "+getVirtualMachinePath()+" nogui");
         if(h.contains(ERROR_MESSAGE))throw new HypervisorOperationException(h.length()<100?h:h.substring(0,100));

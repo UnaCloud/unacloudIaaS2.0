@@ -11,9 +11,11 @@ public class VirtualMachineStartMessage extends VirtualMachineOperationMessage i
     String virtualMachineIP,virtualMachineNetMask,checkPoint,snapshotRoute;
     boolean persistent;
     long shutdownTime;
-    String username,password;
+    
+    String username,password,hostname;
+    String configuratorClass;
     public VirtualMachineStartMessage() {
-		super(VM_TURN_ON);
+		super(VM_START);
 	}
     @Override
     protected void processMessage(UnaCloudMessage message) {
@@ -81,5 +83,10 @@ public class VirtualMachineStartMessage extends VirtualMachineOperationMessage i
 	public void setExecutionTime(int executionTime) {
 		this.executionTime = executionTime;
 	}
-	
+	public String getHostname() {
+		return hostname;
+	}
+	public String getConfiguratorClass() {
+		return configuratorClass;
+	}
 }

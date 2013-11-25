@@ -1,4 +1,4 @@
-package execution;
+package virtualMachineExecution;
 
 import static com.losandes.utils.Constants.ERROR_MESSAGE;
 import static com.losandes.utils.Constants.ERROR_STATE;
@@ -116,7 +116,7 @@ public class PersistentExecutionManager {
     	turnOnMessage.setShutdownTime(System.currentTimeMillis()+turnOnMessage.getExecutionTime()*3600000);
         Hypervisor v=HypervisorFactory.getHypervisor(turnOnMessage.getHypervisorName(),turnOnMessage.getHypervisorPath(),turnOnMessage.getVmPath());
         try {
-            v.preconfigureAndStartVirtualMachine(turnOnMessage.getVmCores(),turnOnMessage.getVmMemory(),turnOnMessage.getPersistent());
+            v.preconfigureAndStartVirtualMachine(turnOnMessage.getVmCores(),turnOnMessage.getVmMemory(),turnOnMessage.isPersistent());
             programShutdown(turnOnMessage);
             new VirtualMachineStateViewer(turnOnMessage.getVirtualMachineExecutionId(),v,turnOnMessage.getVmIP());
             MachineMonitor.addMachineExecution(turnOnMessage.getVirtualMachineExecutionId(),turnOnMessage.getVmPath(),turnOnMessage.getVmCores());

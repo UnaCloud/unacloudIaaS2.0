@@ -9,13 +9,13 @@ import monitoring.PhysicalMachineMonitor;
 import monitoring.PhysicalMachineState;
 import monitoring.PhysicalMachineStateReporter;
 import physicalmachine.OperatingSystem;
+import virtualMachineExecution.PersistentExecutionManager;
 
 import com.losandes.dataChannel.DataServerSocket;
 import com.losandes.utils.Log;
 import com.losandes.utils.VariableManager;
 
 import communication.ClouderClientAttention;
-import execution.PersistentExecutionManager;
 import fileTransfer.TreeDistributionChannelManager;
 
 /**

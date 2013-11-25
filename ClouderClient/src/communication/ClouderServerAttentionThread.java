@@ -11,18 +11,17 @@ import java.net.Socket;
 
 import monitoring.PhysicalMachineMonitor;
 import physicalmachine.OperatingSystem;
+import virtualMachineConfiguration.AbstractVirtualMachineConfigurator;
+import virtualMachineExecution.PersistentExecutionManager;
 import communication.messages.AgentMessage;
 import communication.messages.PhysicalMachineOperationMessage;
 import communication.messages.VirtualMachineOperationMessage;
 import communication.messages.pmo.PhysicalMachineMonitorMessage;
 import communication.messages.pmo.PhysicalMachineTurnOnMessage;
-import communication.messages.vmo.ConfigurationAbstractMessage;
 import communication.messages.vmo.VirtualMachineAddTimeMessage;
 import communication.messages.vmo.VirtualMachineRestartMessage;
 import communication.messages.vmo.VirtualMachineTurnOffMessage;
 import communication.messages.vmo.VirtualMachineStartMessage;
-import configuration.VirtualMachineConfigurator;
-import execution.PersistentExecutionManager;
 
 /**
  * @author Eduardo Rosales Responsible for attending or discarding a Clouder
@@ -83,18 +82,15 @@ public class ClouderServerAttentionThread extends Thread {
     }
 
     /**
-     * Method responsible for attending requests for operations over virtual
-     * machines
-     *
+     * Method responsible for attending requests for operations over virtual machines
      * @param clouderServerRequestSplitted Server request
      */
     private void attendVirtualMachineOperation(UnaCloudAbstractMessage message,ObjectInputStream ois,PrintWriter pw) {
         switch (message.getSubOp()) {
-            case VirtualMachineOperationMessage.VM_TURN_ON:
-                VirtualMachineStartMessage turnOn=(VirtualMachineStartMessage)message;
-                PersistentExecutionManager.addExecution(turnOn);
+            case VirtualMachineOperationMessage.VM_START:
+            	AbstractVirtualMachineConfigurator.startVirtualMachine((VirtualMachineStartMessage)message);
                 break;
-            case VirtualMachineOperationMessage.VM_TURN_OFF:
+            case VirtualMachineOperationMessage.VM_STOP:
             	VirtualMachineTurnOffMessage turnOff=(VirtualMachineTurnOffMessage)message;
                 PersistentExecutionManager.removeExecution(turnOff.getVirtualMachineExecutionId());
                 break;
@@ -106,8 +102,6 @@ public class ClouderServerAttentionThread extends Thread {
             	VirtualMachineAddTimeMessage time=(VirtualMachineAddTimeMessage)message;
                 PersistentExecutionManager.extendsVMTime(time);
                 break;
-            case VirtualMachineOperationMessage.VIRTUAL_MACHINE_CONFIGURATION:
-                new VirtualMachineConfigurator().attendConfigurationRequest((ConfigurationAbstractMessage)message, ois,pw);
             default:
         }
     }

@@ -66,14 +66,14 @@ public abstract class Hypervisor {
      * @param persistent The persistent property
      * @throws HypervisorOperationException if there is an error configuring the virtual machine settings
      */
-    public abstract void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, String persistent) throws HypervisorOperationException;
+    public abstract void preconfigureAndStartVirtualMachine(int coreNumber, int ramSize, boolean persistent) throws HypervisorOperationException;
     
     /**
      * Turn on the managed virtual machine
      * @throws HypervisorOperationException if there is an error starting up the virtual machine
      */
     public final void startVirtualMachine() throws HypervisorOperationException{
-        preconfigureAndStartVirtualMachine(0,0,null);
+        preconfigureAndStartVirtualMachine(0,0,false);
     }
 
     /**
