@@ -32,7 +32,7 @@ public class Main {
         VariableManager.init("./vars");
         Log.print("Inicio "+Arrays.toString(args));
         int mainCase = 1;
-        if (args != null && args.length>0 && !args[1].matches("[0-9]+"))mainCase = Integer.parseInt(args[0]);
+        if (args != null && args.length>0 && !args[0].matches("[0-9]+"))mainCase = Integer.parseInt(args[0]);
         
         if(mainCase==LOGIN_DB) PhysicalMachineState.reportPhyisicalMachineLoggin(OperatingSystem.getUserName());
         else PhysicalMachineState.reportPhyisicalMachineState(mainCase);
