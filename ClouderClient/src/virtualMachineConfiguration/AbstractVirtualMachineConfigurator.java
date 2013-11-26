@@ -59,6 +59,7 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
 	}
 	
 	public static VirtualMachineStartResponse startVirtualMachine(VirtualMachineStartMessage startMessage){
+		System.out.println("startVirtualMachine");
 		VirtualMachineStartResponse resp=new VirtualMachineStartResponse();
 		Hypervisor hypervisor=HypervisorFactory.getHypervisor(startMessage.getHypervisorName(),startMessage.getHypervisorPath(),startMessage.getVmPath());
 		if(hypervisor==null){
@@ -85,6 +86,7 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
 				resp.setMessage("Configurator class error: "+e.getMessage());
 			}
 		}
+		System.out.println(resp);
 		return resp;
 	}
 }

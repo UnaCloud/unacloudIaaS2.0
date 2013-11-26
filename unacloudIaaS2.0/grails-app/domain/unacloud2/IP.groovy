@@ -4,8 +4,9 @@ class IP {
 
     String ip
 	boolean used
-	static belongsTo = [ipPool: IPPool]
+	String mask
 	
+	static transients = ['mask']
 	static constraints = {
 		
     }

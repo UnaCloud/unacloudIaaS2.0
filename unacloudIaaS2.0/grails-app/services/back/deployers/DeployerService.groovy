@@ -12,40 +12,52 @@ class DeployerService {
 	TransferService transferService
 	
     def	deploy(Deployment deployment){
-		runAsync{
-			transferService.transferVM(deployment.cluster)
-			sleep(10000)
-			deployVMs(deployment.cluster);	
-		}
+		println "llamando"
+		//transferService.transferVM(deployment.cluster)
+		println "llamé"
+		deployVMs(deployment.cluster);	
+		
 	}
 	
 		def deployVMs(DeployedCluster cluster){
+			println "Deploying cluster ---> "+cluster.cluster.name
 			for(image in cluster.images) {
+				println "Deploying Image ----->" +image.image.name
 				VirtualMachineStartMessage vmsm=new VirtualMachineStartMessage();
 				vmsm.setPassword(image.image.password)
 				vmsm.setUsername(image.image.user)
 				vmsm.setConfiguratorClass(image.image.operatingSystem.configurer)
-				vmsm.setHypervisorName()
-				vmsm.setHypervisorPath()
+				println "Deploying Image ----->" +image.image.name
 				
 				for(vm in image.virtualMachines){
-					vmsm.setExecutionTime(vm.stopTime()-vm.startTime())
-					vmsm.setHypervisorName(Constants.VMW)
+					println "Deploying VM"+ vm.name
+					
+					vmsm.setExecutionTime(1)
+					println "tiempo asignado"
+					vmsm.setHypervisorName(1)
 					vmsm.setHypervisorPath("C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe")
 					vmsm.setHostname("debian6")
+					println "Deploying2 VM"+ vm.name
 					vmsm.setVirtualMachineIP(vm.ip.ip)
-					vmsm.setVirtualMachineNetMask(vm.ip.ipPool.mask)
+					vmsm.setVirtualMachineNetMask("255.255.255.0")
 					vmsm.setVmCores(vm.cores)
 					vmsm.setVmMemory(vm.ram)
-					vmsm.setVmPath("D:\\Debian 6 - Lab Heroku Est\\Debian 6 Lab Heroku.vmx")
+					println "Deploying3 VM"+ vm.name
+					vmsm.setVmPath("D:\\DebianPaaS64\\DebianPaaS64.vmx")
+					String pmIp=vm.executionNode.ip.ip;
+					println vmsm
+					
 					try{
-						Socket s=new Socket(vm.executionNode.ip.ip);
+						println "conectando a ip "+pmIp
+						Socket s=new Socket(pmIp,81);
 						ObjectOutputStream oos=new ObjectOutputStream(s.getOutputStream());
 						ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
 						oos.writeObject(vmsm);
-						oos.close();
+						oos.flush();
 						Object c=ois.readObject();
 						println "response: "+c	
+						oos.close();
+						
 						s.close();
 					}catch(Exception e){
 						e.printStackTrace();

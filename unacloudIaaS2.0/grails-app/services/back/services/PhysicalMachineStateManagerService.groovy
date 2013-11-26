@@ -10,7 +10,7 @@ class PhysicalMachineStateManagerService {
 		if(pm!=null){
 			Date currentTime=new Date();
 			if(pm.state!=PhysicalMachineStateEnum.DISABLED){
-				pm.state=PhysicalMachineStateEnum.ON;
+				pm.putAt("state", PhysicalMachineStateEnum.ON)
 				pm.lastReport=currentTime;
 				pm.save()
 			}
@@ -22,7 +22,7 @@ class PhysicalMachineStateManagerService {
 		if(pm!=null){
 			Date currentTime=new Date();
 			if(pm.state!=PhysicalMachineStateEnum.DISABLED){
-				pm.state=PhysicalMachineStateEnum.ON;
+				pm.putAt("state", PhysicalMachineStateEnum.ON)
 				pm.lastReport=currentTime;
 				pm.save()
 			}
@@ -31,7 +31,7 @@ class PhysicalMachineStateManagerService {
 	def turnOffPhysicalMachine(String hostname){
 		PhysicalMachine pm=PhysicalMachine.findByName(hostname)
 		if(pm!=null&&pm.state!=PhysicalMachineStateEnum.DISABLED){
-			pm.state=PhysicalMachineStateEnum.OFF;
+			pm.putAt("state", PhysicalMachineStateEnum.OFF)
 			pm.save()
 		}
 		

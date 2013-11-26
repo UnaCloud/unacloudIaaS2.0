@@ -20,6 +20,7 @@ class PhysicalMachineAllocatorService {
 		for(ip in ipPool.ips){
 					if(ip.used==false){
 						vme.ip= ip
+						ip.mask=ipPool.mask
 						ip.used=true
 						break
 					}

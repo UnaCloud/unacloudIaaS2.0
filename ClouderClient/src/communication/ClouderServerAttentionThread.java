@@ -52,6 +52,7 @@ public class ClouderServerAttentionThread extends Thread {
     public void run() {
         try(ObjectInputStream ois=new ObjectInputStream(communication.getInputStream());ObjectOutputStream oos=new ObjectOutputStream(communication.getOutputStream())){
         	for(UnaCloudAbstractMessage clouderServerRequest;(clouderServerRequest = (UnaCloudAbstractMessage)ois.readObject())!=null;){
+        		System.out.println("recieved "+clouderServerRequest);
         		switch (clouderServerRequest.getMainOp()) {
 	                case UnaCloudAbstractMessage.VIRTUAL_MACHINE_OPERATION:
 	                    oos.writeObject(attendVirtualMachineOperation(clouderServerRequest,ois,oos));

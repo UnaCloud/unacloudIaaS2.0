@@ -107,5 +107,18 @@ public class VirtualMachineStartMessage extends VirtualMachineOperationMessage i
 	public void setConfiguratorClass(String configuratorClass) {
 		this.configuratorClass = configuratorClass;
 	}
+	@Override
+	public String toString() {
+		return "VirtualMachineStartMessage [hypervisorName=" + hypervisorName
+				+ ", vmCores=" + vmCores + ", vmMemory=" + vmMemory
+				+ ", vmPath=" + vmPath + ", hypervisorPath=" + hypervisorPath
+				+ ", executionTime=" + executionTime + ", virtualMachineIP="
+				+ virtualMachineIP + ", virtualMachineNetMask="
+				+ virtualMachineNetMask + ", snapshotRoute=" + snapshotRoute
+				+ ", persistent=" + persistent + ", shutdownTime="
+				+ shutdownTime + ", username=" + username + ", password="
+				+ password + ", hostname=" + hostname + ", configuratorClass="
+				+ configuratorClass + "]";
+	}
 	
 }

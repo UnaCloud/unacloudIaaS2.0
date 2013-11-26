@@ -54,7 +54,7 @@ class DeploymentService {
 	   }
 	   depCluster.save(failOnError: true)
 	   physicalMachineAllocatorService.allocatePhysicalMachinesRandomly(depCluster)
-	   
+	   println "voy a llamar"
 	   
 	   long stopTimeMillis= new Date().getTime()
 	   def stopTime= new Date(stopTimeMillis +Integer.parseInt(time))
@@ -64,7 +64,11 @@ class DeploymentService {
 		   user.deployments=[]
 	   user.deployments.add(dep)
 	   user.save(failOnError: true)
-	   deployerService.deploy();
+	   println "ahora si voy a llamar"
+	   runAsync{
+		   
+	   deployerService.deploy(dep);
+	   }
    }
 	   
 	def stopVirtualMachineExecution(VirtualMachineExecution vm){
