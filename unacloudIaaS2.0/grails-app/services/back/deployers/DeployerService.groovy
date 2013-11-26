@@ -12,6 +12,7 @@ class DeployerService {
 	TransferService transferService
 	
     def	deploy(Deployment deployment){
+		
 		println "llamando"
 		//transferService.transferVM(deployment.cluster)
 		println "llamé"

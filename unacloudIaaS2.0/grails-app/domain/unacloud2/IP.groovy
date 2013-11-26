@@ -4,10 +4,9 @@ class IP {
 
     String ip
 	boolean used
-	String mask
+	IPPool ipPool
 	
-	static transients = ['mask']
 	static constraints = {
-		
+		ipPool nullable:true 	
     }
 }

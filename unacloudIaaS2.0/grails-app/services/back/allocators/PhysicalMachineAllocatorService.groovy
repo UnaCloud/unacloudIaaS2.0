@@ -5,10 +5,13 @@ import unacloud2.*
 class PhysicalMachineAllocatorService {
 	
     def allocatePhysicalMachinesRandomly(DeployedCluster deployment){
+		println "allocando"
 		for(DeployedImage di:deployment.images){
 			allocatePhysicalMachines(di);
 		}
+		println "allocado completo"
 	}
+	
 	def allocatePhysicalMachine(VirtualMachineExecution vme ){
 		
 		List<PhysicalMachine> l=PhysicalMachine.list();
@@ -31,8 +34,10 @@ class PhysicalMachineAllocatorService {
 		List<PhysicalMachine> l=PhysicalMachine.list();
 		Collections.shuffle(l);
 		int a=0;
+		println "allocando imagenes"
 		for(VirtualMachineExecution vme:deployedImage.virtualMachines){
 			if(a<l.size){
+				println "allocando vm"
 				vme.executionNode = l.get(a++);
 				IPPool ipPool= vme.executionNode.laboratory.virtualMachinesIPs	
 				
@@ -46,5 +51,6 @@ class PhysicalMachineAllocatorService {
 				//vme.executionNode.laboratory.
 			}
 		}
+		println "allocado"
 	}
 }
