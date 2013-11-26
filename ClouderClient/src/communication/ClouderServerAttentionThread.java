@@ -30,13 +30,12 @@ import communication.messages.vmo.VirtualMachineStartMessage;
 public class ClouderServerAttentionThread extends Thread {
 
     /**
-     * Abstract comunnicator used to recieve the request and send a response
+     * Abstract communicator used to receive the request and send a response
      */
     private Socket communication;
     
     /**
-     * Constructs an attention thread for a given communicator channel. Recieves
-     * an owner object for stop requests
+     * Constructs an attention thread for a given communicator channel. Receives an owner object for stop requests
      *
      * @param clientSocket
      * @param cca The owner of this object
@@ -51,27 +50,23 @@ public class ClouderServerAttentionThread extends Thread {
      */
     public void run() {
         try(ObjectInputStream ois=new ObjectInputStream(communication.getInputStream());ObjectOutputStream oos=new ObjectOutputStream(communication.getOutputStream())){
-        	for(UnaCloudAbstractMessage clouderServerRequest;(clouderServerRequest = (UnaCloudAbstractMessage)ois.readObject())!=null;){
-        		switch (clouderServerRequest.getMainOp()) {
-	                case UnaCloudAbstractMessage.VIRTUAL_MACHINE_OPERATION:
-	                    oos.writeObject(attendVirtualMachineOperation(clouderServerRequest,ois,oos));
-	                    break;
-	                case UnaCloudAbstractMessage.PHYSICAL_MACHINE_OPERATION:
-	                    attendPhysicalMachineOperation(clouderServerRequest);
-	                    break;
-	                case UnaCloudAbstractMessage.AGENT_OPERATION:
-	                    attendAgentOperation(clouderServerRequest);
-	                    break;
-	                default:
-	                	//TODO do something
-	                    //clouderClientOperationResult += ERROR_MESSAGE + "The Clouder Server request is null or an invalid number: " + operationDomain;
-	                    //System.err.println(clouderClientOperationResult);
-	                    break;
-        		}
-        	}
+    		UnaCloudAbstractMessage clouderServerRequest=(UnaCloudAbstractMessage)ois.readObject();
+    		switch (clouderServerRequest.getMainOp()) {
+                case UnaCloudAbstractMessage.VIRTUAL_MACHINE_OPERATION:
+                    oos.writeObject(attendVirtualMachineOperation(clouderServerRequest,ois,oos));
+                    break;
+                case UnaCloudAbstractMessage.PHYSICAL_MACHINE_OPERATION:
+                    attendPhysicalMachineOperation(clouderServerRequest);
+                    break;
+                case UnaCloudAbstractMessage.AGENT_OPERATION:
+                	oos.writeObject(attendAgentOperation(clouderServerRequest));
+                    break;
+                default:
+                	oos.writeObject(new InvalidOperationResponse("Opeartion "+clouderServerRequest.getMainOp()+" is invalid as main operation."));
+                    break;
+    		}
         } catch (Exception ex) {
             ex.printStackTrace();
-            // System.err.println("The communication process with Clouder Server failed in ClouderServerAttentionThread: " + ex.getMessage());
         }
      }
 
@@ -98,18 +93,17 @@ public class ClouderServerAttentionThread extends Thread {
     		case AgentMessage.UPDATE_OPERATION:
     			ClouderClientAttention.close();
     			try {
-                    Runtime.getRuntime().exec("javaw -jar ClientUpdater.jar 6");
+                    Runtime.getRuntime().exec(new String[]{"javaw","-jar","ClientUpdater.jar","6"});
                 } catch (Exception e) {
                 }
                 System.exit(6);
-    			break;
+                return "successful";
     		case AgentMessage.STOP_CLIENT:
     			ClouderClientAttention.close();
     			System.exit(0);
-    			break;
+    			return "successful";
     		case AgentMessage.GET_VERSION:
-    			//TODO imprimir version
-                //pw.println("1.30");
+    			return "1.30";
     	}
     	return null;
     }
