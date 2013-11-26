@@ -16,9 +16,6 @@ import back.services.PhysicalMachineStateManagerService;
 
 class MachineStateController {
 	PhysicalMachineStateManagerService physicalMachineStateManagerService;
-	def index(){
-		render "hola"
-	}
 	def reportPhysicalMachineState(){
 		String strOperation=params['operation']
 		String hostname=params['hostname']

@@ -22,6 +22,7 @@ public class LocalProcessExecutor {
      * @return If the command was suceesfully execute or nor
      */
     public static boolean executeCommand(String command){
+    	System.out.println("Exec: "+command);
         try {
             Runtime.getRuntime().exec(command).waitFor();
         } catch (Exception ex) {
@@ -33,9 +34,10 @@ public class LocalProcessExecutor {
     /**
      * Responsible for executing local commands with outputs
      * @param inCommand Command to execute
-     * @return The output of the xommand execution
+     * @return The output of the command execution
      */
     public static String executeCommandOutput(String...command){
+    	System.out.println("Exec: "+Arrays.toString(command));
         Process p;
         try {
             p = Runtime.getRuntime().exec(command);

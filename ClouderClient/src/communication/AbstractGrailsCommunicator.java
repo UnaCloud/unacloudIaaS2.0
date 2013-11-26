@@ -16,10 +16,9 @@ public class AbstractGrailsCommunicator{
 		try {
 			String urlParams=null;
 			for(int e=0,i=params.length;e<i;e+=2)urlParams=(urlParams==null?"?":(urlParams+"&"))+params[e]+"="+params[e+1];
-			URL url=new URL(serverUrl+"/"+serviceName+urlParams);
+			URL url=new URL((serverUrl+"/"+serviceName+urlParams).replace(" ","%20"));
 			System.out.println(serverUrl+"/"+serviceName+urlParams);	
 			HttpURLConnection http = (HttpURLConnection)url.openConnection();
-			http.setRequestMethod("GET");
 			http.connect();
 			BufferedReader br=new BufferedReader(new InputStreamReader(http.getInputStream()));
 			for(String h;(h=br.readLine())!=null;);

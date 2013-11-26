@@ -19,7 +19,7 @@ class BootStrap {
 			IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.202.1', mask: '255.255.255.0').save()
 			virtualIpPool.ips= []
 			for(int i=0;i<39;i++){
-				def virtualIp= new IP(used:false, ip: ('157.253.202.'+(111+i))).save()	
+				def virtualIp= new IP(used:false, ip: ('157.253.202.'+(111+i)), ipPool: virtualIpPool).save()	
 				virtualIpPool.ips.add(virtualIp)
 			}
 			virtualIpPool.save()

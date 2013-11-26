@@ -60,7 +60,7 @@ public class VirtualMachineStartMessage extends VirtualMachineOperationMessage i
 	}
 	@Override
 	public int compareTo(VirtualMachineStartMessage o) {
-		return getVirtualMachineExecutionId().compareTo(o.getVirtualMachineExecutionId());
+		return Long.compare(getVirtualMachineExecutionId(),o.getVirtualMachineExecutionId());
 	}
 	public void setExecutionTime(int executionTime) {
 		this.executionTime = executionTime;

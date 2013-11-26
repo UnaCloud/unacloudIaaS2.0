@@ -19,5 +19,13 @@ public class VirtualMachineStopMessage extends VirtualMachineOperationMessage{
 	public String getHypervisorPath() {
 		return hypervisorPath;
 	}
-    
+	public void setHypervisorName(int hypervisorName) {
+		this.hypervisorName = hypervisorName;
+	}
+	public void setVmPath(String vmPath) {
+		this.vmPath = vmPath;
+	}
+	public void setHypervisorPath(String hypervisorPath) {
+		this.hypervisorPath = hypervisorPath;
+	}
 }

@@ -38,7 +38,7 @@ class DeploymentController {
 	}
 	
 	def deploy(){
-		
+		println "LA RAMMMM"+params.RAM
 		Cluster cluster= Cluster.get(params.id)
 		User user= User.get(session.user.id)
 		if(!cluster.isDeployed()){

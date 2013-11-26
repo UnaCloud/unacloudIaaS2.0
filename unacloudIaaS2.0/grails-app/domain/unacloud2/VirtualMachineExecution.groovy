@@ -4,6 +4,8 @@ import java.util.concurrent.TimeUnit
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
+import unacloudEnums.VirtualMachineExecutionStateEnum;
+
 class VirtualMachineExecution {
 
     String name

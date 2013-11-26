@@ -1,4 +1,4 @@
-<%@page import="unacloud2.VirtualMachineExecutionStateEnum"%>
+<%@page import="unacloudEnums.*"%>
 <html>
    <head>
       <meta name="layout" content="main"/>

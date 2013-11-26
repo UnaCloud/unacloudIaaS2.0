@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 import com.losandes.utils.Log;
 
-import static com.losandes.utils.Constants.*;
+import unacloudEnums.VirtualMachineExecutionStateEnum;
 import virtualMachineExecution.PersistentExecutionManager;
 import virtualmachine.Hypervisor;
 
@@ -28,8 +28,8 @@ public class VirtualMachineStateViewer {
      * @param vmPath The path of the virtual machine that must be checked
      * @param hypervisorName The type of hypervisor used to deploy the virtual machine
      */
-    public VirtualMachineStateViewer(String virtualMachineCode,Hypervisor v,String vmIP){
-        ServerMessageSender.reportVirtualMachineState(virtualMachineCode,DEPLOYING_STATE,"Starting virtual machine");
+    public VirtualMachineStateViewer(long virtualMachineCode,Hypervisor v,String vmIP){
+        ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.DEPLOYING,"Starting virtual machine");
         /*boolean encendio=false,red=false;
         if(v.getHypervisorId()==VIRTUAL_BOX){
             encendio=true;
@@ -46,12 +46,12 @@ public class VirtualMachineStateViewer {
             if(pingVerification(vmIP))red=true;
             if(!red)try{Thread.sleep(30000);}catch(Exception ex){}
         }
-        if(encendio&&red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,ON_STATE,"Machine started");
+        if(encendio&&red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.DEPLOYED,"Machine started");
         else{
             PersistentExecutionManager.removeExecution(virtualMachineCode);
-            if(encendio&&!red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,ERROR_STATE,"Machine not configured");
-            else if(!encendio&&red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,ERROR_STATE,"Machine didn't start");
-            else if(!encendio&&!red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,ERROR_STATE,"Machine didn't start");
+            if(encendio&&!red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.FAILED,"Machine not configured");
+            else if(!encendio&&red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.FAILED,"Machine didn't start");
+            else if(!encendio&&!red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.FAILED,"Machine didn't start");
         }
     }
 

@@ -70,3 +70,354 @@ GPort
 executeCommandOutput [hostname]
 GPort
 
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+Error: The operation was canceled
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+Error: The virtual machine is not powered on: D:\DebianPaaS64\DebianPaaS64.vmx
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+Error: The operation was canceled
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+Error: The operation was canceled
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, debianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\3911348841821053154.txt, /etc/hostname]
+Error: Invalid user name or password for the guest OS
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\7879267086478350019.txt, /etc/hostname]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /bin/hostname, debian6]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\8378985780719572040.txt, /etc/network/interfaces]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /etc/init.d/networking, restart]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\4356236821489601996.txt, /etc/hostname]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /bin/hostname, debian6]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\-7390612688231969933.txt, /etc/network/interfaces]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /etc/init.d/networking, restart]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\-5023581899262008687.txt, /etc/hostname]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /bin/hostname, debian6]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\491836887223558578.txt, /etc/network/interfaces]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /etc/init.d/networking, restart]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\1878293517210006362.txt, /etc/hostname]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /bin/hostname, debian6]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\-547678856077253560.txt, /etc/network/interfaces]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /etc/init.d/networking, restart]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\2423712706319667274.txt, /etc/hostname]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /bin/hostname, debian6]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\5759245817169761117.txt, /etc/network/interfaces]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /etc/init.d/networking, restart]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\9078294602877435976.txt, /etc/hostname]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /bin/hostname, debian6]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\-1196646887885375212.txt, /etc/network/interfaces]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /etc/init.d/networking, restart]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\3041199864849637053.txt, /etc/hostname]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /bin/hostname, debian6]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\1406520682823845145.txt, /etc/network/interfaces]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /etc/init.d/networking, restart]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\-5544276113136929762.txt, /etc/hostname]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /bin/hostname, debian6]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\4241279671155010489.txt, /etc/network/interfaces]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /etc/init.d/networking, restart]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\-3827960269734422352.txt, /etc/hostname]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /bin/hostname, debian6]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\1791226971184078967.txt, /etc/network/interfaces]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /etc/init.d/networking, restart]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\6650116631615380810.txt, /etc/hostname]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /bin/hostname, debian6]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\-7971493161080694912.txt, /etc/network/interfaces]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /etc/init.d/networking, restart]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [hostname]
+ZENBOOK
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\1596101975954411681.txt, /etc/hostname]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /bin/hostname, debian6]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\-1285218346516411841.txt, /etc/network/interfaces]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /etc/init.d/networking, restart]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\-4466494410390874032.txt, /etc/hostname]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /bin/hostname, debian6]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\8954419655376108202.txt, /etc/network/interfaces]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /etc/init.d/networking, restart]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\3232884775148004383.txt, /etc/hostname]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /bin/hostname, debian6]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\4043149561843423564.txt, /etc/network/interfaces]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /etc/init.d/networking, restart]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\-3605303558531396719.txt, /etc/hostname]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /bin/hostname, debian6]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, copyFileFromHostToGuest, D:\DebianPaaS64\DebianPaaS64.vmx, C:\Users\Andres\git\unacloudIaaS2.0\ClouderClient\temp\-3946492578735446914.txt, /etc/network/interfaces]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, -gu, root, -gp, DebianP445, runProgramInGuest, D:\DebianPaaS64\DebianPaaS64.vmx, /etc/init.d/networking, restart]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, start, D:\DebianPaaS64\DebianPaaS64.vmx, nogui]
+
+executeCommandOutput [C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe, -T, ws, stop, D:\DebianPaaS64\DebianPaaS64.vmx]
+

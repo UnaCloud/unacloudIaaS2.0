@@ -1,7 +1,6 @@
 package virtualMachineExecution;
 
 import static com.losandes.utils.Constants.ERROR_MESSAGE;
-import static com.losandes.utils.Constants.ERROR_STATE;
 import static com.losandes.utils.Constants.VMW_TURN_OFF;
 
 import java.io.FileInputStream;
@@ -14,7 +13,7 @@ import java.util.Timer;
 import java.util.TreeMap;
 
 import monitoring.VirtualMachineStateViewer;
-import physicalmachine.MachineMonitor;
+import unacloudEnums.VirtualMachineExecutionStateEnum;
 import virtualmachine.Hypervisor;
 import virtualmachine.HypervisorFactory;
 import virtualmachine.HypervisorOperationException;
@@ -40,12 +39,12 @@ public class PersistentExecutionManager {
      */
     private static final String executionsFile = "executions.txt";
     
-    private static Map<String,VirtualMachineStartMessage> turnOnMachinesList=new TreeMap<>();
+    private static Map<Long,VirtualMachineStartMessage> turnOnMachinesList=new TreeMap<>();
 
     /**
      * A map containing a map between virtual machine ids and its scheduled TimerTask to stop it.
      */
-    private static Map<String,Schedule> programedShutdowns = new TreeMap<String,Schedule>();
+    private static final Map<Long,Schedule> programedShutdowns = new TreeMap<Long,Schedule>();
     
     /**
      * Timer used to schedule shutdown events
@@ -68,6 +67,7 @@ public class PersistentExecutionManager {
      * @param checkPoint The name of the checkpoint that must be taken to secure this virtual machine execution, null if no checkpoint is needed
      */
     public static void addExecution(VirtualMachineStartMessage turnOnMessage) {
+    	System.out.println("addExecution "+turnOnMessage.getVirtualMachineExecutionId());
     	startUpMachine(turnOnMessage);
     }
 
@@ -76,12 +76,14 @@ public class PersistentExecutionManager {
      * @param turnOffMEssage
      * @return
      */
-    public static UnaCloudAbstractResponse removeExecution(String virtualMachineExecutionId) {
+    public static UnaCloudAbstractResponse removeExecution(long virtualMachineExecutionId) {
+    	System.out.println("removeExecution "+virtualMachineExecutionId);
     	VirtualMachineStartMessage turnOnMessage=null;
     	try{
     		turnOnMessage=turnOnMachinesList.remove(virtualMachineExecutionId);
             programedShutdowns.remove(virtualMachineExecutionId).cancel();
         }catch(Exception e){}
+    	System.out.println("turnOnMessage "+turnOnMessage);
     	if(turnOnMessage!=null){
         	HypervisorFactory.getHypervisor(turnOnMessage.getHypervisorName(),turnOnMessage.getHypervisorPath(),turnOnMessage.getVmPath()).stopVirtualMachine();
             //return "";
@@ -102,7 +104,7 @@ public class PersistentExecutionManager {
         try {
             v.restartVirtualMachine();
         } catch (HypervisorOperationException ex) {
-            ServerMessageSender.reportVirtualMachineState(restartMessage.getVirtualMachineExecutionId(), ERROR_STATE, ex.getMessage());
+            ServerMessageSender.reportVirtualMachineState(restartMessage.getVirtualMachineExecutionId(), VirtualMachineExecutionStateEnum.FAILED, ex.getMessage());
         }
         return null;
     }
@@ -119,34 +121,13 @@ public class PersistentExecutionManager {
             v.preconfigureAndStartVirtualMachine(turnOnMessage.getVmCores(),turnOnMessage.getVmMemory(),turnOnMessage.isPersistent());
             programShutdown(turnOnMessage);
             new VirtualMachineStateViewer(turnOnMessage.getVirtualMachineExecutionId(),v,turnOnMessage.getVmIP());
-            MachineMonitor.addMachineExecution(turnOnMessage.getVirtualMachineExecutionId(),turnOnMessage.getVmPath(),turnOnMessage.getVmCores());
         } catch (HypervisorOperationException e) {
 			HypervisorFactory.getHypervisor(turnOnMessage.getHypervisorName(),turnOnMessage.getHypervisorPath(),turnOnMessage.getVmPath()).stopVirtualMachine();
-            ServerMessageSender.reportVirtualMachineState(turnOnMessage.getVirtualMachineExecutionId(), ERROR_STATE, e.getMessage());
+            ServerMessageSender.reportVirtualMachineState(turnOnMessage.getVirtualMachineExecutionId(), VirtualMachineExecutionStateEnum.FAILED, e.getMessage());
             return ERROR_MESSAGE + e.getMessage();
         }
         return "";
     }
-
-    /**
-     * Starts a virtual machine after returning to its last snapshot
-     * @param vmxroute The route of the virtual machine to be managed
-     * @param hypervisorPath The hypervisor that must be used to start and stop the given virtual machine
-     * @param vmIP The ip of the virtual machine that is being deployed
-     * @param id The id of the new managed virtual machine execution
-     * @param executionTime The time that the machine must stay turned on
-     * @param hypervisorName The type of hypervisor that must be used to deploy this virtual machine
-     * @param checkPoint
-     * @return
-     */
-    /*private static String startUpMachine(String vmxroute, String hypervisorPath, String vmIP, String id, long executionTimeMilis, int hypervisorName,int checkPoint) {
-        if(checkPoint==1)try {
-            LocalProcessExecutor.executeCommand("\"" + hypervisorPath + "\\vmrun\" revertToSnapshot \""+vmxroute+"\" \"AutoProtect Snapshot/AutoProtect Snapshot/AutoProtect Snapshot/AutoProtect Snapshot/AutoProtect Snapshot\"");
-        } catch (Exception ex) {
-            Log.print(ex.getLocalizedMessage());
-        }
-        return startUpMachine(vmxroute, hypervisorPath, vmIP, id, executionTimeMilis, 0,0,hypervisorName, "Not used");
-    }*/
 
     /**
      * Extends the time that the virtual machine must be up
@@ -164,6 +145,7 @@ public class PersistentExecutionManager {
     private static boolean programShutdown(VirtualMachineStartMessage turnOnMessage){
     	Schedule timeExec = new Schedule(turnOnMessage.getHypervisorName(),turnOnMessage.getHypervisorPath(),VMW_TURN_OFF,turnOnMessage.getVmPath());
         programedShutdowns.put(turnOnMessage.getVirtualMachineExecutionId(),timeExec);
+        turnOnMachinesList.put(turnOnMessage.getVirtualMachineExecutionId(),turnOnMessage);
         timer.schedule(timeExec,new Date(turnOnMessage.getShutdownTime()));
         return true;
     }

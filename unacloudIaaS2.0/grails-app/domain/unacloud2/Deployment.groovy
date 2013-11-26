@@ -1,5 +1,7 @@
 package unacloud2
 
+import unacloudEnums.VirtualMachineExecutionStateEnum;
+
 class Deployment {
 	
 	DeployedCluster cluster

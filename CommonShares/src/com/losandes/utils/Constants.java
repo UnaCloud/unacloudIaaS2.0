@@ -35,13 +35,6 @@ public class Constants {
     public static final int GRID_USER = 3;
     public static final int CLOUD_TEMPLATE = 1;
     public static final int GRID_TEMPLATE = 2;
-    //UnaCloud Entities states
-    public static final int OFF_STATE = 0;
-    public static final int ON_STATE = 1;
-    public static final int LOCK_STATE= 2;
-    public static final int DEPLOYING_STATE= 4;
-    public static final int COPYING_STATE= 5;
-    public static final int ERROR_STATE= 6;
 
     //UnaCloud Client database operation request constants
     public static final int TURN_OFF_DB = 0;

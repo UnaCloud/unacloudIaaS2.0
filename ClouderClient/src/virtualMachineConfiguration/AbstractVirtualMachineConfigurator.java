@@ -34,15 +34,20 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
     @Override
     public void run() {
     	try {
+    		System.out.println("hypervisor.changeVirtualMachineMac");
 			hypervisor.changeVirtualMachineMac();
+			System.out.println("hypervisor.startVirtualMachine");
 			hypervisor.startVirtualMachine();
+			System.out.println("configureHostname");
 		    configureHostname();
+		    System.out.println("configureIP");
 	        configureIP();
 	        if(!startMessage.isPersistent()){
 	        	hypervisor.stopVirtualMachine();
 	            waitTime(10000);
 	            //takeSnapshotOnMachine("base");
 	        }else doPostConfigure();
+	        System.out.println("PersistentExecutionManager.addExecution");
 	        PersistentExecutionManager.addExecution(startMessage);
 		} catch (HypervisorOperationException e) {
 			e.printStackTrace();
@@ -55,6 +60,7 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
         }
     }
 	public File generateRandomFile(){
+		if(!new File("temp").exists())new File("temp").mkdir();
 		return new File("temp/"+r.nextLong()+".txt");
 	}
 	

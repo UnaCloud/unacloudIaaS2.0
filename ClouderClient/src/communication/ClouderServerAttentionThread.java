@@ -50,24 +50,28 @@ public class ClouderServerAttentionThread extends Thread {
      */
     public void run() {
         try(ObjectInputStream ois=new ObjectInputStream(communication.getInputStream());ObjectOutputStream oos=new ObjectOutputStream(communication.getOutputStream())){
-                    UnaCloudAbstractMessage clouderServerRequest=(UnaCloudAbstractMessage)ois.readObject();
-                    switch (clouderServerRequest.getMainOp()) {
-                case UnaCloudAbstractMessage.VIRTUAL_MACHINE_OPERATION:
-                    oos.writeObject(attendVirtualMachineOperation(clouderServerRequest,ois,oos));
-                    break;
-                case UnaCloudAbstractMessage.PHYSICAL_MACHINE_OPERATION:
-                    attendPhysicalMachineOperation(clouderServerRequest);
-                    break;
-                case UnaCloudAbstractMessage.AGENT_OPERATION:
-                        oos.writeObject(attendAgentOperation(clouderServerRequest));
-                    break;
-                default:
-                        oos.writeObject(new InvalidOperationResponse("Opeartion "+clouderServerRequest.getMainOp()+" is invalid as main operation."));
-                    break;
-                    }
+            UnaCloudAbstractMessage clouderServerRequest=(UnaCloudAbstractMessage)ois.readObject();
+            switch (clouderServerRequest.getMainOp()) {
+		        case UnaCloudAbstractMessage.VIRTUAL_MACHINE_OPERATION:
+		            oos.writeObject(attendVirtualMachineOperation(clouderServerRequest,ois,oos));
+		            break;
+		        case UnaCloudAbstractMessage.PHYSICAL_MACHINE_OPERATION:
+		            attendPhysicalMachineOperation(clouderServerRequest);
+		            break;
+		        case UnaCloudAbstractMessage.AGENT_OPERATION:
+		                oos.writeObject(attendAgentOperation(clouderServerRequest));
+		            break;
+		        default:
+	                oos.writeObject(new InvalidOperationResponse("Opeartion "+clouderServerRequest.getMainOp()+" is invalid as main operation."));
+	            break;
+	            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        try {
+			communication.close();
+		} catch (IOException e) {
+		}
      }
 
     /**

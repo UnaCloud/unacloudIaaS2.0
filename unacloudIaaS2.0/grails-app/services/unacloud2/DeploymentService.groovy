@@ -1,5 +1,6 @@
 package unacloud2
 
+import unacloudEnums.VirtualMachineExecutionStateEnum;
 import back.allocators.PhysicalMachineAllocatorService;
 import back.deployers.DeployerService;
 
@@ -35,17 +36,20 @@ class DeploymentService {
 	   
 	   DeployedCluster depCluster= new DeployedCluster(cluster: cluster)
 	   depCluster.images=[]
+	   println iRAM
+	   int images= cluster.images.size()
+	   println images
+	   boolean onlyOneImage= images=1
+	   println "hay una imagen? ==>"+ onlyOneImage
 	   cluster.images.eachWithIndex(){ image,i->
 		   def depImage= new DeployedImage(image:image)
 		   depImage.virtualMachines= []
-		   for(int j=0;j<Integer.parseInt(instance.getAt(i));j++){
+		   for(int j=0;j<((Integer.parseInt(instance.getAt(i))));j++){
 			   println "NUMERO DE INSTANCIAS:===============>"+instance
-			   def iIP= new IP(ip: "10.0.1."+j)
-			   iIP.save(failOnError: true)
 			   long stopTimeMillis= new Date().getTime()
 			   def stopTime= new Date(stopTimeMillis +Integer.parseInt(time))
 			   def iName=image.name
-			   def virtualMachine = new VirtualMachineExecution(message: "Deploying", name: iName +"-"+j ,ram: iRAM.getAt(i), cores:iCores.getAt(i),disk:0,ip: iIP,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
+			   def virtualMachine = new VirtualMachineExecution(message: "Deploying", name: iName +"-"+j ,ram: (onlyOneImage)?iRAM:iRAM.getAt(i), cores:iCores.getAt(i),disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 			   depImage.virtualMachines.add(virtualMachine)
 			   virtualMachine.save(failOnError: true)
 			   depImage.save(failOnError: true)
@@ -74,6 +78,8 @@ class DeploymentService {
 		vm.ip.used=false
 		vm.status= VirtualMachineExecutionStateEnum.FINISHED
 		vm.save()
+		
+		deployerService.stopVirtualMachine(vm)
 	}
 	
 	def stopDeployments(User user){
@@ -85,6 +91,7 @@ class DeploymentService {
 			it.save()
 			}
 		}
+		
 	}
 	
 	def addInstances(DeployedImage depImage, int instance, time){

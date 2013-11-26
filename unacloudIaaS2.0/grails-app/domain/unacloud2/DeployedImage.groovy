@@ -2,6 +2,8 @@ package unacloud2
 
 import java.util.ArrayList;
 
+import unacloudEnums.VirtualMachineExecutionStateEnum;
+
 class DeployedImage {
 	VirtualMachineImage image
 	

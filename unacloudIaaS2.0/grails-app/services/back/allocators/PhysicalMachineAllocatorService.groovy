@@ -42,9 +42,11 @@ class PhysicalMachineAllocatorService {
 				IPPool ipPool= vme.executionNode.laboratory.virtualMachinesIPs	
 				
 				for(ip in ipPool.ips){
+					println "buscando ip"
 					if(ip.used==false){
-						vme.ip= ip
-						ip.used=true
+						println "ip encontrada"
+						vme.putAt("ip", ip)
+						ip.putAt("used", true)
 						break
 					}
 				}
