@@ -6,8 +6,12 @@ import org.apache.commons.io.FileUtils
 import org.junit.internal.runners.statements.FailOnTimeout;
 
 class VirtualMachineImageService {
-
-    def uploadImage(files, diskSize, name, isPublic, accessProtocol, operatingSystemId, username, password,User user) {
+	
+	public VirtualMachineImage getImage(long id){
+		return VirtualMachineImage.get(id)
+	}
+    
+	def uploadImage(files, diskSize, name, isPublic, accessProtocol, operatingSystemId, username, password,User user) {
 		
 		def i= new VirtualMachineImage( fixedDiskSize: diskSize, name: name , avaliable: true,
 			isPublic: isPublic, accessProtocol: accessProtocol , operatingSystem: OperatingSystem.get(operatingSystemId),
