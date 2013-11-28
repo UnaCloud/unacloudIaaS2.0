@@ -73,16 +73,16 @@ function reload()
     </td>
     <td>
     <g:if test="${virtualMachine.status== VirtualMachineExecutionStateEnum.CONFIGURING || virtualMachine.status== VirtualMachineExecutionStateEnum.COPYING}">
-     <g:img file="blue.png"/>
+     <g:img file="blue.png" title="${virtualMachine.message }"/>
      </g:if>
      <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.DEPLOYING}">
-     <g:img file="amber.png"/>
+     <g:img file="amber.png" title="${virtualMachine.message }"/>
      </g:if>
      <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.DEPLOYED}">
-     <g:img file="green.png"/>
+     <g:img file="green.png" title="${virtualMachine.message }"/>
      </g:if>
     <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.FAILED}">
-     <g:img file="red.png"/>
+     <g:img file="red.png" title="${virtualMachine.message }"/>
      </g:if>
     </td>
   	<td>
