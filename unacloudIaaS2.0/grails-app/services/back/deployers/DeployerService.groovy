@@ -4,6 +4,7 @@ import javassist.bytecode.stackmap.BasicBlock.Catch;
 
 import com.losandes.utils.Constants;
 
+import communication.messages.VirtualMachineOperationMessage;
 import communication.messages.vmo.VirtualMachineStartMessage;
 import communication.messages.vmo.VirtualMachineStopMessage;
 import unacloud2.*;
@@ -28,9 +29,6 @@ class DeployerService {
 		for(image in cluster.images) {
 			println "Deploying Image ----->" +image.image.name
 			VirtualMachineStartMessage vmsm=new VirtualMachineStartMessage();
-			vmsm.setPassword(image.image.password)
-			vmsm.setUsername(image.image.user)
-			vmsm.setConfiguratorClass(image.image.operatingSystem.configurer)
 			println "Deploying Image ----->" +image.image.name+" "+image.virtualMachines.size()
 			
 			image.virtualMachines.eachWithIndex() { vm, i ->
