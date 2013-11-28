@@ -32,9 +32,9 @@ class VirtualMachineExecution {
         if(m.length()==1)m="0"+m;
         return h+"h:"+m+"m:"+s+"s"
 	}
-	def runningTimeInHours(){
+	int runningTimeInHours(){
 		long millisTime=(stopTime.getTime()-startTime.getTime())/1000
-		return millisTime/3600;
+		return Math.round(millisTime/3600)
 	}
 	
 }

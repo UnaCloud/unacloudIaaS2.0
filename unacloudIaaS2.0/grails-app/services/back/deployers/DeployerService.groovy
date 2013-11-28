@@ -33,19 +33,19 @@ class DeployerService {
 			vmsm.setConfiguratorClass(image.image.operatingSystem.configurer)
 			println "Deploying Image ----->" +image.image.name+" "+image.virtualMachines.size()
 			
-			for(vm in image.virtualMachines){
+			image.virtualMachines.eachWithIndex() { vm, i ->
 				println "for(vm in image.virtualMachines){" 
-				vmsm.setExecutionTime(1)
+				vmsm.setExecutionTime(vm.runningTimeInHours())
 				println "vmsm.setExecutionTime"
 				vmsm.setHypervisorName(1)
 				println "vmsm.setHypervisorName"
 				vmsm.setHypervisorPath("C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe")
 				println "vmsm.setHypervisorPath"
-				vmsm.setHostname("debian6")
+				vmsm.setHostname(image.image.name+i)
 				println "vmsm.setHostname"
 				vmsm.setVirtualMachineIP(vm.ip.ip)
 				println "vmsm.setVirtualMachineIP"
-				vmsm.setVirtualMachineNetMask("255.255.255.0")
+				vmsm.setVirtualMachineNetMask(vm.ip.ipPool.mask)
 				println "vmsm.setVirtualMachineNetMask"
 				vmsm.setVmCores(vm.cores)
 				println "vmsm.setVmCores"
