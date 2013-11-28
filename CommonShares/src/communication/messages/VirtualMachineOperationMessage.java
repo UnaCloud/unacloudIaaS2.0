@@ -10,7 +10,7 @@ public abstract class VirtualMachineOperationMessage extends UnaCloudAbstractMes
     public static final int VM_RESTART = 3;
     public static final int VM_STATE = 4;
     public static final int VM_TIME = 5;
-    protected long virtualMachineExecutionId,virtualMachineImageId;
+    protected long virtualMachineExecutionId;
 	public VirtualMachineOperationMessage(int subOperation){
 		super(VIRTUAL_MACHINE_OPERATION,subOperation);
 	}
@@ -23,10 +23,5 @@ public abstract class VirtualMachineOperationMessage extends UnaCloudAbstractMes
 	public void setVirtualMachineExecutionId(long virtualMachineExecutionId) {
 		this.virtualMachineExecutionId = virtualMachineExecutionId;
 	}
-	public void setVirtualMachineImageId(long virtualMachineImageId) {
-		this.virtualMachineImageId = virtualMachineImageId;
-	}
-	public long getVirtualMachineImageId() {
-		return virtualMachineImageId;
-	}
+	
 }

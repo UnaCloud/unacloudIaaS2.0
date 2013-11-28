@@ -8,7 +8,6 @@ import com.losandes.utils.Log;
 import com.losandes.utils.VariableManager;
 
 import java.net.ServerSocket;
-import java.net.Socket;
 
 /**
  * Responsible for listening to the Clouder Server
@@ -50,8 +49,7 @@ public class ClouderClientAttention{
                 serverSocket = new ServerSocket(localPort);
             while (true) {
                 try {
-                        Socket sSocket = serverSocket.accept();
-                    poolExe.execute(new ClouderServerAttentionThread(sSocket));
+                    poolExe.execute(new ClouderServerAttentionThread(serverSocket.accept()));
                 } catch (IOException ex) {
                     Log.print("Can't process message " + localPort + " . " + ex.getLocalizedMessage());
                 }

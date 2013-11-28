@@ -5,11 +5,11 @@ import communication.messages.VirtualMachineOperationMessage;
 public class VirtualMachineStartMessage extends VirtualMachineOperationMessage implements Comparable<VirtualMachineStartMessage>{
 	private static final long serialVersionUID = -5116988985857543662L;
 	
+	long virtualMachineImageId;
 	int vmCores,vmMemory;
     int executionTime;
     String virtualMachineIP,virtualMachineNetMask,snapshotRoute;
     boolean persistent;
-    long shutdownTime;
     String hostname;
     
     public VirtualMachineStartMessage() {
@@ -32,12 +32,6 @@ public class VirtualMachineStartMessage extends VirtualMachineOperationMessage i
 	}
 	public String getSnapshotRoute() {
 		return snapshotRoute;
-	}
-	public long getShutdownTime() {
-		return shutdownTime;
-	}
-	public void setShutdownTime(long shutdownTime) {
-		this.shutdownTime = shutdownTime;
 	}
 	public String getVirtualMachineNetMask() {
 		return virtualMachineNetMask;
@@ -70,6 +64,10 @@ public class VirtualMachineStartMessage extends VirtualMachineOperationMessage i
 	public void setHostname(String hostname) {
 		this.hostname = hostname;
 	}
-	
-	
+	public void setVirtualMachineImageId(long virtualMachineImageId) {
+		this.virtualMachineImageId = virtualMachineImageId;
+	}
+	public long getVirtualMachineImageId() {
+		return virtualMachineImageId;
+	}
 }

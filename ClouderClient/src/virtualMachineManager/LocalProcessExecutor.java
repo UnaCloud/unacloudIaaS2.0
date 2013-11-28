@@ -1,4 +1,4 @@
-package virtualMachineExecution;
+package virtualMachineManager;
 
 import java.io.*;
 import java.io.IOException;

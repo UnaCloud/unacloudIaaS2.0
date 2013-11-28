@@ -1,7 +1,7 @@
 package virtualMachineConfiguration;
 
+import hypervisorManager.HypervisorOperationException;
 import utils.AddressUtility;
-import virtualmachine.HypervisorOperationException;
 
 /**
  *
@@ -11,7 +11,7 @@ public class Windows7 extends AbstractVirtualMachineConfigurator{
 
     @Override
     public void configureIP() throws HypervisorOperationException {
-    	AddressUtility au = new AddressUtility(startMessage.getVmIP(),startMessage.getVirtualMachineNetMask());
+    	AddressUtility au = new AddressUtility(execution.getIp(),execution.getNetMask());
         executeCommand("netsh.exe","interface","ip","set","address","name=Conexión de Área local","static",au.getIp(),au.getNetmask(),au.getGateway(),"1");
     }
     @Override

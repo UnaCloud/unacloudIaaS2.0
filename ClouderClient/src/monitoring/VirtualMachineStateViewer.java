@@ -1,6 +1,7 @@
 package monitoring;
 
 import communication.ServerMessageSender;
+import hypervisorManager.Hypervisor;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,8 +12,7 @@ import java.util.logging.Logger;
 import com.losandes.utils.Log;
 
 import unacloudEnums.VirtualMachineExecutionStateEnum;
-import virtualMachineExecution.PersistentExecutionManager;
-import virtualmachine.Hypervisor;
+import virtualMachineManager.PersistentExecutionManager;
 
 /**
  * This class is responsible for checking if a VMware virtual machine has been correctly deployed. That is, if the virtual machines has started and if it has well configured its IP address
@@ -48,7 +48,7 @@ public class VirtualMachineStateViewer {
         }
         if(encendio&&red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.DEPLOYED,"Machine started");
         else{
-            PersistentExecutionManager.removeExecution(virtualMachineCode);
+            PersistentExecutionManager.removeExecution(virtualMachineCode,false);
             if(encendio&&!red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.FAILED,"Machine not configured");
             else if(!encendio&&red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.FAILED,"Machine didn't start");
             else if(!encendio&&!red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.FAILED,"Machine didn't start");

@@ -63,9 +63,9 @@ public class Constants {
     public static String PATH_SEPARATOR = File.separator;
     public static String JAR_NAME="/UnaCloudClient.jar";
     //UnaCloud Client VMware Workstation constants
-    public static final int VMW=1;
-    public static final int PLAYER=2;
-    public static final int VIRTUAL_BOX=3;
+    public static final String VM_WARE_WORKSTATION="Workstation";
+    public static final String VM_WARE_PLAYER="Player";
+    public static final String VIRTUAL_BOX="VBox";
     public static final String VMW_RUN_FILE="\\vmrun.exe";
     public static final String VMW_VMX_EXTENSION=".vmx";
     public static final String VMW_TURN_ON="start";

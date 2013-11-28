@@ -9,7 +9,7 @@ import monitoring.PhysicalMachineMonitor;
 import monitoring.PhysicalMachineState;
 import monitoring.PhysicalMachineStateReporter;
 import physicalmachine.OperatingSystem;
-import virtualMachineExecution.PersistentExecutionManager;
+import virtualMachineManager.PersistentExecutionManager;
 
 import com.losandes.dataChannel.DataServerSocket;
 import com.losandes.utils.Log;
@@ -45,7 +45,7 @@ public class Main {
             @Override
             public void run() {
                 super.run();
-                    PersistentExecutionManager.loadExecutions();
+                    PersistentExecutionManager.loadData();
                 }
             }.start();
             new TreeDistributionChannelManager();

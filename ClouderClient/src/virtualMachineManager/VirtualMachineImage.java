@@ -1,23 +1,30 @@
 package virtualMachineManager;
 
 import java.io.File;
+import java.io.Serializable;
 
-public class VirtualMachineImage {
+public class VirtualMachineImage implements Serializable{
+	private static final long serialVersionUID = -2386734224180305694L;
 	long id;
-	File configurationFile;
+	String virtualMachineName;
+	File mainFile;
 	String username;
 	String password;
+	
+	String configuratorClass;
+	String hypervisorId;
+	
 	public long getId() {
 		return id;
 	}
 	public void setId(long id) {
 		this.id = id;
 	}
-	public File getConfigurationFile(){
-		return configurationFile;
+	public File getMainFile() {
+		return mainFile;
 	}
-	public void setConfigurationFile(File configurationFile){
-		this.configurationFile = configurationFile;
+	public void setMainFile(File mainFile) {
+		this.mainFile = mainFile;
 	}
 	public String getUsername(){
 		return username;
@@ -30,5 +37,20 @@ public class VirtualMachineImage {
 	}
 	public void setPassword(String password){
 		this.password = password;
+	}
+	public String getVirtualMachineName() {
+		return virtualMachineName;
+	}
+	public void setVirtualMachineName(String virtualMachineName) {
+		this.virtualMachineName = virtualMachineName;
+	}
+	public String getConfiguratorClass() {
+		return configuratorClass;
+	}
+	public String getHypervisorId() {
+		return hypervisorId;
+	}
+	public void setHypervisorId(String hypervisorId) {
+		this.hypervisorId = hypervisorId;
 	}
 }

@@ -11,7 +11,8 @@ import java.net.Socket;
 import monitoring.PhysicalMachineMonitor;
 import physicalmachine.OperatingSystem;
 import virtualMachineConfiguration.AbstractVirtualMachineConfigurator;
-import virtualMachineExecution.PersistentExecutionManager;
+import virtualMachineManager.PersistentExecutionManager;
+import virtualMachineManager.VirtualMachineExecution;
 import communication.messages.AgentMessage;
 import communication.messages.InvalidOperationResponse;
 import communication.messages.PhysicalMachineOperationMessage;
@@ -81,15 +82,15 @@ public class ClouderServerAttentionThread extends Thread {
     private UnaCloudAbstractResponse attendVirtualMachineOperation(UnaCloudAbstractMessage message,ObjectInputStream ois,ObjectOutputStream pw) {
         switch (message.getSubOp()) {
             case VirtualMachineOperationMessage.VM_START:
-                    return AbstractVirtualMachineConfigurator.startVirtualMachine((VirtualMachineStartMessage)message);
+            	return AbstractVirtualMachineConfigurator.startVirtualMachine(VirtualMachineExecution.getFromStartVirtualMachineMessage((VirtualMachineStartMessage)message));
             case VirtualMachineOperationMessage.VM_STOP:
-                    return PersistentExecutionManager.removeExecution(((VirtualMachineStopMessage)message).getVirtualMachineExecutionId());
+                return PersistentExecutionManager.removeExecution(((VirtualMachineStopMessage)message).getVirtualMachineExecutionId(),false);
             case VirtualMachineOperationMessage.VM_RESTART:
-                    return PersistentExecutionManager.restartMachine((VirtualMachineRestartMessage)message);
+                return PersistentExecutionManager.restartMachine((VirtualMachineRestartMessage)message);
             case VirtualMachineOperationMessage.VM_TIME:
-                    return PersistentExecutionManager.extendsVMTime((VirtualMachineAddTimeMessage)message);
+                return PersistentExecutionManager.extendsVMTime((VirtualMachineAddTimeMessage)message);
             default:
-                    return new InvalidOperationResponse("Invalid virtual machine operation: "+message.getSubOp());
+                return new InvalidOperationResponse("Invalid virtual machine operation: "+message.getSubOp());
         }
     }
     private String attendAgentOperation(UnaCloudAbstractMessage message) {

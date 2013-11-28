@@ -1,13 +1,17 @@
 package fileManager;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import com.losandes.utils.Constants;
 
 import unacloud2.VirtualMachineImage;
 import unacloud2.VirtualMachineImageService;
@@ -36,6 +40,15 @@ public class FileTransferTask implements Runnable{
 				}
 				zos.closeEntry();
 			}
+			zos.putNextEntry(new ZipEntry("unacloudinfo"));
+			try(PrintWriter pw=new PrintWriter(zos)){
+				pw.println(Constants.VM_WARE_WORKSTATION);
+				pw.println(new File(image.getMainFile()).getName());
+				pw.println(image.getPassword());
+				pw.println(image.getUser());
+				pw.println(image.getName());
+			}
+			zos.closeEntry();
 			zos.flush();
 		} catch (IOException e) {
 			e.printStackTrace();

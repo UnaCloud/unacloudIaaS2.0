@@ -1,4 +1,4 @@
-package virtualmachine;
+package hypervisorManager;
 
 /**
  * Exception to be used by hypervisors to notify hypervisor operations errors.

@@ -1,7 +1,7 @@
 package virtualMachineConfiguration;
 
 import utils.AddressUtility;
-import virtualmachine.HypervisorOperationException;
+import hypervisorManager.HypervisorOperationException;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -18,7 +18,7 @@ public class ScientificLinux extends AbstractVirtualMachineConfigurator{
      * @param ip
      */
     public void configureIP() throws HypervisorOperationException {
-    	AddressUtility au = new AddressUtility(startMessage.getVmIP(),startMessage.getVirtualMachineNetMask());
+    	AddressUtility au = new AddressUtility(execution.getIp(),execution.getNetMask());
     	File out=generateRandomFile();
     	try(PrintWriter pw = new LinuxPrintWriter(out)){
     		pw.println("# Advanced Micro Devices [AMD] 79c970 [PCnet32 LANCE]");
@@ -54,12 +54,12 @@ public class ScientificLinux extends AbstractVirtualMachineConfigurator{
 		try(PrintWriter pw = new LinuxPrintWriter(out)){
 			pw.println("NETWORKING=yes");
 	        pw.println("NETWORKING_IPV6=no");
-	        pw.println("HOSTNAME=" + startMessage.getHostname());
+	        pw.println("HOSTNAME=" + execution.getHostname());
         } catch (Exception e) {
             return;
         }
 		copyFile("/etc/sysconfig/network",out);
-		executeCommand("/bin/hostname",startMessage.getHostname());
+		executeCommand("/bin/hostname",execution.getHostname());
 	}
 
 	@Override
