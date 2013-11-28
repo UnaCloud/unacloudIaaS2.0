@@ -1,3 +1,4 @@
+import fileManager.DataServerSocket;
 import unacloud2.IP
 import unacloud2.IPPool;
 import unacloud2.Laboratory;
@@ -14,7 +15,8 @@ class BootStrap {
 		if(User.count() ==0){
 			new User(name:'Guest',username:'admin',password:'admin', userType: 'Administrator').save()
 		}
-		
+		println "starting ss"
+		DataServerSocket.startServices();
 		if(Laboratory.count() ==0){
 			IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.202.1', mask: '255.255.255.0').save()
 			virtualIpPool.ips= []
@@ -52,9 +54,8 @@ class BootStrap {
 			new ServerVariable(name:'MONITORING_DATABASE_USER',serverVariableType: ServerVariableTypeEnum.STRING,variable:'pmonitoreo').save()
 			new ServerVariable(name:'MONITORING_ENABLE',serverVariableType: ServerVariableTypeEnum.STRING,variable:'true').save()
 			new ServerVariable(name:'MONITORING_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable: '157.253.236.160').save()
-
 		}
-		 
+		
 	}
     def destroy = {
     }

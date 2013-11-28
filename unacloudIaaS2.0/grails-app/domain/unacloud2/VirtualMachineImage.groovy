@@ -10,6 +10,7 @@ class VirtualMachineImage implements Comparable<VirtualMachineImage>{
 	String password
 	OperatingSystem operatingSystem
 	String accessProtocol
+	String mainFile
 	
 	static hasMany = [files:File ]
 	
@@ -32,4 +33,4 @@ class VirtualMachineImage implements Comparable<VirtualMachineImage>{
 	public int compareTo(VirtualMachineImage o) {
 		return Long.compare(id,o.id);
 	}
-}
+}	
