@@ -37,9 +37,6 @@ class DeployerService {
 				println "for(vm in image.virtualMachines){" 
 				vmsm.setExecutionTime(vm.runningTimeInHours())
 				println "vmsm.setExecutionTime"
-				vmsm.setHypervisorName(1)
-				println "vmsm.setHypervisorName"
-				vmsm.setHypervisorPath("C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe")
 				println "vmsm.setHypervisorPath"
 				vmsm.setHostname(image.image.name+i)
 				println "vmsm.setHostname"
@@ -53,11 +50,12 @@ class DeployerService {
 				println "vmsm.setVmMemory"
 				vmsm.setVirtualMachineExecutionId(vm.id)
 				println "vmsm.setVirtualMachineExecutionId"
-				vmsm.setVmPath("D:\\DebianPaaS64\\DebianPaaS64.vmx")
-				println "vmsm.setVmPath"
+				vmsm.setVirtualMachineImageId(image.id)
+				println "setVirtualMachineImageId(image.id)"
 				String pmIp=vm.executionNode.ip.ip;
 				println "String pmIp=vm.executionNode.ip.ip;"
 				println vmsm
+				
 				try{
 					Socket s=new Socket(pmIp,81);
 					ObjectOutputStream oos=new ObjectOutputStream(s.getOutputStream());
