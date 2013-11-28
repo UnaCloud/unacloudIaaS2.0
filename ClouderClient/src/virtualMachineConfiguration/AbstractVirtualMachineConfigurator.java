@@ -6,6 +6,8 @@ import java.util.Random;
 import communication.messages.vmo.VirtualMachineStartMessage;
 import communication.messages.vmo.VirtualMachineStartResponse;
 import virtualMachineExecution.PersistentExecutionManager;
+import virtualMachineManager.VirtualMachineImage;
+import virtualMachineManager.VirtualMachineImageManager;
 import virtualmachine.Hypervisor;
 import virtualmachine.HypervisorFactory;
 import virtualmachine.HypervisorOperationException;
@@ -66,6 +68,7 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
 	
 	public static VirtualMachineStartResponse startVirtualMachine(VirtualMachineStartMessage startMessage){
 		System.out.println("startVirtualMachine");
+		VirtualMachineImage vmi=VirtualMachineImageManager.getImage(startMessage.getVirtualMachineId());
 		VirtualMachineStartResponse resp=new VirtualMachineStartResponse();
 		Hypervisor hypervisor=HypervisorFactory.getHypervisor(startMessage.getHypervisorName(),startMessage.getHypervisorPath(),startMessage.getVmPath());
 		if(hypervisor==null){
