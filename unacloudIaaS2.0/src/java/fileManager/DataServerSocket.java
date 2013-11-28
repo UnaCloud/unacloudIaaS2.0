@@ -1,15 +1,9 @@
 package fileManager;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import unacloud2.VirtualMachineImage;
-import unacloud2.VirtualMachineImageService;
 
 public class DataServerSocket extends Thread{
 	private DataServerSocket(){}
@@ -23,24 +17,13 @@ public class DataServerSocket extends Thread{
 	}
 	@Override
 	public void run(){
-		System.out.println("startServices DataServerSocket");
 		try(ServerSocket ss = new ServerSocket(3020)){
-			while(true){
-				try{
-					Socket s=ss.accept();
-					BufferedReader br=new BufferedReader(new InputStreamReader(s.getInputStream()));
-					long imageId=Long.parseLong(br.readLine());
-					System.out.println("Atendiendo "+imageId);
-					VirtualMachineImage image=new VirtualMachineImageService().getImage(imageId);
-					image.setMainFile("C:\\VMs\\DebianPaaS64\\DebianPaaS64.vmx");
-					threadPool.submit(new FileTransferTask(image, s));
-				}catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			while(true)threadPool.submit(new FileTransferTask(ss.accept()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+	}
+	public static void main(String[] args) {
+		new DataServerSocket().start();
 	}
 }

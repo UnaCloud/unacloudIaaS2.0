@@ -8,7 +8,7 @@ public class Main {
 
 	public static void main(String[] args)throws Exception{
 		Socket s=new Socket("127.0.0.1",3020);
-		long sum=0;
+		long sum=0,time=-System.currentTimeMillis();
 		try{
 			PrintWriter pw=new PrintWriter(s.getOutputStream());
 			ZipInputStream zis=new ZipInputStream(s.getInputStream());
@@ -27,7 +27,9 @@ public class Main {
 			
 		}
 		System.out.println("Leidos "+sum);
-		//s.close();
+		time+=System.currentTimeMillis();
+		System.out.println((sum*1000)/time);
+		s.close();
 	}
 
 }
