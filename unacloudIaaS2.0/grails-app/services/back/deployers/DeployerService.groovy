@@ -28,18 +28,12 @@ class DeployerService {
 		for(image in cluster.images) {
 			println "Deploying Image ----->" +image.image.name
 			VirtualMachineStartMessage vmsm=new VirtualMachineStartMessage();
-			vmsm.setPassword(image.image.password)
-			vmsm.setUsername(image.image.user)
-			vmsm.setConfiguratorClass(image.image.operatingSystem.configurer)
 			println "Deploying Image ----->" +image.image.name+" "+image.virtualMachines.size()
 			
 			image.virtualMachines.eachWithIndex() { vm, i ->
 				println "for(vm in image.virtualMachines){" 
 				vmsm.setExecutionTime(vm.runningTimeInHours())
 				println "vmsm.setExecutionTime"
-				vmsm.setHypervisorName(1)
-				println "vmsm.setHypervisorName"
-				vmsm.setHypervisorPath("C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe")
 				println "vmsm.setHypervisorPath"
 				vmsm.setHostname(image.image.name+i)
 				println "vmsm.setHostname"
@@ -53,9 +47,10 @@ class DeployerService {
 				println "vmsm.setVmMemory"
 				vmsm.setVirtualMachineExecutionId(vm.id)
 				println "vmsm.setVirtualMachineExecutionId"
-				vmsm.setVmPath("D:\\DebianPaaS64\\DebianPaaS64.vmx")
+				vmsm.setVirtualMachineImageId(image.id)
 				println "vmsm.setVmPath"
 				String pmIp=vm.executionNode.ip.ip;
+				
 				println "String pmIp=vm.executionNode.ip.ip;"
 				println vmsm
 				try{

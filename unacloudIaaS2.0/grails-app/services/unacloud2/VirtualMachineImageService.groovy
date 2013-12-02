@@ -15,7 +15,7 @@ class VirtualMachineImageService {
 		
 		def i= new VirtualMachineImage( fixedDiskSize: diskSize, name: name , avaliable: true,
 			isPublic: isPublic, accessProtocol: accessProtocol , operatingSystem: OperatingSystem.get(operatingSystemId),
-			user: username, password: password)
+			user: username, password: password, mainFile: 'D:\\DebianPaaS64\\')
 		i.save(failOnError: true)
 		def imagePath= 'C:\\images\\'
 		files.each {
