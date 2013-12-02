@@ -27,9 +27,7 @@ public class FileTransferTask implements Runnable{
 			ZipOutputStream zos=new ZipOutputStream(os);
 			long imageId=Long.parseLong(br.readLine());
 			System.out.println("Atendiendo "+imageId);
-			
 			VirtualMachineImage image=new VirtualMachineImageService().getImage(imageId);
-			image.setMainFile("C:\\VMs\\DebianPaaS64\\DebianPaaS64.vmx");
 			final byte[] buffer=new byte[1024*100];
 			System.out.println("Enviando archivos");
 			for(java.io.File f:new java.io.File(image.getMainFile()).getParentFile().listFiles())if(f.isFile()){
