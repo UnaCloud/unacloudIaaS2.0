@@ -46,7 +46,8 @@ public class PhysicalMachineMonitor{
 	 * @param windowSize time in secconds between each data comit
 	 */
 	public static void start(final int frecuency, final int windowSize) {
-		if (monitor == null) {
+		//TODO, do something to start the monitor. It is enough to uncomment this code.
+		/*if (monitor == null) {
 			monitor = new MonitorAgent();
 			try {
 				monitor.doInitialLoad();
@@ -64,7 +65,7 @@ public class PhysicalMachineMonitor{
 					}
 				}
 			}.start();
-		}
+		}*/
 	}
 
 	/**

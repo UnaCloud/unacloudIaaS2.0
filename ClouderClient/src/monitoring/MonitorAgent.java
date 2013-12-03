@@ -1,18 +1,8 @@
 package monitoring;
 
-/**
- *
- * @author jcadavid
- */
-import com.losandes.utils.VariableManager;
 import communication.messages.monitoring.MonitorReport;
 
 public class MonitorAgent {
-    public static void main(String...args){
-        VariableManager.init("./vars");
-        new MonitorAgent().doInitialLoad();
-                
-    }
     void doInitialLoad(){
         MonitorDatabaseConnection.doInitialReport(MonitorReportGenerator.generateInitialReport());
     }
