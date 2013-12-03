@@ -45,13 +45,13 @@ public class FileTransferTask implements Runnable{
 				pw.println(image.getPassword());
 				pw.println(image.getUser());
 				pw.println(image.getName());
-				System.out.println("en el servidor el configurator class es "+image.getOperatingSystem().getConfigurer()+" "+image.getName());
-				pw.println(image.getOperatingSystem().getConfigurer());
+				//System.out.println("en el servidor el configurator class es "+image.getOperatingSystem().getConfigurer()+" "+image.getName());
+				pw.println("Debian");
 				pw.flush();
 			}
 			zos.closeEntry();
 			zos.flush();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
