@@ -47,7 +47,7 @@ class DeployerService {
 				println "vmsm.setVmMemory"
 				vmsm.setVirtualMachineExecutionId(vm.id)
 				println "vmsm.setVirtualMachineExecutionId"
-				vmsm.setVirtualMachineImageId(image.id)
+				vmsm.setVirtualMachineImageId(image.image.id)
 				println "vmsm.setVmPath"
 				String pmIp=vm.executionNode.ip.ip;
 				

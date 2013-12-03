@@ -27,7 +27,7 @@ public class VirtualMachineImageManager {
 		File root=new File(machineRepository+"\\"+imageId);
 		root.mkdirs();
 		try(Socket s=new Socket("127.0.0.1",3020);PrintWriter pw=new PrintWriter(s.getOutputStream())){
-			pw.println(1);
+			pw.println(imageId);
 			pw.flush();
 			try(ZipInputStream zis=new ZipInputStream(s.getInputStream())){
 				byte[] buffer=new byte[1024*100];
