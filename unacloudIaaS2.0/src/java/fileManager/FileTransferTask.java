@@ -45,6 +45,7 @@ public class FileTransferTask implements Runnable{
 				pw.println(image.getPassword());
 				pw.println(image.getUser());
 				pw.println(image.getName());
+				pw.println(image.getOperatingSystem().getConfigurer());
 			}
 			zos.closeEntry();
 			zos.flush();

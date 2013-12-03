@@ -41,6 +41,7 @@ public class VirtualMachineImageManager {
 						vmi.setPassword(br.readLine());
 						vmi.setUsername(br.readLine());
 						vmi.setVirtualMachineName(br.readLine());
+						vmi.setConfiguratorClass(br.readLine());
 					}else{
 						try(FileOutputStream fos=new FileOutputStream(new File(root,entry.getName()))){
 							for(int n;(n=zis.read(buffer))!=-1;){

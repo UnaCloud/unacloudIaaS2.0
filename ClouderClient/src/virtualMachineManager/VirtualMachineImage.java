@@ -53,4 +53,7 @@ public class VirtualMachineImage implements Serializable{
 	public void setHypervisorId(String hypervisorId) {
 		this.hypervisorId = hypervisorId;
 	}
+	public void setConfiguratorClass(String configuratorClass) {
+		this.configuratorClass = configuratorClass;
+	}
 }
