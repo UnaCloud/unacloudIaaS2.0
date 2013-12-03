@@ -23,8 +23,8 @@ public class HypervisorFactory {
     private static Map<String,Hypervisor> map = new HashMap<>();
     
     public static void registerHypervisors(){
-    	map.put(VMwareWorkstation.HYPERVISOR_ID,new VMwareWorkstation(""));
-    	map.put(VMwarePlayer.HYPERVISOR_ID,new VMwarePlayer(""));
+    	map.put(VMwareWorkstation.HYPERVISOR_ID,new VMwareWorkstation("C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe"));
+    	map.put(VMwarePlayer.HYPERVISOR_ID,new VMwarePlayer("C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe"));
     	map.put(VirtualBox.HYPERVISOR_ID,new VirtualBox(""));
     }
 
