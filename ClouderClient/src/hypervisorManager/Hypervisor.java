@@ -18,6 +18,7 @@ public abstract class Hypervisor {
     private String executablePath;
     
     public Hypervisor(String path){
+    	this.executablePath=path;
     }
 
     public String getExecutablePath() {
