@@ -70,6 +70,7 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
 	public static VirtualMachineStartResponse startVirtualMachine(VirtualMachineExecution machineExecution){
 		System.out.println("startVirtualMachine");
 		VirtualMachineImage image=VirtualMachineImageManager.getFreeImageCopy(machineExecution.getImageId());
+		machineExecution.setImage(image);
 		VirtualMachineStartResponse resp=new VirtualMachineStartResponse();
 		Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
 		try {
