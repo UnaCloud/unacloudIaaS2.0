@@ -6,10 +6,9 @@ import java.util.Map;
 
 import virtualMachineManager.VirtualMachineExecution;
 import virtualMachineManager.VirtualMachineImage;
-import communication.messages.vmo.VirtualMachineStartMessage;
 
 /**
- * Factory resposible for managing hypervisor classes and instances. This class provides methods to dinamically load hypervisor clasees and instantiate them.
+ * Factory responsible for managing hypervisor classes and instances. This class provides methods to dinamically load hypervisor clasees and instantiate them.
  * @author Clouder
  */
 public class HypervisorFactory {
