@@ -2,6 +2,7 @@ package domain;
 
 import static com.losandes.utils.Constants.LOGIN_DB;
 import static com.losandes.utils.Constants.TURN_ON_DB;
+import hypervisorManager.HypervisorFactory;
 
 import java.util.Arrays;
 
@@ -30,6 +31,7 @@ public class Main {
      */
     public static void main(String[] args){
         VariableManager.init("./vars");
+        HypervisorFactory.registerHypervisors();
         Log.print("Inicio "+Arrays.toString(args));
         int mainCase = 1;
         if (args != null && args.length>0 && !args[0].matches("[0-9]+"))mainCase = Integer.parseInt(args[0]);
