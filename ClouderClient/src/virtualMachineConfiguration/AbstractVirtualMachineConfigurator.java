@@ -71,7 +71,7 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
 		System.out.println("startVirtualMachine");
 		VirtualMachineImage image=VirtualMachineImageManager.getFreeImageCopy(machineExecution.getImageId());
 		VirtualMachineStartResponse resp=new VirtualMachineStartResponse();
-		Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getVirtualMachineName());
+		Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
 		try {
 			Class<?> configuratorClass=Class.forName("virtualMachineConfiguration."+image.getConfiguratorClass());
 			Object configuratorObject=configuratorClass.getConstructor().newInstance();
