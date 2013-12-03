@@ -42,6 +42,7 @@ public class VirtualMachineImageManager {
 						vmi.setUsername(br.readLine());
 						vmi.setVirtualMachineName(br.readLine());
 						vmi.setConfiguratorClass(br.readLine());
+						System.out.println("Configurator class is "+vmi.getConfiguratorClass());
 					}else{
 						try(FileOutputStream fos=new FileOutputStream(new File(root,entry.getName()))){
 							for(int n;(n=zis.read(buffer))!=-1;){
