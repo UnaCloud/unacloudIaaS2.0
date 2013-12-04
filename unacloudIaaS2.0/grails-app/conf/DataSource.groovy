@@ -16,7 +16,7 @@ environments {
     development {
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:mysql://157.253.204.12/iaas2dev?useUnicode=yes&characterEncoding=UTF-8"
+            url = "jdbc:mysql://157.253.204.12:100/iaas2dev?useUnicode=yes&characterEncoding=UTF-8"
         }
     }
     test {

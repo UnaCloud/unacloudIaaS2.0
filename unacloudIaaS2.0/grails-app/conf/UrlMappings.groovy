@@ -1,5 +1,6 @@
 class UrlMappings {
-
+	
+	static excludes = ["/virtualMachineImage/update"]
 	static mappings = {
 		"/$controller/$action?/$id?"{
 			constraints {
