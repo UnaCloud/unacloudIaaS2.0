@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
 
 public class AbstractGrailsCommunicator{
 	private static String serverUrl="http://localhost:8080/Unacloud2";

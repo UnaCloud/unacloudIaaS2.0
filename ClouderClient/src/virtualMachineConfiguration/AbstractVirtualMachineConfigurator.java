@@ -37,8 +37,10 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
     @Override
     public void run() {
     	try {
+    		hypervisor.registerVirtualMachine(execution.getImage());
     		System.out.println("hypervisor.changeVirtualMachineMac");
 			hypervisor.changeVirtualMachineMac(execution.getImage());
+			hypervisor.configureVirtualMachineHardware(execution.getCores(),execution.getMemory(),execution.getImage());
 			System.out.println("hypervisor.startVirtualMachine");
 			hypervisor.startVirtualMachine(execution.getImage());
 			System.out.println("configureHostname");
