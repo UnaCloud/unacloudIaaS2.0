@@ -43,6 +43,7 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
 			hypervisor.configureVirtualMachineHardware(execution.getCores(),execution.getMemory(),execution.getImage());
 			System.out.println("hypervisor.startVirtualMachine");
 			hypervisor.startVirtualMachine(execution.getImage());
+			sleep(10000);
 			System.out.println("configureHostname");
 		    configureHostname();
 		    System.out.println("configureIP");
@@ -54,7 +55,7 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
 	        }else doPostConfigure();
 	        System.out.println("PersistentExecutionManager.addExecution");
 	        PersistentExecutionManager.startUpMachine(execution);
-		} catch (HypervisorOperationException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
     }
