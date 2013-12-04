@@ -22,6 +22,7 @@ public class Debian extends AbstractVirtualMachineConfigurator{
         }
 		copyFile("/etc/hostname",out);
 		executeCommand("/bin/hostname",execution.getHostname());
+		out.delete();
 	}
     /**
      * Configures the ip address of the Debian managed virtual machine
