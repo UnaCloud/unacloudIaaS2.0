@@ -87,7 +87,7 @@ public class PersistentExecutionManager {
     	execution.setShutdownTime(System.currentTimeMillis()+execution.getExecutionTime()*3600000);
         Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getHypervisorId());
         try {
-            v.preconfigureAndStartVirtualMachine(execution);
+            v.startVirtualMachine(execution.getImage());
             executionList.put(execution.getId(),execution);
             timer.schedule(new Schedule(execution.getId()),new Date(execution.getShutdownTime()+100));
             new VirtualMachineStateViewer(execution.getId(),v,execution.getIp());

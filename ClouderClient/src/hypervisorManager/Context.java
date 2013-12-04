@@ -1,15 +1,20 @@
 package hypervisorManager;
 
-import java.io.BufferedReader;
+import static com.losandes.utils.Constants.DOUBLE_QUOTE;
+import static com.losandes.utils.Constants.ERROR_MESSAGE;
+import static com.losandes.utils.Constants.OK_MESSAGE;
+import static com.losandes.utils.Constants.VMW_VMX_CPU;
+import static com.losandes.utils.Constants.VMW_VMX_MEMORY;
+
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import static com.losandes.utils.Constants.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 /**
- * @author Eduardo Rosales
  * Responsible for changing the .vmx configuration file for executing a virtual machine fulfilling the user context
  */
 public class Context {
@@ -27,14 +32,13 @@ public class Context {
     }
 
     /**
-     * Responible for sorting the .vmx file context process
+     * Responsible for sorting the .vmx file context process
      * @param vmCores
      * @param vmMemory
      * @return
      */
-    public String changeVMXFileContext(String vmCores, String vmMemory,boolean persistent) {
-        String per = persistent?"keep":"autoRevert";
-        String[][] vmxParameters = {/*{VMW_VMX_HW, VMW_VMX_HW_VER},*/ {VMW_VMX_CPU, vmCores}, {VMW_VMX_MEMORY, vmMemory},{"snapshot.action",per},{"priority.ungrabbed","idle"}};
+    public String changeVMXFileContext(int vmCores, int vmMemory) {
+        String[][] vmxParameters = {/*{VMW_VMX_HW, VMW_VMX_HW_VER},*/ {VMW_VMX_CPU, ""+vmCores}, {VMW_VMX_MEMORY, ""+vmMemory},{"priority.ungrabbed","idle"}};
         return changeVMXparameter(vmxParameters);
     }
 
@@ -43,20 +47,14 @@ public class Context {
      * @param vmxPath
      * @return
      */
-    private static ArrayList<String> convertVMXToString(String vmxPath) {
-        System.out.println("convertVMXToString "+vmxPath);
-        ArrayList<String> ar=new ArrayList<String>();
+    private static List<String> convertVMXToString(String vmxPath) {
+    	System.out.println("convertVMXToString "+vmxPath);
         try {
-            BufferedReader br = new BufferedReader(new FileReader(vmxPath));
-            for(String h;(h=br.readLine())!=null;){
-                ar.add(h);
-            }
-            br.close();
-            return ar;
-        } catch (IOException ex) {
-            System.err.println();
-            return null;
-        }
+			return Files.readAllLines(Paths.get(vmxPath),Charset.defaultCharset());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**
@@ -64,15 +62,11 @@ public class Context {
      * @param vmxPath The path of the output VMX file
      * @param lines The content of the file
      */
-    private static void convertStrignToVMX(String vmxPath,ArrayList<String> lines) {
-        try {
-            PrintWriter pw = new PrintWriter(vmxPath);
-            for(int e=0;e<lines.size();e++){
-                pw.println(lines.get(e));
-            }
-            pw.close();
+    private static void convertStrignToVMX(String vmxPath,List<String> lines) {
+        try(PrintWriter pw = new PrintWriter(vmxPath)){
+            for(int e=0;e<lines.size();e++)pw.println(lines.get(e));
         } catch (IOException ex) {
-            System.err.println();
+            ex.printStackTrace();
         }
     }
 
@@ -81,7 +75,7 @@ public class Context {
      * @param vmxParameters [][] = {{VMW_VMX_HW, VMW_VMX_HW_VER}, {VMW_VMX_CPU, vmCores}, {VMW_VMX_MEMORY, vmMemory}}
      */
     private String changeVMXparameter(String[][] vmxParameters) {
-        ArrayList<String> splittedString = convertVMXToString(vmxFile.getPath());
+        List<String> splittedString = convertVMXToString(vmxFile.getPath());
         if(splittedString==null)return ERROR_MESSAGE;
         boolean found = false;
         for (int r = 0; r < vmxParameters.length; r++) {

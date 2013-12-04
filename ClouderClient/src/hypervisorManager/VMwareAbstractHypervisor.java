@@ -13,9 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import communication.messages.vmo.VirtualMachineStartMessage;
 import virtualMachineManager.LocalProcessExecutor;
-import virtualMachineManager.VirtualMachineExecution;
 import virtualMachineManager.VirtualMachineImage;
 
 /**
@@ -46,13 +44,10 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
     }
 
     @Override
-    public void preconfigureAndStartVirtualMachine(VirtualMachineExecution execution) throws HypervisorOperationException {
-        if(execution.getCores()!=0&&execution.getMemory()!=0){
-            Context vmx = new Context(execution.getImage().getMainFile().getPath());
-            vmx.changeVMXFileContext(String.valueOf(execution.getCores()).toString(), String.valueOf(execution.getMemory()).toString(), execution.isPersistent());
-        }
+    public void startVirtualMachine(VirtualMachineImage image) throws HypervisorOperationException {
+        
         correctDataStores();
-        String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"start",execution.getImage().getMainFile().getPath(),"nogui");
+        String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"start",image.getMainFile().getPath(),"nogui");
         if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
         }
@@ -79,12 +74,29 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
     }
 
     @Override
-    public void takeSnapshotOnMachine(VirtualMachineImage image,String snapshotname) throws HypervisorOperationException {
+    public void takeVirtualMachineSnapshot(VirtualMachineImage image,String snapshotname) throws HypervisorOperationException {
         String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"snapshot",image.getMainFile().getPath(),snapshotname);
         if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
         }
     }
+    @Override
+    public void configureVirtualMachineHardware(int cores, int ram, VirtualMachineImage image) throws HypervisorOperationException {
+    	if(cores!=0&&ram!=0){
+            new Context(image.getMainFile().getPath()).changeVMXFileContext(cores,ram);
+       }
+    }
+    @Override
+    public boolean existsVirtualMachineSnapshot(VirtualMachineImage image, String snapshotname) throws HypervisorOperationException {
+    	// TODO Auto-generated method stub
+    	return false;
+    }
+    @Override
+    public void restoreVirtualMachineSnapshot(VirtualMachineImage image, String snapshotname) throws HypervisorOperationException {
+    	// TODO Auto-generated method stub
+    	
+    }
+    
 
     private void correctDataStores() {
         try {

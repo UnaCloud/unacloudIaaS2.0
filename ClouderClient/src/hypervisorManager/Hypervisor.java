@@ -2,8 +2,6 @@ package hypervisorManager;
 
 import java.io.File;
 
-import communication.messages.vmo.VirtualMachineStartMessage;
-import virtualMachineManager.VirtualMachineExecution;
 import virtualMachineManager.VirtualMachineImage;
 
 /**
@@ -32,8 +30,9 @@ public abstract class Hypervisor {
      * @param persistent The persistent property
      * @throws HypervisorOperationException if there is an error configuring the virtual machine settings
      */
-    public abstract void preconfigureAndStartVirtualMachine(VirtualMachineExecution execution) throws HypervisorOperationException;
+    public abstract void startVirtualMachine(VirtualMachineImage image) throws HypervisorOperationException;
     
+    public abstract void configureVirtualMachineHardware(int cores,int ram,VirtualMachineImage image) throws HypervisorOperationException;
     /**
      * turns off the managed virtual machine
      * @throws HypervisorOperationException If there is an error stoping the virtual machine
@@ -55,8 +54,12 @@ public abstract class Hypervisor {
      */
     public abstract void executeCommandOnMachine(VirtualMachineImage image, String command,String...args) throws HypervisorOperationException;
 
-    public abstract void takeSnapshotOnMachine(VirtualMachineImage image,String snapshotname) throws HypervisorOperationException;
+    public abstract void takeVirtualMachineSnapshot(VirtualMachineImage image,String snapshotname) throws HypervisorOperationException;
 
+    public abstract void restoreVirtualMachineSnapshot(VirtualMachineImage image,String snapshotname)throws HypervisorOperationException;
+    
+    public abstract boolean existsVirtualMachineSnapshot(VirtualMachineImage image,String snapshotname)throws HypervisorOperationException;
+    
     /**
      * writes a file on the virtual machine file system
      * @param user the operating system privileged user name that is going to write the file

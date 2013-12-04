@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 import com.losandes.utils.Constants;
 
 import virtualMachineManager.LocalProcessExecutor;
-import virtualMachineManager.VirtualMachineExecution;
 import virtualMachineManager.VirtualMachineImage;
 
 /**
@@ -34,11 +33,13 @@ class VirtualBox extends Hypervisor {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
         }*/
     }
-    public void registerVirtualMachine(VirtualMachineImage image){
+    @Override
+	public void registerVirtualMachine(VirtualMachineImage image){
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "registervm", image.getMainFile().getPath());
         sleep(15000);
     }
-    public void unregisterVirtualMachine(VirtualMachineImage image){
+    @Override
+	public void unregisterVirtualMachine(VirtualMachineImage image){
         sleep(15000);
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "unregistervm", image.getVirtualMachineName());
     }
@@ -50,22 +51,20 @@ class VirtualBox extends Hypervisor {
         }
     }
     @Override
-	public void preconfigureAndStartVirtualMachine(VirtualMachineExecution execution) throws HypervisorOperationException {
-        registerVirtualMachine(execution.getImage());
-        if (hasSnapshot(execution.getImage())) {
-            LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "snapshot", execution.getImage().getVirtualMachineName(), "restorecurrent");
-            sleep(10000);
-        }
-        if(execution.getCores()!=0&&execution.getMemory()!=0){
-            LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "modifyvm", execution.getImage().getVirtualMachineName(),"--memory",""+execution.getMemory(),"--cpus",""+execution.getCores());
-            sleep(10000);
-        }
+	public void startVirtualMachine(VirtualMachineImage image) throws HypervisorOperationException {
         String h;
-        if ((h=LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "startvm", execution.getImage().getVirtualMachineName(), "--type", "headless")).contains(ERROR_MESSAGE)) {
+        if((h=LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "startvm", image.getVirtualMachineName(), "--type", "headless")).contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
         }
         sleep(30000);
         LocalProcessExecutor.executeCommandOutput("wmic","process","where","name=\"VBoxHeadless.exe\"","CALL","setpriority","64");
+    }
+    @Override
+    public void configureVirtualMachineHardware(int cores, int ram, VirtualMachineImage image) throws HypervisorOperationException {
+    	if(cores!=0&&ram!=0){
+            LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "modifyvm", image.getVirtualMachineName(),"--memory",""+ram,"--cpus",""+cores);
+            sleep(10000);
+        }
     }
     @Override
     public void executeCommandOnMachine(VirtualMachineImage image,String command, String... args) throws HypervisorOperationException {
@@ -89,23 +88,13 @@ class VirtualBox extends Hypervisor {
     }
 
     @Override
-    public void takeSnapshotOnMachine(VirtualMachineImage image,String snapshotname) throws HypervisorOperationException {
-        registerVirtualMachine(image);
+    public void takeVirtualMachineSnapshot(VirtualMachineImage image,String snapshotname) throws HypervisorOperationException {
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"snapshot",image.getVirtualMachineName(),"take",snapshotname);
-        unregisterVirtualMachine(image);
     }
 
     @Override
     public void changeVirtualMachineMac(VirtualMachineImage image) throws HypervisorOperationException {
-        registerVirtualMachine(image);
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "modifyvm", image.getVirtualMachineName(),"--macaddress1","auto");
-        unregisterVirtualMachine(image);
-    }
-
-    
-    private boolean hasSnapshot(VirtualMachineImage image){
-        String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "snapshot", image.getVirtualMachineName(), "list");
-        return h != null && !h.contains("does not");
     }
 
     private void sleep(long l) {
@@ -115,5 +104,17 @@ class VirtualBox extends Hypervisor {
             Logger.getLogger(VirtualBox.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+	@Override
+	public void restoreVirtualMachineSnapshot(VirtualMachineImage image, String snapshotname) throws HypervisorOperationException {
+		LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "snapshot", image.getVirtualMachineName(), "restorecurrent");
+        sleep(10000);
+	}
+
+	@Override
+	public boolean existsVirtualMachineSnapshot(VirtualMachineImage image, String snapshotname) throws HypervisorOperationException {
+		String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "snapshot", image.getVirtualMachineName(), "list");
+        return h != null && !h.contains("does not");
+	}
 
 }
