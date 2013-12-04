@@ -38,7 +38,7 @@ public class Context {
      * @return
      */
     public String changeVMXFileContext(int vmCores, int vmMemory) {
-        String[][] vmxParameters = {/*{VMW_VMX_HW, VMW_VMX_HW_VER},*/ {VMW_VMX_CPU, ""+vmCores}, {VMW_VMX_MEMORY, ""+vmMemory},{"priority.ungrabbed","idle"}};
+        String[][] vmxParameters = {/*{VMW_VMX_HW, VMW_VMX_HW_VER},*/ {VMW_VMX_CPU, ""+vmCores}, {VMW_VMX_MEMORY, ""+vmMemory},{"snapshot.action","keep"},{"priority.ungrabbed","idle"}};
         return changeVMXparameter(vmxParameters);
     }
 
