@@ -35,10 +35,10 @@ class DeployerService {
 				vmsm.setExecutionTime(vm.runningTimeInHours())
 				println "vmsm.setExecutionTime"
 				println "vmsm.setHypervisorPath"
-				vmsm.setHostname(image.image.name+i)
+				vmsm.setHostname(vm.name)
 				println "vmsm.setHostname"
 				vmsm.setVirtualMachineIP(vm.ip.ip)
-				println "vmsm.setVirtualMachineIP"
+				println "vmsm.setVirtualMachineIP --->"+ vm.ip.ip
 				vmsm.setVirtualMachineNetMask(vm.ip.ipPool.mask)
 				println "vmsm.setVirtualMachineNetMask"
 				vmsm.setVmCores(vm.cores)
