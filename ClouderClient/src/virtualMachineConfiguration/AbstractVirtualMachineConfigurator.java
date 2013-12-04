@@ -66,7 +66,7 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
     }
 	public File generateRandomFile(){
 		if(!new File("temp").exists())new File("temp").mkdir();
-		return new File("temp/"+r.nextLong()+".txt");
+		return new File("temp/"+Math.abs(r.nextLong())+".txt");
 	}
 	
 	public static VirtualMachineStartResponse startVirtualMachine(VirtualMachineExecution machineExecution){
