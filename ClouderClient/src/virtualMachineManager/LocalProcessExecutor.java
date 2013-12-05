@@ -1,9 +1,9 @@
 package virtualMachineManager;
 
 import java.io.*;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
 import static com.losandes.utils.Constants.*;
+
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,13 +62,14 @@ public class LocalProcessExecutor {
             	System.out.println(" "+line);
             }
         }catch (IOException ex){
+        	ex.printStackTrace();
         }
-        /*try(PrintWriter pw=new PrintWriter(new FileOutputStream("exec.log",true))){
-            pw.println("executeCommandOutput "+Arrays.toString(command));
-            pw.println(outputs);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(LocalProcessExecutor.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        try {
+			p.waitFor();
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
         return outputs;
     }
 }
