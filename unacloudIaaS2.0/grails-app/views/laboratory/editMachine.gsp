@@ -36,12 +36,12 @@
 	    			<input name="ram" type="text" value="${machine.ram }">
 	    		</div>
     		</div>
-    		<div class="control-group">
+    		<!--  <div class="control-group">
    			<label class="control-label">Hard Disk Size</label>
 	    		<div class="controls">
-	    			<input name="disk" type="text" value="${machine.hardDisk }">
+	    			<input name="disk" type="text" value="">
 	    		</div>
-    		</div>
+    		</div>-->	
     		<div class="control-group">
    			<label class="control-label">Operating System</label>
 	    		<div class="controls">

@@ -12,10 +12,9 @@ class VirtualMachineImage implements Comparable<VirtualMachineImage>{
 	String accessProtocol
 	String mainFile
 	
-	static hasMany = [files:File ]
-	
 	static constraints = {
-    }
+    	mainFile (nullable: true)
+	}
 	
 	def isDeployed(){
 		boolean isDeployed=false

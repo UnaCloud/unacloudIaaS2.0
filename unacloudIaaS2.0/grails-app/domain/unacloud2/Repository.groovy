@@ -5,7 +5,8 @@ class Repository {
 	String name
 	int capacity
 	String root
-	Collection<VirtualMachineImage> images	
+	static hasMany = [images: VirtualMachineImage]
+	
     static constraints = {
 	}
 	

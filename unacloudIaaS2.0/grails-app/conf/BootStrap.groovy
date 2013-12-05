@@ -1,3 +1,5 @@
+
+
 import fileManager.DataServerSocket;
 import unacloud2.IP
 import unacloud2.IPPool;
@@ -7,7 +9,7 @@ import unacloud2.OperatingSystem;
 import unacloud2.ServerVariable
 import unacloud2.ServerVariableTypeEnum
 import unacloud2.User
-
+import unacloud2.Repository
 
 class BootStrap {
 
@@ -28,7 +30,9 @@ class BootStrap {
 			new Laboratory( virtualMachinesIPs: virtualIpPool, name: 'Wuaira 1', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS).save()	
 		
 	    }
-		
+		if(Repository.count()==0){
+			new Repository(name: "Main Repository", capacity: 20, root: "C:\\images\\").save();
+		}
 		if(OperatingSystem.count() ==0){
 			new OperatingSystem(name:'Windows 7',configurer:'Windows').save()
 			new OperatingSystem(name:'Windows XP',configurer:'Windows').save()

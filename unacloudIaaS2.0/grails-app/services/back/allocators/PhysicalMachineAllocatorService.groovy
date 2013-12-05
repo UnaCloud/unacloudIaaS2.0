@@ -35,7 +35,7 @@ class PhysicalMachineAllocatorService {
 		Collections.shuffle(l);
 		int a=0;
 		println "allocando imagenes"
-		for(VirtualMachineExecution vme:deployedImage.virtualMachines){
+		for(vme in deployedImage.virtualMachines){
 			if(a<l.size){
 				println "allocando vm"
 				vme.executionNode = l.get(a++);

@@ -27,7 +27,6 @@ class LaboratoryService {
 		machine.putAt("cores", Integer.parseInt(cores))
 		machine.putAt("mac", mac)
 		machine.putAt("ram", Integer.parseInt(ram))
-		machine.putAt("hardDisk", Integer.parseInt(disk))
 		machine.putAt("hypervisorPath", hyperPath)
 	}
 }

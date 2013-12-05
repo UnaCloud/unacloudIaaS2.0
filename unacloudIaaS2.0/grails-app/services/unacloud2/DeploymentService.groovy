@@ -15,20 +15,25 @@ class DeploymentService {
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +(60*60*1000))
 		def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: image.name+"-"+1 ,ram:512 , cores:1 ,disk: image.fixedDiskSize , status: VirtualMachineExecutionStateEnum.COPYING, startTime: new Date(), stopTime: stopTime )
-		DeployedImage depImage= new DeployedImage(image:image)
-		depImage.virtualMachines=[]
-		depImage.virtualMachines.add(virtualMachine)
 		virtualMachine.save()
-		DeployedCluster cluster= new DeployedCluster(cluster: null)
-		cluster.images=[]
-		cluster.images.add(depImage)
+		DeployedImage depImage= new DeployedImage(image:image)
+		depImage.addToVirtualMachines(virtualMachine)
 		depImage.save()
+		DeployedCluster cluster= new DeployedCluster(cluster: null)
+		cluster.addToImages(depImage)
 		Deployment dep= new Deployment(cluster: cluster, startTime: new Date(), stopTime: stopTime, totalVMs: 1, status: DeploymentStateEnum.ACTIVE)
 		cluster.save()
 		dep.save()
 		if(user.deployments==null)
 			user.deployments=[]
-		user.deployments.add(dep)
+		user.addToDeployments(dep)
+		println "allocando"
+		if(depImage.virtualMachines.size()>0){
+		physicalMachineAllocatorService.allocatePhysicalMachinesRandomly(cluster)
+		}
+		runAsync{
+			deployerService.deploy(dep)
+		}
 		user.save(failOnError: true)
 	}
    
@@ -49,7 +54,7 @@ class DeploymentService {
 			   long stopTimeMillis= new Date().getTime()
 			   def stopTime= new Date(stopTimeMillis +Integer.parseInt(time))
 			   def iName=image.name
-			   def virtualMachine = new VirtualMachineExecution(message: "Deploying", name: iName +"-"+j ,ram: (onlyOneImage)?iRAM:iRAM.getAt(i), cores:iCores.getAt(i),disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
+			   def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: iName +"-"+j ,ram: (onlyOneImage)?iRAM:iRAM.getAt(i), cores:iCores.getAt(i),disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 			   depImage.virtualMachines.add(virtualMachine)
 			   virtualMachine.save(failOnError: true)
 			   depImage.save(failOnError: true)

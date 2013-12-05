@@ -82,8 +82,18 @@ class VirtualMachineImageController {
 			}
 			if (!isUsed){	
 				def user= User.get(session.user.id)
-				
-				virtualMachineImageService.deleteImage(user, image)
+				Repository repository
+				for(repo in Repository.all) {
+					for (repoImage in repo.images){
+						if (repoImage.equals(image)){
+							repository= repo
+							break
+						}
+					}
+					if (repository.equals(repo))
+						break
+				}
+				virtualMachineImageService.deleteImage(user,repository, image)
 				redirect(action:"index")
 			}
 			else{
