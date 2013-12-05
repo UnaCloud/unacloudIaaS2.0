@@ -46,21 +46,29 @@ public class LocalProcessExecutor {
             return "Error: Executable not found";
         }
         String outputs = "";
+        System.out.println("output:");
         try(BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()))){
-            for(String line;(line = in.readLine()) != null;)outputs += line + "\n";
+            for(String line;(line = in.readLine()) != null;){
+            	outputs += line + "\n";
+            	System.out.println(" "+line);
+            }
         }catch (IOException ex){
             outputs =ERROR_MESSAGE + "executing " + Arrays.toString(command) + " : " + ex.getMessage();
         }
+        System.out.println("errput:");
         try(BufferedReader in = new BufferedReader(new InputStreamReader(p.getErrorStream()))){
-            for(String line;(line = in.readLine()) != null;)outputs += line + "\n";
+            for(String line;(line = in.readLine()) != null;){
+            	outputs += line + "\n";
+            	System.out.println(" "+line);
+            }
         }catch (IOException ex){
         }
-        try(PrintWriter pw=new PrintWriter(new FileOutputStream("exec.log",true))){
+        /*try(PrintWriter pw=new PrintWriter(new FileOutputStream("exec.log",true))){
             pw.println("executeCommandOutput "+Arrays.toString(command));
             pw.println(outputs);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(LocalProcessExecutor.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         return outputs;
     }
 }
