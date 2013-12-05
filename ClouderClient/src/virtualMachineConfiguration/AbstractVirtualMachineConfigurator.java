@@ -7,7 +7,9 @@ import hypervisorManager.HypervisorOperationException;
 import java.io.File;
 import java.util.Random;
 
+import communication.ServerMessageSender;
 import communication.messages.vmo.VirtualMachineStartResponse;
+import unacloudEnums.VirtualMachineExecutionStateEnum;
 import virtualMachineManager.PersistentExecutionManager;
 import virtualMachineManager.VirtualMachineExecution;
 import virtualMachineManager.VirtualMachineImage;
@@ -36,24 +38,18 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
     public abstract void doPostConfigure();
     @Override
     public void run() {
-    	try {
+    	ServerMessageSender.reportVirtualMachineState(execution.getId(), VirtualMachineExecutionStateEnum.CONFIGURING, "Configuring virtual machine");
+        try {
     		hypervisor.registerVirtualMachine(execution.getImage());
-    		System.out.println("hypervisor.changeVirtualMachineMac");
-			hypervisor.changeVirtualMachineMac(execution.getImage());
+    		hypervisor.changeVirtualMachineMac(execution.getImage());
 			hypervisor.configureVirtualMachineHardware(execution.getCores(),execution.getMemory(),execution.getImage());
-			System.out.println("hypervisor.startVirtualMachine");
 			hypervisor.startVirtualMachine(execution.getImage());
-			sleep(10000);
-			System.out.println("configureHostname");
 		    configureHostname();
-		    System.out.println("configureIP");
-	        configureIP();
+		    configureIP();
 	        if(!execution.isPersistent()){
 	        	hypervisor.stopVirtualMachine(execution.getImage());
-	            waitTime(10000);
 	            //takeSnapshotOnMachine("base");
 	        }else doPostConfigure();
-	        System.out.println("PersistentExecutionManager.addExecution");
 	        PersistentExecutionManager.startUpMachine(execution);
 		} catch (Exception e) {
 			e.printStackTrace();
