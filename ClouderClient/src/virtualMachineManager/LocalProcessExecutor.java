@@ -37,8 +37,7 @@ public class LocalProcessExecutor {
      * @return The output of the command execution
      */
     public static String executeCommandOutput(String...command){
-    	System.out.println("Exec: "+Arrays.toString(command));
-        Process p;
+    	Process p;
         try {
             p = Runtime.getRuntime().exec(command);
         }catch(IOException ex){
@@ -46,27 +45,22 @@ public class LocalProcessExecutor {
             return "Error: Executable not found";
         }
         String outputs = "";
-        System.out.println("output:");
         try(BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()))){
             for(String line;(line = in.readLine()) != null;){
             	outputs += line + "\n";
-            	System.out.println(" "+line);
             }
         }catch (IOException ex){
             outputs =ERROR_MESSAGE + "executing " + Arrays.toString(command) + " : " + ex.getMessage();
         }
-        System.out.println("errput:");
         try(BufferedReader in = new BufferedReader(new InputStreamReader(p.getErrorStream()))){
             for(String line;(line = in.readLine()) != null;){
             	outputs += line + "\n";
-            	System.out.println(" "+line);
             }
         }catch (IOException ex){
         	ex.printStackTrace();
         }
         try {
 			p.waitFor();
-			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
