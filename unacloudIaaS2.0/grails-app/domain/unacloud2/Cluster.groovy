@@ -6,10 +6,6 @@ class Cluster {
 	
 	String name
 	static hasMany = [images: VirtualMachineImage]
-	static mapping = {
-		
-		images cascade: 'all-delete-orphan'
-	}
 	
 	
 	List <PhysicalMachine> getOrderedImages(){

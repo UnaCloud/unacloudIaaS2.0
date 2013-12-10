@@ -30,7 +30,7 @@ class ClusterController {
 	}
 	
 	def deployOptions(){
-		[cluster: Cluster.get(params.id),limit: 20, limitHA: 2]	
+		[cluster: Cluster.get(params.id),limit: PhysicalMachine.count, limitHA: 2]	
 	}
 	
 	def delete(){

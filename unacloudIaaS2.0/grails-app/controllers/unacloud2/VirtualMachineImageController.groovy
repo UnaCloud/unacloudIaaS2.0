@@ -58,7 +58,7 @@ class VirtualMachineImageController {
 			}
 			else{ 
 			def e=it.getOriginalFilename()
-			if(!(e.endsWith("vmx")|| e.endsWith("vmdk")) ){
+			if(!(e.endsWith("vmx")|| e.endsWith("vmdk")||e.endsWith("vbox")|| e.endsWith("vdi"))){
 				flash.message = 'invalid file type'
 				render(view: 'newUploadImage')
 			}
