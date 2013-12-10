@@ -114,6 +114,9 @@ public class PersistentExecutionManager {
         return null;
     }
     
+    /**
+     * Saves the current state of virtual machine executions and virtual machine images on this node.  
+     */
     private static void saveData(){
     	try(ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(executionsFile));){
         	oos.writeObject(executionList);
@@ -122,7 +125,7 @@ public class PersistentExecutionManager {
     }
     /**
      * Loads the stored virtual machine executions when the physical machine start.
-     * Each loaded execution used to turn on the corresponding virtual machine
+     * Each loaded execution is used to turn on the corresponding virtual machine
      */
     @SuppressWarnings("unchecked")
 	public static void loadData(){
@@ -131,10 +134,10 @@ public class PersistentExecutionManager {
         try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream(executionsFile))){
         	executions=(Map<Long,VirtualMachineExecution>)ois.readObject();
         	images=(List<VirtualMachineImage>)ois.readObject();
+        	if(executions!=null&&images!=null){
+            	executionList=executions;
+            	VirtualMachineImageManager.imageList=images;
+            }else saveData();
         } catch (Exception ex){}
-        if(executions!=null&&images!=null){
-        	executionList=executions;
-        	VirtualMachineImageManager.imageList=images;
-        }
     }
 }

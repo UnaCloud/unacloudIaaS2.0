@@ -9,7 +9,6 @@ import utils.AddressUtility;
 
 /**
  * Class responsible to implement methods to configure Debian virtual machines
- * @author Clouder
  */
 public class Debian extends AbstractVirtualMachineConfigurator{
 	@Override
@@ -25,7 +24,7 @@ public class Debian extends AbstractVirtualMachineConfigurator{
 		out.delete();
 	}
     /**
-     * Configures the ip address of the Debian managed virtual machine
+     * Configures the IP address of the Debian managed virtual machine
      * @param netmask
      * @param ip
      * @throws HypervisorOperationException 
