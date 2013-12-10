@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import com.losandes.utils.VariableManager;
+
 public class VirtualMachineImageManager {
 	static String machineRepository="D:\\GRID\\";
 	static List<VirtualMachineImage> imageList=new ArrayList<>();
@@ -25,7 +27,7 @@ public class VirtualMachineImageManager {
 		VirtualMachineImage vmi=new VirtualMachineImage();
 		File root=new File(machineRepository+"\\"+imageId);
 		root.mkdirs();
-		try(Socket s=new Socket("127.0.0.1",3020);PrintWriter pw=new PrintWriter(s.getOutputStream())){
+		try(Socket s=new Socket(VariableManager.getStringValue("CLOUDER_SERVER_IP"),3020);PrintWriter pw=new PrintWriter(s.getOutputStream())){
 			pw.println(imageId);
 			pw.flush();
 			try(ZipInputStream zis=new ZipInputStream(s.getInputStream())){
