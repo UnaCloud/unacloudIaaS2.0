@@ -24,7 +24,7 @@ public class PhysicalMachineMonitor{
 	 * Restarts this physical machine monitor
 	 */
 	public static void restart() {
-		try {
+		/*try {
 			boolean monitorear = Boolean.parseBoolean(VariableManager.getStringValue("MONITORING_ENABLE"));
 			try {
 				if (monitorear) {
@@ -36,7 +36,7 @@ public class PhysicalMachineMonitor{
 				monitorear = false;
 			}
 		} catch (Throwable t) {
-		}
+		}*/
 	}
 
 	/**
