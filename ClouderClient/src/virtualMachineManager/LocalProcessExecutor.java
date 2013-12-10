@@ -58,6 +58,8 @@ public class LocalProcessExecutor {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+        System.out.println("Exec: "+Arrays.toString(command));
+        System.out.println(outputs);
         return outputs;
     }
 }
