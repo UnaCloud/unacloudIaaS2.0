@@ -9,9 +9,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.losandes.utils.VariableManager;
+
 public class AbstractGrailsCommunicator{
-	private static String serverUrl="http://localhost:8080/Unacloud2";
 	public static boolean pushInfo(String serviceName,Object...params){
+		final String serverUrl=VariableManager.getStringValue("serverurl");
 		try {
 			String urlParams=null;
 			for(int e=0,i=params.length;e<i;e+=2)urlParams=(urlParams==null?"?":(urlParams+"&"))+params[e]+"="+params[e+1];
@@ -19,7 +21,7 @@ public class AbstractGrailsCommunicator{
 			HttpURLConnection http = (HttpURLConnection)url.openConnection();
 			http.connect();
 			BufferedReader br=new BufferedReader(new InputStreamReader(http.getInputStream()));
-			for(String h;(h=br.readLine())!=null;);
+			for(;br.readLine()!=null;);
 			http.disconnect();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -28,6 +30,7 @@ public class AbstractGrailsCommunicator{
 		return true;
 	}
 	public static String doRequest(String serviceName,String message){
+		final String serverUrl=VariableManager.getStringValue("serverurl");
 		String ret="";
 		try {
 			URL url=new URL(serverUrl+"/"+serviceName+"?type=2");
@@ -68,7 +71,4 @@ public class AbstractGrailsCommunicator{
         for(e++;e<args.length;e++)if(args[e]!=null)resp+=MESSAGE_SEPARATOR_TOKEN+args[e];
         return resp;
     }*/
-	public static void main(String[] args){
-		doRequest("Hola mundop!");
-	}
 }
