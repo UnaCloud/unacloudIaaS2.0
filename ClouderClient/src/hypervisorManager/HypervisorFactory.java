@@ -21,7 +21,7 @@ public class HypervisorFactory {
     public static void registerHypervisors(){
     	map.put(VMwareWorkstation.HYPERVISOR_ID,new VMwareWorkstation("C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe"));
     	map.put(VMwarePlayer.HYPERVISOR_ID,new VMwarePlayer("C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe"));
-    	map.put(VirtualBox.HYPERVISOR_ID,new VirtualBox(""));
+    	map.put(VirtualBox.HYPERVISOR_ID,new VirtualBox("C:\\Program Files\\Oracle\\VirtualBox\\VBoxHeadless.exe"));
     }
 
     /**
