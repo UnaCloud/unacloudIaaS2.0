@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package hypervisorManager;
 
 import static com.losandes.utils.Constants.ERROR_MESSAGE;
@@ -19,8 +15,6 @@ import virtualMachineManager.VirtualMachineImage;
 /**
  * Implementation of hypervisor abstract class to give support for
  * VMwareWorkstation hypervisor.
- *
- * @author Clouder
  */
 
 public abstract class VMwareAbstractHypervisor extends Hypervisor{
@@ -30,9 +24,6 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
     @Override
     public void stopVirtualMachine(VirtualMachineImage image){
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"stop",image.getMainFile().getPath());
-        /*if (h.contains(ERROR_MESSAGE)) {
-            throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
-        }*/
     }
 
     @Override
@@ -45,7 +36,6 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
 
     @Override
     public void startVirtualMachine(VirtualMachineImage image) throws HypervisorOperationException {
-        
         correctDataStores();
         String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"start",image.getMainFile().getPath(),"nogui");
         if (h.contains(ERROR_MESSAGE)) {
@@ -88,16 +78,16 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
     }
     @Override
     public boolean existsVirtualMachineSnapshot(VirtualMachineImage image, String snapshotname) throws HypervisorOperationException {
-    	// TODO Auto-generated method stub
-    	return false;
+    	String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"listSnapshots",image.getMainFile().getPath());
+    	return h!=null&&h.contains(snapshotname);
     }
     @Override
     public void restoreVirtualMachineSnapshot(VirtualMachineImage image, String snapshotname) throws HypervisorOperationException {
-    	// TODO Auto-generated method stub
-    	
+    	String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"revertToSnapshot",image.getMainFile().getPath(),snapshotname);
+        if (h.contains(ERROR_MESSAGE)) {
+            throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
+        }
     }
-    
-
     private void correctDataStores() {
         try {
             FileInputStream fis = new FileInputStream("./datastores.xml");
@@ -116,12 +106,9 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
     }
 	@Override
 	public void registerVirtualMachine(VirtualMachineImage image) {
-		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public void unregisterVirtualMachine(VirtualMachineImage image) {
-		// TODO Auto-generated method stub
 	}
 	public abstract String getType();
 }

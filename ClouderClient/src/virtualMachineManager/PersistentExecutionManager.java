@@ -53,7 +53,11 @@ public class PersistentExecutionManager {
     public static UnaCloudAbstractResponse removeExecution(long virtualMachineExecutionId,boolean checkTime) {
     	VirtualMachineExecution execution=null;
     	execution=executionList.remove(virtualMachineExecutionId);
-		if(execution!=null&&(!checkTime||System.currentTimeMillis()>execution.getShutdownTime()))HypervisorFactory.getHypervisor(execution.getImage().getHypervisorId()).stopVirtualMachine(execution.getImage());
+		if(execution!=null&&(!checkTime||System.currentTimeMillis()>execution.getShutdownTime())){
+			Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getHypervisorId());
+			v.stopVirtualMachine(execution.getImage());
+			v.unregisterVirtualMachine(execution.getImage());
+		}
 		saveData();
     	return null;
     }
