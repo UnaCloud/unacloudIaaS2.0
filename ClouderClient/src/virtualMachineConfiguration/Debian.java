@@ -68,6 +68,6 @@ public class Debian extends AbstractVirtualMachineConfigurator{
     }
 	@Override
 	public void doPostConfigure() {
-		
+		hypervisor.stopVirtualMachine(execution.getImage());
 	}
 }

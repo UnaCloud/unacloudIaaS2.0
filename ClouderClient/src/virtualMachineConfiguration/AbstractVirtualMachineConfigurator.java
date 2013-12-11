@@ -53,10 +53,6 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
 			hypervisor.startVirtualMachine(execution.getImage());
 		    configureHostname();
 		    configureIP();
-	        /*if(!execution.isPersistent()){
-	        	hypervisor.stopVirtualMachine(execution.getImage());
-	            //takeSnapshotOnMachine("base");
-	        }else*/ 
 	        doPostConfigure();
 	        PersistentExecutionManager.startUpMachine(execution);
 		} catch (Exception e) {
