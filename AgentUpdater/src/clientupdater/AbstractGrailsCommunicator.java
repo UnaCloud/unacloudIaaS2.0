@@ -1,6 +1,7 @@
 package clientupdater;
 
 import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,10 +14,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class AbstractGrailsCommunicator{
-	public static String getVersion(String serverIp){
+	public static String getVersion(){
+		final String serverUrl=VariableManager.getStringValue("SERVER_URL");
 		String ret="";
 		try {
-			URL url=new URL("http://"+serverIp+"/Unacloud2/UnaCloudServices/agentVersion");
+			URL url=new URL(serverUrl+"/UnaCloudServices/agentVersion");
 			HttpURLConnection http = (HttpURLConnection)url.openConnection();
 			http.setRequestMethod("GET");
 			http.connect();
@@ -31,9 +33,10 @@ public class AbstractGrailsCommunicator{
 		}
 		return ret;
 	}
-	public static void getAgentZip(String serverIp,PrintWriter versionFile){
+	public static void getAgentZip(PrintWriter versionFile){
+		final String serverUrl=VariableManager.getStringValue("SERVER_URL");
 		try {
-			URL url=new URL("http://"+serverIp+"/Unacloud2/agent.zip");
+			URL url=new URL(serverUrl+"/agent.zip");
 			HttpURLConnection http = (HttpURLConnection)url.openConnection();
 			http.setRequestMethod("GET");
 			http.connect();

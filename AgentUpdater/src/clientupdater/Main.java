@@ -75,7 +75,7 @@ public class Main {
      */
     private static void doUpdate() {
     	final List<String> versionsFile = gerVersionFile();
-    	String version=AbstractGrailsCommunicator.getVersion(SERVER_IP);
+    	String version=AbstractGrailsCommunicator.getVersion();
     	if(!versionsFile.get(0).equals(version)){
     		for (int e = 1; e < versionsFile.size(); e++) {
                 File c = new File(versionsFile.get(e));
@@ -83,7 +83,7 @@ public class Main {
             }
     		try(PrintWriter versionFile = new PrintWriter(new FileOutputStream(versions),false)){
     			versionFile.println(version);
-        		AbstractGrailsCommunicator.getAgentZip(SERVER_IP,versionFile);
+        		AbstractGrailsCommunicator.getAgentZip(versionFile);
         		versionFile.flush();
                 versionFile.close();
     		} catch (FileNotFoundException e) {
