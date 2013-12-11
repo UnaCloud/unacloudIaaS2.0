@@ -4,8 +4,6 @@ import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.losandes.utils.VariableManager;
-
 /**
  * Class responsible for manage the physical machine monitor process
  * 

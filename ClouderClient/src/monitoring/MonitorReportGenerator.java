@@ -1,12 +1,5 @@
 package monitoring;
 
-import communication.messages.monitoring.MonitorInitialReport;
-import communication.messages.monitoring.MonitorReport;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -20,7 +13,11 @@ import org.hyperic.sigar.Uptime;
 import org.hyperic.sigar.cmd.SigarCommandBase;
 
 import physicalmachine.Network;
+import physicalmachine.OperatingSystem;
 import physicalmachine.PhysicalMachine;
+
+import communication.messages.monitoring.MonitorInitialReport;
+import communication.messages.monitoring.MonitorReport;
 
 public class MonitorReportGenerator extends SigarCommandBase {
 
@@ -119,7 +116,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
             Mem MEM = instance.sigar.getMem();
             NetInterfaceStat NET = instance.sigar
                     .getNetInterfaceStat(monitor.network.getNetworkInterface());
-            return new MonitorReport(UUID, timest, contadorRegistros, getUserName(),
+            return new MonitorReport(UUID, timest, contadorRegistros, OperatingSystem.getUserName(),
                     UPTIME.getUptime(), CPUMflops.getMflops(),
                     CPUMflops.getTimeinSecs(), CPU2.getIdle() * 100,
                     (100 - (CPU2.getIdle() * 100)), CPU2.getUser() * 100,
@@ -144,23 +141,6 @@ public class MonitorReportGenerator extends SigarCommandBase {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static String getUserName() {
-        String userName = null;
-        try {
-            Process p = Runtime.getRuntime().exec("cmd.exe /c quser");
-            InputStream is = p.getInputStream();
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-                br.readLine();
-                for (String linea; (linea = br.readLine()) != null;) {
-                    String user = linea.trim().split(" |\t")[0];
-                    userName = (userName == null ? "" : ";") + user;
-                }
-            }
-        } catch (IOException ex) {
-        }
-        return userName;
     }
 
     @Override

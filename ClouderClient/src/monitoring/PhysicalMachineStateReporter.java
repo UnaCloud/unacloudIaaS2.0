@@ -1,5 +1,6 @@
 package monitoring;
 
+import physicalmachine.OperatingSystem;
 
 /**
  * Class responsible for report this physical machine status. Every 30 seconds this class sends a keep alive message to UnaCloud server.
@@ -25,7 +26,7 @@ public class PhysicalMachineStateReporter extends Thread{
     public void run() {
        while(true){
            try{
-               PhysicalMachineState.reportPhyisicalMachineLoggin(MonitorReportGenerator.getUserName());
+               PhysicalMachineState.reportPhyisicalMachineLoggin(OperatingSystem.getUserName());
            }catch(Exception sce){
         	   sce.printStackTrace();
            }

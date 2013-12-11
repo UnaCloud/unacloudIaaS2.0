@@ -1,5 +1,10 @@
 package physicalmachine;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import virtualMachineManager.LocalProcessExecutor;
 import static com.losandes.utils.Constants.*;
 
@@ -15,14 +20,6 @@ public class OperatingSystem {
     public OperatingSystem() {
         operatingSystemName = getOperatingSystemName();
         operatingSystemCurrentUser = getUserName();
-    }
-
-    /**
-     * Responsible for obtaining the operating system current user name
-     * @return
-     */
-    public static String getUserName() {
-        return System.getProperty("user.name");
     }
 
     /**
@@ -102,6 +99,22 @@ public class OperatingSystem {
             System.err.println(result);
         }
         return result;
+    }
+    public static String getUserName() {
+        String userName = null;
+        try {
+            Process p = Runtime.getRuntime().exec("cmd.exe /c quser");
+            InputStream is = p.getInputStream();
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+                br.readLine();
+                for (String linea; (linea = br.readLine()) != null;) {
+                    String user = linea.trim().split(" |\t")[0];
+                    userName = (userName == null ? "" : ";") + user;
+                }
+            }
+        } catch (IOException ex) {
+        }
+        return userName;
     }
 } //end of OperatingSystem
 
