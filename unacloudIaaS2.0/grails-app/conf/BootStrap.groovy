@@ -1,6 +1,8 @@
 
 
+import com.losandes.utils.Constants;
 import fileManager.DataServerSocket;
+import unacloud2.Hypervisor;
 import unacloud2.IP
 import unacloud2.IPPool;
 import unacloud2.Laboratory;
@@ -58,6 +60,12 @@ class BootStrap {
 			new ServerVariable(name:'MONITORING_DATABASE_USER',serverVariableType: ServerVariableTypeEnum.STRING,variable:'pmonitoreo').save()
 			new ServerVariable(name:'MONITORING_ENABLE',serverVariableType: ServerVariableTypeEnum.STRING,variable:'true').save()
 			new ServerVariable(name:'MONITORING_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable: '157.253.236.160').save()
+		}
+		if(Hypervisor.count() == 0){
+			new Hypervisor(name: Constants.VIRTUAL_BOX, hypervisorVersion: "4.3.4").save()
+			new Hypervisor(name: Constants.VM_WARE_WORKSTATION, hypervisorVersion: "10").save()
+			new Hypervisor(name: Constants.VM_WARE_PLAYER, hypervisorVersion: "10").save()
+			
 		}
 		
 	}
