@@ -19,6 +19,15 @@ class ClusterService {
     }
 	
 	def deleteCluster(Cluster cluster, User user){
+		for (depCluster in DeployedCluster.getAll()){
+			if(depCluster.cluster!= null){
+			if (depCluster.cluster.equals(cluster)){
+				depCluster.cluster=null
+				depCluster.save()
+			}
+			}
+		}
+		
 		user.userClusters.remove(cluster)
 		user.save()
 		cluster.delete()	

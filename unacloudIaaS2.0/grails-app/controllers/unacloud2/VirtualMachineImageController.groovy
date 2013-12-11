@@ -68,6 +68,23 @@ class VirtualMachineImageController {
 		redirect(action: 'index')
 	}
 	
+	def edit(){
+		def i= VirtualMachineImage.get(params.id)
+		
+		if (!i) {
+			redirect(action:"index")
+		}
+		else{
+			[image: i]
+		}
+	}
+	
+	def setValues(){
+		def image = VirtualMachineImage.get(params.id)
+		virtualMachineImageService.setValues(image,params.name,params.user,params.password)
+		redirect(action:"index")
+	}
+	
 	def delete(){
 		def image = VirtualMachineImage.get(params.id)
 		if (!image) {

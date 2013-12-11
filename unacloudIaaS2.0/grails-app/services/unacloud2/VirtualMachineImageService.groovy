@@ -12,6 +12,12 @@ class VirtualMachineImageService {
 		return VirtualMachineImage.get(id)
 	}
     
+	def setValues(VirtualMachineImage image, name, user, password){
+		image.putAt("name", name)
+		image.putAt("user", user)
+		image.putAt("password", password)
+	}
+	
 	def uploadImage(files, diskSize, name, isPublic, accessProtocol, operatingSystemId, username, password,User user) {
 		
 		//TODO define repository assignment schema
@@ -22,7 +28,7 @@ class VirtualMachineImageService {
 		i.save(failOnError: true)
 		files.each {
 			def e=it.getOriginalFilename()
-			
+			println e 
 			java.io.File newFile= new java.io.File(repository.root+i.name+"_"+user.username+"\\"+it.getOriginalFilename())
 			newFile.mkdirs()
 			it.transferTo(newFile)
@@ -30,6 +36,7 @@ class VirtualMachineImageService {
 			def templateFile= new java.io.File(repository.root+"imageTemplates\\"+i.name+"_"+user.username+"\\"+it.getOriginalFilename())
 			FileUtils.copyFile(newFile, templateFile)
 			if (e.endsWith(".vmx"))
+			println "mainfile"+e
 				i.putAt("mainFile", repository.root+i.name+"_"+user.username+"\\"+it.getOriginalFilename())
 			}
 			}
@@ -45,7 +52,12 @@ class VirtualMachineImageService {
     }
 	
 	def deleteImage(User user, Repository repository, VirtualMachineImage image){
-		
+		for(depImage in DeployedImage.getAll()){
+			if(depImage.image.equals(image)){
+				depImage.image==null
+				depImage.save()
+			}
+		}
 		user.images.remove(image)
 		user.save()
 		repository.images.remove(image)
