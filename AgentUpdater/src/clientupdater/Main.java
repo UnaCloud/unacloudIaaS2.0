@@ -31,21 +31,11 @@ public class Main {
     final static File versions = new File("versions.txt");
     static String SERVER_IP = "";
     public static void main(String... args) throws FileNotFoundException{
-    	String file="logActualizador";
-        if(args.length>0&&args[0]!=null&&args[0].length()<2)file+=args[0];
-        System.setOut(new PrintStream(new FileOutputStream(file,true),true){
-        	@Override
-        	public void println(String line) {
-        		super.println(new Date()+": "+line);
-        	}
-        });
-        System.out.println("InicioActualizador "+Arrays.toString(args));
-        VariableManager.init("./vars");
+    	VariableManager.init("./vars");
         SERVER_IP = VariableManager.getStringValue("CLOUDER_SERVER_IP");
         if(args.length>=1){
             startClient(Integer.parseInt(args[0]));
         }
-        System.out.close();
     }
 
     /**
@@ -62,7 +52,6 @@ public class Main {
             }
         }
         if(opcion==1)doUpdate();
-        System.out.println("Actualizado");
         try {
             Runtime.getRuntime().exec("java -jar ClouderClient.jar "+opcion+"\"");
         } catch (Throwable t) {
