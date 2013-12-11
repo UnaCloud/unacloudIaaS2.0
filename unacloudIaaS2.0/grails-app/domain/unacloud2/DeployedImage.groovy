@@ -11,6 +11,7 @@ class DeployedImage {
 	
 	static hasMany = [virtualMachines: VirtualMachineExecution]
     static constraints = {
+		image nullable:true 
     }
 	
 	ArrayList <VirtualMachineExecution> getOrderedVMs(){

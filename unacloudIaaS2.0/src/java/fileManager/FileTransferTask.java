@@ -39,7 +39,10 @@ public class FileTransferTask implements Runnable{
 			}
 			zos.putNextEntry(new ZipEntry("unacloudinfo"));
 			try(PrintWriter pw=new PrintWriter(zos)){
-				pw.println(Constants.VM_WARE_WORKSTATION);
+				if(image.getMainFile().endsWith("vmx"))
+					pw.println(Constants.VM_WARE_WORKSTATION);
+				else if(image.getMainFile().endsWith("vbox"))
+					pw.println(Constants.VIRTUAL_BOX);
 				pw.println(new File(image.getMainFile()).getName());
 				pw.println(image.getPassword());
 				pw.println(image.getUser());
