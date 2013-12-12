@@ -3,6 +3,7 @@ package unacloud2
 class LaboratoryController {
 	
 	LaboratoryService laboratoryService
+	AgentService agentService
 	
 	def beforeInterceptor = {
 		if(!session.user){
@@ -47,6 +48,18 @@ class LaboratoryController {
 		def machine = PhysicalMachine.get(params.id)
 		laboratoryService.setValues(machine, params.name, params.ip, params.osId, params.cores, params.mac, params.ram, params.disk, params.hyperPath)
 		redirect(action:"getLab", params:[id: params.labId])
+	}
+	
+	def updateMachines(){
+		params.each {
+			if (it.key.contains("machine")){
+				if(it.value.contains("on")){
+					PhysicalMachine pm= PhysicalMachine.get((it.key - "machine") as Integer)
+					agentService.updateMachine(pm)
+				}
+			}
+		}
+		redirect( action: "index")
 	}
 	
 	

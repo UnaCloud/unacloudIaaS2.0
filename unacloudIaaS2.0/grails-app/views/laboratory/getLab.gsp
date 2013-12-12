@@ -4,11 +4,14 @@
       <r:require modules="bootstrap"/>
    </head>
 <body>
+<g:form>
 <div class="hero-unit span9">
 <table class="table table-bordered text-center" style="background:white" >
   <tr class="info">
   	<td class="info" colspan="12">
-  	<g:link controller="laboratory" action="createMachine" params="${[id: lab.id]}"><i class="icon-plus-sign"></i></g:link>
+  	<input type="checkbox" id="selectAll"><small>&nbsp;Select All</small>
+  	<g:link controller="laboratory" action="createMachine" params="${[id: lab.id]}"><i class="icon-plus-sign pull-right"></i></g:link>
+  	<g:actionSubmitImage value="refresh" src="${resource(dir: 'images', file: 'empty.gif')}" action="updateMachines" class="icon-refresh pull-right"/>
   	</td>
   </tr>
   
@@ -23,7 +26,7 @@
     <table class="table table-bordered table-condensed text-center" style="background:white">
       	<tr class="info">
       		<td>
-      		  <g:checkBox name="${"checkbox"+machine.name }"/>   		
+      		  <input type="checkbox" name="machine${machine.id}" class="all"/>   		
               <g:link action="editMachine" params="${[id: machine.id, labId: lab.id] }" class="nav pull-right"><i class="icon-pencil" ></i></g:link>
       		</td>
    		</tr>
@@ -41,6 +44,19 @@
 </div>
 </td>
 </tr>
+</g:form>
 </table>
+
 </div>
+<script type="text/javascript">
+$(function () {
+    $('#selectAll').click(function (event) {
+
+        var selected = this.checked;
+        // Iterate each checkbox
+        $('.all:checkbox').each(function () {    this.checked = selected; });
+
+    });
+ });
+</script>
 </body>
