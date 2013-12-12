@@ -54,13 +54,13 @@ class VirtualMachineImageService {
 	def deleteImage(User user, Repository repository, VirtualMachineImage image){
 		for(depImage in DeployedImage.getAll()){
 			if(depImage.image.equals(image)){
-				depImage.image==null
-				depImage.save()
+				println "borrando depImage"
+				depImage.putAt("image", null)
 			}
 		}
-		user.images.remove(image)
-		user.save()
 		repository.images.remove(image)
+		repository.save()
+		user.images.remove(image)
 		user.save()
 		image.delete()
 	}

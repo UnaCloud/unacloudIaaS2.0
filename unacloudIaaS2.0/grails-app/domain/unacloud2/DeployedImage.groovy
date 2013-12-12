@@ -10,7 +10,8 @@ class DeployedImage {
 	boolean highAvaliavility
 	
 	static hasMany = [virtualMachines: VirtualMachineExecution]
-    static constraints = {
+    
+	static constraints = {
 		image nullable:true 
     }
 	

@@ -31,7 +31,7 @@
       ${deployment.cluster.cluster.name}
       </g:if>
       <g:if test="${deployment.cluster.cluster==null }">
-      None
+      None/Deleted
       </g:if>
       </small>
     </td>
@@ -39,7 +39,12 @@
     <g:each in="${deployment.cluster.images}" status="j" var="image">
    		
     <td>
-   	<small>${image.image.name }</small>		    
+   	<small><g:if test="${image.image!=null }">
+      ${image.image.name}
+      </g:if>
+      <g:if test="${ image.image==null }">
+      Deleted
+      </g:if></small>		    
     </td>
     <td>
     <small>${image.virtualMachines.size() }</small>
