@@ -1,5 +1,7 @@
 package unacloud2
 
+import back.services.AgentService;
+
 class LaboratoryController {
 	
 	LaboratoryService laboratoryService

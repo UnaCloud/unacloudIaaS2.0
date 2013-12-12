@@ -1,5 +1,6 @@
 package back.allocators
 
+import back.services.PhysicalMachineStateManagerService;
 import unacloud2.*
 
 class PhysicalMachineAllocatorService {
@@ -14,7 +15,7 @@ class PhysicalMachineAllocatorService {
 	
 	def allocatePhysicalMachine(VirtualMachineExecution vme ){
 		
-		List<PhysicalMachine> l=PhysicalMachine.list();
+		List<PhysicalMachine> l=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
 		Collections.shuffle(l);
 		
 		vme.executionNode = l.first();
@@ -31,7 +32,7 @@ class PhysicalMachineAllocatorService {
 		
 	}
 	def allocatePhysicalMachines(DeployedImage deployedImage){
-		List<PhysicalMachine> l=PhysicalMachine.list();
+		List<PhysicalMachine> l=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON)
 		Collections.shuffle(l);
 		int a=0;
 		println "allocando imagenes"
