@@ -44,7 +44,7 @@ class DeploymentService {
 	   println iRAM
 	   int images= cluster.images.size()
 	   println images
-	   boolean onlyOneImage= images=1
+	   boolean onlyOneImage= (images==1)
 	   println "hay una imagen? ==>"+ onlyOneImage
 	   cluster.images.eachWithIndex(){ image,i->
 		   def depImage= new DeployedImage(image:image)

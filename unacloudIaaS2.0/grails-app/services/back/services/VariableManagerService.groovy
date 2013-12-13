@@ -14,4 +14,12 @@ class VariableManagerService {
 		if(sv==null||sv.getVariable()==null||!sv.getVariable().matches("[0-9]+"))return 0;
 		return Integer.parseInt(sv.getVariable());
 	}
+	
+	def updateAgentVersion(){
+		ServerVariable agentVersion= ServerVariable.findByName("AGENT_VERSION")
+		int newVerNumber= ((agentVersion.getVariable()-"2.0.") as Integer)
+		newVerNumber++
+		String newVersion=  "2.0."+ newVerNumber
+		agentVersion.putAt("variable", newVersion)
+	}
 }

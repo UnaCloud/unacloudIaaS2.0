@@ -12,6 +12,7 @@ class UrlMappings {
 		"/test/"(controller:"test", action:"index")
 		"/functionalities"(view:"/functionalities")
 		"/administration"(view:"/administration")
+		"/configuration"(view:"/configuration")
 		"/user/create"(view:"user/create")
 		"/hypervisor/create"(view:"hypervisor/create")
 		"/operatingSystem/create"(view:"operatingSystem/create")

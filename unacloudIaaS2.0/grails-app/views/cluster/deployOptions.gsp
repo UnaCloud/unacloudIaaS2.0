@@ -48,28 +48,26 @@
     		<td>
     		<select name="RAM" class="input-small" > 
     			<option value="${512}">${512}</option>
+    			<option value="${1024}">${1024}</option>
+    			<option value="${2048}">${2048}</option>
+    			<option value="${4096}">${4096}</option>
     		</select> 
     		</td>
     		<td>
     		<select name="cores" class="input-small" > 
     			<option value="${1}">${1}</option>
+    			<option value="${2}">${2}</option>
+    			<option value="${4}">${4}</option>
+    			<option value="${8}">${8}</option>
     		</select>
     		</td>
     		</tr>
     		<tr>
     		<td>
-    		<label>Green Deployment</label>
+    		<label>High Availability</label>
     		</td>
     		<td>
-    		<input type="checkbox" name="green">
-    		</td>
-    		</tr>
-    		<tr>
-    		<td>
-    		<label>Prefer same IP pool</label>
-    		</td>
-    		<td>
-    		<input type="checkbox" name="sameIP">
+    		<input type="checkbox" name="highAvaliability">
     		</td>
     		</tr>
     		</table>
@@ -81,6 +79,9 @@
 	    			<select name="time" class="input-small">
     					<option value="${60*60*1000}">1 hour</option>
     					<option value="${2*60*60*1000}">2 hours</option>
+    					<option value="${4*60*60*1000}">4 hours</option>
+    					<option value="${12*60*60*1000}">12 hours</option>
+    					<option value="${24*60*60*1000}">1 day</option>
     				</select>
 	    		</div>
     		</div>
@@ -89,6 +90,9 @@
   			<g:submitButton name="deploy" class="btn" value="Deploy" />
    			</div>
    		</g:form>
+   		<g:if test="${flash.message && flash.message!=""}">
+   		<div class="alert alert-error"><i class="icon-exclamation-sign"></i>&nbsp;&nbsp;&nbsp;${flash.message }</div>
+   		</g:if>
    	</div>
    </body>
 </html>

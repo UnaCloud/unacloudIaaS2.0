@@ -16,6 +16,12 @@ class UnaCloudServicesController {
 	def agentVersion(){
 		variableManagerService.getStringValue("AGENT_VERSION");
 	}
+	
+	def updateAgentVersion(){
+		variableManagerService.updateAgentVersion();
+		redirect(uri: "/configuration");	
+	}
+	
 	def agent(){
 		def openAgain = new File('web-app/tmpfiles/agent.zip')
 		response.setContentType("application/zip")

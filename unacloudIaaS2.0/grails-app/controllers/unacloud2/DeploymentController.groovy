@@ -41,13 +41,29 @@ class DeploymentController {
 		Cluster cluster= Cluster.get(params.id)
 		User user= User.get(session.user.id)
 		if(!cluster.isDeployed()){
-			deploymentService.deploy(cluster, user, params.instances, params.RAM, params.cores, params.time)
-			redirect(controller:"deployment")
+			int totalInstances
+			def imageNumber= cluster.images.size()
+			if(imageNumber==1){
+				totalInstances+= params.instances as Integer
+			}
+			else{
+				for (int i=0; i< limit;i++) {
+					totalInstances+=params.instances.getAt(i)
+				}
+				
+			}
+			def avaliableInstances= PhysicalMachine.findAllByState("ON").size()
+			if(totalInstances<=avaliableInstances){
+				deploymentService.deploy(cluster, user, params.instances, params.RAM, params.cores, params.time)
+				redirect(controller:"deployment")
+			}
+			else{
+				flash.message="Instance limit exceeded"
+				redirect( controller: "cluster",action: "deployOptions", id:cluster.id )
+			}
 		}
-		else{
-			flash.message="Cluster already deployed"
-			redirect( controller: "cluster",action: "index" )
-		}
+		
+		
 	
 	}
 	
