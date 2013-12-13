@@ -15,7 +15,7 @@ import java.util.zip.ZipInputStream;
 import com.losandes.utils.VariableManager;
 
 public class VirtualMachineImageManager {
-	static String machineRepository="D:\\GRID\\";
+	static String machineRepository="E:\\GRID\\";
 	static List<VirtualMachineImage> imageList=new ArrayList<>();
 	public synchronized static VirtualMachineImage getFreeImageCopy(long imageId){
 		for(VirtualMachineImage vmi:imageList)if(vmi.getId()==imageId){

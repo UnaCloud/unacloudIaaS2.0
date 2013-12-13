@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import com.losandes.utils.Log;
 import com.losandes.utils.VariableManager;
 
 import java.net.ServerSocket;
@@ -51,11 +50,9 @@ public class ClouderClientAttention{
                 try {
                     poolExe.execute(new ClouderServerAttentionThread(serverSocket.accept()));
                 } catch (IOException ex) {
-                    Log.print("Can't process message " + localPort + " . " + ex.getLocalizedMessage());
                 }
             }
         } catch (IOException ex) {
-            Log.print("Can't open socket on the port " + localPort + ". " + ex.getLocalizedMessage());
         }
     }
 

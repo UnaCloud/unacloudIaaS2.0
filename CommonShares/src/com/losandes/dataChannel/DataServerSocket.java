@@ -6,7 +6,6 @@ package com.losandes.dataChannel;
 
 import com.losandes.fileTransfer.Destination;
 import com.losandes.utils.ByteUtils;
-import com.losandes.utils.Log;
 import com.losandes.utils.VariableManager;
 import java.io.IOException;
 import java.io.InputStream;
@@ -94,10 +93,8 @@ public class DataServerSocket {
      * @return The Socket representing the data transfer with ID id.
      */
     public static Socket accept(long id) {
-        Log.print("DSS accept " + id);
         while (!map.containsKey(id)) {
             try {
-                Log.print("Dormir ");
                 synchronized (map) {
                     map.wait();
                 }

@@ -1,6 +1,7 @@
 package back.deployers
 
 import javassist.bytecode.stackmap.BasicBlock.Catch;
+import back.services.VariableManagerService;
 
 import com.losandes.utils.Constants;
 
@@ -11,6 +12,8 @@ import unacloud2.*;
 class DeployerService {
 	
 	TransferService transferService
+	
+	VariableManagerService variableManagerService
 	
 	static transactional = false
 	
@@ -54,7 +57,7 @@ class DeployerService {
 				println "String pmIp=vm.executionNode.ip.ip;"
 				println vmsm
 				try{
-					Socket s=new Socket(pmIp,81);
+					Socket s=new Socket(pmIp,variableManagerService.getIntValue("CLOUDER_CLIENT_PORT"));
 					ObjectOutputStream oos=new ObjectOutputStream(s.getOutputStream());
 					ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
 					oos.writeObject(vmsm);
