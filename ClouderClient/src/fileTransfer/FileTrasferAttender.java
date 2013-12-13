@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.losandes.utils.Log;
 import communication.UnaCloudMessage;
 import communication.security.utils.AbstractCommunicator;
 import communication.security.utils.ConnectionException;
@@ -31,7 +30,6 @@ public class FileTrasferAttender {
      * @param abc The abstract communicator used to attend the request
      */
     public static void attendFileOperation(UnaCloudMessage message,AbstractCommunicator abc){
-        Log.print(message.toString());
         //message[0] = PHYSICAL MACHINE OPERATION
         //message[1] = PM_WRITE_FILE
         //message[2] = TIPO TRANSFERENCIA
@@ -87,8 +85,6 @@ public class FileTrasferAttender {
             File c = new File(ruta);
             if(ruta.endsWith("lck")){
                 deleteFolder(c.getParentFile());
-            }else{
-                if(c.isFile()&&c.delete())Log.print("borrado "+ruta);
             }
         }
     }

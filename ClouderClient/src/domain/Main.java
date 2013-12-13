@@ -4,8 +4,6 @@ import static com.losandes.utils.Constants.LOGIN_DB;
 import static com.losandes.utils.Constants.TURN_ON_DB;
 import hypervisorManager.HypervisorFactory;
 
-import java.util.Arrays;
-
 import monitoring.PhysicalMachineMonitor;
 import monitoring.PhysicalMachineState;
 import monitoring.PhysicalMachineStateReporter;
@@ -13,7 +11,6 @@ import physicalmachine.OperatingSystem;
 import virtualMachineManager.PersistentExecutionManager;
 
 import com.losandes.dataChannel.DataServerSocket;
-import com.losandes.utils.Log;
 import com.losandes.utils.VariableManager;
 
 import communication.ClouderClientAttention;
@@ -30,9 +27,8 @@ public class Main {
      * @param args[0] = {0 = TURN_OFF_DB, 1 = TURN_ON_DB , 2 = LOGIN_DB, 3 = LOGOUT_DB}
      */
     public static void main(String[] args){
-        VariableManager.init("./vars");
+        VariableManager.init();
         HypervisorFactory.registerHypervisors();
-        Log.print("Inicio "+Arrays.toString(args));
         int mainCase = 1;
         if (args != null && args.length>0 && !args[0].matches("[0-9]+"))mainCase = Integer.parseInt(args[0]);
         

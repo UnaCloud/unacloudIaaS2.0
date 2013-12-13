@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.TreeMap;
-import com.losandes.utils.Log;
 import com.losandes.utils.VariableManager;
 /**
  * This class is responsible for managing Tree Based File Transfer channels.
@@ -35,7 +34,6 @@ public class TreeDistributionChannelManager {
                     ss = new ServerSocket(VariableManager.getIntValue("FILE_TRANSFER_SOCKET"));
                     while(true){
                         Socket s = ss.accept();
-                        Log.print("recibiendoArchivo");
                         DataInputStream dis = new DataInputStream(new BufferedInputStream(s.getInputStream(),1024*100));
                         long id = dis.readLong();
                         TransferenciaArchivo T = transfers.get(id);

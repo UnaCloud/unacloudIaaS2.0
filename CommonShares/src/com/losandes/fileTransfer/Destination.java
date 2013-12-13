@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.losandes.fileTransfer;
 
 import java.io.DataInputStream;
@@ -13,7 +8,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.losandes.utils.Log;
 import java.util.Arrays;
 
 /**
@@ -79,23 +73,17 @@ public class Destination {
      */
     public void connect(){
         try {
-            Log.print("Conectando con "+ipDestino);
             s = new Socket(ipDestino,FILE_TRANSFER_SOCKET);
             outFile = new DataOutputStream(new AsynchronusOutputStream(s.getOutputStream(),100));
             inFile=new DataInputStream(s.getInputStream());
             outFile.writeLong(id);
             outFile.flush();
-            Log.print("Flush long, reading "+id);
             cent = inFile.readLong();
-            Log.print("Long readed");
             conectado=true;
-            Log.print("Conectado con "+ipDestino);
         } catch (UnknownHostException ex){
             ex.printStackTrace();
-            Log.print("1.Se cayo la conexion con "+ipDestino+" "+FILE_TRANSFER_SOCKET+" "+ex.getMessage());
             conectado=false;
         } catch (IOException ex) {
-            Log.print("2.Se cayo la conexion con "+ipDestino+" "+FILE_TRANSFER_SOCKET+" "+ex.getMessage());
             ex.printStackTrace();
             conectado=false;
         }
@@ -150,7 +138,6 @@ public class Destination {
             try{
                 outFile.close();
             }catch (IOException ex2){}
-            Log.print("3.Se cayo la conexion con "+ipDestino+" "+ex.getMessage());
             conectado=false;
         }
     }

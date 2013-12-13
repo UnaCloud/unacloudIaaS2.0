@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package fileTransfer;
 
 import com.losandes.fileTransfer.Destination;
@@ -15,7 +10,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import physicalmachine.Network;
-import com.losandes.utils.Log;
 
 /**
  *
@@ -36,7 +30,6 @@ public class TransferenciaArchivo {
     File archivo;
     public TransferenciaArchivo(String[] ipDestinos,long idTransferencia,int nParticiones,File archivo,long tamano)throws IOException{
         this.archivo=archivo;
-        Log.print("Abrir transfernecia "+idTransferencia+" "+archivo+" "+Arrays.toString(ipDestinos));
         this.idTransferencia=idTransferencia;
         destinos=crearDestinos(ipDestinos, nParticiones);
         archivo.getParentFile().mkdirs();
@@ -46,27 +39,21 @@ public class TransferenciaArchivo {
     }
 
     public void connect(Socket s,DataInputStream dis){
-        Log.print("Abrir transfernecia "+idTransferencia);
         if(conected)return;
         try {
             this.s = s;
             this.dis = dis;
-            Log.print("Escribiendo long");
             dos = new DataOutputStream(s.getOutputStream());
             dos.writeLong(cent);
             dos.flush();
-            Log.print("Long escrito");
             conected=true;
-            Log.print("conectando con destinos");
             if(!dtCnt){
                 for(Destination d:destinos)d.connect();
                 dtCnt=true;
             }
-            Log.print("destinos conectados");
             recibirArchivo();
             conected=false;
         } catch (IOException ex) {
-            Log.print(ex.getMessage());
             conected=false;
         }
     }
@@ -91,23 +78,16 @@ public class TransferenciaArchivo {
                 cent+=e;
                 if(cent==tamano)break;
             }
-            Log.print("ArchivoRecibido");
             rafarchivo.close();
-            Log.print("ArchivoRecibido");
-            Log.print("Esperando destinos");
             String h = "";
             for(Destination d:destinos){
-                Log.print("Esperando "+d.getIpDestino());
                 h+=d.waitCompletation()+":";
                 d.close();
             }
-            Log.print("Escrito");
             dos.writeUTF(h+Network.getHostname());
-            Log.print("Flush");
             dos.flush();
             s.close();
         } catch (IOException ex) {
-            Log.print("Error "+ex.getMessage());
             //cerrar hijos y padre
         }
     }

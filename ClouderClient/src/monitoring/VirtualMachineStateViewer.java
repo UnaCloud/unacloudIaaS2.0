@@ -9,8 +9,6 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.losandes.utils.Log;
-
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import virtualMachineManager.PersistentExecutionManager;
 
@@ -71,7 +69,6 @@ public class VirtualMachineStateViewer {
             File vmx = new File(vmPath);
             for(String h;i<e&&(h=br.readLine())!=null;i++){
                 if(new File(h).equals(vmx)){
-                    Log.print("true");
                     ret=true;
                     br.close();
                     p.destroy();

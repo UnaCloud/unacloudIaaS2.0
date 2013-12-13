@@ -1,12 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.losandes.dataChannel;
 
 import com.losandes.utils.ByteUtils;
-import com.losandes.utils.Log;
 import com.losandes.utils.VariableManager;
 import java.io.IOException;
 import java.net.Socket;
@@ -27,7 +21,6 @@ public class DataSocketConnection {
      * @throws IOException If there is an error on data socket request
      */
     public static Socket connect(String ip,long id) throws UnknownHostException, IOException{
-        Log.print("Conecting to "+ip+" : "+VariableManager.getIntValue("DATA_SOCKET"));
         Socket s = new Socket(ip,VariableManager.getIntValue("DATA_SOCKET"));
         s.getOutputStream().write(ByteUtils.longToBytes(id));
         return s;

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.losandes.utils;
 
 import java.io.BufferedReader;
@@ -13,39 +9,30 @@ import java.util.TreeMap;
 
 /**
  * Class responsible for manage system variables and stores its values
- * @author Clouder
  */
 public class VariableManager {
-
+	/**
+     * File used to persist variable values
+     */
+    private static File globalConfig=new File("vars");
+    
     /**
      * map used to save variables values. It is used to improve response time
      */
-    private final static Map<String, Object> map = new TreeMap<String, Object>() {
-        private static final long serialVersionUID = 795845389075916030L;
-		@Override
-        public Object put(String key, Object value) {
-            key = key.replace("=", "");
-            Object c = super.put(key, value);
-            saveChanges();
-            return c;
-        }
-    };
-    /**
-     * File used to persist variable values
-     */
-    private static File fileVars;
-
+    private final static Map<String, Object> globalMap = new TreeMap<String, Object>();
+    
     /**
      * Return the value of the string variable with the given key.
      * @param key The key that identify the variable
      * @return The value of the variable or null if there is no value for the given key
      */
     public static synchronized String getStringValue(String key) {
-        return (String) map.get("String." + key);
+        return (String) globalMap.get("String." + key);
     }
 
     public static synchronized void setStringValue(String key, String v) {
-        map.put("String." + key, v);
+    	globalMap.put("String." + key, v);
+    	saveChanges();
     }
 
     /**
@@ -54,39 +41,20 @@ public class VariableManager {
      * @return The value of the variable or null if there is no value for the given key
      */
     public static synchronized int getIntValue(String key) {
-        return (Integer) map.get("Integer." + key);
+        return (Integer) globalMap.get("Integer." + key);
     }
 
-    /**
-     *
-     * @param key
-     * @param v
-     */
     public static synchronized void setIntValue(String key, int v) {
-        map.put("Integer." + key, v);
-    }
-
-    /**
-     * Merges the state of this variable manager with the given map
-     * @param temp
-     */
-    public static synchronized void mergeValues(Map<String, String> temp) {
-        for (Map.Entry<String, String> e : temp.entrySet()) {
-            map.put(e.getKey(), e.getValue());
-        }
-        saveChanges();
+    	globalMap.put("Integer." + key, v);
+    	saveChanges();
     }
 
     /**
      * Stores the variables on the storage file.
      */
     private static void saveChanges() {
-        try {
-            PrintWriter pw = new PrintWriter(fileVars);
-            for (Map.Entry<String, Object> e : map.entrySet()) {
-                pw.println(e.getKey() + "=" + e.getValue());
-            }
-            pw.close();
+        try(PrintWriter pw = new PrintWriter(globalConfig)){
+            for (Map.Entry<String, Object> e : globalMap.entrySet())pw.println(e.getKey() + "=" + e.getValue());
         } catch (Exception e) {
         }
     }
@@ -95,24 +63,16 @@ public class VariableManager {
      * Inits this variable manager using the given file to manage its variables.
      * @param varsPath
      */
-    public static void init(String varsPath) {
-        if (fileVars == null) {
-            fileVars = new File(varsPath);
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(fileVars));
-                for (String h, j[]; (h = br.readLine()) != null;) {
-                    j = h.split("=");
-                    if (j[0].startsWith("String.")) {
-                        map.put(j[0], j[1]);
-                    } else if (j[0].startsWith("Integer.")) {
-                        map.put(j[0], Integer.parseInt(j[1]));
-                    }
-                }
-                br.close();
-            } catch (Exception e) {
-                System.err.println("El archivo vars no existe");
-            }
+    public static void init() {
+        try(BufferedReader br = new BufferedReader(new FileReader(globalConfig));) {
+            for (String h; (h = br.readLine()) != null;)processLine(globalMap,h);
+        } catch (Exception e) {
+            System.err.println("El archivo vars no existe");
         }
-
+    }
+    private static void processLine(Map<String,Object> map,String line){
+    	String[] j = line.split("=");
+        if (j[0].startsWith("String."))map.put(j[0], j[1]);
+        else if (j[0].startsWith("Integer."))map.put(j[0], Integer.parseInt(j[1]));
     }
 }
