@@ -4,7 +4,6 @@ import static com.losandes.utils.Constants.*;
 
 /**
  * Responsible for executing the physical machine state operations
- * @author Eduardo Rosales
  */
 public class PhysicalMachine {
 

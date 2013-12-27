@@ -9,6 +9,8 @@ import unacloud2.IPPool;
 import unacloud2.Laboratory;
 import unacloud2.NetworkQualityEnum;
 import unacloud2.OperatingSystem;
+import unacloud2.PhysicalMachine;
+import unacloud2.PhysicalMachineStateEnum;
 import unacloud2.ServerVariable
 import unacloud2.ServerVariableTypeEnum
 import unacloud2.User
@@ -23,21 +25,25 @@ class BootStrap {
 		println "starting ss"
 		DataServerSocket.startServices();
 		if(Laboratory.count() ==0){
-			IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.202.1', mask: '255.255.255.0').save()
-			virtualIpPool.ips= []
-			for(int i=0;i<39;i++){
-				def virtualIp= new IP(used:false, ip: ('157.253.202.'+(111+i)), ipPool: virtualIpPool).save()	
-				virtualIpPool.ips.add(virtualIp)
+			uniandes:{
+				IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.202.1', mask: '255.255.255.0').save()
+				virtualIpPool.ips= []
+				for(int i=0;i<39;i++){
+					def virtualIp= new IP(used:false, ip: ('157.253.202.'+(111+i)), ipPool: virtualIpPool).save()
+					virtualIpPool.ips.add(virtualIp)
+				}
+				virtualIpPool.save()
+				new Laboratory( virtualMachinesIPs: virtualIpPool, name: 'Wuaira 1', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS).save()
 			}
-			virtualIpPool.save()
-			new Laboratory( virtualMachinesIPs: virtualIpPool, name: 'Wuaira 1', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS).save()	
-		
+			
 	    }
 		if(Repository.count()==0){
 			new Repository(name: "Main Repository", capacity: 20, root: "C:\\images\\").save();
 		}
 		if(OperatingSystem.count() ==0){
-			new OperatingSystem(name:'Windows 7',configurer:'Windows').save()
+			new OperatingSystem(name:'Windows 8',configurer:'Windows').save()
+			OperatingSystem win7=new OperatingSystem(name:'Windows 7',configurer:'Windows')
+			win7.save()
 			new OperatingSystem(name:'Windows XP',configurer:'Windows').save()
 			new OperatingSystem(name:'Debian 6',configurer:'Debian').save();
 			new OperatingSystem(name:'Debian 7',configurer:'Debian').save();
@@ -45,6 +51,16 @@ class BootStrap {
 			new OperatingSystem(name:'Ubuntu 10',configurer:'Ubuntu').save();
 			new OperatingSystem(name:'Ubuntu 11',configurer:'Ubuntu').save();
 			new OperatingSystem(name:'Scientific Linux',configurer:'Linux').save();
+			test:{
+				IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.204.1', mask: '255.255.255.0').save()
+				virtualIpPool.ips= []
+				def virtualIp= new IP(used:false, ip: ('157.253.204.140'), ipPool: virtualIpPool).save()
+				virtualIpPool.ips.add(virtualIp)
+				virtualIpPool.save()
+				Laboratory labLocal=new Laboratory( virtualMachinesIPs: virtualIpPool, name: 'Local Test', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS)
+				labLocal.save()
+				new PhysicalMachine(cores: 2, highAvaliability: false, ip: new IP(used:true, ip: ('157.253.204.12')), mac: "AA:BB:CC:DD:EE", ram: 4096, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, withUser: false, name: "Asistente-PC", belongsTo: labLocal, )
+			}
 		}
 		if(ServerVariable.count() ==0){
 			new ServerVariable(name:'CLOUDER_SERVER_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable:'26').save()
