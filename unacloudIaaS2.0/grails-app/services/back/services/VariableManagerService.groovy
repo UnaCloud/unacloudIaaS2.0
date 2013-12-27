@@ -17,8 +17,7 @@ class VariableManagerService {
 	
 	def updateAgentVersion(){
 		ServerVariable agentVersion= ServerVariable.findByName("AGENT_VERSION")
-		int newVerNumber= ((agentVersion.getVariable()-"2.0.") as Integer)
-		newVerNumber++
+		int newVerNumber= ((agentVersion.getVariable()-"2.0.") as Integer)+1
 		String newVersion=  "2.0."+ newVerNumber
 		agentVersion.putAt("variable", newVersion)
 	}

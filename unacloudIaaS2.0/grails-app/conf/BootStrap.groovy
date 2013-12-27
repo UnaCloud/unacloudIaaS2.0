@@ -1,6 +1,7 @@
-
+import back.services.DatabaseService;
 
 import com.losandes.utils.Constants;
+
 import fileManager.DataServerSocket;
 import unacloud2.Hypervisor;
 import unacloud2.IP
@@ -14,7 +15,7 @@ import unacloud2.User
 import unacloud2.Repository
 
 class BootStrap {
-
+	DatabaseService databaseService
     def init = { servletContext ->
 		if(User.count() ==0){
 			new User(name:'Guest',username:'admin',password:'admin', userType: 'Administrator').save()
@@ -68,7 +69,7 @@ class BootStrap {
 			new Hypervisor(name: Constants.VM_WARE_PLAYER, hypervisorVersion: "10").save()
 			
 		}
-		
+		databaseService.initDatabase()
 	}
     def destroy = {
     }
