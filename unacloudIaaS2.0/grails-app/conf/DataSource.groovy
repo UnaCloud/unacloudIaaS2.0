@@ -32,10 +32,10 @@ environments {
     }
     test {
         dataSource {
-			username = "iaastest"
-			password = "cH01mEeDWAVkDonJA3FJ"
-            dbCreate = "update"
-            url = "jdbc:mysql://localhost:3306/iaas2test?useUnicode=yes&characterEncoding=UTF-8"
+			username = "iaasdev"
+			password = "2fsGR5T1vJV3mJ9QXaw4"
+            dbCreate = "create-drop"
+            url = "jdbc:mysql://157.253.204.12:100/iaas2dev?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
         }
     }
     production {
