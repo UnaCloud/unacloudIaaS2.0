@@ -23,9 +23,9 @@ class UnaCloudServicesController {
 	}
 	
 	def agent(){
-		def openAgain = new File('web-app/tmpfiles/agent.zip')
+		def openAgain = new File('web-app/agent.zip')
 		response.setContentType("application/zip")
-		response.setHeader("Content-disposition", "filename=${fileName}")
+		response.setHeader("Content-disposition", "filename=agent.zip")
 		
 		response.outputStream << openAgain.getBytes()
 		response.outputStream.flush()
