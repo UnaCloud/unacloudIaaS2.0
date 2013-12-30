@@ -36,7 +36,7 @@ public class AbstractGrailsCommunicator{
 	public static void getAgentZip(PrintWriter versionFile){
 		final String serverUrl=VariableManager.getStringValue("SERVER_URL");
 		try {
-			URL url=new URL(serverUrl+"/agent.zip");
+			URL url=new URL(serverUrl+"/UnaCloudServices/agent");
 			HttpURLConnection http = (HttpURLConnection)url.openConnection();
 			http.setRequestMethod("GET");
 			http.connect();

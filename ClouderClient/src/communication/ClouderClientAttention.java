@@ -36,7 +36,7 @@ public class ClouderClientAttention{
      */
     private ClouderClientAttention() {
         poolExe = Executors.newFixedThreadPool(POOL_THREAD_SIZE);
-        localPort = VariableManager.getIntValue("CLOUDER_CLIENT_PORT");
+        localPort = VariableManager.global.getIntValue("CLOUDER_CLIENT_PORT");
         
     }
 

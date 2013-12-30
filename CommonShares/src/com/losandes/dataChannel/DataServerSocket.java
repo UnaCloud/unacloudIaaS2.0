@@ -40,8 +40,8 @@ public class DataServerSocket {
     public static void init() {
         try {
             if (ss == null) {
-                ss = new ServerSocket(VariableManager.getIntValue("DATA_SOCKET"));
-                Destination.FILE_TRANSFER_SOCKET=VariableManager.getIntValue("FILE_TRANSFER_SOCKET");
+                ss = new ServerSocket(VariableManager.global.getIntValue("DATA_SOCKET"));
+                Destination.FILE_TRANSFER_SOCKET=VariableManager.global.getIntValue("FILE_TRANSFER_SOCKET");
                 new Thread() {
 
                     @Override

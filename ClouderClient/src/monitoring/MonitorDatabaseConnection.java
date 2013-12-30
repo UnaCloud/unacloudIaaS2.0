@@ -22,10 +22,10 @@ public class MonitorDatabaseConnection {
     }
     private static Connection generateConnection() throws SQLException {
         Connection conexion;
-        String ip = VariableManager.getStringValue("MONITORING_SERVER_IP");
-        String name = VariableManager.getStringValue("MONITORING_DATABASE_NAME");
-        String user = VariableManager.getStringValue("MONITORING_DATABASE_USER");
-        String password = VariableManager.getStringValue("MONITORING_DATABASE_PASSWORD");
+        String ip = VariableManager.global.getStringValue("MONITORING_SERVER_IP");
+        String name = VariableManager.global.getStringValue("MONITORING_DATABASE_NAME");
+        String user = VariableManager.global.getStringValue("MONITORING_DATABASE_USER");
+        String password = VariableManager.global.getStringValue("MONITORING_DATABASE_PASSWORD");
         String url = "jdbc:mysql://" + ip + ":3306/" + name;
         conexion = DriverManager.getConnection(url, user, password);
         conexion.setAutoCommit(false);

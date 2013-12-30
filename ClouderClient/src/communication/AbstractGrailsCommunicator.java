@@ -13,7 +13,7 @@ import com.losandes.utils.VariableManager;
 
 public class AbstractGrailsCommunicator{
 	public static boolean pushInfo(String serviceName,Object...params){
-		final String serverUrl=VariableManager.getStringValue("SERVER_URL");
+		final String serverUrl=VariableManager.global.getStringValue("SERVER_URL");
 		try {
 			String urlParams=null;
 			for(int e=0,i=params.length;e<i;e+=2)urlParams=(urlParams==null?"?":(urlParams+"&"))+params[e]+"="+params[e+1];
@@ -30,7 +30,7 @@ public class AbstractGrailsCommunicator{
 		return true;
 	}
 	public static String doRequest(String serviceName,String message){
-		final String serverUrl=VariableManager.getStringValue("SERVER_URL");
+		final String serverUrl=VariableManager.global.getStringValue("SERVER_URL");
 		String ret="";
 		try {
 			URL url=new URL(serverUrl+"/"+serviceName+"?type=2");

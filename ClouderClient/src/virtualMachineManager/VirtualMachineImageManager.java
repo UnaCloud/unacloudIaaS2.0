@@ -27,7 +27,7 @@ public class VirtualMachineImageManager {
 		VirtualMachineImage vmi=new VirtualMachineImage();
 		File root=new File(machineRepository+"\\"+imageId);
 		root.mkdirs();
-		try(Socket s=new Socket(VariableManager.getStringValue("CLOUDER_SERVER_IP"),3020);PrintWriter pw=new PrintWriter(s.getOutputStream())){
+		try(Socket s=new Socket(VariableManager.global.getStringValue("CLOUDER_SERVER_IP"),3020);PrintWriter pw=new PrintWriter(s.getOutputStream())){
 			pw.println(imageId);
 			pw.flush();
 			try(ZipInputStream zis=new ZipInputStream(s.getInputStream())){

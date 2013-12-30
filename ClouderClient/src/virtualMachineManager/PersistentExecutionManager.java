@@ -133,15 +133,19 @@ public class PersistentExecutionManager {
      */
     @SuppressWarnings("unchecked")
 	public static void loadData(){
-    	Map<Long,VirtualMachineExecution> executions=null;
-    	List<VirtualMachineImage> images=null;
-        try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream(executionsFile))){
-        	executions=(Map<Long,VirtualMachineExecution>)ois.readObject();
-        	images=(List<VirtualMachineImage>)ois.readObject();
-        	if(executions!=null&&images!=null){
-            	executionList=executions;
-            	VirtualMachineImageManager.imageList=images;
-            }else saveData();
-        } catch (Exception ex){}
+    	new Thread(){
+    		public void run() {
+    			Map<Long,VirtualMachineExecution> executions=null;
+    	    	List<VirtualMachineImage> images=null;
+    	        try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream(executionsFile))){
+    	        	executions=(Map<Long,VirtualMachineExecution>)ois.readObject();
+    	        	images=(List<VirtualMachineImage>)ois.readObject();
+    	        	if(executions!=null&&images!=null){
+    	            	executionList=executions;
+    	            	VirtualMachineImageManager.imageList=images;
+    	            }else saveData();
+    	        } catch (Exception ex){}
+    		};
+    	}.start();
     }
 }

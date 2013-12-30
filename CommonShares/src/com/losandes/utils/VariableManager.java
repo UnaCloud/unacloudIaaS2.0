@@ -11,27 +11,36 @@ import java.util.TreeMap;
  * Class responsible for manage system variables and stores its values
  */
 public class VariableManager {
+	
+	public static final VariableManager global=new VariableManager("vars");
+	public static final VariableManager local=new VariableManager("local");
+	
 	/**
-     * File used to persist variable values
+     * File used to persist global variable values
      */
-    private static File globalConfig=new File("vars");
+    private File configFile;
     
     /**
      * map used to save variables values. It is used to improve response time
      */
-    private final static Map<String, Object> globalMap = new TreeMap<String, Object>();
+    private final Map<String, Object> map = new TreeMap<String, Object>();
     
-    /**
+    public VariableManager(String configFile){
+		this.configFile = new File(configFile);
+		init();
+	}
+
+	/**
      * Return the value of the string variable with the given key.
      * @param key The key that identify the variable
      * @return The value of the variable or null if there is no value for the given key
      */
-    public static synchronized String getStringValue(String key) {
-        return (String) globalMap.get("String." + key);
+    public synchronized String getStringValue(String key) {
+        return (String) map.get("String." + key);
     }
 
-    public static synchronized void setStringValue(String key, String v) {
-    	globalMap.put("String." + key, v);
+    public synchronized void setStringValue(String key, String v) {
+    	map.put("String." + key, v);
     	saveChanges();
     }
 
@@ -40,21 +49,36 @@ public class VariableManager {
      * @param key The key that identify the variable
      * @return The value of the variable or null if there is no value for the given key
      */
-    public static synchronized int getIntValue(String key) {
-        return (Integer) globalMap.get("Integer." + key);
+    public synchronized int getIntValue(String key) {
+        return (Integer) map.get("Integer." + key);
     }
 
-    public static synchronized void setIntValue(String key, int v) {
-    	globalMap.put("Integer." + key, v);
+    public synchronized void setIntValue(String key, int v) {
+    	map.put("Integer." + key, v);
+    	saveChanges();
+    }
+    
+    /**
+     * Return the value of the Boolean variable with the given key.
+     * @param key The key that identify the variable
+     * @return The value of the variable or null if there is no value for the given key
+     */
+    public synchronized boolean getBooleanValue(String key) {
+    	Object r=map.get("Boolean." + key);
+        return r!=null&&(Boolean) r;
+    }
+
+    public synchronized void setBooleanValue(String key, boolean v) {
+    	map.put("Boolean." + key, v);
     	saveChanges();
     }
 
     /**
      * Stores the variables on the storage file.
      */
-    private static void saveChanges() {
-        try(PrintWriter pw = new PrintWriter(globalConfig)){
-            for (Map.Entry<String, Object> e : globalMap.entrySet())pw.println(e.getKey() + "=" + e.getValue());
+    private void saveChanges() {
+        try(PrintWriter pw = new PrintWriter(configFile)){
+            for (Map.Entry<String, Object> e : map.entrySet())pw.println(e.getKey() + "=" + e.getValue());
         } catch (Exception e) {
         }
     }
@@ -63,9 +87,9 @@ public class VariableManager {
      * Inits this variable manager using the given file to manage its variables.
      * @param varsPath
      */
-    public static void init() {
-        try(BufferedReader br = new BufferedReader(new FileReader(globalConfig));) {
-            for (String h; (h = br.readLine()) != null;)processLine(globalMap,h);
+    private void init() {
+        try(BufferedReader br = new BufferedReader(new FileReader(configFile));) {
+            for (String h; (h = br.readLine()) != null;)processLine(map,h);
         } catch (Exception e) {
             System.err.println("El archivo vars no existe");
         }
@@ -74,5 +98,6 @@ public class VariableManager {
     	String[] j = line.split("=");
         if (j[0].startsWith("String."))map.put(j[0], j[1]);
         else if (j[0].startsWith("Integer."))map.put(j[0], Integer.parseInt(j[1]));
+        else if (j[0].startsWith("Boolean."))map.put(j[0], Boolean.parseBoolean(j[1]));
     }
 }

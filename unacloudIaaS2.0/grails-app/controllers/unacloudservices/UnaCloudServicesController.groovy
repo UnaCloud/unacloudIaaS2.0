@@ -1,5 +1,6 @@
 package unacloudservices
 
+import back.services.AgentService;
 import back.services.LogService;
 import back.services.PhysicalMachineStateManagerService;
 import back.services.VariableManagerService;
@@ -7,6 +8,7 @@ import back.services.VariableManagerService;
 class UnaCloudServicesController {
 	PhysicalMachineStateManagerService physicalMachineStateManagerService;
 	VariableManagerService variableManagerService;
+	AgentService agentService;
 	LogService logService;
     def clouderClientAttention(){
 		println params.type
@@ -14,7 +16,7 @@ class UnaCloudServicesController {
 		render "Succeded"
 	}
 	def agentVersion(){
-		variableManagerService.getStringValue("AGENT_VERSION");
+		render variableManagerService.getStringValue("AGENT_VERSION");
 	}
 	
 	def updateAgentVersion(){
@@ -23,11 +25,15 @@ class UnaCloudServicesController {
 	}
 	
 	def agent(){
-		def openAgain = new File('web-app/agent.zip')
 		response.setContentType("application/zip")
 		response.setHeader("Content-disposition", "filename=agent.zip")
-		
-		response.outputStream << openAgain.getBytes()
+		agentService.copyAgentOnStream(response.outputStream)
+		response.outputStream.flush()
+	}
+	def updater(){
+		response.setContentType("application/zip")
+		response.setHeader("Content-disposition", "filename=updater.zip")
+		agentService.copyUpdaterOnStream(response.outputStream)
 		response.outputStream.flush()
 	}
 	def logMessage(){

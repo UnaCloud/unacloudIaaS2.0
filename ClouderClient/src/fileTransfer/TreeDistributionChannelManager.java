@@ -31,7 +31,7 @@ public class TreeDistributionChannelManager {
             @Override
             public void run() {
                 try {
-                    ss = new ServerSocket(VariableManager.getIntValue("FILE_TRANSFER_SOCKET"));
+                    ss = new ServerSocket(VariableManager.global.getIntValue("FILE_TRANSFER_SOCKET"));
                     while(true){
                         Socket s = ss.accept();
                         DataInputStream dis = new DataInputStream(new BufferedInputStream(s.getInputStream(),1024*100));

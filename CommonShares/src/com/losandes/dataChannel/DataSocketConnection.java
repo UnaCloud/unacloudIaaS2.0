@@ -21,7 +21,7 @@ public class DataSocketConnection {
      * @throws IOException If there is an error on data socket request
      */
     public static Socket connect(String ip,long id) throws UnknownHostException, IOException{
-        Socket s = new Socket(ip,VariableManager.getIntValue("DATA_SOCKET"));
+        Socket s = new Socket(ip,VariableManager.global.getIntValue("DATA_SOCKET"));
         s.getOutputStream().write(ByteUtils.longToBytes(id));
         return s;
     }
