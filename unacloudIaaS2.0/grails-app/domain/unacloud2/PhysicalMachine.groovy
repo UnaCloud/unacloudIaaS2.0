@@ -15,6 +15,6 @@ class PhysicalMachine {
 	PhysicalMachineStateEnum state
 	OperatingSystem operatingSystem
 	Date lastReport
-	
+	//Laboratory laboratory;
 	static belongsTo =[laboratory: Laboratory]
 }

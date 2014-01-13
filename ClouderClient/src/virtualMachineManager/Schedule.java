@@ -17,6 +17,7 @@ public class Schedule extends TimerTask {
      * Responsible for un-deploying a virtual machine execution in an executionTime
      */
     public void run(){
+    	System.out.println("Schedule apagando "+executionId);
     	PersistentExecutionManager.removeExecution(executionId,true);
     }
 }

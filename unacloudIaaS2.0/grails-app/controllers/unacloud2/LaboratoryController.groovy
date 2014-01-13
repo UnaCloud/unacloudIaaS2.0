@@ -63,6 +63,16 @@ class LaboratoryController {
 		}
 		redirect( action: "index")
 	}
-	
+	def stopMachines(){
+		params.each {
+			if (it.key.contains("machine")){
+				if(it.value.contains("on")){
+					PhysicalMachine pm= PhysicalMachine.get((it.key - "machine") as Integer)
+					agentService.stopMachine(pm)
+				}
+			}
+		}
+		redirect( action: "index")
+	}
 	
 }

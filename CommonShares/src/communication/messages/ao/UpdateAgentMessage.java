@@ -1,5 +1,7 @@
 package communication.messages.ao;
 
+import java.io.Serializable;
+
 import communication.messages.AgentMessage;
 
 public class UpdateAgentMessage extends AgentMessage{

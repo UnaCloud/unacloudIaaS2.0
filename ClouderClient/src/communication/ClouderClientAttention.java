@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import com.losandes.utils.VariableManager;
 
 import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Responsible for listening to the Clouder Server
@@ -45,14 +46,27 @@ public class ClouderClientAttention{
      */
     public final void connect() {
         try {
-                serverSocket = new ServerSocket(localPort);
-            while (true) {
-                try {
-                    poolExe.execute(new ClouderServerAttentionThread(serverSocket.accept()));
-                } catch (IOException ex) {
-                }
-            }
+			serverSocket = new ServerSocket(localPort);
+			System.out.println("Escuchando en "+localPort);
+	        while (true) {
+	        	Socket s;
+	            try {
+	            	s=serverSocket.accept();
+	            	System.out.println("Atendiendo");
+	            } catch (IOException ex) {
+	            	ex.printStackTrace();
+	            	break;
+	            }
+	            try {
+	            	poolExe.execute(new ClouderServerAttentionThread(s));
+	            } catch (Exception ex) {
+	            	ex.printStackTrace();
+	            	break;
+	            }
+                
+	        }
         } catch (IOException ex) {
+        	ex.printStackTrace();
         }
     }
 
@@ -61,7 +75,7 @@ public class ClouderClientAttention{
      */
     public static void close() {
         try {
-                instance.serverSocket.close();
+            instance.serverSocket.close();
         } catch (Exception e) {
         }
     }

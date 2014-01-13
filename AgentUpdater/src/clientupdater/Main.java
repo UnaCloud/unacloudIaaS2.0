@@ -11,11 +11,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,7 +50,7 @@ public class Main {
         }
         if(opcion==1)doUpdate();
         try {
-            Runtime.getRuntime().exec("java -jar ClouderClient.jar "+opcion+"\"");
+            Runtime.getRuntime().exec(new String[]{"java","-jar","ClouderClient.jar",opcion+""});
         } catch (Throwable t) {
             System.out.println("EXE: "+t.getMessage());
         }
@@ -68,7 +65,7 @@ public class Main {
     	if(!versionsFile.get(0).equals(version)){
     		for (int e = 1; e < versionsFile.size(); e++) {
                 File c = new File(versionsFile.get(e));
-                if (c.exists())c.delete();
+                if (c.exists()&&!c.getName().equals("vars")&&!c.getName().equals("ClientUpdater.jar"))c.delete();
             }
     		try(PrintWriter versionFile = new PrintWriter(new FileOutputStream(versions),false)){
     			versionFile.println(version);
@@ -81,7 +78,7 @@ public class Main {
     	}
     }
     /**
-     * Rrturns the information contained on stored version file.
+     * Returns the information contained on stored version file.
      * @return
      */
     private static ArrayList<String> gerVersionFile() {

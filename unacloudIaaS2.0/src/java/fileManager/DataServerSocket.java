@@ -6,24 +6,25 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class DataServerSocket extends Thread{
-	private DataServerSocket(){}
 	private static DataServerSocket instance;
 	private ExecutorService threadPool=Executors.newSingleThreadExecutor();
-	public static void startServices(){
+	private int listenPort;
+	public DataServerSocket(int listenPort) {
+		this.listenPort = listenPort;
+	}
+	public static void startServices(int port){
 		if(instance==null){
-			instance=new DataServerSocket();
+			instance=new DataServerSocket(port);
 			instance.start();
 		}
 	}
 	@Override
 	public void run(){
-		try(ServerSocket ss = new ServerSocket(3020)){
+		System.out.println("starting ss on port "+listenPort);
+		try(ServerSocket ss = new ServerSocket(listenPort)){
 			while(true)threadPool.submit(new FileTransferTask(ss.accept()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	public static void main(String[] args) {
-		new DataServerSocket().start();
 	}
 }

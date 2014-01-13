@@ -11,11 +11,11 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/CommonShares"/>
 	<classpathentry exported="true" kind="lib" path="lib/sigar-bin/lib/log4j.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/sigar-bin/lib/sigar.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/nsclient4j.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/mysql-connector-java-5.1.18-bin.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/sigar-bin"/>
+	<classpathentry kind="lib" path="/Unacloud2/lib/commonshares.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

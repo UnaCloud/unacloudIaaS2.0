@@ -10,8 +10,9 @@
   <tr class="info">
   	<td class="info" colspan="12">
   	<input type="checkbox" id="selectAll"><small>&nbsp;Select All</small>
-  	<g:link controller="laboratory" action="createMachine" params="${[id: lab.id]}"><i class="icon-plus-sign pull-right"></i></g:link>
-  	<g:actionSubmitImage value="refresh" src="${resource(dir: 'images', file: 'empty.gif')}" action="updateMachines" class="icon-refresh pull-right"/>
+  	<g:link controller="laboratory" action="createMachine" params="${[id: lab.id]}" title="Create PM"><i class="icon-plus-sign pull-right"></i></g:link>
+  	<g:actionSubmitImage value="refresh" src="${resource(dir: 'images', file: 'empty.gif')}" action="updateMachines" title="Update agents" class="icon-refresh pull-right"/>
+  	<g:actionSubmitImage value="stop" src="${resource(dir: 'images', file: 'empty.gif')}" action="stopMachines" title="Stop agents" class="icon-stop pull-right"/>
   	</td>
   </tr>
   

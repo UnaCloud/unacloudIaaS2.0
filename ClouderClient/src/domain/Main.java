@@ -1,13 +1,17 @@
 package domain;
 
 import static com.losandes.utils.Constants.*;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+
 import hypervisorManager.HypervisorFactory;
 import monitoring.PhysicalMachineMonitor;
 import monitoring.PhysicalMachineState;
 import monitoring.PhysicalMachineStateReporter;
 import virtualMachineManager.PersistentExecutionManager;
 
-import com.losandes.dataChannel.DataServerSocket;
 import com.losandes.utils.VariableManager;
 
 import communication.ClouderClientAttention;
@@ -25,7 +29,13 @@ public class Main {
      */
     public static void main(String[] args){
         HypervisorFactory.registerHypervisors();
-        
+        try {
+        	PrintStream ps=new PrintStream(new FileOutputStream("log.txt"),true);
+			System.setOut(ps);
+			System.setErr(ps);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
         int mainCase = 1;
         if (args != null && args.length>0 && !args[0].matches("[0-9]+"))mainCase = Integer.parseInt(args[0]);
         
@@ -37,7 +47,7 @@ public class Main {
         else if(mainCase==TURN_ON_DB){
         	PhysicalMachineState.reportPhyisicalMachineStart();
         	PhysicalMachineMonitor.restart();
-            DataServerSocket.init();
+            //DataServerSocket.init();
             new PhysicalMachineStateReporter().start();
             PersistentExecutionManager.loadData();
             new TreeDistributionChannelManager();

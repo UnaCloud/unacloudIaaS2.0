@@ -28,9 +28,8 @@ public class Windows7 extends AbstractVirtualMachineConfigurator{
 		
 	}
 	@Override
-	public void doPostConfigure() {
-		// TODO Auto-generated method stub
-		
+	public boolean doPostConfigure() {
+		return false;
 	}
     
 }

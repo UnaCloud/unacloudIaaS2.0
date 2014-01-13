@@ -24,10 +24,14 @@ public class VirtualMachineImageManager {
 		return getImageFiles(imageId);
 	}
 	private static VirtualMachineImage getImageFiles(long imageId){
+		System.out.println("getImageFiles "+imageId);
 		VirtualMachineImage vmi=new VirtualMachineImage();
 		File root=new File(machineRepository+"\\"+imageId);
 		root.mkdirs();
-		try(Socket s=new Socket(VariableManager.global.getStringValue("CLOUDER_SERVER_IP"),3020);PrintWriter pw=new PrintWriter(s.getOutputStream())){
+		final int puerto = VariableManager.global.getIntValue("DATA_SOCKET");
+		final String ip=VariableManager.global.getStringValue("CLOUDER_SERVER_IP");
+		System.out.println("Conetando a  "+ip+" en puerto "+puerto);
+		try(Socket s=new Socket(ip,puerto);PrintWriter pw=new PrintWriter(s.getOutputStream())){
 			pw.println(imageId);
 			pw.flush();
 			try(ZipInputStream zis=new ZipInputStream(s.getInputStream())){
@@ -56,10 +60,10 @@ public class VirtualMachineImageManager {
 			}catch(Exception e){
 				e.printStackTrace();
 			}
+			imageList.add(vmi);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		imageList.add(vmi);
 		return vmi;
 	}
 }

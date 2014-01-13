@@ -85,18 +85,22 @@ public class PersistentExecutionManager {
     /**
      * Starts and configures a virtual machine. this method must be used by other methods to configure, start and schedule a virtual machine execution
      * @param turnOnMessage
+     * @param started Parameter that tell if the VM is already on and should not be started again. 
      * @return
      */
-    public static String startUpMachine(VirtualMachineExecution execution){
+    public static String startUpMachine(VirtualMachineExecution execution,boolean started){
+    	System.out.println("Execution time: "+System.currentTimeMillis()+execution.getExecutionTime()*3600000);
     	execution.setShutdownTime(System.currentTimeMillis()+execution.getExecutionTime()*3600000);
         Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getHypervisorId());
         try {
-            v.startVirtualMachine(execution.getImage());
+            if(!started)v.startVirtualMachine(execution.getImage());
             executionList.put(execution.getId(),execution);
+            System.out.println("Apagando "+new Date(execution.getShutdownTime()+100));
             timer.schedule(new Schedule(execution.getId()),new Date(execution.getShutdownTime()+100));
             new VirtualMachineStateViewer(execution.getId(),v,execution.getIp());
         } catch (HypervisorOperationException e) {
-        	HypervisorFactory.getHypervisor(execution.getImage().getHypervisorId()).stopVirtualMachine(execution.getImage());
+        	e.printStackTrace();
+        	v.stopVirtualMachine(execution.getImage());
         	ServerMessageSender.reportVirtualMachineState(execution.getId(), VirtualMachineExecutionStateEnum.FAILED, e.getMessage());
             return ERROR_MESSAGE + e.getMessage();
         }

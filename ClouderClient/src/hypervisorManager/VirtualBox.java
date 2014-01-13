@@ -28,9 +28,6 @@ class VirtualBox extends Hypervisor {
     public void stopVirtualMachine(VirtualMachineImage image){
         sleep(2000);
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "controlvm", image.getVirtualMachineName(), "poweroff");
-        /*if (h.contains(ERROR_MESSAGE)) {
-            throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
-        }*/
     }
     @Override
 	public void registerVirtualMachine(VirtualMachineImage image){

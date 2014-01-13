@@ -1,21 +1,18 @@
 package virtualMachineConfiguration;
 
 import hypervisorManager.Hypervisor;
-import hypervisorManager.HypervisorFactory;
 import hypervisorManager.HypervisorOperationException;
 
 import java.io.File;
 import java.util.Random;
 
-import communication.ServerMessageSender;
-import communication.messages.vmo.VirtualMachineStartResponse;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import virtualMachineManager.PersistentExecutionManager;
 import virtualMachineManager.VirtualMachineExecution;
-import virtualMachineManager.VirtualMachineImage;
-import virtualMachineManager.VirtualMachineImageManager;
 
-public abstract class AbstractVirtualMachineConfigurator extends Thread{
+import communication.ServerMessageSender;
+
+public abstract class AbstractVirtualMachineConfigurator{
 	private static Random r=new Random();
 	Hypervisor hypervisor;
 	VirtualMachineExecution execution;
@@ -31,13 +28,7 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
 	void executeCommand(String command,String...args)throws HypervisorOperationException{
 		hypervisor.executeCommandOnMachine(execution.getImage(), command, args);
 	}
-	public abstract void configureHostname() throws HypervisorOperationException;
-	public abstract void configureIP() throws HypervisorOperationException;
-    public abstract void configureDHCP() throws HypervisorOperationException;
-    public abstract void configureHostTable() throws HypervisorOperationException;
-    public abstract void doPostConfigure();
-    @Override
-    public void run() {
+    public void start() {
     	ServerMessageSender.reportVirtualMachineState(execution.getId(), VirtualMachineExecutionStateEnum.CONFIGURING, "Configuring virtual machine");
         try {
     		hypervisor.registerVirtualMachine(execution.getImage());
@@ -51,10 +42,10 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
     		}
     		hypervisor.configureVirtualMachineHardware(execution.getCores(),execution.getMemory(),execution.getImage());
 			hypervisor.startVirtualMachine(execution.getImage());
+			waitTime(50000);
 		    configureHostname();
 		    configureIP();
-	        doPostConfigure();
-	        PersistentExecutionManager.startUpMachine(execution);
+	        PersistentExecutionManager.startUpMachine(execution,!doPostConfigure());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -69,33 +60,13 @@ public abstract class AbstractVirtualMachineConfigurator extends Thread{
 		if(!new File("temp").exists())new File("temp").mkdir();
 		return new File("temp/"+Math.abs(r.nextLong())+".txt");
 	}
-	
-	public static VirtualMachineStartResponse startVirtualMachine(VirtualMachineExecution machineExecution){
-		System.out.println("startVirtualMachine");
-		VirtualMachineImage image=VirtualMachineImageManager.getFreeImageCopy(machineExecution.getImageId());
-		machineExecution.setImage(image);
-		VirtualMachineStartResponse resp=new VirtualMachineStartResponse();
-		Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
-		try {
-			Class<?> configuratorClass=Class.forName("virtualMachineConfiguration."+image.getConfiguratorClass());
-			Object configuratorObject=configuratorClass.getConstructor().newInstance();
-			if(configuratorObject instanceof AbstractVirtualMachineConfigurator){
-				AbstractVirtualMachineConfigurator configurator=(AbstractVirtualMachineConfigurator)configuratorObject;
-				configurator.setHypervisor(hypervisor);
-				configurator.setExecution(machineExecution);
-				configurator.start();
-				resp.setState(VirtualMachineStartResponse.VirtualMachineState.STARTING);
-				resp.setMessage("Starting virtual machine...");
-			}else{
-				resp.setState(VirtualMachineStartResponse.VirtualMachineState.FAILED);
-				resp.setMessage("Invalid virtual machine configurator.");
-			}
-			
-		} catch (Exception e) {
-			resp.setState(VirtualMachineStartResponse.VirtualMachineState.FAILED);
-			resp.setMessage("Configurator class error: "+e.getMessage());
-		}
-		System.out.println(resp);
-		return resp;
-	}
+	public abstract void configureHostname() throws HypervisorOperationException;
+	public abstract void configureIP() throws HypervisorOperationException;
+    public abstract void configureDHCP() throws HypervisorOperationException;
+    public abstract void configureHostTable() throws HypervisorOperationException;
+    /**
+     * Returns true if the VM should be started again 
+     * @return
+     */
+    public abstract boolean doPostConfigure();
 }

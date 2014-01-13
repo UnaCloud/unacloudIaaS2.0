@@ -10,9 +10,10 @@ import java.net.Socket;
 
 import monitoring.PhysicalMachineMonitor;
 import physicalmachine.OperatingSystem;
-import virtualMachineConfiguration.AbstractVirtualMachineConfigurator;
+import virtualMachineConfiguration.VirtualMachineConfigurer;
 import virtualMachineManager.PersistentExecutionManager;
 import virtualMachineManager.VirtualMachineExecution;
+
 import communication.messages.AgentMessage;
 import communication.messages.InvalidOperationResponse;
 import communication.messages.PhysicalMachineOperationMessage;
@@ -21,8 +22,8 @@ import communication.messages.pmo.PhysicalMachineMonitorMessage;
 import communication.messages.pmo.PhysicalMachineTurnOnMessage;
 import communication.messages.vmo.VirtualMachineAddTimeMessage;
 import communication.messages.vmo.VirtualMachineRestartMessage;
-import communication.messages.vmo.VirtualMachineStopMessage;
 import communication.messages.vmo.VirtualMachineStartMessage;
+import communication.messages.vmo.VirtualMachineStopMessage;
 
 /**
  * Responsible for attending or discarding a Clouder
@@ -51,7 +52,8 @@ public class ClouderServerAttentionThread extends Thread {
      */
     public void run() {
         try(ObjectInputStream ois=new ObjectInputStream(communication.getInputStream());ObjectOutputStream oos=new ObjectOutputStream(communication.getOutputStream())){
-            UnaCloudAbstractMessage clouderServerRequest=(UnaCloudAbstractMessage)ois.readObject();
+        	UnaCloudAbstractMessage clouderServerRequest=(UnaCloudAbstractMessage)ois.readObject();
+            System.out.println(clouderServerRequest);
             switch (clouderServerRequest.getMainOp()) {
 		        case UnaCloudAbstractMessage.VIRTUAL_MACHINE_OPERATION:
 		            oos.writeObject(attendVirtualMachineOperation(clouderServerRequest,ois,oos));
@@ -60,7 +62,7 @@ public class ClouderServerAttentionThread extends Thread {
 		            attendPhysicalMachineOperation(clouderServerRequest);
 		            break;
 		        case UnaCloudAbstractMessage.AGENT_OPERATION:
-		                oos.writeObject(attendAgentOperation(clouderServerRequest));
+		            oos.writeObject(attendAgentOperation(clouderServerRequest));
 		            break;
 		        default:
 	                oos.writeObject(new InvalidOperationResponse("Opeartion "+clouderServerRequest.getMainOp()+" is invalid as main operation."));
@@ -82,7 +84,7 @@ public class ClouderServerAttentionThread extends Thread {
     private UnaCloudAbstractResponse attendVirtualMachineOperation(UnaCloudAbstractMessage message,ObjectInputStream ois,ObjectOutputStream pw) {
         switch (message.getSubOp()) {
             case VirtualMachineOperationMessage.VM_START:
-            	return AbstractVirtualMachineConfigurator.startVirtualMachine(VirtualMachineExecution.getFromStartVirtualMachineMessage((VirtualMachineStartMessage)message));
+            	return new VirtualMachineConfigurer(VirtualMachineExecution.getFromStartVirtualMachineMessage((VirtualMachineStartMessage)message)).startProcess();
             case VirtualMachineOperationMessage.VM_STOP:
                 return PersistentExecutionManager.removeExecution(((VirtualMachineStopMessage)message).getVirtualMachineExecutionId(),false);
             case VirtualMachineOperationMessage.VM_RESTART:
@@ -94,23 +96,41 @@ public class ClouderServerAttentionThread extends Thread {
         }
     }
     private String attendAgentOperation(UnaCloudAbstractMessage message) {
-            switch (message.getSubOp()) {
-                    case AgentMessage.UPDATE_OPERATION:
-                            ClouderClientAttention.close();
-                            try {
-                    Runtime.getRuntime().exec(new String[]{"javaw","-jar","ClientUpdater.jar","6"});
+        switch (message.getSubOp()) {
+            case AgentMessage.UPDATE_OPERATION:
+            	ClouderClientAttention.close();
+                try {
+        			Runtime.getRuntime().exec(new String[]{"javaw","-jar","ClientUpdater.jar","6"});
                 } catch (Exception e) {
                 }
-                System.exit(6);
+                new Thread(){
+                	public void run() {
+                		try {
+                			Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+                		System.exit(6);
+                	};
+                }.start();
                 return "successful";
-                    case AgentMessage.STOP_CLIENT:
-                            ClouderClientAttention.close();
-                            System.exit(0);
-                            return "successful";
-                    case AgentMessage.GET_VERSION:
-                            return "1.30";
-            }
-            return null;
+            case AgentMessage.STOP_CLIENT:
+                ClouderClientAttention.close();
+                new Thread(){
+                	public void run() {
+                		try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+                		System.exit(0);
+                	};
+                }.start();
+                return "successful";
+            case AgentMessage.GET_VERSION:
+                return "1.30";
+        }
+        return null;
     }
     /**
      * Method responsible for attending requests for operations over the
