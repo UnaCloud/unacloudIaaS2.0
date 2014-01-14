@@ -34,13 +34,13 @@ public abstract class AbstractVirtualMachineConfigurator{
     		hypervisor.registerVirtualMachine(execution.getImage());
     		if(!hypervisor.existsVirtualMachineSnapshot(execution.getImage(),"unacloudbase")){
     			//TODO También se puede tomar el snapshot luego de iniciar la máquina y ante de configurarla
-    			hypervisor.takeVirtualMachineSnapshot(execution.getImage(),"unacloudbase");
     			hypervisor.changeVirtualMachineMac(execution.getImage());
+        		hypervisor.takeVirtualMachineSnapshot(execution.getImage(),"unacloudbase");
     		}else{
     			//TODO Evaluar si hacerlo en el apagado porque es mas importante el tiempo de arranque.
     			hypervisor.restoreVirtualMachineSnapshot(execution.getImage(),"unacloudbase");
     		}
-    		hypervisor.configureVirtualMachineHardware(execution.getCores(),execution.getMemory(),execution.getImage());
+			hypervisor.configureVirtualMachineHardware(execution.getCores(),execution.getMemory(),execution.getImage());
 			hypervisor.startVirtualMachine(execution.getImage());
 			waitTime(50000);
 		    configureHostname();

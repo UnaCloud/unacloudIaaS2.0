@@ -5,14 +5,15 @@ import java.io.Serializable;
 
 public class VirtualMachineImage implements Serializable{
 	private static final long serialVersionUID = -2386734224180305694L;
+	
 	long id;
 	String virtualMachineName;
 	File mainFile;
 	String username;
 	String password;
-	
 	String configuratorClass;
 	String hypervisorId;
+	transient VirtualMachineImageStatus status=VirtualMachineImageStatus.FREE;
 	
 	public long getId() {
 		return id;
@@ -55,5 +56,11 @@ public class VirtualMachineImage implements Serializable{
 	}
 	public void setConfiguratorClass(String configuratorClass) {
 		this.configuratorClass = configuratorClass;
+	}
+	public VirtualMachineImageStatus getStatus() {
+		return status;
+	}
+	public void setStatus(VirtualMachineImageStatus status) {
+		this.status = status;
 	}
 }

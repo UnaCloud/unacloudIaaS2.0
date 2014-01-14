@@ -128,7 +128,6 @@ public class PersistentExecutionManager {
     private static void saveData(){
     	try(ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(executionsFile));){
         	oos.writeObject(executionList);
-        	oos.writeObject(VirtualMachineImageManager.imageList);
         }catch(Exception e){}
     }
     /**
@@ -146,7 +145,6 @@ public class PersistentExecutionManager {
     	        	images=(List<VirtualMachineImage>)ois.readObject();
     	        	if(executions!=null&&images!=null){
     	            	executionList=executions;
-    	            	VirtualMachineImageManager.imageList=images;
     	            }else saveData();
     	        } catch (Exception ex){}
     		};
