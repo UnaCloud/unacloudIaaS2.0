@@ -79,7 +79,7 @@ class UserController {
 	
 	def setValues(){
 		def user = User.findByUsername(params.oldUsername)
-		userService.setValues(user,params.username, params.password,params.name+" "+params.lastname, params.userType)
+		userService.setValues(user,params.username, params.name+" "+params.lastname, params.userType, params.password)
 		redirect(action:"index")
 	}
 	
