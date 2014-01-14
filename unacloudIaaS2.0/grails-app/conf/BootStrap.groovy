@@ -43,7 +43,6 @@ class BootStrap {
 					def ip=new IP(used:false, ip: ('157.253.202.'+(11+e)));
 					ip.save()
 					def pm=new PhysicalMachine(cores: 4, highAvaliability: false, hypervisorPath: "/", ip: ip, name: "ISC"+(201+e), mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, laboratory: labWaira1, lastReport: new Date(0));
-					pm.save();
 					labWaira1.physicalMachines.add(pm)
 				}
 				labWaira1.save()
@@ -62,26 +61,11 @@ class BootStrap {
 					def ip=new IP(used:false, ip: ('157.253.239.'+(11+e)));
 					ip.save();
 					def pm=new PhysicalMachine(cores: 4, highAvaliability: false, hypervisorPath: "/", ip: ip, name: "ISC"+(301+e), mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, laboratory: labWaira2, lastReport: new Date(0));
-					pm.save();
 					labWaira2.physicalMachines.add(pm)
 				}
 				labWaira2.save()
 			}
-			test:{
-				IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.204.1', mask: '255.255.255.0').save()
-				virtualIpPool.ips= []
-				def virtualIp= new IP(used:false, ip: ('157.253.204.'+(112)), ipPool: virtualIpPool).save()
-				virtualIpPool.ips.add(virtualIp)
-				virtualIpPool.save()
-				def labTest = new Laboratory( virtualMachinesIPs: virtualIpPool, name: 'Test', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS);
-				labTest.physicalMachines = []
-				def ip=new IP(used:false, ip: ('157.253.204.'+(12)));
-				ip.save()
-				def pm=new PhysicalMachine(cores: 2, highAvaliability: false, hypervisorPath: "/", ip: ip, name: "Gasotelo", mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, lastReport: new Date(0));
-				labTest.physicalMachines.add(pm)
-				pm.save();
-				labTest.save()
-			}
+			
 	    }
 		if(Repository.count()==0){
 			new Repository(name: "Main Repository", capacity: 20, root: "C:\\images\\").save();
