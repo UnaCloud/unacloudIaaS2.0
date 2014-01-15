@@ -65,9 +65,7 @@ class UserController {
 	
 	def changePass(){
 		User u= User.findByUsername(params.username)
-		println ("confirm old pass")
 		if(u.password.equals(params.oldPassword)&& u.password.equals(params.confirmPassword)){
-			println ("changing pass")
 			userService.changePass(u, params.newPassword)
 			redirect(uri:"/", absolute:true)
 		}
