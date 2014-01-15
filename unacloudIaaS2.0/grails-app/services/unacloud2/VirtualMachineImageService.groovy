@@ -29,7 +29,7 @@ class VirtualMachineImageService {
 		files.each {
 			def e=it.getOriginalFilename()
 			println e 
-			java.io.File newFile= new java.io.File(repository.root+i.name+"_"+user.username+"\\"+it.getOriginalFilename())
+			java.io.File newFile= new java.io.File(repository.root+i.name+"_"+user.username+"\\"+it.getOriginalFilename()+"\\")
 			newFile.mkdirs()
 			it.transferTo(newFile)
 			if(i.isPublic){

@@ -19,10 +19,10 @@ class WebServicesService {
 		ImageRequestOptions[] options= new ImageRequestOptions[images.length()]
 		for(int i=0; i<images.length();i++){
 			JSONObject image=images.get(i)
-			options[i]= new ImageRequestOptions(image.get("imageId"), image.get("ram"), image.get("cores"), image.get("instances"))			
+			options[i]= new ImageRequestOptions(image.getLong("imageId"), image.getInt("ram").toInteger(), image.getInt("cores"), image.getInt("instances"))			
 		}
 		def userCluster= Cluster.get(cluster.get("clusterId"))
-		deploymentService.deploy(userCluster, user, options)
+		return deploymentService.deploy(userCluster, user, cluster.getInt("execTime")*60000,options)
 	}
 	
 	def getClusterList(String login,String apiKey){

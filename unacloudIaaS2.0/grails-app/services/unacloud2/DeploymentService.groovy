@@ -45,7 +45,7 @@ class DeploymentService {
 			depImage.virtualMachines= []
 			int option
 			for(int j=0;j<options.length;j++){
-				if (option[j].id.equals(image.id)){
+				if (options[j].imageId==image.id){
 					option=j
 					break
 				}
@@ -68,7 +68,7 @@ class DeploymentService {
 		depCluster.save(failOnError: true)
 		physicalMachineAllocatorService.allocatePhysicalMachinesRandomly(depCluster)
 		long stopTimeMillis= new Date().getTime()
-		def stopTime= new Date(stopTimeMillis +Integer.parseInt(time))
+		def stopTime= new Date(stopTimeMillis +time)
 		Deployment dep= new Deployment(cluster: depCluster,startTime: new Date(),stopTime: stopTime,status: DeploymentStateEnum.ACTIVE)
 		dep.save(failOnError: true)
 		if(user.deployments==null)
@@ -76,6 +76,7 @@ class DeploymentService {
 		user.deployments.add(dep)
 		user.save(failOnError: true)
 		runAsync{ deployerService.deploy(dep) }
+		return dep.id
 	}
 
 	def stopVirtualMachineExecution(VirtualMachineExecution vm){

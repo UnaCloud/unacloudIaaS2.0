@@ -56,14 +56,14 @@ class DeploymentController {
 			if(totalInstances<=avaliableInstances){
 				def temp=new ImageRequestOptions[cluster.images.size()];
 				if(cluster.images.size()==1){
-					temp[0]=new ImageRequestOptions(it.name,it.id, params.RAM,params.cores,params.instances);
+					temp[0]=new ImageRequestOptions(cluster.images.getAt(0).id, params.RAM.toInteger(),params.cores.toInteger(),params.instances.toInteger());
 				}
 				else{
 					cluster.images.eachWithIndex {it,idx->
-						temp[idx]=new ImageRequestOptions(it.name,it.id, params.RAM.getAt(idx),params.cores.getAt(idx),params.instances.getAt(idx));
+						temp[idx]=new ImageRequestOptions(it.id, params.RAM.getAt(idx).toInteger(),params.cores.getAt(idx).toInteger(),params.instances.getAt(idx).toInteger());
 					}
 				}
-				deploymentService.deploy(cluster, user, temp)
+				deploymentService.deploy(cluster, user, params.time.toInteger(), temp)
 				redirect(controller:"deployment")
 			}
 			else{
