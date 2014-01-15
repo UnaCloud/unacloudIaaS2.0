@@ -18,7 +18,7 @@ class WebServicesController{
 	
 	def startCluster(String login,String apiKey,String cluster){
 		JSONObject jsonCluster= new JSONObject(cluster)
-		webServicesService.startCluster(login,apiKey,cluster)
+		webServicesService.startCluster(login,apiKey,jsonCluster)
 	}
 	
 	def getClusterList(String login,String apiKey){

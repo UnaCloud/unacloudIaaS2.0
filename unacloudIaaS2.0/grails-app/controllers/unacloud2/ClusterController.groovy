@@ -1,5 +1,7 @@
 package unacloud2
 
+import webutils.ImageRequestOptions;
+
 class ClusterController {
 	
 	ClusterService clusterService
@@ -30,9 +32,9 @@ class ClusterController {
 	}
 	
 	def deployOptions(){
-		[cluster: Cluster.get(params.id),limit: PhysicalMachine.count, limitHA: 2]	
+		def cluster=Cluster.get(params.id);
+		[cluster: cluster,limit: PhysicalMachine.count, limitHA: 2]
 	}
-	
 	def delete(){
 		def cluster = Cluster.get(params.id)
 		if (!cluster) {

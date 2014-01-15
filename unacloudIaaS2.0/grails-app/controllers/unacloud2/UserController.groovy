@@ -73,7 +73,6 @@ class UserController {
 			flash.message="Incorrect Password"
 			redirect(uri:"/account", absolute:true)
 		}
-		
 	}
 	
 	def refreshAPIKey(){
