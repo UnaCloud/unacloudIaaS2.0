@@ -26,9 +26,9 @@ class BootStrap {
 	def init = { servletContext ->
 		if(User.count() ==0){
 			String charset = (('A'..'Z') + ('0'..'9')).join()
-			Integer length = 9
+			Integer length = 32
 			String randomString = RandomStringUtils.random(length, charset.toCharArray())
-			new User(name:'Guest',username:'admin',password:'admin', userType: 'Administrator',apiKey: "").save()
+			new User(name:'Guest',username:'admin',password:'admin', userType: 'Administrator',apiKey: randomString).save()
 		}
 		if(Laboratory.count() ==0){
 			def win7=new OperatingSystem(name:'Windows 7',configurer:'Windows');

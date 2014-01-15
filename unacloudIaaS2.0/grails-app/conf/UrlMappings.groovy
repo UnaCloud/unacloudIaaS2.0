@@ -21,5 +21,6 @@ class UrlMappings {
 		"/adminHome"(controller:"user", action:"adminHome")
 		"/userHome"(controller:"user", action:"userHome")
 		"/error"(view:'/error')
+		"/account"(controller:"user", action:"account")
 	}
 }

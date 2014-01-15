@@ -53,6 +53,38 @@ class UserController {
 		redirect(controller:"user" ,action:"index")
 	}
 	
+	def account(){
+		def u= User.get(session.user.id)
+		if (!u) {
+			redirect(action:"index")
+		}
+		else{
+			[user: u]
+		}
+	}
+	
+	def changePass(){
+		User u= User.findByUsername(params.username)
+		println ("confirm old pass")
+		if(u.password.equals(params.oldPassword)&& u.password.equals(params.confirmPassword)){
+			println ("changing pass")
+			userService.changePass(u, params.newPassword)
+			redirect(uri:"/", absolute:true)
+		}
+		else{
+			flash.message="Incorrect Password"
+			redirect(uri:"/account", absolute:true)
+		}
+		
+	}
+	
+	def refreshAPIKey(){
+		User u= User.findByUsername(params.username)
+		
+		userService.refreshAPIKey(u)
+		redirect (action:"account")
+	}
+	
 	def delete(){
 		def user = User.findByUsername(params.username)
 		if (!user) {

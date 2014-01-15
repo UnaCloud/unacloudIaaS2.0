@@ -48,7 +48,7 @@
           <a class="brand" href="${createLink(controller: 'user', action: 'home')}">UnaCloud 2.0</a>
           <div class="nav-collapse collapse">
             <ul class="nav pull-right">
-              <li><a href="#">My Account</a></li>
+              <li><a href="${createLink(uri: '/account/', absolute: true)}">My Account</a></li>
               <li><g:link controller="user" action="logout">Log Out</g:link></li>
             </ul>
           </div><!--/.nav-collapse -->
