@@ -5,6 +5,7 @@ import com.losandes.utils.Constants;
 import com.losandes.utils.VariableManager;
 
 import fileManager.DataServerSocket;
+import org.apache.commons.lang.RandomStringUtils;
 import unacloud2.Hypervisor;
 import unacloud2.IP
 import unacloud2.IPPool;
@@ -24,7 +25,10 @@ class BootStrap {
 	
 	def init = { servletContext ->
 		if(User.count() ==0){
-			new User(name:'Guest',username:'admin',password:'admin', userType: 'Administrator').save()
+			String charset = (('A'..'Z') + ('0'..'9')).join()
+			Integer length = 9
+			String randomString = RandomStringUtils.random(length, charset.toCharArray())
+			new User(name:'Guest',username:'admin',password:'admin', userType: 'Administrator',apiKey: "").save()
 		}
 		if(Laboratory.count() ==0){
 			def win7=new OperatingSystem(name:'Windows 7',configurer:'Windows');

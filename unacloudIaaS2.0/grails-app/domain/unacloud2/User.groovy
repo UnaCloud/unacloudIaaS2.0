@@ -8,6 +8,8 @@ class User {
 	String username
 	String userType
 	String password
+	String apiKey
+	
 	Collection<UserPermss> userPermss
 	
 	static hasMany = [images: VirtualMachineImage, userClusters: Cluster, deployments: Deployment]
