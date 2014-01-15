@@ -16,14 +16,12 @@ class WebServicesController{
 		render "holamundo";
 	}
 	
-	def startCluster(String cluster){
+	def startCluster(String login,String apiKey,String cluster){
 		JSONObject jsonCluster= new JSONObject(cluster)
-		webServicesService.startCluster(cluster)
-			
+		webServicesService.startCluster(login,apiKey,cluster)
 	}
 	
-	def getClusterList(String userData){
-		JSONObject data= new JSONObject(userData)
-		render webServicesService.getClusterList(data) as JSON	
+	def getClusterList(String login,String apiKey){
+		render webServicesService.getClusterList(login,apiKey) as JSON	
 	}
 }
