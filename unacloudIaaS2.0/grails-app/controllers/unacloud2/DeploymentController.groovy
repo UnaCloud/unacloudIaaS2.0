@@ -45,9 +45,12 @@ class DeploymentController {
 			int totalInstances
 			def imageNumber= cluster.images.size()
 			if(imageNumber==1){
-				totalInstances+= params.instances as Integer
+				totalInstances= params.instances.toInteger()
 			}
 			else{
+				//				for (ins in params.instances) {
+				//					totalInstances+=ins.toInteger();
+				//				}
 				for (int i=0; i< params.instances.size();i++) {
 					totalInstances+=params.instances.getAt(i).toInteger()
 				}
@@ -55,8 +58,8 @@ class DeploymentController {
 			def avaliableInstances= PhysicalMachine.findAllByState("ON").size()
 			if(totalInstances<=avaliableInstances){
 				def temp=new ImageRequestOptions[cluster.images.size()];
-				if(cluster.images.size()==1){
-					temp[0]=new ImageRequestOptions(cluster.images.getAt(0).id, params.RAM.toInteger(),params.cores.toInteger(),params.instances.toInteger());
+				if(imageNumber==1){
+					temp[0]=new ImageRequestOptions(cluster.images.first().id, params.RAM.toInteger(),params.cores.toInteger(),params.instances.toInteger());
 				}
 				else{
 					cluster.images.eachWithIndex {it,idx->
