@@ -15,7 +15,7 @@ class UserController {
 			redirect(uri:"/error", absolute:true)
 			return false
 		}
-	}, except: ['login','logout','home','userHome']]
+	}, except: ['login','logout','home','userHome','account']]
 	
     def index() {
 		[users: User.list(params)];
@@ -54,6 +54,7 @@ class UserController {
 	}
 	
 	def account(){
+		
 		def u= User.get(session.user.id)
 		if (!u) {
 			redirect(action:"index")
