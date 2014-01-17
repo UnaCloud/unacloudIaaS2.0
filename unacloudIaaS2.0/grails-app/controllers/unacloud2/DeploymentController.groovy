@@ -71,6 +71,10 @@ class DeploymentController {
 				redirect( controller: "cluster",action: "deployOptions", id:cluster.id )
 			}
 		}
+		else{
+			flash.message="Cluster already deployed"
+			redirect( controller: "cluster",action: "deployOptions", id:cluster.id )
+		}
 	}
 
 	def history(){
