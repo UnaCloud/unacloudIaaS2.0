@@ -17,7 +17,7 @@ public class LocalProcessExecutor {
     /**
      * Responsible for executing local commands without output
      * @param inCommand Command to execute
-     * @return If the command was suceesfully execute or nor
+     * @return If the command was succesfully execute or nor
      */
     public static boolean executeCommand(String command){
     	System.out.println("Exec: "+command);
@@ -35,6 +35,7 @@ public class LocalProcessExecutor {
      * @return The output of the command execution
      */
     public static String executeCommandOutput(String...command){
+    	System.out.println("Exec: "+Arrays.toString(command));
     	Process p;
         try {
             p = Runtime.getRuntime().exec(command);
@@ -58,7 +59,6 @@ public class LocalProcessExecutor {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-        System.out.println("Exec: "+Arrays.toString(command));
         System.out.println(outputs);
         return outputs;
     }

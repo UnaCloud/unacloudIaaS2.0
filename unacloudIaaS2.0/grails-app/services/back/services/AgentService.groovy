@@ -53,8 +53,9 @@ class AgentService {
 	}
 	def copyAgentOnStream(OutputStream outputStream,File appDir){
 		ZipOutputStream zos=new ZipOutputStream(outputStream);
+		copyFile(zos,"ClientUpdater.jar",new File(appDir,"agentSources/ClientUpdater.jar"),true);
 		copyFile(zos,"ClouderClient.jar",new File(appDir,"agentSources/ClouderClient.jar"),true);
-		copyFile(zos,"executions.txt",new File(appDir,"agentSources/ClouderClient.jar"),true);
+		copyFile(zos,"executions.txt",new File(appDir,"agentSources/executions.txt"),true);
 		zos.putNextEntry(new ZipEntry("vars"));
 		PrintWriter pw=new PrintWriter(zos);
 		for(ServerVariable sv:ServerVariable.all)pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);

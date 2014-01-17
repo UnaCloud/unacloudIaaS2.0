@@ -2,6 +2,7 @@ package unacloudservices
 
 import java.util.Date;
 
+import javassist.bytecode.stackmap.BasicBlock.Catch;
 import unacloud2.IP;
 import unacloud2.OperatingSystem;
 import unacloud2.PhysicalMachineStateEnum;
@@ -30,7 +31,12 @@ class MachineStateController {
 	def reportPhysicalMachineLogin(){
 		String hostname=params['hostname']
 		String hostuser=params['hostuser']
-		physicalMachineStateManagerService.reportPhysicalMachine(hostname,hostuser)
+		try{
+			physicalMachineStateManagerService.reportPhysicalMachine(hostname,hostuser)
+		}catch(Exception ex){
+			println "Error on reportPhysicalMachineLogin "+ hostname+" "+hostuser;
+		}
+		
 		render "succeeded"
 	}
 	def registerPhysicalMachine(){
