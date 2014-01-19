@@ -20,6 +20,7 @@ class DeploymentController {
 	def index() {
 		[deployments: session.user.getActiveDeployments()]
 	}
+	
 	def addInstancesOptions(){
 		[id:params.id]
 	}
@@ -48,9 +49,6 @@ class DeploymentController {
 				totalInstances= params.instances.toInteger()
 			}
 			else{
-				//				for (ins in params.instances) {
-				//					totalInstances+=ins.toInteger();
-				//				}
 				for (int i=0; i< params.instances.size();i++) {
 					totalInstances+=params.instances.getAt(i).toInteger()
 				}
