@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 
 public class DataServerSocket extends Thread{
 	private static DataServerSocket instance;
-	private ExecutorService threadPool=Executors.newSingleThreadExecutor();
+	private ExecutorService threadPool=Executors.newFixedThreadPool(3);
 	private int listenPort;
 	public DataServerSocket(int listenPort) {
 		this.listenPort = listenPort;

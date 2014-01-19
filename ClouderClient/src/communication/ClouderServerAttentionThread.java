@@ -11,9 +11,9 @@ import java.net.Socket;
 import monitoring.PhysicalMachineMonitor;
 import physicalmachine.OperatingSystem;
 import virtualMachineConfiguration.VirtualMachineConfigurer;
+import virtualMachineManager.ImageCacheManager;
 import virtualMachineManager.PersistentExecutionManager;
 import virtualMachineManager.VirtualMachineExecution;
-
 import communication.messages.AgentMessage;
 import communication.messages.InvalidOperationResponse;
 import communication.messages.PhysicalMachineOperationMessage;
@@ -129,8 +129,10 @@ public class ClouderServerAttentionThread extends Thread {
                 return "successful";
             case AgentMessage.GET_VERSION:
                 return "1.30";
+            case AgentMessage.CLEAR_CACHE:
+                return ImageCacheManager.clearCache();
         }
-        return null;
+        return "Invalid operation";
     }
     /**
      * Method responsible for attending requests for operations over the

@@ -1,0 +1,37 @@
+El archivo vars no existe
+El archivo vars no existe
+Exec: [hostname]
+G-PC
+
+ Error en: null/machineState/registerPhysicalMachine?hostname=G-PC&cores=1&ram=4096&mac=AA_BB_CC_DD_EE_AA&os=win7
+java.net.MalformedURLException: no protocol: null/machineState/registerPhysicalMachine?hostname=G-PC&cores=1&ram=4096&mac=AA_BB_CC_DD_EE_AA&os=win7
+	at java.net.URL.<init>(URL.java:585)
+	at java.net.URL.<init>(URL.java:482)
+	at java.net.URL.<init>(URL.java:431)
+	at communication.AbstractGrailsCommunicator.pushInfo(AbstractGrailsCommunicator.java:20)
+	at monitoring.PhysicalMachineState.registerPhysicalMachine(PhysicalMachineState.java:27)
+	at domain.Main.main(Main.java:43)
+ Error en: null/machineState/physicalMachineStart?hostname=G-PC
+java.net.MalformedURLException: no protocol: null/machineState/physicalMachineStart?hostname=G-PC
+	at java.net.URL.<init>(URL.java:585)
+	at java.net.URL.<init>(URL.java:482)
+	at java.net.URL.<init>(URL.java:431)
+	at communication.AbstractGrailsCommunicator.pushInfo(AbstractGrailsCommunicator.java:20)
+	at monitoring.PhysicalMachineState.reportPhyisicalMachineStart(PhysicalMachineState.java:15)
+	at domain.Main.main(Main.java:48)
+Exception in thread "Thread-3" java.lang.NullPointerException
+	at com.losandes.utils.VariableManager.getIntValue(VariableManager.java:53)
+	at fileTransfer.TreeDistributionChannelManager$1.run(TreeDistributionChannelManager.java:34)
+Exception in thread "main" java.lang.NullPointerException
+	at com.losandes.utils.VariableManager.getIntValue(VariableManager.java:53)
+	at communication.ClouderClientAttention.<init>(ClouderClientAttention.java:40)
+	at communication.ClouderClientAttention.getInstance(ClouderClientAttention.java:32)
+	at domain.Main.main(Main.java:54)
+ Error en: null/machineState/reportPhysicalMachineLogin?hostname=G-PC&hostuser=>g
+java.net.MalformedURLException: no protocol: null/machineState/reportPhysicalMachineLogin?hostname=G-PC&hostuser=>g
+	at java.net.URL.<init>(URL.java:585)
+	at java.net.URL.<init>(URL.java:482)
+	at java.net.URL.<init>(URL.java:431)
+	at communication.AbstractGrailsCommunicator.pushInfo(AbstractGrailsCommunicator.java:20)
+	at monitoring.PhysicalMachineState.reportPhyisicalMachineUserLogin(PhysicalMachineState.java:24)
+	at monitoring.PhysicalMachineStateReporter.run(PhysicalMachineStateReporter.java:27)

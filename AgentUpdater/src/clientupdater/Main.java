@@ -64,14 +64,14 @@ public class Main {
     	String version=AbstractGrailsCommunicator.getVersion();
     	System.out.println("Version es "+version+" cuando server es "+versionsFile.get(0));
     	if(!versionsFile.get(0).equals(version)){
-    		for(File c:new File(".").listFiles()){
-    		//for (int e = 1; e < versionsFile.size(); e++) {
-            //    File c = new File(versionsFile.get(e));
-    			if(c.isDirectory()){
+    		//for(File c:new File(".").listFiles()){
+    		for (int e = 1; e < versionsFile.size(); e++) {
+                File c = new File(versionsFile.get(e));
+    			/*if(c.isDirectory()){
     				for(File r:c.listFiles())r.delete();
     				c.delete();
     			}
-    			else if (c.exists()&&!c.getName().equals("vars")&&!c.getName().equals("ClientUpdater.jar")){
+    			else */if (c.exists()&&!c.getName().equals("vars")&&!c.getName().equals("ClientUpdater.jar")){
                 	c.delete();
                 }
             }

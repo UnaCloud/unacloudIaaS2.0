@@ -57,6 +57,7 @@ public class PersistentExecutionManager {
 			Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getHypervisorId());
 			v.stopVirtualMachine(execution.getImage());
 			v.unregisterVirtualMachine(execution.getImage());
+			ImageCacheManager.freeLockedImageCopy(execution.getImage());
 		}
 		saveData();
     	return null;
@@ -101,6 +102,8 @@ public class PersistentExecutionManager {
         } catch (HypervisorOperationException e) {
         	e.printStackTrace();
         	v.stopVirtualMachine(execution.getImage());
+        	v.unregisterVirtualMachine(execution.getImage());
+			ImageCacheManager.freeLockedImageCopy(execution.getImage());
         	ServerMessageSender.reportVirtualMachineState(execution.getId(), VirtualMachineExecutionStateEnum.FAILED, e.getMessage());
             return ERROR_MESSAGE + e.getMessage();
         }
@@ -139,10 +142,10 @@ public class PersistentExecutionManager {
     	new Thread(){
     		public void run() {
     			Map<Long,VirtualMachineExecution> executions=null;
-    	    	List<VirtualMachineImage> images=null;
+    	    	List<Image> images=null;
     	        try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream(executionsFile))){
     	        	executions=(Map<Long,VirtualMachineExecution>)ois.readObject();
-    	        	images=(List<VirtualMachineImage>)ois.readObject();
+    	        	images=(List<Image>)ois.readObject();
     	        	if(executions!=null&&images!=null){
     	            	executionList=executions;
     	            }else saveData();

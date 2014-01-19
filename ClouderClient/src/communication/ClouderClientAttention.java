@@ -14,9 +14,9 @@ import java.net.Socket;
  */
 public class ClouderClientAttention{
         
-        public static int POOL_THREAD_SIZE = 2;
+    public static int POOL_THREAD_SIZE = 2;
 
-        private ServerSocket serverSocket;
+    private ServerSocket serverSocket;
     /**
      * Port to be used by the listening server socket
      */

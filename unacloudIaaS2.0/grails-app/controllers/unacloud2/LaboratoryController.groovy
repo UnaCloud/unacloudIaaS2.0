@@ -74,5 +74,15 @@ class LaboratoryController {
 		}
 		redirect( action: "index")
 	}
-	
+	def clearCache(){
+		params.each {
+			if (it.key.contains("machine")){
+				if(it.value.contains("on")){
+					PhysicalMachine pm= PhysicalMachine.get((it.key - "machine") as Integer)
+					agentService.clearCache(pm)
+				}
+			}
+		}
+		redirect( action: "index")
+	}
 }

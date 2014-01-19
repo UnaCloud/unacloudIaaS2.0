@@ -2,7 +2,7 @@ package hypervisorManager;
 
 import java.io.File;
 
-import virtualMachineManager.VirtualMachineImage;
+import virtualMachineManager.Image;
 
 /**
  * This class is an abstract class to be implemented by each hypervisor. It must be only instantiated by the hyperviso factory
@@ -30,20 +30,20 @@ public abstract class Hypervisor {
      * @param persistent The persistent property
      * @throws HypervisorOperationException if there is an error configuring the virtual machine settings
      */
-    public abstract void startVirtualMachine(VirtualMachineImage image) throws HypervisorOperationException;
+    public abstract void startVirtualMachine(Image image) throws HypervisorOperationException;
     
-    public abstract void configureVirtualMachineHardware(int cores,int ram,VirtualMachineImage image) throws HypervisorOperationException;
+    public abstract void configureVirtualMachineHardware(int cores,int ram,Image image) throws HypervisorOperationException;
     /**
      * turns off the managed virtual machine
      * @throws HypervisorOperationException If there is an error stoping the virtual machine
      */
-    public abstract void stopVirtualMachine(VirtualMachineImage image);
+    public abstract void stopVirtualMachine(Image image);
 
     /**
      * Restarts the managed virtual machine
      * @throws HypervisorOperationException If there is an error restating the virtual machine
      */
-    public abstract void restartVirtualMachine(VirtualMachineImage image) throws HypervisorOperationException;
+    public abstract void restartVirtualMachine(Image image) throws HypervisorOperationException;
 
     /**
      * Executes a command on the managed virtual machine
@@ -52,13 +52,13 @@ public abstract class Hypervisor {
      * @param command The command to be executed
      * @throws HypervisorOperationException If there is an error executing the command
      */
-    public abstract void executeCommandOnMachine(VirtualMachineImage image, String command,String...args) throws HypervisorOperationException;
+    public abstract void executeCommandOnMachine(Image image, String command,String...args) throws HypervisorOperationException;
 
-    public abstract void takeVirtualMachineSnapshot(VirtualMachineImage image,String snapshotname) throws HypervisorOperationException;
+    public abstract void takeVirtualMachineSnapshot(Image image,String snapshotname) throws HypervisorOperationException;
 
-    public abstract void restoreVirtualMachineSnapshot(VirtualMachineImage image,String snapshotname)throws HypervisorOperationException;
+    public abstract void restoreVirtualMachineSnapshot(Image image,String snapshotname)throws HypervisorOperationException;
     
-    public abstract boolean existsVirtualMachineSnapshot(VirtualMachineImage image,String snapshotname)throws HypervisorOperationException;
+    public abstract boolean existsVirtualMachineSnapshot(Image image,String snapshotname)throws HypervisorOperationException;
     
     /**
      * writes a file on the virtual machine file system
@@ -68,10 +68,10 @@ public abstract class Hypervisor {
      * @param sourceFile The local file that contains the content of the copied file
      * @throws HypervisorOperationException If there is an error copying the file
      */
-    public abstract void copyFileOnVirtualMachine(VirtualMachineImage image,String destinationRoute, File sourceFile) throws HypervisorOperationException;
+    public abstract void copyFileOnVirtualMachine(Image image,String destinationRoute, File sourceFile) throws HypervisorOperationException;
     
-    public abstract void changeVirtualMachineMac(VirtualMachineImage image) throws HypervisorOperationException;
+    public abstract void changeVirtualMachineMac(Image image) throws HypervisorOperationException;
     
-    public abstract void registerVirtualMachine(VirtualMachineImage image);
-    public abstract void unregisterVirtualMachine(VirtualMachineImage image);
+    public abstract void registerVirtualMachine(Image image);
+    public abstract void unregisterVirtualMachine(Image image);
 }

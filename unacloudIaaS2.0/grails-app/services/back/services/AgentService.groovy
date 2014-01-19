@@ -7,8 +7,8 @@ import java.nio.file.Files;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import communication.messages.ao.StopAgentMessage;
-import communication.messages.ao.UpdateAgentMessage;
+import communication.UnaCloudAbstractMessage;
+import communication.messages.ao.*;
 import javassist.bytecode.stackmap.BasicBlock.Catch;
 import unacloud2.PhysicalMachine;
 import unacloud2.ServerVariable;
@@ -16,46 +16,38 @@ import unacloud2.ServerVariable;
 class AgentService {
 	VariableManagerService variableManagerService
     def updateMachine(PhysicalMachine pm){
-		String ipAddress=pm.ip.ip;
-		try{
-			Socket s=new Socket(ipAddress,variableManagerService.getIntValue("CLOUDER_CLIENT_PORT"));
-			UpdateAgentMessage updateMessage=new UpdateAgentMessage();
-			ObjectOutputStream oos=new ObjectOutputStream(s.getOutputStream());
-			ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
-			oos.writeObject(updateMessage);
-			oos.flush();
-			oos.close();
-			try{
-				Thread.sleep(1000);
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-			s.close();
-		}catch(Exception e){
-			println "Error conectando a "+ipAddress; 
-		}
-		
+		sendMessage(pm,new UpdateAgentMessage());
 	}
 	def stopMachine(PhysicalMachine pm){
+		sendMessage(pm,new StopAgentMessage());
+	}
+	def clearCache(PhysicalMachine pm){
+		sendMessage(pm,new ClearVMCacheMessage());
+	}
+	def sendMessage(PhysicalMachine pm,UnaCloudAbstractMessage message){
 		String ipAddress=pm.ip.ip;
 		try{
 			Socket s=new Socket(ipAddress,variableManagerService.getIntValue("CLOUDER_CLIENT_PORT"));
-			StopAgentMessage stopMessage=new StopAgentMessage();
 			ObjectOutputStream oos=new ObjectOutputStream(s.getOutputStream());
 			ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
-			oos.writeObject(stopMessage);
+			oos.writeObject(message);
 			oos.flush();
 			println ois.readObject();
 			s.close();
 		}catch(Exception e){
 			println "Error conectando a "+ipAddress;
+			e.printStackTrace();
+		}
+		try{
+			Thread.sleep(1000);
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 	def copyAgentOnStream(OutputStream outputStream,File appDir){
 		ZipOutputStream zos=new ZipOutputStream(outputStream);
 		copyFile(zos,"ClientUpdater.jar",new File(appDir,"agentSources/ClientUpdater.jar"),true);
 		copyFile(zos,"ClouderClient.jar",new File(appDir,"agentSources/ClouderClient.jar"),true);
-		copyFile(zos,"executions.txt",new File(appDir,"agentSources/executions.txt"),true);
 		zos.putNextEntry(new ZipEntry("vars"));
 		PrintWriter pw=new PrintWriter(zos);
 		for(ServerVariable sv:ServerVariable.all)pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);

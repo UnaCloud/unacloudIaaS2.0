@@ -6,8 +6,8 @@ import communication.ServerMessageSender;
 import communication.messages.vmo.VirtualMachineStartResponse;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import virtualMachineManager.VirtualMachineExecution;
-import virtualMachineManager.VirtualMachineImage;
-import virtualMachineManager.VirtualMachineImageManager;
+import virtualMachineManager.Image;
+import virtualMachineManager.ImageCacheManager;
 
 public final class VirtualMachineConfigurer extends Thread{
 	VirtualMachineExecution machineExecution;
@@ -24,7 +24,7 @@ public final class VirtualMachineConfigurer extends Thread{
 	@Override
 	public void run() {
 		System.out.println("startVirtualMachine");
-		VirtualMachineImage image=VirtualMachineImageManager.getFreeImageCopy(machineExecution.getImageId());
+		Image image=ImageCacheManager.getFreeImageCopy(machineExecution.getImageId());
 		machineExecution.setImage(image);
 		Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
 		try {
