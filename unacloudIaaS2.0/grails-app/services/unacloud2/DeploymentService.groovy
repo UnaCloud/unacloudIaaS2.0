@@ -36,6 +36,40 @@ class DeploymentService {
 		user.save(failOnError: true)
 	}
 
+	def deployMultipleOptions(Cluster cluster, User user, long time, ImageRequestOptions[] options){
+		println "Deploying"
+		DeployedCluster depCluster= new DeployedCluster(cluster: cluster)
+		depCluster.images=[]
+		options.eachWithIndex(){ image,i->
+			def depImage= new DeployedImage(image:VirtualMachineImage.get(image.imageId))
+			depImage.virtualMachines= []
+			int option
+
+			for(int j=0;j<image.instances;j++){
+				long stopTimeMillis= new Date().getTime()
+				def stopTime= new Date(stopTimeMillis +time)
+				def iName=depImage.image.name
+				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: iName +"-"+j, ram: image.ram, cores: image.cores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
+				depImage.virtualMachines.add(virtualMachine)
+				virtualMachine.save(failOnError: true)
+				depImage.save(failOnError: true)
+			}
+			depCluster.images.add(depImage)
+		}
+		depCluster.save(failOnError: true)
+		physicalMachineAllocatorService.allocatePhysicalMachinesRandomly(depCluster)
+		long stopTimeMillis= new Date().getTime()
+		def stopTime= new Date(stopTimeMillis +time)
+		Deployment dep= new Deployment(cluster: depCluster,startTime: new Date(),stopTime: stopTime,status: DeploymentStateEnum.ACTIVE)
+		dep.save(failOnError: true)
+		if(user.deployments==null)
+			user.deployments=[]
+		user.deployments.add(dep)
+		user.save(failOnError: true)
+		runAsync{ deployerService.deploy(dep) }
+		return dep.id
+	}
+
 	def deploy(Cluster cluster, User user, long time, ImageRequestOptions[] options){
 		println "Deploying"
 		DeployedCluster depCluster= new DeployedCluster(cluster: cluster)
@@ -49,10 +83,9 @@ class DeploymentService {
 					option=j
 					break
 				}
-				
 			}
 			if(option==null){
-				return 
+				return
 			}
 			for(int j=0;j<options[option].instances;j++){
 				long stopTimeMillis= new Date().getTime()
@@ -108,12 +141,12 @@ class DeploymentService {
 		for(int i=index;i<instance+index;i++){
 			long stopTimeMillis= new Date().getTime()
 			def stopTime= new Date(stopTimeMillis +Integer.parseInt(time))
-			def virtualMachine = new VirtualMachineExecution(message: "Deploying",name: iName+"-"+i ,ram: iRAM, cores:iCores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
+			def virtualMachine = new VirtualMachineExecution(message: "Adding instance",name: iName+"-"+i ,ram: iRAM, cores:iCores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
 			physicalMachineAllocatorService.allocatePhysicalMachine(virtualMachine)
 			virtualMachine.save(failOnError: true)
 			depImage.virtualMachines.add(virtualMachine)
 		}
-
+		runAsync{ deployerService.deployNewInstances(depImage) }
 		depImage.save(failOnError: true)
 	}
 }
