@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import virtualMachineManager.ImageCopy;
 import virtualMachineManager.LocalProcessExecutor;
 import virtualMachineManager.Image;
 
@@ -22,12 +23,12 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
 		super(path);
 	}
     @Override
-    public void stopVirtualMachine(Image image){
+    public void stopVirtualMachine(ImageCopy image){
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"stop",image.getMainFile().getPath());
     }
 
     @Override
-    public void restartVirtualMachine(Image image) throws HypervisorOperationException {
+    public void restartVirtualMachine(ImageCopy image) throws HypervisorOperationException {
         String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"reset",image.getMainFile().getPath());
         if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
@@ -35,7 +36,7 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
     }
 
     @Override
-    public void startVirtualMachine(Image image) throws HypervisorOperationException {
+    public void startVirtualMachine(ImageCopy image) throws HypervisorOperationException {
         correctDataStores();
         String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"start",image.getMainFile().getPath(),"nogui");
         if (h.contains(ERROR_MESSAGE)) {
@@ -44,9 +45,9 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
     }
     
     @Override
-    public void executeCommandOnMachine(Image image,String command, String... args) throws HypervisorOperationException {
+    public void executeCommandOnMachine(ImageCopy image,String command, String... args) throws HypervisorOperationException {
         List<String> com=new ArrayList<>();
-        Collections.addAll(com, getExecutablePath(),"-T",getType(),"-gu",image.getUsername(),"-gp",image.getPassword(),"runProgramInGuest",image.getMainFile().getPath());
+        Collections.addAll(com, getExecutablePath(),"-T",getType(),"-gu",image.getImage().getUsername(),"-gp",image.getImage().getPassword(),"runProgramInGuest",image.getMainFile().getPath());
         com.add(command);
         Collections.addAll(com,args);
         String h = LocalProcessExecutor.executeCommandOutput(com.toArray(new String[0]));
@@ -56,33 +57,33 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
     }
 
     @Override
-    public void copyFileOnVirtualMachine(Image image, String destinationRoute, File sourceFile) throws HypervisorOperationException {
-        String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"-gu",image.getUsername(),"-gp",image.getPassword(),"copyFileFromHostToGuest",image.getMainFile().getPath(),sourceFile.getAbsolutePath(),destinationRoute);
+    public void copyFileOnVirtualMachine(ImageCopy image, String destinationRoute, File sourceFile) throws HypervisorOperationException {
+        String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"-gu",image.getImage().getUsername(),"-gp",image.getImage().getPassword(),"copyFileFromHostToGuest",image.getMainFile().getPath(),sourceFile.getAbsolutePath(),destinationRoute);
         if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
         }
     }
 
     @Override
-    public void takeVirtualMachineSnapshot(Image image,String snapshotname) throws HypervisorOperationException {
+    public void takeVirtualMachineSnapshot(ImageCopy image,String snapshotname) throws HypervisorOperationException {
         String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"snapshot",image.getMainFile().getPath(),snapshotname);
         if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
         }
     }
     @Override
-    public void configureVirtualMachineHardware(int cores, int ram, Image image) throws HypervisorOperationException {
+    public void configureVirtualMachineHardware(int cores, int ram, ImageCopy image) throws HypervisorOperationException {
     	if(cores!=0&&ram!=0){
             new Context(image.getMainFile().getPath()).changeVMXFileContext(cores,ram);
        }
     }
     @Override
-    public boolean existsVirtualMachineSnapshot(Image image, String snapshotname) throws HypervisorOperationException {
+    public boolean existsVirtualMachineSnapshot(ImageCopy image, String snapshotname) throws HypervisorOperationException {
     	String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"listSnapshots",image.getMainFile().getPath());
     	return h!=null&&h.contains(snapshotname);
     }
     @Override
-    public void restoreVirtualMachineSnapshot(Image image, String snapshotname) throws HypervisorOperationException {
+    public void restoreVirtualMachineSnapshot(ImageCopy image, String snapshotname) throws HypervisorOperationException {
     	String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"revertToSnapshot",image.getMainFile().getPath(),snapshotname);
         if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
@@ -102,13 +103,13 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
         }
     }
 
-    public void changeVirtualMachineMac(Image image) throws HypervisorOperationException {
+    public void changeVirtualMachineMac(ImageCopy image) throws HypervisorOperationException {
     }
 	@Override
-	public void registerVirtualMachine(Image image) {
+	public void registerVirtualMachine(ImageCopy image) {
 	}
 	@Override
-	public void unregisterVirtualMachine(Image image) {
+	public void unregisterVirtualMachine(ImageCopy image) {
 	}
 	public abstract String getType();
 }

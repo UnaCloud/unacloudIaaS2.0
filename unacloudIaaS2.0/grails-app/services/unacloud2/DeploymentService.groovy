@@ -30,7 +30,7 @@ class DeploymentService {
 		user.addToDeployments(dep)
 		println "allocando"
 		if(depImage.virtualMachines.size()>0){
-			physicalMachineAllocatorService.allocatePhysicalMachinesRandomly(cluster)
+			physicalMachineAllocatorService.allocatePhysicalMachines(cluster)
 		}
 		runAsync{ deployerService.deploy(dep) }
 		user.save(failOnError: true)
@@ -66,7 +66,7 @@ class DeploymentService {
 			depCluster.images.add(depImage)
 		}
 		depCluster.save(failOnError: true)
-		physicalMachineAllocatorService.allocatePhysicalMachinesRandomly(depCluster)
+		physicalMachineAllocatorService.allocatePhysicalMachines(depCluster)
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +time)
 		Deployment dep= new Deployment(cluster: depCluster,startTime: new Date(),stopTime: stopTime,status: DeploymentStateEnum.ACTIVE)
@@ -78,7 +78,48 @@ class DeploymentService {
 		runAsync{ deployerService.deploy(dep) }
 		return dep.id
 	}
-
+	def deployCCSACluster(Cluster cluster, User user, long time, ImageRequestOptions[] options){
+		println "Deploying"
+		DeployedCluster depCluster= new DeployedCluster(cluster: cluster)
+		depCluster.images=[]
+		cluster.images.eachWithIndex(){ image,i->
+			def depImage= new DeployedImage(image:image)
+			depImage.virtualMachines= []
+			int option
+			for(int j=0;j<options.length;j++){
+				if (options[j].imageId==image.id){
+					option=j
+					break
+				}
+				
+			}
+			if(option==null){
+				return
+			}
+			for(int j=0;j<options[option].instances;j++){
+				long stopTimeMillis= new Date().getTime()
+				def stopTime= new Date(stopTimeMillis +time)
+				def iName=image.name
+				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: iName +"-"+j, ram: options[option].ram, cores: options[option].cores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
+				depImage.virtualMachines.add(virtualMachine)
+				virtualMachine.save(failOnError: true)
+				depImage.save(failOnError: true)
+			}
+			depCluster.images.add(depImage)
+		}
+		depCluster.save(failOnError: true)
+		physicalMachineAllocatorService.allocatePhysicalMachines(depCluster)
+		long stopTimeMillis= new Date().getTime()
+		def stopTime= new Date(stopTimeMillis +time)
+		Deployment dep= new Deployment(cluster: depCluster,startTime: new Date(),stopTime: stopTime,status: DeploymentStateEnum.ACTIVE)
+		dep.save(failOnError: true)
+		if(user.deployments==null)
+			user.deployments=[]
+		user.deployments.add(dep)
+		user.save(failOnError: true)
+		runAsync{ deployerService.deploy(dep) }
+		return dep.id
+	}
 	def stopVirtualMachineExecution(VirtualMachineExecution vm){
 		vm.stopTime=new Date()
 		vm.ip.used=false

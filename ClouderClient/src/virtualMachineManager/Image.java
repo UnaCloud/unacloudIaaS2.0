@@ -1,31 +1,22 @@
 package virtualMachineManager;
 
-import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Image implements Serializable{
 	private static final long serialVersionUID = -2386734224180305694L;
-	
 	long id;
-	String virtualMachineName;
-	File mainFile;
 	String username;
 	String password;
 	String configuratorClass;
 	String hypervisorId;
-	transient VirtualMachineImageStatus status=VirtualMachineImageStatus.FREE;
-	
+	List<ImageCopy> imageCopies=new ArrayList<>();
 	public long getId() {
 		return id;
 	}
 	public void setId(long id) {
 		this.id = id;
-	}
-	public File getMainFile() {
-		return mainFile;
-	}
-	public void setMainFile(File mainFile) {
-		this.mainFile = mainFile;
 	}
 	public String getUsername(){
 		return username;
@@ -39,12 +30,6 @@ public class Image implements Serializable{
 	public void setPassword(String password){
 		this.password = password;
 	}
-	public String getVirtualMachineName() {
-		return virtualMachineName;
-	}
-	public void setVirtualMachineName(String virtualMachineName) {
-		this.virtualMachineName = virtualMachineName;
-	}
 	public String getConfiguratorClass() {
 		return configuratorClass;
 	}
@@ -57,10 +42,10 @@ public class Image implements Serializable{
 	public void setConfiguratorClass(String configuratorClass) {
 		this.configuratorClass = configuratorClass;
 	}
-	public VirtualMachineImageStatus getStatus() {
-		return status;
+	public List<ImageCopy> getImageCopies() {
+		return imageCopies;
 	}
-	public void setStatus(VirtualMachineImageStatus status) {
-		this.status = status;
+	public void setImageCopies(List<ImageCopy> imageCopies) {
+		this.imageCopies = imageCopies;
 	}
 }

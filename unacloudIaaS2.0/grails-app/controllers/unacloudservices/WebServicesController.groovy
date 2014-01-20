@@ -19,7 +19,6 @@ class WebServicesController{
 		JSONObject jsonCluster= new JSONObject(cluster)
 		render new JSONObject().put("deploymentId",webServicesService.startCluster(login,apiKey,jsonCluster))
 	}
-	
 	def getClusterList(String login,String apiKey){
 		render webServicesService.getClusterList(login,apiKey) as JSON	
 	}

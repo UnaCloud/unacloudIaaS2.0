@@ -5,6 +5,7 @@ import hypervisorManager.HypervisorFactory;
 import communication.ServerMessageSender;
 import communication.messages.vmo.VirtualMachineStartResponse;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
+import virtualMachineManager.ImageCopy;
 import virtualMachineManager.VirtualMachineExecution;
 import virtualMachineManager.Image;
 import virtualMachineManager.ImageCacheManager;
@@ -24,11 +25,11 @@ public final class VirtualMachineConfigurer extends Thread{
 	@Override
 	public void run() {
 		System.out.println("startVirtualMachine");
-		Image image=ImageCacheManager.getFreeImageCopy(machineExecution.getImageId());
+		ImageCopy image=ImageCacheManager.getFreeImageCopy(machineExecution.getImageId());
 		machineExecution.setImage(image);
-		Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
+		Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getImage().getHypervisorId());
 		try {
-			Class<?> configuratorClass=Class.forName("virtualMachineConfiguration."+image.getConfiguratorClass());
+			Class<?> configuratorClass=Class.forName("virtualMachineConfiguration."+image.getImage().getConfiguratorClass());
 			Object configuratorObject=configuratorClass.getConstructor().newInstance();
 			if(configuratorObject instanceof AbstractVirtualMachineConfigurator){
 				AbstractVirtualMachineConfigurator configurator=(AbstractVirtualMachineConfigurator)configuratorObject;

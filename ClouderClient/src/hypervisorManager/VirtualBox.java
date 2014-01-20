@@ -11,35 +11,36 @@ import java.util.logging.Logger;
 
 import com.losandes.utils.Constants;
 
+import virtualMachineManager.ImageCopy;
 import virtualMachineManager.LocalProcessExecutor;
-import virtualMachineManager.Image;
 
 /**
  * Implementation of hypervisor abstract class to give support for VMwarePlayer
  * hypervisor.
  */
-class VirtualBox extends Hypervisor {
+public class VirtualBox extends Hypervisor {
 	public static final String HYPERVISOR_ID=Constants.VIRTUAL_BOX;
     public VirtualBox(String path) {
 		super(path);
 	}
 
     @Override
-    public void stopVirtualMachine(Image image){
+    public void stopVirtualMachine(ImageCopy image){
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "controlvm", image.getVirtualMachineName(), "poweroff");
         sleep(2000);
     }
     @Override
-	public void registerVirtualMachine(Image image){
+	public void registerVirtualMachine(ImageCopy image){
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "registervm", image.getMainFile().getPath());
         sleep(15000);
     }
     @Override
-	public void unregisterVirtualMachine(Image image){
+	public void unregisterVirtualMachine(ImageCopy image){
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "unregistervm", image.getVirtualMachineName());
+        sleep(15000);
     }
     @Override
-    public void restartVirtualMachine(Image image) throws HypervisorOperationException {
+    public void restartVirtualMachine(ImageCopy image) throws HypervisorOperationException {
         String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "controlvm", image.getVirtualMachineName(), "reset");
         if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
@@ -47,7 +48,7 @@ class VirtualBox extends Hypervisor {
         sleep(30000);
     }
     @Override
-	public void startVirtualMachine(Image image) throws HypervisorOperationException {
+	public void startVirtualMachine(ImageCopy image) throws HypervisorOperationException {
         String h;
         if((h=LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "startvm", image.getVirtualMachineName(), "--type", "headless")).contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
@@ -57,16 +58,16 @@ class VirtualBox extends Hypervisor {
         sleep(1000);
     }
     @Override
-    public void configureVirtualMachineHardware(int cores, int ram, Image image) throws HypervisorOperationException {
+    public void configureVirtualMachineHardware(int cores, int ram, ImageCopy image) throws HypervisorOperationException {
     	if(cores!=0&&ram!=0){
             LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "modifyvm", image.getVirtualMachineName(),"--memory",""+ram,"--cpus",""+cores);
             sleep(20000);
         }
     }
     @Override
-    public void executeCommandOnMachine(Image image,String command, String... args) throws HypervisorOperationException {
+    public void executeCommandOnMachine(ImageCopy image,String command, String... args) throws HypervisorOperationException {
         List<String> com = new ArrayList<>();
-        Collections.addAll(com, getExecutablePath(), "--nologo", "guestcontrol", image.getVirtualMachineName(), "execute", "--image", command, "--username", image.getUsername(), "--password", image.getPassword(), "--wait-exit", "--");
+        Collections.addAll(com, getExecutablePath(), "--nologo", "guestcontrol", image.getVirtualMachineName(), "execute", "--image", command, "--username", image.getImage().getUsername(), "--password", image.getImage().getPassword(), "--wait-exit", "--");
         Collections.addAll(com, args);
         String h = LocalProcessExecutor.executeCommandOutput(com.toArray(new String[0]));
         if (h.contains(ERROR_MESSAGE)) {
@@ -76,8 +77,8 @@ class VirtualBox extends Hypervisor {
     }
 
     @Override
-    public void copyFileOnVirtualMachine(Image image, String destinationRoute, File sourceFile) throws HypervisorOperationException {
-        String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "guestcontrol", image.getVirtualMachineName(), "copyto", sourceFile.getAbsolutePath(), destinationRoute, "--username", image.getUsername(), "--password", image.getPassword());
+    public void copyFileOnVirtualMachine(ImageCopy image, String destinationRoute, File sourceFile) throws HypervisorOperationException {
+        String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "guestcontrol", image.getVirtualMachineName(), "copyto", sourceFile.getAbsolutePath(), destinationRoute, "--username", image.getImage().getUsername(), "--password", image.getImage().getPassword());
         if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
         }
@@ -85,13 +86,13 @@ class VirtualBox extends Hypervisor {
     }
 
     @Override
-    public void takeVirtualMachineSnapshot(Image image,String snapshotname) throws HypervisorOperationException {
+    public void takeVirtualMachineSnapshot(ImageCopy image,String snapshotname) throws HypervisorOperationException {
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"snapshot",image.getVirtualMachineName(),"take",snapshotname);
         sleep(20000);
     }
 
     @Override
-    public void changeVirtualMachineMac(Image image) throws HypervisorOperationException {
+    public void changeVirtualMachineMac(ImageCopy image) throws HypervisorOperationException {
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "modifyvm", image.getVirtualMachineName(),"--macaddress1","auto");
         sleep(20000);
     }
@@ -105,16 +106,26 @@ class VirtualBox extends Hypervisor {
     }
 
 	@Override
-	public void restoreVirtualMachineSnapshot(Image image, String snapshotname) throws HypervisorOperationException {
+	public void restoreVirtualMachineSnapshot(ImageCopy image, String snapshotname) throws HypervisorOperationException {
 		LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "snapshot", image.getVirtualMachineName(), "restorecurrent");
         sleep(20000);
 	}
 
 	@Override
-	public boolean existsVirtualMachineSnapshot(Image image, String snapshotname) throws HypervisorOperationException {
+	public boolean existsVirtualMachineSnapshot(ImageCopy image, String snapshotname) throws HypervisorOperationException {
 		String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "snapshot", image.getVirtualMachineName(), "list");
         sleep(20000);
         return h != null && !h.contains("does not");
 	}
-
+	public void cloneVirtualMachine(ImageCopy oldImage,ImageCopy newImage){
+		LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "clonevm",oldImage.getVirtualMachineName(),"--snapshot","unacloudbase","--basefolder",newImage.getMainFile().getParentFile().getAbsolutePath(),"--name",newImage.getVirtualMachineName());
+        sleep(20000);
+	}
+	public void unregisterAllVms(){
+		String[] h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "list","vms").split("\n|\r");
+		for(String vm:h){
+			LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "unregistervm", vm.split(" ")[1]);
+	        sleep(15000);
+		}
+	}
 }

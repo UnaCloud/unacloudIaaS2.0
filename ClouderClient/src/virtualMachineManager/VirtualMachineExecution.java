@@ -15,7 +15,7 @@ public class VirtualMachineExecution implements Serializable{
     String hostname;
     
     long imageId;
-    Image image;
+    ImageCopy image;
     
     long shutdownTime;
     public VirtualMachineExecution() {
@@ -68,10 +68,10 @@ public class VirtualMachineExecution implements Serializable{
 	public void setHostname(String hostname) {
 		this.hostname = hostname;
 	}
-	public Image getImage() {
+	public ImageCopy getImage() {
 		return image;
 	}
-	public void setImage(Image image) {
+	public void setImage(ImageCopy image) {
 		this.image = image;
 	}
 	public long getShutdownTime() {

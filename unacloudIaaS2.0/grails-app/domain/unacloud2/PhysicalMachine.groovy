@@ -17,4 +17,7 @@ class PhysicalMachine {
 	Date lastReport
 	//Laboratory laboratory;
 	static belongsTo =[laboratory: Laboratory]
+	def long getDatabaseId(){
+		return id;
+	}
 }

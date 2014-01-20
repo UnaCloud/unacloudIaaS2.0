@@ -24,7 +24,6 @@ class WebServicesService {
 		def userCluster= Cluster.get(cluster.get("clusterId"))
 		return deploymentService.deploy(userCluster, user, cluster.getInt("execTime")*60000,options)
 	}
-	
 	def getClusterList(String login,String apiKey){
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login);

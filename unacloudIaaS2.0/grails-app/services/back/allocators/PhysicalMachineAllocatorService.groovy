@@ -5,15 +5,28 @@ import java.util.Comparator;
 import unacloud2.*
 
 class PhysicalMachineAllocatorService {
-	
-    def allocatePhysicalMachinesRandomly(DeployedCluster deployment){
-		println "allocando"
-		for(DeployedImage di:deployment.images){
-			allocatePhysicalMachines(di);
+	def allocatePhysicalMachines(DeployedCluster cluster){
+		ArrayList<VirtualMachineExecution> vms=new ArrayList<>();
+		List<PhysicalMachine> pms=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
+		for(DeployedImage image:cluster.images){
+			vms.addAll(image.virtualMachines);
 		}
-		println "allocado completo"
+		if(cluster.allocPolicies==null||cluster.allocPolicies.isEmpty()){
+			VirtualMachineAllocatorInterface allocator=new RoundRobinAllocator();
+			allocator.allocateVirtualMachines(vms,pms);
+			for(VirtualMachineExecution vme:vms){
+				println "Allocando en : "+vme.executionNode.ip.ip;
+				IPPool ipPool= vme.executionNode.laboratory.virtualMachinesIPs
+				for(ip in ipPool.ips){
+					if(ip.used==false){
+						vme.ip= ip
+						ip.used=true
+						break
+					}
+				}
+			}
+		}
 	}
-	
 	def allocatePhysicalMachine(VirtualMachineExecution vme ){
 		
 		List<PhysicalMachine> l=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
@@ -27,15 +40,15 @@ class PhysicalMachineAllocatorService {
 		IPPool ipPool= vme.executionNode.laboratory.virtualMachinesIPs
 		
 		for(ip in ipPool.ips){
-					if(ip.used==false){
-						vme.ip= ip
-						ip.used=true
-						break
-					}
-				}
+			if(ip.used==false){
+				vme.ip= ip
+				ip.used=true
+				break
+			}
+		}
 		
 	}
-	def allocatePhysicalMachines(DeployedImage deployedImage){
+	/*def allocatePhysicalMachines(DeployedImage deployedImage){
 		List<PhysicalMachine> l=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON)
 		Collections.sort(l,new Comparator<PhysicalMachine>(){
 			public int compare(PhysicalMachine p1,PhysicalMachine p2){
@@ -64,5 +77,5 @@ class PhysicalMachineAllocatorService {
 			}
 		}
 		println "allocado"
-	}
+	}*/
 }

@@ -54,7 +54,7 @@ public class PersistentExecutionManager {
     	VirtualMachineExecution execution=null;
     	execution=executionList.remove(virtualMachineExecutionId);
 		if(execution!=null&&(!checkTime||System.currentTimeMillis()>execution.getShutdownTime())){
-			Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getHypervisorId());
+			Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getImage().getHypervisorId());
 			v.stopVirtualMachine(execution.getImage());
 			v.unregisterVirtualMachine(execution.getImage());
 			ImageCacheManager.freeLockedImageCopy(execution.getImage());
@@ -73,7 +73,7 @@ public class PersistentExecutionManager {
      */
     public static UnaCloudAbstractResponse restartMachine(VirtualMachineRestartMessage restartMessage) {
     	VirtualMachineExecution execution=executionList.get(restartMessage.getVirtualMachineExecutionId());
-        Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getHypervisorId());
+        Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getImage().getHypervisorId());
         try {
             v.restartVirtualMachine(execution.getImage());
         } catch (HypervisorOperationException ex) {
@@ -92,7 +92,7 @@ public class PersistentExecutionManager {
     public static String startUpMachine(VirtualMachineExecution execution,boolean started){
     	System.out.println("Execution time: "+System.currentTimeMillis()+execution.getExecutionTime()*3600000);
     	execution.setShutdownTime(System.currentTimeMillis()+execution.getExecutionTime()*3600000);
-        Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getHypervisorId());
+        Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getImage().getHypervisorId());
         try {
             if(!started)v.startVirtualMachine(execution.getImage());
             executionList.put(execution.getId(),execution);

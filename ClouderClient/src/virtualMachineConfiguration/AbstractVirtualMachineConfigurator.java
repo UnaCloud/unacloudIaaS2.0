@@ -31,21 +31,20 @@ public abstract class AbstractVirtualMachineConfigurator{
     public void start() {
     	ServerMessageSender.reportVirtualMachineState(execution.getId(), VirtualMachineExecutionStateEnum.CONFIGURING, "Configuring virtual machine");
         try {
-    		hypervisor.registerVirtualMachine(execution.getImage());
-    		if(!hypervisor.existsVirtualMachineSnapshot(execution.getImage(),"unacloudbase")){
-    			//TODO También se puede tomar el snapshot luego de iniciar la máquina y ante de configurarla
-    			hypervisor.changeVirtualMachineMac(execution.getImage());
-        		hypervisor.takeVirtualMachineSnapshot(execution.getImage(),"unacloudbase");
-    		}else{
-    			//TODO Evaluar si hacerlo en el apagado porque es mas importante el tiempo de arranque.
-    			hypervisor.restoreVirtualMachineSnapshot(execution.getImage(),"unacloudbase");
-    		}
-			hypervisor.configureVirtualMachineHardware(execution.getCores(),execution.getMemory(),execution.getImage());
-			hypervisor.startVirtualMachine(execution.getImage());
-			waitTime(50000);
-		    configureHostname();
-		    configureIP();
-	        PersistentExecutionManager.startUpMachine(execution,!doPostConfigure());
+        	synchronized (execution.getImage()) {
+        		hypervisor.registerVirtualMachine(execution.getImage());
+
+        			//TODO Evaluar si hacerlo en el apagado porque es mas importante el tiempo de arranque.
+        			hypervisor.restoreVirtualMachineSnapshot(execution.getImage(),"unacloudbase");
+    			
+        		hypervisor.configureVirtualMachineHardware(execution.getCores(),execution.getMemory(),execution.getImage());
+    			hypervisor.startVirtualMachine(execution.getImage());
+    			waitTime(50000);
+    		    configureHostname();
+    		    configureIP();
+    	        PersistentExecutionManager.startUpMachine(execution,!doPostConfigure());
+			}
+    		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
