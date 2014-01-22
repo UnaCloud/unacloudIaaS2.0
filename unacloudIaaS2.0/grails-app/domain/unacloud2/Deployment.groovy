@@ -26,9 +26,10 @@ class Deployment {
 	def isActive(){
 		for(image in cluster.images) {
 			for(vm in image.virtualMachines){
-				if(!(vm.status ==VirtualMachineExecutionStateEnum.FINISHED)){
+				if(vm.stopTime.compareTo(new Date())<0)
+					vm.status= VirtualMachineExecutionStateEnum.FINISHED
+				if(!(vm.status ==VirtualMachineExecutionStateEnum.FINISHED))
 					return true
-				}
 			}
 		}
 		return false

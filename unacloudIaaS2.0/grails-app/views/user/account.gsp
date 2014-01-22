@@ -22,16 +22,16 @@
 	    			<input name= "oldPassword" type="password" >
 	    		</div>
     		</div>
-   			<div class="control-group">
-   			<label class="control-label">Confirm Password</label>
-	    		<div class="controls">
-	    			<input name= "confirmPassword" type="password" >
-	    		</div>
-    		</div>
     		<div class="control-group">
     		<label class="control-label">New Password</label>
 	    		<div class="controls">
 	    			<input name= "newPassword" type="password">
+	    		</div>
+    		</div>
+    		<div class="control-group">
+   			<label class="control-label">Confirm Password</label>
+	    		<div class="controls">
+	    			<input name= "confirmPassword" type="password" >
 	    		</div>
     		</div>
     		<div class="control-group">

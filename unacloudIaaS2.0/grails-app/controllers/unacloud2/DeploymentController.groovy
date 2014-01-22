@@ -15,6 +15,7 @@ class DeploymentController {
 			return false
 		}
 		session.user.refresh()
+		deploymentService.stopDeployments(User.get(session.user.id))
 	}
 
 	def index() {

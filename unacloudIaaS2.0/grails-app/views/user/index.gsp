@@ -46,7 +46,7 @@
     <td >
     <div class="row-fluid text-center">
     <g:link action="edit" params="${[username:user.username]}"><i class="icon-pencil"></i></g:link>
-    <a href="edit"><i class="icon-check"></i></a>
+    <g:link action="editPerms" params="${[username:user.username]}"><i class="icon-check"></i></g:link>
     <g:link action="delete" params="${[username:user.username]}"><i class="icon-remove-sign"></i></g:link>
     </div>
     </td>

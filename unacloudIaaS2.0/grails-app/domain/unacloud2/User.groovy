@@ -10,9 +10,7 @@ class User {
 	String password
 	String apiKey
 	
-	Collection<UserPermss> userPermss
-	
-	static hasMany = [images: VirtualMachineImage, userClusters: Cluster, deployments: Deployment]
+	static hasMany = [images: VirtualMachineImage, allocationPolicies: AllocationPolicy, userClusters: Cluster, deployments: Deployment]
 	
 	static constraints = {
     }
@@ -37,4 +35,6 @@ class User {
 		}
 		return activeDeployments
 	}
+	
+	
 }

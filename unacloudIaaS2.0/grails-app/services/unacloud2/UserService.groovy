@@ -24,6 +24,26 @@ class UserService {
 		user.putAt("userType", userType)		
 	}
 	
+	def setPolicy(User u, String name, String value){
+		AllocationPolicy oldAlloc
+		for(allocPolicy in u.allocationPolicies){
+			if(allocPolicy.name.equals(name)){
+				oldAlloc= allocPolicy
+			}
+		}
+		println oldAlloc
+		if(oldAlloc==null){
+			def alloc= new AllocationPolicy(name: name, value: value)
+			alloc.save()
+			println alloc
+			u.addToAllocationPolicies(alloc).save()
+		}
+		else{
+			println oldAlloc
+			oldAlloc.setValue(value).save()
+		}
+	}
+	
 	def changePass(User u, String newPass){
 		u.password=newPass
 		u.save()	

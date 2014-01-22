@@ -67,7 +67,6 @@ class DeployerService {
 	}
 	
 	def deployVMs(DeployedCluster cluster){
-		println "Deploying cluster ---> "+cluster.cluster.name
 		for(image in cluster.images) {
 			VirtualMachineStartMessage vmsm=new VirtualMachineStartMessage();
 			println "Deploying Image ----->" +image.image.name+" "+image.virtualMachines.size()
