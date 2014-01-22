@@ -21,7 +21,13 @@ class ClusterController {
 	}
 	
 	def newCluster(){
-		[images: session.user.getOrderedImages()]
+		ArrayList<VirtualMachineImage> images = session.user.getOrderedImages()
+		VirtualMachineImage.all.each {
+			if(it.isPublic&&!(it.user.equals(session.user))){
+				images.add(it)
+			}
+		}
+		[images: images]
 	}
 	
 	def save(){

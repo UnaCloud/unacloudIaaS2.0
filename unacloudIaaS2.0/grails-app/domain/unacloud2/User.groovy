@@ -17,13 +17,13 @@ class User {
 	static constraints = {
     }
 	
-	ArrayList <PhysicalMachine> getOrderedImages(){
+	ArrayList <VirtualMachineImage> getOrderedImages(){
 		VirtualMachineImageComparator c= new VirtualMachineImageComparator()
 		ArrayList <VirtualMachineImage> array = new ArrayList(images).sort(c)
 		return array
 	}
 	
-	ArrayList <PhysicalMachine> getOrderedClusters(){
+	ArrayList <Cluster> getOrderedClusters(){
 		ClusterComparator c= new ClusterComparator()
 		ArrayList <Cluster> array = new ArrayList(userClusters).sort(c)
 		return array
