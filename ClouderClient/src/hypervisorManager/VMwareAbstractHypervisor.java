@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import virtualMachineManager.ImageCopy;
 import virtualMachineManager.LocalProcessExecutor;
-import virtualMachineManager.Image;
 
 /**
  * Implementation of hypervisor abstract class to give support for
@@ -112,4 +110,8 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
 	public void unregisterVirtualMachine(ImageCopy image) {
 	}
 	public abstract String getType();
+	@Override
+	public void cloneVirtualMachine(ImageCopy source, ImageCopy dest) {
+		// TODO Auto-generated method stub
+	}
 }

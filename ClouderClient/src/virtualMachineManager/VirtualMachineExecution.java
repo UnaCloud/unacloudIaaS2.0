@@ -1,5 +1,7 @@
 package virtualMachineManager;
 
+import hypervisorManager.ImageCopy;
+
 import java.io.Serializable;
 
 import communication.messages.vmo.VirtualMachineStartMessage;

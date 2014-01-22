@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 import com.losandes.utils.Constants;
 
-import virtualMachineManager.ImageCopy;
 import virtualMachineManager.LocalProcessExecutor;
 
 /**
@@ -26,7 +25,7 @@ public class VirtualBox extends Hypervisor {
 
     @Override
     public void stopVirtualMachine(ImageCopy image){
-        LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "controlvm", image.getVirtualMachineName(), "poweroff");
+		LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "controlvm", image.getVirtualMachineName(), "poweroff");
         sleep(2000);
     }
     @Override
@@ -116,10 +115,6 @@ public class VirtualBox extends Hypervisor {
 		String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "snapshot", image.getVirtualMachineName(), "list");
         sleep(20000);
         return h != null && !h.contains("does not");
-	}
-	public void cloneVirtualMachine(ImageCopy oldImage,ImageCopy newImage){
-		LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "clonevm",oldImage.getVirtualMachineName(),"--snapshot","unacloudbase","--basefolder",newImage.getMainFile().getParentFile().getAbsolutePath(),"--name",newImage.getVirtualMachineName());
-        sleep(20000);
 	}
 	public void unregisterAllVms(){
 		String[] h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "list","vms").split("\n|\r");

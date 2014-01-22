@@ -2,14 +2,13 @@ package hypervisorManager;
 
 import java.io.File;
 
-import virtualMachineManager.Image;
-import virtualMachineManager.ImageCopy;
+import virtualMachineManager.ImageCacheManager;
 
 /**
  * This class is an abstract class to be implemented by each hypervisor. It must be only instantiated by the hyperviso factory
  * @author Clouder
  */
-public abstract class Hypervisor {
+abstract class Hypervisor {
 
     /**
      * Path to this hypervisor executable
@@ -75,4 +74,12 @@ public abstract class Hypervisor {
     
     public abstract void registerVirtualMachine(ImageCopy image);
     public abstract void unregisterVirtualMachine(ImageCopy image);
+    public abstract void cloneVirtualMachine(ImageCopy source,ImageCopy dest);
+    public void stopAndUnregister(ImageCopy image){
+    	synchronized (image) {
+    		stopVirtualMachine(image);
+        	unregisterVirtualMachine(image);
+        	ImageCacheManager.freeLockedImageCopy(image);
+		}
+    }
 }

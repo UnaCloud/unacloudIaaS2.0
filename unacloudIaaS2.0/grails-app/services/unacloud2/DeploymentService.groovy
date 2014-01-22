@@ -2,13 +2,12 @@ package unacloud2
 
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import webutils.ImageRequestOptions;
-import back.allocators.PhysicalMachineAllocatorService;
 import back.deployers.DeployerService;
+import back.deploymentBuilder.DeploymentProcessorService;
 
 
 class DeploymentService {
-
-	PhysicalMachineAllocatorService physicalMachineAllocatorService
+	DeploymentProcessorService deploymentProcessorService 
 	DeployerService deployerService
 
 	def deployImage(VirtualMachineImage image, User user){
@@ -30,9 +29,9 @@ class DeploymentService {
 		user.addToDeployments(dep)
 		println "allocando"
 		if(depImage.virtualMachines.size()>0){
-			physicalMachineAllocatorService.allocatePhysicalMachines(cluster)
+			deploymentProcessorService.doDeployment(cluster)
+			runAsync{ deployerService.deploy(dep) }
 		}
-		runAsync{ deployerService.deploy(dep) }
 		user.save(failOnError: true)
 	}
 
@@ -57,7 +56,7 @@ class DeploymentService {
 			depCluster.images.add(depImage)
 		}
 		depCluster.save(failOnError: true)
-		physicalMachineAllocatorService.allocatePhysicalMachinesRandomly(depCluster)
+		ipAllocatorService.allocatePhysicalMachinesRandomly(depCluster)
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +time)
 		Deployment dep= new Deployment(cluster: depCluster,startTime: new Date(),stopTime: stopTime,status: DeploymentStateEnum.ACTIVE)
@@ -99,7 +98,7 @@ class DeploymentService {
 			depCluster.images.add(depImage)
 		}
 		depCluster.save(failOnError: true)
-		physicalMachineAllocatorService.allocatePhysicalMachines(depCluster)
+		ipAllocatorService.allocatePhysicalMachines(depCluster)
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +time)
 		Deployment dep= new Deployment(cluster: depCluster,startTime: new Date(),stopTime: stopTime,status: DeploymentStateEnum.ACTIVE)
@@ -141,7 +140,7 @@ class DeploymentService {
 			depCluster.images.add(depImage)
 		}
 		depCluster.save(failOnError: true)
-		physicalMachineAllocatorService.allocatePhysicalMachines(depCluster)
+		ipAllocatorService.allocatePhysicalMachines(depCluster)
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +time)
 		Deployment dep= new Deployment(cluster: depCluster,startTime: new Date(),stopTime: stopTime,status: DeploymentStateEnum.ACTIVE)
@@ -183,7 +182,7 @@ class DeploymentService {
 			long stopTimeMillis= new Date().getTime()
 			def stopTime= new Date(stopTimeMillis +Integer.parseInt(time))
 			def virtualMachine = new VirtualMachineExecution(message: "Adding instance",name: iName+"-"+i ,ram: iRAM, cores:iCores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
-			physicalMachineAllocatorService.allocatePhysicalMachine(virtualMachine)
+			ipAllocatorService.allocatePhysicalMachine(virtualMachine)
 			virtualMachine.save(failOnError: true)
 			depImage.virtualMachines.add(virtualMachine)
 		}

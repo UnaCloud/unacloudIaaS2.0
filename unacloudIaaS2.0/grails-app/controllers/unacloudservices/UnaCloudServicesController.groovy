@@ -34,7 +34,7 @@ class UnaCloudServicesController {
 	def updater(){
 		response.setContentType("application/zip")
 		response.setHeader("Content-disposition", "filename=updater.zip")
-		agentService.copyUpdaterOnStream(response.outputStream)
+		agentService.copyUpdaterOnStream(response.outputStream,grailsAttributes.getApplicationContext().getResource("/").getFile())
 		response.outputStream.flush()
 	}
 	def logMessage(){

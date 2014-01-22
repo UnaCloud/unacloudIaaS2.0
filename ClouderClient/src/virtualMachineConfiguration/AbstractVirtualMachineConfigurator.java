@@ -14,11 +14,7 @@ import communication.ServerMessageSender;
 
 public abstract class AbstractVirtualMachineConfigurator{
 	private static Random r=new Random();
-	Hypervisor hypervisor;
 	VirtualMachineExecution execution;
-	public final void setHypervisor(Hypervisor hypervisor) {
-		this.hypervisor = hypervisor;
-	}
 	public void setExecution(VirtualMachineExecution execution) {
 		this.execution = execution;
 	}
@@ -34,8 +30,8 @@ public abstract class AbstractVirtualMachineConfigurator{
         	synchronized (execution.getImage()) {
         		hypervisor.registerVirtualMachine(execution.getImage());
 
-        			//TODO Evaluar si hacerlo en el apagado porque es mas importante el tiempo de arranque.
-        			hypervisor.restoreVirtualMachineSnapshot(execution.getImage(),"unacloudbase");
+    			//TODO Evaluar si hacerlo en el apagado porque es mas importante el tiempo de arranque.
+    			hypervisor.restoreVirtualMachineSnapshot(execution.getImage(),"unacloudbase");
     			
         		hypervisor.configureVirtualMachineHardware(execution.getCores(),execution.getMemory(),execution.getImage());
     			hypervisor.startVirtualMachine(execution.getImage());
