@@ -7,7 +7,6 @@ import static com.losandes.utils.Constants.*;
 import java.util.Arrays;
 
 /**
- * @author Eduardo Rosales
  * Responsible for executing commands on local machine
  */
 public class LocalProcessExecutor {
@@ -17,7 +16,7 @@ public class LocalProcessExecutor {
     /**
      * Responsible for executing local commands without output
      * @param inCommand Command to execute
-     * @return If the command was succesfully execute or nor
+     * @return If the command was successfully execute or nor
      */
     public static boolean executeCommand(String command){
     	System.out.println("Exec: "+command);

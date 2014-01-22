@@ -2,6 +2,8 @@ package virtualMachineManager;
 
 import hypervisorManager.Hypervisor;
 import hypervisorManager.HypervisorFactory;
+import hypervisorManager.Image;
+import hypervisorManager.ImageCopy;
 import hypervisorManager.VirtualBox;
 
 import java.io.BufferedReader;
@@ -28,10 +30,12 @@ public class ImageCacheManager {
 	private static Map<Long,Image> imageList=null;
 	public static ImageCopy getFreeImageCopy(long imageId){
 		Image vmi=getImage(imageId);
-		synchronized (vmi) {
+		ImageCopy source;
+		synchronized (vmi){
 			if(vmi.imageCopies.isEmpty()){
 				ImageCopy copy=new ImageCopy();
 				dowloadImageCopy(vmi,copy);
+				return copy;
 			}else{
 				for(ImageCopy copy:vmi.imageCopies){
 					if(copy.getStatus()==VirtualMachineImageStatus.FREE){
@@ -39,28 +43,10 @@ public class ImageCacheManager {
 						return copy;
 					}
 				}
-				/*for(Image vmi:imageList)if(vmi.getId()==imageId){
-				for(ImageCopy)
-				if(vmi.getStatus()==VirtualMachineImageStatus.FREE){
-				vmi.setStatus(VirtualMachineImageStatus.LOCK);
-				return vmi;
-			}
-			for(Image vmi:imageList)if(vmi.getId()==imageId&&vmi.getStatus()==VirtualMachineImageStatus.LOCK){
-				Image newImage=new Image();
-				newImage.setHypervisorId(br.readLine());
-				newImage.setId(imageId);
-				newImage.setMainFile(new File(root,mainFile));
-				newImage.setPassword(br.readLine());
-				newImage.setUsername(br.readLine());
-				newImage.setStatus(VirtualMachineImageStatus.FREE);
-				newImage.setVirtualMachineName(br.readLine());
-				newImage.setConfiguratorClass(br.readLine());
-			}
-			return null;*/
-				//clonar?
+				source=vmi.getImageCopies().get(0);
 			}
 		}
-		return null;
+		return source.cloneCopy(machineRepository);
 	}
 	private synchronized static Image getImage(long imageId){
 		loadImages();
@@ -98,7 +84,7 @@ public class ImageCacheManager {
 						copy.setMainFile(new File(root,mainFile));
 						image.setPassword(br.readLine());
 						image.setUsername(br.readLine());
-						copy.setStatus(VirtualMachineImageStatus.FREE);
+						copy.setStatus(VirtualMachineImageStatus.LOCK);
 						copy.setVirtualMachineName(br.readLine());
 						image.setConfiguratorClass(br.readLine());
 					}else{

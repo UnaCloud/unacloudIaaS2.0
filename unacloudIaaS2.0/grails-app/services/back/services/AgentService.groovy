@@ -55,12 +55,16 @@ class AgentService {
 		zos.closeEntry();
 		zos.close();
 	}
-	def copyUpdaterOnStream(OutputStream outputStream){
+	def copyUpdaterOnStream(OutputStream outputStream,File appDir){
 		ZipOutputStream zos=new ZipOutputStream(outputStream);
-		copyFile(zos,"ClientUpdater.jar",new File("web-app/agentSources/ClientUpdater.jar"),true);
+		copyFile(zos,"ClientUpdater.jar",new File(appDir,"agentSources/ClientUpdater.jar"),true);
 		zos.putNextEntry(new ZipEntry("vars"));
 		PrintWriter pw=new PrintWriter(zos);
-		for(ServerVariable sv:ServerVariable.all)pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
+		for(ServerVariable sv:ServerVariable.all){
+			if(!sv.name.equals("AGENT_VERSION")){
+				pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
+			}
+		}
 		pw.flush();
 		zos.closeEntry();
 		zos.close();

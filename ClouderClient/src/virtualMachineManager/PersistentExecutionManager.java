@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TreeMap;
@@ -38,7 +37,7 @@ public class PersistentExecutionManager {
      */
     private static final String executionsFile = "executions.txt";
     
-    private static Map<Long,VirtualMachineExecution> executionList=new TreeMap<>();
+    private static final Map<Long,VirtualMachineExecution> executionList=new TreeMap<>();
     
     /**
      * Timer used to schedule shutdown events
@@ -51,13 +50,10 @@ public class PersistentExecutionManager {
      * @return
      */
     public static UnaCloudAbstractResponse removeExecution(long virtualMachineExecutionId,boolean checkTime) {
-    	VirtualMachineExecution execution=null;
-    	execution=executionList.remove(virtualMachineExecutionId);
+    	VirtualMachineExecution execution=executionList.remove(virtualMachineExecutionId);
 		if(execution!=null&&(!checkTime||System.currentTimeMillis()>execution.getShutdownTime())){
 			Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getImage().getHypervisorId());
-			v.stopVirtualMachine(execution.getImage());
-			v.unregisterVirtualMachine(execution.getImage());
-			ImageCacheManager.freeLockedImageCopy(execution.getImage());
+			v.stopAndUnregister(execution.getImage());
 		}
 		saveData();
     	return null;
@@ -96,14 +92,11 @@ public class PersistentExecutionManager {
         try {
             if(!started)v.startVirtualMachine(execution.getImage());
             executionList.put(execution.getId(),execution);
-            System.out.println("Apagando "+new Date(execution.getShutdownTime()+100));
             timer.schedule(new Schedule(execution.getId()),new Date(execution.getShutdownTime()+100));
             new VirtualMachineStateViewer(execution.getId(),v,execution.getIp());
         } catch (HypervisorOperationException e) {
         	e.printStackTrace();
-        	v.stopVirtualMachine(execution.getImage());
-        	v.unregisterVirtualMachine(execution.getImage());
-			ImageCacheManager.freeLockedImageCopy(execution.getImage());
+        	v.stopAndUnregister(execution.getImage());
         	ServerMessageSender.reportVirtualMachineState(execution.getId(), VirtualMachineExecutionStateEnum.FAILED, e.getMessage());
             return ERROR_MESSAGE + e.getMessage();
         }
@@ -113,8 +106,8 @@ public class PersistentExecutionManager {
     
     /**
      * Extends the time that the virtual machine must be up
-     * @param id The execution id to find the correspondig virtual machine
-     * @param executionTime The aditional time that must be added to the virtual machine execution
+     * @param id The execution id to find the corresponding virtual machine
+     * @param executionTime The additional time that must be added to the virtual machine execution
      */
     public static UnaCloudAbstractResponse extendsVMTime(VirtualMachineAddTimeMessage timeMessage) {
     	VirtualMachineExecution execution=executionList.get(timeMessage.getVirtualMachineExecutionId());
@@ -142,12 +135,13 @@ public class PersistentExecutionManager {
     	new Thread(){
     		public void run() {
     			Map<Long,VirtualMachineExecution> executions=null;
-    	    	List<Image> images=null;
-    	        try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream(executionsFile))){
+    	    	try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream(executionsFile))){
     	        	executions=(Map<Long,VirtualMachineExecution>)ois.readObject();
-    	        	images=(List<Image>)ois.readObject();
-    	        	if(executions!=null&&images!=null){
-    	            	executionList=executions;
+    	        	if(executions!=null){
+    	        		for(VirtualMachineExecution execution:executions.values())if(execution!=null){
+	        				Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getImage().getHypervisorId());
+	        				v.stopAndUnregister(execution.getImage());
+    	        		}
     	            }else saveData();
     	        } catch (Exception ex){}
     		};
