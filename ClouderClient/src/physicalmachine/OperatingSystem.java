@@ -103,12 +103,14 @@ public class OperatingSystem {
     public static String getUserName() {
         String userName = null;
         try {
-            Process p = Runtime.getRuntime().exec("cmd.exe /c quser");
+            Process p = Runtime.getRuntime().exec(new String[]{"cmd.exe","/c","quser"});
             InputStream is = p.getInputStream();
             try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
                 br.readLine();
                 for (String linea; (linea = br.readLine()) != null;) {
-                    String user = linea.trim().split(" |\t")[0];
+                    final String user = linea.trim().split(" |\t")[0].replaceAll("[^0-9a-zA-Z\\.,-_]","");
+                    System.out.println("Linea "+linea);
+                    System.out.println("User  "+user);
                     userName = (userName == null ? "" : ";") + user;
                 }
             }

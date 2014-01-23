@@ -48,7 +48,7 @@ public class Main {
         	PhysicalMachineState.reportPhyisicalMachineStart();
         	PhysicalMachineMonitor.restart();
             //DataServerSocket.init();
-            new PhysicalMachineStateReporter().start();
+            PhysicalMachineStateReporter.getInstance().start();
             PersistentExecutionManager.loadData();
             new TreeDistributionChannelManager();
             ClouderClientAttention.getInstance().connect();
