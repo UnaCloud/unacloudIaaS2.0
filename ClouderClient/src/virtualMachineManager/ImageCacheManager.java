@@ -1,6 +1,5 @@
 package virtualMachineManager;
 
-import hypervisorManager.Hypervisor;
 import hypervisorManager.HypervisorFactory;
 import hypervisorManager.Image;
 import hypervisorManager.ImageCopy;
@@ -21,6 +20,9 @@ import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import utils.RandomUtils;
+import utils.SystemUtils;
+
 import com.losandes.utils.Constants;
 import com.losandes.utils.VariableManager;
 
@@ -29,24 +31,37 @@ public class ImageCacheManager {
 	private static File imageListFile=new File("imageList");
 	private static Map<Long,Image> imageList=null;
 	public static ImageCopy getFreeImageCopy(long imageId){
+		System.out.println("getFreeImageCopy "+imageId);
 		Image vmi=getImage(imageId);
-		ImageCopy source;
+		ImageCopy source,dest;
 		synchronized (vmi){
-			if(vmi.imageCopies.isEmpty()){
+			if(vmi.getImageCopies().isEmpty()){
 				ImageCopy copy=new ImageCopy();
 				dowloadImageCopy(vmi,copy);
+				System.out.println(" downloaded");
 				return copy;
 			}else{
-				for(ImageCopy copy:vmi.imageCopies){
+				for(ImageCopy copy:vmi.getImageCopies()){
 					if(copy.getStatus()==VirtualMachineImageStatus.FREE){
 						copy.setStatus(VirtualMachineImageStatus.LOCK);
+						System.out.println(" Using free");
 						return copy;
 					}
 				}
 				source=vmi.getImageCopies().get(0);
+				final String vmName="v"+RandomUtils.generateRandomString(9);
+				dest=new ImageCopy();
+				dest.setImage(vmi);
+				vmi.getImageCopies().add(dest);
+				File root=new File(machineRepository+"\\"+imageId+"\\"+vmName);
+				dest.setMainFile(new File(root,vmName+"."+source.getMainFile().getName().split("\\.")[1]));
+				dest.setStatus(VirtualMachineImageStatus.LOCK);
+				dest.setVirtualMachineName(vmName);
+				SystemUtils.sleep(2000);
 			}
 		}
-		return source.cloneCopy(machineRepository);
+		System.out.println(" clonning");
+		return source.cloneCopy(dest);
 	}
 	private synchronized static Image getImage(long imageId){
 		loadImages();
@@ -99,13 +114,9 @@ public class ImageCacheManager {
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
-			hypervisor.registerVirtualMachine(copy);
-			hypervisor.changeVirtualMachineMac(copy);
-			hypervisor.takeVirtualMachineSnapshot(copy,"unacloudbase");
-			hypervisor.unregisterVirtualMachine(copy);
 			copy.setImage(image);
-			image.imageCopies.add(copy);
+			image.getImageCopies().add(copy);
+			copy.init();
 			saveImages();
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -139,7 +150,7 @@ public class ImageCacheManager {
 			imageList=new TreeMap<>();
 			try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream(imageListFile))){
 				imageList=(Map<Long,Image>)ois.readObject();
-				for(Image im:imageList.values())for(ImageCopy copy:im.imageCopies){
+				for(Image im:imageList.values())for(ImageCopy copy:im.getImageCopies()){
 					copy.setStatus(VirtualMachineImageStatus.FREE);
 				}
 			} catch (Exception e) {

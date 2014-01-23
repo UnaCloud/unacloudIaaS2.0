@@ -35,9 +35,9 @@ public class ScientificLinux extends AbstractVirtualMachineConfigurator{
     	}catch (Exception e) {
 			return;
 		}
-        copyFile("/etc/network/interfaces",out);
-        executeCommand("/sbin/ifdown","eth0");
-        executeCommand("/sbin/ifup","eth0");
+    	execution.getImage().copyFileOnVirtualMachine("/etc/network/interfaces",out);
+    	execution.getImage().executeCommandOnMachine("/sbin/ifdown","eth0");
+    	execution.getImage().executeCommandOnMachine("/sbin/ifup","eth0");
         out.delete();
     }
 
@@ -58,8 +58,8 @@ public class ScientificLinux extends AbstractVirtualMachineConfigurator{
         } catch (Exception e) {
             return;
         }
-		copyFile("/etc/sysconfig/network",out);
-		executeCommand("/bin/hostname",execution.getHostname());
+		execution.getImage().copyFileOnVirtualMachine("/etc/sysconfig/network",out);
+		execution.getImage().executeCommandOnMachine("/bin/hostname",execution.getHostname());
 	}
 
 	@Override

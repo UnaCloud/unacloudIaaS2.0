@@ -5,8 +5,10 @@ import java.io.Serializable;
 
 import communication.ServerMessageSender;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
-import utils.RandomUtils;
+import utils.SystemUtils;
 import virtualMachineConfiguration.AbstractVirtualMachineConfigurator;
+import virtualMachineManager.ImageCacheManager;
+import virtualMachineManager.PersistentExecutionManager;
 import virtualMachineManager.VirtualMachineExecution;
 import virtualMachineManager.VirtualMachineImageStatus;
 
@@ -47,23 +49,60 @@ public class ImageCopy implements Serializable{
 			Object configuratorObject=configuratorClass.getConstructor().newInstance();
 			if(configuratorObject instanceof AbstractVirtualMachineConfigurator){
 				AbstractVirtualMachineConfigurator configurator=(AbstractVirtualMachineConfigurator)configuratorObject;
-				configurator.setHypervisor(hypervisor);
+				//configurator.setHypervisor(hypervisor);
 				configurator.setExecution(machineExecution);
-				configurator.start();
+				//TODO Evaluar si hacerlo en el apagado porque es mas importante el tiempo de arranque.
+				hypervisor.registerVirtualMachine(this);
+    			hypervisor.restoreVirtualMachineSnapshot(this,"unacloudbase");
+        		hypervisor.configureVirtualMachineHardware(machineExecution.getCores(),machineExecution.getMemory(),this);
+    			hypervisor.startVirtualMachine(this);
+    			SystemUtils.sleep(50000);
+    			configurator.configureHostname();
+    			configurator.configureIP();
+    	        PersistentExecutionManager.startUpMachine(machineExecution,!configurator.doPostConfigure());
 			}else ServerMessageSender.reportVirtualMachineState(machineExecution.getId(), VirtualMachineExecutionStateEnum.FAILED,"Invalid virtual machine configurator.");
 		} catch (Exception e) {
 			ServerMessageSender.reportVirtualMachineState(machineExecution.getId(), VirtualMachineExecutionStateEnum.FAILED,"Configurator class error: "+e.getMessage());
 		}
 	}
-	public synchronized ImageCopy cloneCopy(String machineRepositoryDestination){
-		ImageCopy dest=new ImageCopy();
-		final String vmName="v"+RandomUtils.generateRandomString(9);
-		File root=new File(machineRepositoryDestination+"\\"+getImage().getId()+"\\"+vmName);
-		dest.setMainFile(new File(root,vmName+"."+getMainFile().getName().split("\\.")[1]));
-		dest.setStatus(VirtualMachineImageStatus.LOCK);
-		dest.setVirtualMachineName(vmName);
+	public synchronized ImageCopy cloneCopy(ImageCopy dest){
 		Hypervisor hypervisor=HypervisorFactory.getHypervisor(this.getImage().getHypervisorId());
 		hypervisor.cloneVirtualMachine(this,dest);
 		return dest;
 	}
+	public synchronized void init(){
+		Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
+		hypervisor.registerVirtualMachine(this);
+		try {
+			hypervisor.changeVirtualMachineMac(this);
+			hypervisor.takeVirtualMachineSnapshot(this,"unacloudbase");
+		} catch (HypervisorOperationException e) {
+			e.printStackTrace();
+		}
+		hypervisor.unregisterVirtualMachine(this);
+	}
+	public void startVirtualMachine()throws HypervisorOperationException{
+		Hypervisor hypervisor=HypervisorFactory.getHypervisor(this.getImage().getHypervisorId());
+		hypervisor.startVirtualMachine(this);
+	}
+    
+    public void executeCommandOnMachine( String command,String...args) throws HypervisorOperationException{
+    	Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
+    	hypervisor.executeCommandOnMachine(this,command,args);
+    }
+
+    public void copyFileOnVirtualMachine(String destinationRoute, File sourceFile) throws HypervisorOperationException{
+    	Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
+    	hypervisor.copyFileOnVirtualMachine(this,destinationRoute,sourceFile);
+    }
+    public void restartVirtualMachine() throws HypervisorOperationException{
+    	Hypervisor hypervisor=HypervisorFactory.getHypervisor(this.getImage().getHypervisorId());
+		hypervisor.restartVirtualMachine(this);
+    }
+    
+    
+    public synchronized void stopAndUnregister(){
+    	Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
+    	hypervisor.stopAndUnregister(this);
+    }
 }

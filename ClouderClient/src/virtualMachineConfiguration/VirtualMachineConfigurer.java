@@ -1,11 +1,7 @@
 package virtualMachineConfiguration;
 
-import hypervisorManager.Hypervisor;
-import hypervisorManager.HypervisorFactory;
 import hypervisorManager.ImageCopy;
-import communication.ServerMessageSender;
 import communication.messages.vmo.VirtualMachineStartResponse;
-import unacloudEnums.VirtualMachineExecutionStateEnum;
 import virtualMachineManager.VirtualMachineExecution;
 import virtualMachineManager.ImageCacheManager;
 

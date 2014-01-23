@@ -19,8 +19,8 @@ public class Debian extends AbstractVirtualMachineConfigurator{
         } catch (Exception e) {
             return;
         }
-		copyFile("/etc/hostname",out);
-		executeCommand("/bin/hostname",execution.getHostname());
+		execution.getImage().copyFileOnVirtualMachine("/etc/hostname",out);
+		execution.getImage().executeCommandOnMachine("/bin/hostname",execution.getHostname());
 		out.delete();
 	}
     /**
@@ -46,8 +46,8 @@ public class Debian extends AbstractVirtualMachineConfigurator{
     	}catch (Exception e) {
 			return;
 		}
-        copyFile("/etc/network/interfaces",out);
-        executeCommand("/etc/init.d/networking","restart");
+    	execution.getImage().copyFileOnVirtualMachine("/etc/network/interfaces",out);
+    	execution.getImage().executeCommandOnMachine("/etc/init.d/networking","restart");
         out.delete();
     }
 

@@ -123,4 +123,10 @@ public class VirtualBox extends Hypervisor {
 	        sleep(15000);
 		}
 	}
+
+	@Override
+	public void cloneVirtualMachine(ImageCopy source, ImageCopy dest) {
+		LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"clonevm",source.getVirtualMachineName(),"--snapshot","unacloudbase","--name",dest.getVirtualMachineName(),"--basefolder",dest.getMainFile().getParentFile().getParentFile().getAbsolutePath());
+        sleep(20000);
+	}
 }

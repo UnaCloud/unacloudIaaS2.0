@@ -33,10 +33,10 @@ public class Ubuntu extends AbstractVirtualMachineConfigurator{
     	}catch (Exception e) {
 			return;
 		}
-    	copyFile("/etc/network/interfaces",out);
-    	executeCommand("/bin/rm","/etc/udev/rules.d/*net.rules");
-        executeCommand("/sbin/ifdown","eth0");
-        executeCommand("/sbin/ifup","eth0");
+    	execution.getImage().copyFileOnVirtualMachine("/etc/network/interfaces",out);
+    	execution.getImage().executeCommandOnMachine("/bin/rm","/etc/udev/rules.d/*net.rules");
+    	execution.getImage().executeCommandOnMachine("/sbin/ifdown","eth0");
+    	execution.getImage().executeCommandOnMachine("/sbin/ifup","eth0");
         out.delete();
     }
 
@@ -54,8 +54,8 @@ public class Ubuntu extends AbstractVirtualMachineConfigurator{
         } catch (Exception e) {
             return;
         }
-		copyFile("/etc/hostname",out);
-		executeCommand("/bin/hostname",execution.getHostname());
+		execution.getImage().copyFileOnVirtualMachine("/etc/hostname",out);
+		execution.getImage().executeCommandOnMachine("/bin/hostname",execution.getHostname());
 	}
 
 	@Override

@@ -12,7 +12,7 @@ public class Windows7 extends AbstractVirtualMachineConfigurator{
     @Override
     public void configureIP() throws HypervisorOperationException {
     	AddressUtility au = new AddressUtility(execution.getIp(),execution.getNetMask());
-        executeCommand("netsh.exe","interface","ip","set","address","name=Conexión de Área local","static",au.getIp(),au.getNetmask(),au.getGateway(),"1");
+    	execution.getImage().executeCommandOnMachine("netsh.exe","interface","ip","set","address","name=Conexión de Área local","static",au.getIp(),au.getNetmask(),au.getGateway(),"1");
     }
     @Override
     public void configureDHCP() {

@@ -56,7 +56,8 @@ class DeploymentService {
 			depCluster.images.add(depImage)
 		}
 		depCluster.save(failOnError: true)
-		ipAllocatorService.allocatePhysicalMachinesRandomly(depCluster)
+		deploymentProcessorService.doDeployment(depCluster)
+		//ipAllocatorService.allocatePhysicalMachinesRandomly(depCluster)
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +time)
 		Deployment dep= new Deployment(cluster: depCluster,startTime: new Date(),stopTime: stopTime,status: DeploymentStateEnum.ACTIVE)
@@ -98,7 +99,8 @@ class DeploymentService {
 			depCluster.images.add(depImage)
 		}
 		depCluster.save(failOnError: true)
-		ipAllocatorService.allocatePhysicalMachines(depCluster)
+		deploymentProcessorService.doDeployment(depCluster)
+		//ipAllocatorService.allocatePhysicalMachines(depCluster)
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +time)
 		Deployment dep= new Deployment(cluster: depCluster,startTime: new Date(),stopTime: stopTime,status: DeploymentStateEnum.ACTIVE)
@@ -140,7 +142,8 @@ class DeploymentService {
 			depCluster.images.add(depImage)
 		}
 		depCluster.save(failOnError: true)
-		ipAllocatorService.allocatePhysicalMachines(depCluster)
+		deploymentProcessorService.doDeployment(depCluster)
+		//ipAllocatorService.allocatePhysicalMachines(depCluster)
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +time)
 		Deployment dep= new Deployment(cluster: depCluster,startTime: new Date(),stopTime: stopTime,status: DeploymentStateEnum.ACTIVE)
@@ -182,7 +185,8 @@ class DeploymentService {
 			long stopTimeMillis= new Date().getTime()
 			def stopTime= new Date(stopTimeMillis +Integer.parseInt(time))
 			def virtualMachine = new VirtualMachineExecution(message: "Adding instance",name: iName+"-"+i ,ram: iRAM, cores:iCores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
-			ipAllocatorService.allocatePhysicalMachine(virtualMachine)
+			deploymentProcessorService.doDeployment(cluster)
+			//ipAllocatorService.allocatePhysicalMachine(virtualMachine)
 			virtualMachine.save(failOnError: true)
 			depImage.virtualMachines.add(virtualMachine)
 		}

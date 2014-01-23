@@ -1,7 +1,6 @@
 package monitoring;
 
 import communication.ServerMessageSender;
-import hypervisorManager.Hypervisor;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,7 +25,7 @@ public class VirtualMachineStateViewer {
      * @param vmPath The path of the virtual machine that must be checked
      * @param hypervisorName The type of hypervisor used to deploy the virtual machine
      */
-    public VirtualMachineStateViewer(long virtualMachineCode,Hypervisor v,String vmIP){
+    public VirtualMachineStateViewer(long virtualMachineCode,String vmIP){
         ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.DEPLOYING,"Starting virtual machine");
         /*boolean encendio=false,red=false;
         if(v.getHypervisorId()==VIRTUAL_BOX){

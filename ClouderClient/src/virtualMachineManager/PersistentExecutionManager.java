@@ -1,8 +1,6 @@
 package virtualMachineManager;
 
 import static com.losandes.utils.Constants.ERROR_MESSAGE;
-import hypervisorManager.Hypervisor;
-import hypervisorManager.HypervisorFactory;
 import hypervisorManager.HypervisorOperationException;
 
 import java.io.FileInputStream;
@@ -52,8 +50,7 @@ public class PersistentExecutionManager {
     public static UnaCloudAbstractResponse removeExecution(long virtualMachineExecutionId,boolean checkTime) {
     	VirtualMachineExecution execution=executionList.remove(virtualMachineExecutionId);
 		if(execution!=null&&(!checkTime||System.currentTimeMillis()>execution.getShutdownTime())){
-			Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getImage().getHypervisorId());
-			v.stopAndUnregister(execution.getImage());
+			execution.getImage().stopAndUnregister();
 		}
 		saveData();
     	return null;
@@ -69,9 +66,8 @@ public class PersistentExecutionManager {
      */
     public static UnaCloudAbstractResponse restartMachine(VirtualMachineRestartMessage restartMessage) {
     	VirtualMachineExecution execution=executionList.get(restartMessage.getVirtualMachineExecutionId());
-        Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getImage().getHypervisorId());
         try {
-            v.restartVirtualMachine(execution.getImage());
+        	execution.getImage().restartVirtualMachine();
         } catch (HypervisorOperationException ex) {
             ServerMessageSender.reportVirtualMachineState(restartMessage.getVirtualMachineExecutionId(), VirtualMachineExecutionStateEnum.FAILED, ex.getMessage());
         }
@@ -88,15 +84,14 @@ public class PersistentExecutionManager {
     public static String startUpMachine(VirtualMachineExecution execution,boolean started){
     	System.out.println("Execution time: "+System.currentTimeMillis()+execution.getExecutionTime()*3600000);
     	execution.setShutdownTime(System.currentTimeMillis()+execution.getExecutionTime()*3600000);
-        Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getImage().getHypervisorId());
         try {
-            if(!started)v.startVirtualMachine(execution.getImage());
+            if(!started)execution.getImage().startVirtualMachine();
             executionList.put(execution.getId(),execution);
             timer.schedule(new Schedule(execution.getId()),new Date(execution.getShutdownTime()+100));
-            new VirtualMachineStateViewer(execution.getId(),v,execution.getIp());
+            new VirtualMachineStateViewer(execution.getId(),execution.getIp());
         } catch (HypervisorOperationException e) {
         	e.printStackTrace();
-        	v.stopAndUnregister(execution.getImage());
+        	execution.getImage().stopAndUnregister();
         	ServerMessageSender.reportVirtualMachineState(execution.getId(), VirtualMachineExecutionStateEnum.FAILED, e.getMessage());
             return ERROR_MESSAGE + e.getMessage();
         }
@@ -139,8 +134,7 @@ public class PersistentExecutionManager {
     	        	executions=(Map<Long,VirtualMachineExecution>)ois.readObject();
     	        	if(executions!=null){
     	        		for(VirtualMachineExecution execution:executions.values())if(execution!=null){
-	        				Hypervisor v=HypervisorFactory.getHypervisor(execution.getImage().getImage().getHypervisorId());
-	        				v.stopAndUnregister(execution.getImage());
+	        				execution.getImage().stopAndUnregister();
     	        		}
     	            }else saveData();
     	        } catch (Exception ex){}
