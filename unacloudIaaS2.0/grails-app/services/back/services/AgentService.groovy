@@ -32,14 +32,13 @@ class AgentService {
 			ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
 			oos.writeObject(message);
 			oos.flush();
-			println ois.readObject();
+			ois.readObject();
 			s.close();
 		}catch(Exception e){
 			println "Error conectando a "+ipAddress;
-			e.printStackTrace();
 		}
 		try{
-			Thread.sleep(1000);
+			Thread.sleep(500);
 		}catch(Exception e){
 			e.printStackTrace();
 		}

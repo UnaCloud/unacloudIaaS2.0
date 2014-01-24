@@ -95,9 +95,9 @@ public class VirtualBox extends Hypervisor {
     @Override
     public void changeVirtualMachineMac(ImageCopy image) throws HypervisorOperationException {
     	NetworkInterface ninterface=AddressUtility.getDefaultNetworkInterface();
-    	System.out.println(" The network interface is "+ninterface);
-        LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "modifyvm", image.getVirtualMachineName(),"--macaddress1","auto");
+    	LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "modifyvm", image.getVirtualMachineName(),"--bridgeadapter1",ninterface.getDisplayName(),"--macaddress1","auto");
         sleep(20000);
+        
     }
 
     private void sleep(long l) {

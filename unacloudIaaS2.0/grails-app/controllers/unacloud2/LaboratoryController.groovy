@@ -61,6 +61,7 @@ class LaboratoryController {
 				}
 			}
 		}
+		println "Termine de actualizar"
 		redirect( action: "index")
 	}
 	def stopMachines(){

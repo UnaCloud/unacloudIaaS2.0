@@ -33,12 +33,9 @@ class MachineStateController {
 		String hostuser=params['hostuser']
 		try{
 			physicalMachineStateManagerService.reportPhysicalMachine(hostname,hostuser)
-			println "Exito on reportPhysicalMachineLogin "+ hostname+" "+hostuser;
 		}catch(Exception ex){
 			println "  Error on reportPhysicalMachineLogin "+ hostname+" "+hostuser;
-			//ex.printStackTrace();
 		}
-		
 		render "succeeded"
 	}
 	def registerPhysicalMachine(){
