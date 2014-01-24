@@ -1,117 +1,35 @@
 <%@page import="unacloud2.ServerVariable"%>
 <html>
-   <head>
-      <meta name="layout" content="main"/>
-      <r:require modules="bootstrap"/>
-   </head>
+<html>
+<head>
+<meta name="layout" content="main" />
+<r:require modules="bootstrap" />
+</head>
 <body>
-<div class="span9">
-	<div class="hero-unit">
-        	<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
+	<div class="hero-unit span9">
+		<g:form name="instancesDeploy" class="form-horizontal"
+			controller="deployment" action="addInstances">
+			<g:each in="${ServerVariable.all}" status="i" var="serverVariable">
+				<div class="control-group">
+					<label class="control-label">
+						${serverVariable.name}
+					</label>
+					<div class="controls" id="data">
+						<input name="value" id="value" type="text"
+							value="${serverVariable.variable}">
+					</div>
 				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
+				
+				
+			</g:each>
+			<div class="controls">
+					<g:submitButton name="addInstances" class="btn" value="Deploy" />
+					<g:link action="updateAgentVersion" controller="unaCloudServices">
+					<button>Update Agent Version</button>
+				</g:link>
 				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label">Allocation Name</label>
-				<div class="controls" id="data">
-					<input name="value" id="value" type="text" value="${ServerVariable.findByName("VM_ALLOCATOR_NAME").variable}">
-				</div>
-			</div>
-        	<g:link  action="updateAgentVersion" controller="unaCloudServices"><button>Update Agent Version</button></g:link>
-	</div>		
-</div>
-    
+			
+		</g:form>
+	</div>
 </body>
 </html>
