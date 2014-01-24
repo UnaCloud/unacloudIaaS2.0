@@ -73,7 +73,8 @@ class UserController {
 
 	def setPolicy(){
 		User u= User.findByUsername(params.username)
-		userService.setPolicy(u, params.name, params.value)
+		println u
+		userService.setPolicy(u, params.type,  params.value)
 		redirect(action:"index")
 	}
 
@@ -83,15 +84,21 @@ class UserController {
 			redirect(action:"index")
 		}
 		else{
-			def value
-			if(params.selectedType!=null){
-				for(allocPolicy in u.allocationPolicies){
-					if(allocPolicy.name.equals(params.name)){
-						value= allocPolicy.value
+			def found
+			if(params.data!=null){
+				for(allocPolicy in u.restrictions){
+					if(allocPolicy.name.equals(params.data)){
+						found=true
+						render "<input id=\"value\" name=\"value\" type=\"text\" value="+allocPolicy.value+">"
 					}
 				}
+				if(found!=true){
+				render "<input id=\"value\" name=\"value\" type=\"text\" value=\"\">"
+				}
 			}
-			[user: u, value: value]
+			else{
+			[user: u]
+			}
 		}
 	}
 

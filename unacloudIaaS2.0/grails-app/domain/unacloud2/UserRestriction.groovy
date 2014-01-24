@@ -1,6 +1,6 @@
 package unacloud2
 
-class AllocationPolicy {
+class UserRestriction {
 	
 	String name
 	String value

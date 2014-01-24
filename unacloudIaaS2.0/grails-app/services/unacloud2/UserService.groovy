@@ -25,22 +25,25 @@ class UserService {
 	}
 	
 	def setPolicy(User u, String name, String value){
-		AllocationPolicy oldAlloc
-		for(allocPolicy in u.allocationPolicies){
+		UserRestriction oldAlloc
+		for(allocPolicy in u.restrictions){
 			if(allocPolicy.name.equals(name)){
 				oldAlloc= allocPolicy
 			}
 		}
-		println oldAlloc
+		println "alloc found:"+oldAlloc
 		if(oldAlloc==null){
-			def alloc= new AllocationPolicy(name: name, value: value)
-			alloc.save()
-			println alloc
-			u.addToAllocationPolicies(alloc).save()
+			
+			def alloc= new UserRestriction(name: name, value: value)
+			alloc.save(failOnError: true)
+			println "alloc created:"+alloc
+			u.addToRestrictions(alloc)
+			u.save(failOnError: true)
 		}
 		else{
-			println oldAlloc
-			oldAlloc.setValue(value).save()
+			println "setting value on oldAlloc:"+oldAlloc
+			oldAlloc.setValue(value)
+			oldAlloc.save(failOnError: true)
 		}
 	}
 	

@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import unacloud2.AllocationPolicy;
 import unacloud2.DeployedCluster;
 import unacloud2.PhysicalMachine;
 import unacloud2.VirtualMachineExecution;
