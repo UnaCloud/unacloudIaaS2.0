@@ -3,8 +3,6 @@ package monitoring;
 import physicalmachine.Network;
 import physicalmachine.OperatingSystem;
 
-import com.losandes.utils.Constants;
-
 import communication.AbstractGrailsCommunicator;
 
 /**

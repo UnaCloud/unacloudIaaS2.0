@@ -7,7 +7,6 @@ import communication.ServerMessageSender;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import utils.SystemUtils;
 import virtualMachineConfiguration.AbstractVirtualMachineConfigurator;
-import virtualMachineManager.ImageCacheManager;
 import virtualMachineManager.PersistentExecutionManager;
 import virtualMachineManager.VirtualMachineExecution;
 import virtualMachineManager.VirtualMachineImageStatus;

@@ -108,15 +108,14 @@ public class OperatingSystem {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
                 br.readLine();
                 for (String linea; (linea = br.readLine()) != null;) {
-                    final String user = linea.trim().split(" |\t")[0].replaceAll("[^0-9a-zA-Z\\.,-_]","");
-                    System.out.println("Linea "+linea);
-                    System.out.println("User  "+user);
-                    userName = (userName == null ? "" : ";") + user;
+                    final String user = linea.trim().split(" |\t")[0].replaceAll("[^\\w\\.-]","");
+                    userName = (userName == null ? "" : (userName+";")) + user;
                 }
             }
+            p.destroy();
         } catch (IOException ex) {
         }
         return userName;
     }
-} //end of OperatingSystem
+}
 

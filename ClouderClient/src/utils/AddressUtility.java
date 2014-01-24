@@ -5,6 +5,10 @@
 
 package utils;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
+
 /**
  *
  * @author Clouder
@@ -62,6 +66,25 @@ public class AddressUtility {
     public String getNetwork() {
         return network;
     }
-
-
+    public static NetworkInterface getDefaultNetworkInterface(){
+    	try{
+    		Enumeration<NetworkInterface> networks=NetworkInterface.getNetworkInterfaces();
+    		while(networks.hasMoreElements()){
+    			NetworkInterface ni =networks.nextElement();
+    			Enumeration<InetAddress> addresses=ni.getInetAddresses();
+    			boolean hasAddress=false;
+    			while(addresses.hasMoreElements()){
+    				InetAddress ia=addresses.nextElement();
+    				if(!(ia.isAnyLocalAddress()||ia.isLinkLocalAddress()||ia.isLoopbackAddress()||ia.isSiteLocalAddress()||ni.isPointToPoint())){
+    					if(!hasAddress){
+    						return ni;
+    					}
+    				}
+    			}
+    		}
+    	}catch(Exception ex){
+    		
+    	}
+		return null;
+	}
 }

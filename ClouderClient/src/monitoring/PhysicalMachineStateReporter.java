@@ -6,8 +6,8 @@ package monitoring;
  */
 public class PhysicalMachineStateReporter extends Thread{
 
-	private int REPORT_DELAY=30000;
-	private int REPORT_FAIL_LIMIT=5;
+	private int REPORT_DELAY=60000;
+	//private int REPORT_FAIL_LIMIT=5;
 
 	private static PhysicalMachineStateReporter instance;
 	public static synchronized PhysicalMachineStateReporter getInstance(){

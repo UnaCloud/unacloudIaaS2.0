@@ -3,6 +3,7 @@ package hypervisorManager;
 import static com.losandes.utils.Constants.ERROR_MESSAGE;
 
 import java.io.File;
+import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.logging.Logger;
 
 import com.losandes.utils.Constants;
 
+import utils.AddressUtility;
 import virtualMachineManager.LocalProcessExecutor;
 
 /**
@@ -92,6 +94,8 @@ public class VirtualBox extends Hypervisor {
 
     @Override
     public void changeVirtualMachineMac(ImageCopy image) throws HypervisorOperationException {
+    	NetworkInterface ninterface=AddressUtility.getDefaultNetworkInterface();
+    	System.out.println(" The network interface is "+ninterface);
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "modifyvm", image.getVirtualMachineName(),"--macaddress1","auto");
         sleep(20000);
     }
