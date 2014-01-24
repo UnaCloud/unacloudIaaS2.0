@@ -1,3 +1,4 @@
+import back.pmallocators.AllocatorEnum;
 import back.services.DatabaseService;
 import back.services.VariableManagerService;
 
@@ -5,7 +6,9 @@ import com.losandes.utils.Constants;
 import com.losandes.utils.VariableManager;
 
 import fileManager.DataServerSocket;
+
 import org.apache.commons.lang.RandomStringUtils;
+
 import unacloud2.Hypervisor;
 import unacloud2.IP
 import unacloud2.IPPool;
@@ -22,7 +25,7 @@ import unacloud2.Repository
 class BootStrap {
 	DatabaseService databaseService
 	VariableManagerService variableManagerService
-	
+
 	def init = { servletContext ->
 		if(User.count() ==0){
 			String charset = (('A'..'Z') + ('0'..'9')).join()
@@ -69,14 +72,13 @@ class BootStrap {
 				}
 				labWaira2.save()
 			}
-			
-	    }
+		}
 		if(Repository.count()==0){
 			new Repository(name: "Main Repository", capacity: 20, root: "C:\\images\\").save();
 		}
 		if(OperatingSystem.count() == 1){
 			new OperatingSystem(name:'Windows 8',configurer:'Windows').save()
-			
+
 			new OperatingSystem(name:'Windows XP',configurer:'Windows').save()
 			new OperatingSystem(name:'Debian 6',configurer:'Debian').save();
 			new OperatingSystem(name:'Debian 7',configurer:'Debian').save();
@@ -101,19 +103,18 @@ class BootStrap {
 			new ServerVariable(name:'MONITORING_ENABLE',serverVariableType: ServerVariableTypeEnum.STRING,variable:'true').save()
 			new ServerVariable(name:'MONITORING_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable: '157.253.236.160').save()
 			new ServerVariable(name:'AGENT_VERSION',serverVariableType: ServerVariableTypeEnum.STRING,variable: '2.0.1').save()
-			
 			new ServerVariable(name:'SERVER_URL',serverVariableType: ServerVariableTypeEnum.STRING,variable: 'http://'+InetAddress.getLocalHost().getHostAddress()+'/Unacloud2').save()
+			new ServerVariable(name:'VM_ALLOCATOR_NAME',serverVariableType: ServerVariableTypeEnum.STRING,variable: AllocatorEnum.RANDON).save()
 		}
 		if(Hypervisor.count() == 0){
 			new Hypervisor(name: Constants.VIRTUAL_BOX, hypervisorVersion: "4.3.4").save()
 			new Hypervisor(name: Constants.VM_WARE_WORKSTATION, hypervisorVersion: "10").save()
 			new Hypervisor(name: Constants.VM_WARE_PLAYER, hypervisorVersion: "10").save()
-			
 		}
 		databaseService.initDatabase()
 		DataServerSocket.startServices(variableManagerService.getIntValue("DATA_SOCKET"));
 		//String applicationPath = request.getSession().getServletContext().getRealPath("")
 	}
-    def destroy = {
-    }
+	def destroy = {
+	}
 }
