@@ -25,7 +25,6 @@ public class AbstractGrailsCommunicator{
 			http.disconnect();
 		} catch (IOException e){
 			System.out.println(" Error en: "+serverUrl+"/"+serviceName+urlParams);
-			e.printStackTrace();
 			return false;
 		}
 		return true;
