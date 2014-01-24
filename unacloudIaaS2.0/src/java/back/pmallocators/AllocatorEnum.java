@@ -1,9 +1,12 @@
 package back.pmallocators;
 
 public enum AllocatorEnum {
-	RANDON("RandomAllocator"),ROUND_ROBIN("RoundRobinAllocator"),GREEN("");
-	String className;
-	private AllocatorEnum(String className) {
-		this.className = className;
+	RANDOM(new RandomAllocator()),ROUND_ROBIN(new RoundRobinAllocator()),GREEN(null);
+	VirtualMachineAllocatorInterface allocator;
+	private AllocatorEnum(VirtualMachineAllocatorInterface allocator) {
+		this.allocator=allocator;
+	}
+	public VirtualMachineAllocatorInterface getAllocator() {
+		return allocator;
 	}
 }
