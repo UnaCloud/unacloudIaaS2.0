@@ -15,6 +15,13 @@ class VariableManagerService {
 		return Integer.parseInt(sv.getVariable());
 	}
 	
+	def changeServerVariables(Map newValues){
+		for(serverVariable in ServerVariable.all){
+			if(!(serverVariable.variable.equals(newValues.getAt(serverVariable.name))))
+			serverVariable.variable= newValues.getAt(serverVariable.name)
+		}
+	}
+	
 	def updateAgentVersion(){
 		ServerVariable agentVersion= ServerVariable.findByName("AGENT_VERSION")
 		int newVerNumber= ((agentVersion.getVariable()-"2.0.") as Integer)+1

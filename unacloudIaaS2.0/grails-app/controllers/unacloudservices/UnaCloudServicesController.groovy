@@ -19,6 +19,11 @@ class UnaCloudServicesController {
 		render variableManagerService.getStringValue("AGENT_VERSION");
 	}
 	
+	def changeServerVariables(){
+		variableManagerService.changeServerVariables(params)
+		redirect(uri: "/configuration");
+	}
+	
 	def updateAgentVersion(){
 		variableManagerService.updateAgentVersion();
 		redirect(uri: "/configuration");	
