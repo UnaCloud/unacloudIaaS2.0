@@ -11,8 +11,7 @@ class PhysicalMachineAllocatorService {
 		for(DeployedImage image:cluster.images)vms.addAll(image.virtualMachines);
 		ServerVariable allocatorName=ServerVariable.findByName("VM_ALLOCATOR_NAME");
 		if(allocatorName==null){
-			VirtualMachineAllocatorInterface allocator=new RoundRobinAllocator();
-			allocator.allocateVirtualMachines(vms,pms);
+			AllocatorEnum.RANDOM.getAllocator().allocateVirtualMachines(vms,pms);
 		}else{
 			AllocatorEnum allocEnum=AllocatorEnum.valueOf(allocatorName);
 		}
