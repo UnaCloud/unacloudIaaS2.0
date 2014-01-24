@@ -23,9 +23,9 @@
 							</g:if>
 							<g:if test="${serverVariable.name=='VM_ALLOCATOR_NAME'}">
 								<select name="${ serverVariable.name}">
-									<g:each in="${AllocatorEnum.values()}" status="j" var="value">
-										<option value="${value}" ${(value.toString() == serverVariable.variable)?'selected':''} >
-											${value }
+									<g:each in="${AllocatorEnum.values()}" status="j" var="var">
+										<option value="${var}" ${(var.toString() == serverVariable.variable)?'selected':''} >
+											${var.getName() }
 										</option>
 									</g:each>
 								</select>

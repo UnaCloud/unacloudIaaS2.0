@@ -1,3 +1,4 @@
+<%@page import="back.userRestrictions.UserRestrictionEnum"%>
 <html>
 <head>
 <meta name="layout" content="main" />
@@ -18,10 +19,12 @@
 				<label class="control-label">Restriction</label>
 				<div class="controls">
 					<select name="type" onChange="${remoteFunction(action:'editPerms', params:'\'username=' + user.username + '&data=\' + this.value' , update: 'data') }">
-						<option value="">--Select a policy--</option>
-						<option value="maxRAMPerVM">Max RAM per VM</option>
-						<option value="maxCoresPerVM">Max cores per VM</option>
-						<option value="allowedLabs">Allowed Labs</option>
+						<option value="">--Select a restriction---</option>
+						<g:each in="${UserRestrictionEnum.values()}" status="j" var="var">
+										<option value="${var}">
+											${var.getName() }
+										</option>
+									</g:each>
 
 					</select>
 				</div>
