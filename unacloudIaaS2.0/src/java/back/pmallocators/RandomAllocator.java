@@ -11,7 +11,6 @@ public class RandomAllocator implements VirtualMachineAllocatorInterface {
 	@Override
 	public void allocateVirtualMachines(List<VirtualMachineExecution> virtualMachineList,List<PhysicalMachine> physicalMachines) {
 		if(virtualMachineList.size()>2*physicalMachines.size()){
-			
 		}else{
 			Collections.shuffle(virtualMachineList);
 			Collections.shuffle(physicalMachines);
