@@ -84,6 +84,7 @@
 						<option value="${4*60*60*1000}">4 hours</option>
 						<option value="${12*60*60*1000}">12 hours</option>
 						<option value="${24*60*60*1000}">1 day</option>
+						<option value="${90*24*60*60*1000}">90 days</option>
 					</select>
 				</div>
 			</div>
