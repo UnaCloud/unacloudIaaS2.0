@@ -79,12 +79,12 @@
 				<label class="control-label">Execution Time</label>
 				<div class="controls">
 					<select name="time" class="input-small">
-						<option value="${60*60*1000}">1 hour</option>
-						<option value="${2*60*60*1000}">2 hours</option>
-						<option value="${4*60*60*1000}">4 hours</option>
-						<option value="${12*60*60*1000}">12 hours</option>
-						<option value="${24*60*60*1000}">1 day</option>
-						<option value="${90*24*60*60*1000}">90 days</option>
+						<option value="${1}">1 hour</option>
+						<option value="${2}">2 hours</option>
+						<option value="${4}">4 hours</option>
+						<option value="${12}">12 hours</option>
+						<option value="${24}">1 day</option>
+						<option value="${90*24}">90 days</option>
 					</select>
 				</div>
 			</div>

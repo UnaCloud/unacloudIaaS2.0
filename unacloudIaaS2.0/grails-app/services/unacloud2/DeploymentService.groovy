@@ -89,7 +89,10 @@ class DeploymentService {
 			}
 			for(int j=0;j<options[option].instances;j++){
 				long stopTimeMillis= new Date().getTime()
+				println stopTimeMillis
+				println "millis:"+(stopTimeMillis+time)
 				def stopTime= new Date(stopTimeMillis +time)
+				println "Stop date"+stopTime
 				def iName=image.name
 				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: iName +"-"+j, ram: options[option].ram, cores: options[option].cores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 				depImage.virtualMachines.add(virtualMachine)
@@ -158,6 +161,7 @@ class DeploymentService {
 	def stopVirtualMachineExecution(VirtualMachineExecution vm){
 		vm.stopTime=new Date()
 		vm.ip.used=false
+		vm.ip.save()
 		vm.status= VirtualMachineExecutionStateEnum.FINISHED
 		vm.save()
 
