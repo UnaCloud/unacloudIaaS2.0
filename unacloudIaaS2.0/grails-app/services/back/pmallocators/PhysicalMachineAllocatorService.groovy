@@ -15,7 +15,7 @@ class PhysicalMachineAllocatorService {
 		ServerVariable allocatorName=ServerVariable.findByName("VM_ALLOCATOR_NAME");
 		AllocatorEnum allocator=AllocatorEnum.ROUND_ROBIN;
 		if(allocatorName!=null){
-			AllocatorEnum allocEnum=AllocatorEnum.valueOf(allocatorName);
+			AllocatorEnum allocEnum=AllocatorEnum.valueOf(allocatorName.getVariable());
 			if(allocEnum!=null)allocator=allocEnum;
 		}
 		allocator.getAllocator().allocateVirtualMachines(vms,pms);
