@@ -6,9 +6,8 @@ import unacloud2.*
 
 class IpAllocatorService {
 	def allocateIPAddresses(DeployedCluster cluster){
-		for (DeployedImage im:cluster.images){
-			for(VirtualMachineExecution vme:im.virtualMachines){
-				println "Allocando en : "+vme.executionNode.ip.ip;
+		for (DeployedImage im in cluster.images){
+			for(VirtualMachineExecution vme in im.virtualMachines){
 				IPPool ipPool= vme.executionNode.laboratory.virtualMachinesIPs
 				for(ip in ipPool.ips){
 					if(ip.used==false){

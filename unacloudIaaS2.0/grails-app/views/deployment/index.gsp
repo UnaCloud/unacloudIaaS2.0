@@ -89,7 +89,12 @@ function reload()
   	<small>${ virtualMachine.remainingTime()}</small>
     </td>
     <td>
+    <g:if test="${virtualMachine.ip!=null}">
     <small>${virtualMachine.ip.ip }</small>	
+    </g:if>
+     <g:if test="${virtualMachine.ip==null}">
+    <small>None</small>	
+    </g:if>
     </td>
     
     </tr>

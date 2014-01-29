@@ -26,15 +26,6 @@ class PhysicalMachineAllocatorService {
 		});
 
 		vme.executionNode = l.first();
-		IPPool ipPool= vme.executionNode.laboratory.virtualMachinesIPs
-
-		for(ip in ipPool.ips){
-			if(ip.used==false){
-				vme.ip= ip
-				ip.used=true
-				break
-			}
-		}
 	}
 	
 }

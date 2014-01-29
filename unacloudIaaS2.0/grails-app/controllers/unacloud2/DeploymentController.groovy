@@ -1,12 +1,15 @@
 package unacloud2
 
+import back.userRestrictions.UserRestrictionProcessorService
 import java.util.regex.Pattern.Start;
 
 import webutils.ImageRequestOptions;
 
 class DeploymentController {
-
+	
+	UserRestrictionProcessorService userRestrictionProcessorService
 	DeploymentService deploymentService
+	
 	def beforeInterceptor = {
 		if(!session.user){
 
@@ -65,7 +68,15 @@ class DeploymentController {
 						temp[idx]=new ImageRequestOptions(it.id, params.RAM.getAt(idx).toInteger(),params.cores.getAt(idx).toInteger(),params.instances.getAt(idx).toInteger());
 					}
 				}
-				deploymentService.deploy(cluster, user, params.time.toInteger(), temp)
+//				def machineList
+//				try{ 
+//					machineList=userRestrictionProcessorService.applyUserPermissions()
+//				}
+//				catch(Exception e){
+//					
+//				}
+				println params.time.toLong()*60*60*1000
+				deploymentService.deploy(cluster, user, params.time.toLong()*60*60*1000, temp)
 				redirect(controller:"deployment")
 			}
 			else{
