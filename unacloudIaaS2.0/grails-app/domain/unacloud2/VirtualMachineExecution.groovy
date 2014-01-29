@@ -34,7 +34,7 @@ class VirtualMachineExecution {
 	}
 	int runningTimeInHours(){
 		long millisTime=(stopTime.getTime()-startTime.getTime())/1000
-		return Math.round(millisTime/3600)
+		return (millisTime/60/60)+1
 	}
 	
 }

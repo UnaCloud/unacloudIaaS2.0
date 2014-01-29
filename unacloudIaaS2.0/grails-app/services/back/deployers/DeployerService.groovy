@@ -75,6 +75,7 @@ class DeployerService {
 				try{
 					println "for(vm in image.virtualMachines){"
 					vmsm.setExecutionTime(vm.runningTimeInHours())
+					println "time sent to the server in hours:"+vm.runningTimeInHours()
 					vmsm.setHostname(vm.name)
 					vmsm.setVirtualMachineIP(vm.ip.ip)
 					println "vmsm.setVirtualMachineIP --->"+ vm.ip.ip
