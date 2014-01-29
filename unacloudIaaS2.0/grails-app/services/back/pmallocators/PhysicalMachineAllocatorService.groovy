@@ -10,14 +10,14 @@ class PhysicalMachineAllocatorService {
 		List<PhysicalMachine> pms=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
 		for(DeployedImage image:cluster.images)vms.addAll(image.virtualMachines);
 		ServerVariable allocatorName=ServerVariable.findByName("VM_ALLOCATOR_NAME");
-		if(allocatorName==null){
-			AllocatorEnum.RANDOM.getAllocator().allocateVirtualMachines(vms,pms);
-		}else{
+		AllocatorEnum allocator=AllocatorEnum.ROUND_ROBIN;
+		if(allocatorName!=null){
 			AllocatorEnum allocEnum=AllocatorEnum.valueOf(allocatorName);
+			if(allocEnum!=null)allocator=allocEnum;
 		}
+		allocator.getAllocator().allocateVirtualMachines(vms,pms);
 	}
 	def allocatePhysicalMachine(VirtualMachineExecution vme ){
-
 		List<PhysicalMachine> l=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
 		Collections.sort(l,new Comparator<PhysicalMachine>(){
 			public int compare(PhysicalMachine p1,PhysicalMachine p2){

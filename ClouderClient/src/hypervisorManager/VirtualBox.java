@@ -87,7 +87,7 @@ public class VirtualBox extends Hypervisor {
     }
 
     @Override
-    public void takeVirtualMachineSnapshot(ImageCopy image,String snapshotname) throws HypervisorOperationException {
+    public void takeVirtualMachineSnapshot(ImageCopy image,String snapshotname){
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"snapshot",image.getVirtualMachineName(),"take",snapshotname);
         sleep(20000);
     }
@@ -130,7 +130,9 @@ public class VirtualBox extends Hypervisor {
 
 	@Override
 	public void cloneVirtualMachine(ImageCopy source, ImageCopy dest) {
-		LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"clonevm",source.getVirtualMachineName(),"--snapshot","unacloudbase","--name",dest.getVirtualMachineName(),"--basefolder",dest.getMainFile().getParentFile().getParentFile().getAbsolutePath());
-        sleep(20000);
+		LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"clonevm",source.getVirtualMachineName(),"--snapshot","unacloudbase","--name",dest.getVirtualMachineName(),"--basefolder",dest.getMainFile().getParentFile().getParentFile().getAbsolutePath(),"--register");
+		sleep(20000);
+		takeVirtualMachineSnapshot(dest,"unacloudbase");
+        unregisterVirtualMachine(dest);
 	}
 }
