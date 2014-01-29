@@ -14,14 +14,10 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 public class Main {
 	static ObjectMapper mapper=new ObjectMapper();
 	public static void main(String[] args)throws Exception{
-		for(int e=0;e<100;e++){
-			
-		
-		
 		DefaultClientConfig clientConfig = new DefaultClientConfig();
 		Client client = Client.create(clientConfig);
-		JsonNode cluster=createClusterDeployJSONRequest(1,new VirtualMachineRequest(1,4,2,1),new VirtualMachineRequest(1,1,1,2));
-	    WebResource resource = client.resource("http://157.253.202.170:8080/Unacloud2/WebServices");
+		JsonNode cluster=createClusterDeployJSONRequest(1,new VirtualMachineRequest(1,4,2,1),new VirtualMachineRequest(1,1,1,1),new VirtualMachineRequest(2,2,2,1));
+	    WebResource resource = client.resource("http://localhost:8080/unacloudIaaS2.0/WebServices");
 	    // lets get the XML as a String
 	    
 	    	//System.out.println("Enviando "+mapper.writeValueAsString(rootNode));
@@ -29,9 +25,9 @@ public class Main {
 			System.out.println(text);
 			JsonNode rootNode = mapper.readValue(text, JsonNode.class);*/
 		    System.out.println(mapper.writeValueAsString(cluster));
-		    String text = resource.path("startCluster").queryParam("login","admin").queryParam("apiKey","5Y95ZO4JVS5YI2EGFQLVT175RGF8QOVE").
+		    String text = resource.path("startClusterMultipleOptions").queryParam("login","admin").queryParam("apiKey","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA").
 		    		queryParam("cluster",mapper.writeValueAsString(cluster)).accept("application/text").post(String.class);
-		    System.out.println(text);}
+		    System.out.println(text);
 	}
 	public static JsonNode createClusterDeployJSONRequest(int clusterId,VirtualMachineRequest...vms)throws Exception{
 		JsonNode rootNode = mapper.createObjectNode();

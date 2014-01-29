@@ -1,5 +1,6 @@
 package unacloud2
 
+import grails.util.Environment;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import webutils.ImageRequestOptions;
 import back.deployers.DeployerService;
@@ -112,8 +113,10 @@ class DeploymentService {
 			user.deployments=[]
 		user.deployments.add(dep)
 		user.save(failOnError: true)
+		if(!Environment.isDevelopmentMode())
 		runAsync{ deployerService.deploy(dep) }
-		return dep.id
+		
+		return dep
 	}
 	def deployCCSACluster(Cluster cluster, User user, long time, ImageRequestOptions[] options){
 		println "Deploying"

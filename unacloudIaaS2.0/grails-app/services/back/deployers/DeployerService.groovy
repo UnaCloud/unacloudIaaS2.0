@@ -32,7 +32,7 @@ class DeployerService {
 		VirtualMachineStartMessage vmsm=new VirtualMachineStartMessage();
 		println "Deploying Image ----->" +image.image.name+" "+image.virtualMachines.size()
 
-		image.virtualMachines.eachWithIndex() { vm, i ->
+		/*image.virtualMachines.eachWithIndex() { vm, i ->
 			if(vm.message.equals("Adding instance")&&vm.status== VirtualMachineExecutionStateEnum.DEPLOYING){
 			try{
 				
@@ -63,7 +63,7 @@ class DeployerService {
 				e.printStackTrace();
 			}
 			}
-		}
+		}*/
 	}
 	
 	def deployVMs(DeployedCluster cluster){
@@ -71,7 +71,7 @@ class DeployerService {
 			VirtualMachineStartMessage vmsm=new VirtualMachineStartMessage();
 			println "Deploying Image ----->" +image.image.name+" "+image.virtualMachines.size()
 
-			image.virtualMachines.eachWithIndex() { vm, i ->
+/*			image.virtualMachines.eachWithIndex() { vm, i ->
 				try{
 					println "for(vm in image.virtualMachines){"
 					vmsm.setExecutionTime(vm.runningTimeInHours())
@@ -103,7 +103,7 @@ class DeployerService {
 				}catch(Exception e){
 					e.printStackTrace();
 				}
-			}
+			}*/
 		}
 	}
 	def stopVirtualMachine(VirtualMachineExecution vm){
