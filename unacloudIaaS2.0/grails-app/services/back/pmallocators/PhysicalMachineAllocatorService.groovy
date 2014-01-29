@@ -14,9 +14,12 @@ class PhysicalMachineAllocatorService {
 		for(DeployedImage image:cluster.images)vms.addAll(image.virtualMachines);
 		ServerVariable allocatorName=ServerVariable.findByName("VM_ALLOCATOR_NAME");
 		AllocatorEnum allocator=AllocatorEnum.ROUND_ROBIN;
-		if(allocatorName!=null){
-			AllocatorEnum allocEnum=AllocatorEnum.valueOf(allocatorName.getVariable());
-			if(allocEnum!=null)allocator=allocEnum;
+		try{
+			if(allocatorName!=null){
+				AllocatorEnum allocEnum=AllocatorEnum.valueOf(allocatorName.getVariable());
+				if(allocEnum!=null)allocator=allocEnum;
+			}
+		}catch(Exception ex){
 		}
 		allocator.getAllocator().allocateVirtualMachines(vms,pms);
 	}
