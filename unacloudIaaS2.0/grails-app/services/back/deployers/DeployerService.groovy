@@ -1,5 +1,6 @@
 package back.deployers
 
+import grails.util.Environment;
 import javassist.bytecode.stackmap.BasicBlock.Catch;
 import back.services.VariableManagerService;
 
@@ -32,46 +33,49 @@ class DeployerService {
 		VirtualMachineStartMessage vmsm=new VirtualMachineStartMessage();
 		println "Deploying Image ----->" +image.image.name+" "+image.virtualMachines.size()
 
-		/*image.virtualMachines.eachWithIndex() { vm, i ->
+		image.virtualMachines.eachWithIndex() { vm, i ->
 			if(vm.message.equals("Adding instance")&&vm.status== VirtualMachineExecutionStateEnum.DEPLOYING){
-			try{
-				
-				vmsm.setExecutionTime(vm.runningTimeInHours())
-				vmsm.setHostname(vm.name)
-				vmsm.setVirtualMachineIP(vm.ip.ip)
-				vmsm.setVirtualMachineNetMask(vm.ip.ipPool.mask)
-				vmsm.setVmCores(vm.cores)
-				vmsm.setVmMemory(vm.ram)
-				vmsm.setVirtualMachineExecutionId(vm.id)
-				vmsm.setVirtualMachineImageId(image.image.id)
-				String pmIp=vm.executionNode.ip.ip;
-				println vmsm
-				try{
-					println "Abriendo socket a "+pmIp+" "+variableManagerService.getIntValue("CLOUDER_CLIENT_PORT");
-					Socket s=new Socket(pmIp,variableManagerService.getIntValue("CLOUDER_CLIENT_PORT"));
-					ObjectOutputStream oos=new ObjectOutputStream(s.getOutputStream());
-					oos.writeObject(vmsm);
-					oos.flush();
-					ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
-					Object c=ois.readObject();
-					oos.close();
-					s.close();
-				}catch(Exception e){
-					e.printStackTrace();
+				vm.setMessage("Initializing")
+				if(!Environment.isDevelopmentMode()){
+					try{
+
+						vmsm.setExecutionTime(vm.runningTimeInHours())
+						vmsm.setHostname(vm.name)
+						vmsm.setVirtualMachineIP(vm.ip.ip)
+						vmsm.setVirtualMachineNetMask(vm.ip.ipPool.mask)
+						vmsm.setVmCores(vm.cores)
+						vmsm.setVmMemory(vm.ram)
+						vmsm.setVirtualMachineExecutionId(vm.id)
+						vmsm.setVirtualMachineImageId(image.image.id)
+						String pmIp=vm.executionNode.ip.ip;
+						println vmsm
+						try{
+							println "Abriendo socket a "+pmIp+" "+variableManagerService.getIntValue("CLOUDER_CLIENT_PORT");
+							Socket s=new Socket(pmIp,variableManagerService.getIntValue("CLOUDER_CLIENT_PORT"));
+							ObjectOutputStream oos=new ObjectOutputStream(s.getOutputStream());
+							oos.writeObject(vmsm);
+							oos.flush();
+							ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
+							Object c=ois.readObject();
+							oos.close();
+							s.close();
+						}catch(Exception e){
+							e.printStackTrace();
+						}
+					}catch(Exception e){
+						e.printStackTrace();
+					}
 				}
-			}catch(Exception e){
-				e.printStackTrace();
 			}
-			}
-		}*/
+		}
 	}
-	
+
 	def deployVMs(DeployedCluster cluster){
 		for(image in cluster.images) {
 			VirtualMachineStartMessage vmsm=new VirtualMachineStartMessage();
 			println "Deploying Image ----->" +image.image.name+" "+image.virtualMachines.size()
 
-/*			image.virtualMachines.eachWithIndex() { vm, i ->
+			image.virtualMachines.eachWithIndex() { vm, i ->
 				try{
 					println "for(vm in image.virtualMachines){"
 					vmsm.setExecutionTime(vm.runningTimeInHours())
@@ -103,7 +107,7 @@ class DeployerService {
 				}catch(Exception e){
 					e.printStackTrace();
 				}
-			}*/
+			}
 		}
 	}
 	def stopVirtualMachine(VirtualMachineExecution vm){

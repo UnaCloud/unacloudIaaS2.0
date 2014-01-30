@@ -26,7 +26,7 @@ class WebServicesController{
 	
 	def startClusterMultipleOptions(String login,String apiKey, String cluster){
 		JSONObject jsonCluster= new JSONObject(cluster)
-		render new JSONObject().put("deploymentId",webServicesService.startClusterMultipleOptions(login,apiKey,jsonCluster))
+		render webServicesService.startClusterMultipleOptions(login,apiKey,jsonCluster) as JSON
 	}
 	
 	def stopCluster(String login, String apiKey, String cluster){

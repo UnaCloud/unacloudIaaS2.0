@@ -25,8 +25,17 @@ public class Main {
 			System.out.println(text);
 			JsonNode rootNode = mapper.readValue(text, JsonNode.class);*/
 		    System.out.println(mapper.writeValueAsString(cluster));
-		    String text = resource.path("startClusterMultipleOptions").queryParam("login","admin").queryParam("apiKey","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA").
-		    		queryParam("cluster",mapper.writeValueAsString(cluster)).accept("application/text").post(String.class);
+//		    String text = resource.path("startCluster").queryParam("login","admin").queryParam("apiKey","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA").
+//		    		queryParam("cluster",mapper.writeValueAsString(cluster)).accept("application/text").post(String.class);
+
+//		    String text = resource.path("stopCluster").queryParam("login","admin").queryParam("apiKey","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA").
+//		    		queryParam("cluster","28").accept("application/text").post(String.class);
+//		 
+		    
+//		    String text = resource.path("getActiveDeployments").queryParam("login","admin").queryParam("apiKey","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA").post(String.class);
+		 
+		    String text = resource.path("getDeploymentInfo").queryParam("login","admin").queryParam("apiKey","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA").queryParam("depId", "15").post(String.class);
+			 
 		    System.out.println(text);
 	}
 	public static JsonNode createClusterDeployJSONRequest(int clusterId,VirtualMachineRequest...vms)throws Exception{

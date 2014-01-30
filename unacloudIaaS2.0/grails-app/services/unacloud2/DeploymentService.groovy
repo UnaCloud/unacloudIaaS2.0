@@ -29,8 +29,8 @@ class DeploymentService {
 			user.deployments=[]
 		user.addToDeployments(dep)
 		println "allocando"
-		if(depImage.virtualMachines.size()>0){
-			deploymentProcessorService.doDeployment(cluster)
+		if(depImage.virtualMachines.size()>0 && !Environment.isDevelopmentMode()){
+			deploymentProcessorService.doDeployment(cluster,false)
 			runAsync{ deployerService.deploy(dep) }
 		}
 		user.save(failOnError: true)
@@ -57,7 +57,7 @@ class DeploymentService {
 			depCluster.images.add(depImage)
 		}
 		depCluster.save(failOnError: true)
-		deploymentProcessorService.doDeployment(depCluster)
+		deploymentProcessorService.doDeployment(depCluster,false)
 		//ipAllocatorService.allocatePhysicalMachinesRandomly(depCluster)
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +time)
@@ -67,6 +67,7 @@ class DeploymentService {
 			user.deployments=[]
 		user.deployments.add(dep)
 		user.save(failOnError: true)
+		if(!Environment.isDevelopmentMode())
 		runAsync{ deployerService.deploy(dep) }
 		return dep.id
 	}
@@ -103,7 +104,7 @@ class DeploymentService {
 			depCluster.images.add(depImage)
 		}
 		depCluster.save(failOnError: true)
-		deploymentProcessorService.doDeployment(depCluster)
+		deploymentProcessorService.doDeployment(depCluster,false)
 		//ipAllocatorService.allocatePhysicalMachines(depCluster)
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +time)
@@ -133,6 +134,7 @@ class DeploymentService {
 				}
 				
 			}
+			
 			if(option==null){
 				return
 			}
@@ -148,7 +150,7 @@ class DeploymentService {
 			depCluster.images.add(depImage)
 		}
 		depCluster.save(failOnError: true)
-		deploymentProcessorService.doDeployment(depCluster)
+		deploymentProcessorService.doDeployment(depCluster,false)
 		//ipAllocatorService.allocatePhysicalMachines(depCluster)
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +time)
@@ -162,13 +164,15 @@ class DeploymentService {
 		return dep.id
 	}
 	def stopVirtualMachineExecution(VirtualMachineExecution vm){
+		if(vm.status==VirtualMachineExecutionStateEnum.DEPLOYED){
 		vm.stopTime=new Date()
 		vm.ip.used=false
 		vm.ip.save()
 		vm.status= VirtualMachineExecutionStateEnum.FINISHED
 		vm.save()
-
+		if(!Environment.isDevelopmentMode())
 		deployerService.stopVirtualMachine(vm)
+		}
 	}
 
 	def stopDeployments(User user){
@@ -192,11 +196,12 @@ class DeploymentService {
 			long stopTimeMillis= new Date().getTime()
 			def stopTime= new Date(stopTimeMillis +Integer.parseInt(time))
 			def virtualMachine = new VirtualMachineExecution(message: "Adding instance",name: iName+"-"+i ,ram: iRAM, cores:iCores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
-			deploymentProcessorService.doDeployment(cluster)
 			//ipAllocatorService.allocatePhysicalMachine(virtualMachine)
 			virtualMachine.save(failOnError: true)
 			depImage.virtualMachines.add(virtualMachine)
 		}
+		DeployedCluster cluster= new DeployedCluster(images: depImage)
+		deploymentProcessorService.doDeployment(cluster,true)
 		runAsync{ deployerService.deployNewInstances(depImage) }
 		depImage.save(failOnError: true)
 	}

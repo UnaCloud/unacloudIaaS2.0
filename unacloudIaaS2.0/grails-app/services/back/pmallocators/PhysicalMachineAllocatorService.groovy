@@ -5,17 +5,31 @@ import back.services.PhysicalMachineStateManagerService;
 import java.util.Comparator;
 
 import javassist.bytecode.stackmap.BasicBlock.Catch;
+import org.hibernate.collection.PersistentSet
 import groovy.sql.Sql;
 import unacloud2.*
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 
 class PhysicalMachineAllocatorService {
 	javax.sql.DataSource dataSource
-	def allocatePhysicalMachines(DeployedCluster cluster){
+	def allocatePhysicalMachines(DeployedCluster cluster, boolean addInstancesDeployment){
 		ArrayList<VirtualMachineExecution> vms=new ArrayList<>();
 		List<PhysicalMachine> pms=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
 		Map<Long,PhysicalMachineAllocationDescription> pmDescriptions = getPhysicalMachineUsage()
-		for(DeployedImage image:cluster.images)vms.addAll(image.virtualMachines);
+		if(!addInstancesDeployment)
+			for(DeployedImage image:cluster.images)vms.addAll(image.virtualMachines);
+		else{
+			println "adding only new instances for allocation"
+			for(DeployedImage image:cluster.images){
+				
+				def virtualMachines= new ArrayList<>()
+				for(VirtualMachineExecution vm:image.virtualMachines)
+				if(vm.message.equals("Adding instance")){
+					virtualMachines.add(vm)}
+				vms.addAll(virtualMachines)
+			}
+		}
+		println vms
 		ServerVariable allocatorName=ServerVariable.findByName("VM_ALLOCATOR_NAME");
 		AllocatorEnum allocator=AllocatorEnum.ROUND_ROBIN;
 		try{
@@ -25,15 +39,16 @@ class PhysicalMachineAllocatorService {
 			}
 		}catch(Exception ex){
 		}
+
 		allocator.getAllocator().allocateVirtualMachines(vms,pms,pmDescriptions);
 	}
 	def allocatePhysicalMachine(VirtualMachineExecution vme ){
 		List<PhysicalMachine> l=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
 		Collections.sort(l,new Comparator<PhysicalMachine>(){
-			public int compare(PhysicalMachine p1,PhysicalMachine p2){
-				return Long.compare(p1.id,p2.id);
-			}
-		});
+					public int compare(PhysicalMachine p1,PhysicalMachine p2){
+						return Long.compare(p1.id,p2.id);
+					}
+				});
 		vme.executionNode = l.first();
 	}
 	def getPhysicalMachineUsage(){

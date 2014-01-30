@@ -31,13 +31,21 @@ class WebServicesService {
 		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
 		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
 		DeployedCluster cluster= DeployedCluster.get(clusterId)
+		def deps=user.deployments
+		def belongsToUser= false
+		for (dep in deps){
+			if(dep.cluster.equals(cluster)){
+				belongsToUser=true
+			}
+		}
+		if(!apiKey.equals(user.apiKey))return new WebServiceException("Cannot stop that cluster because it doesn´t belong to user")
 		for(image in cluster.images){
 			for(vm in image.virtualMachines){
 				deploymentService.stopVirtualMachineExecution(vm)	
 			}
 		}
+		deploymentService.stopDeployments(user)
 		return "Success"
-		
 	}
 
 	def startClusterMultipleOptions(String login,String apiKey,JSONObject cluster) {
@@ -69,11 +77,12 @@ class WebServicesService {
 		User user= User.findByUsername(login);
 		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
 		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
-		Collection deps
+		def deps= new ArrayList()
 		for(dep in user.deployments){
 			if (dep.status.equals(DeploymentStateEnum.ACTIVE))
 			deps.add(dep)
 		}
+		if (deps.isEmpty())return new WebServiceException("There's no active deployments for this user")
 		return deps
 	}
 	
@@ -82,6 +91,20 @@ class WebServicesService {
 		User user= User.findByUsername(login);
 		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
 		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
-		return Deployment.get(depId).cluster
+		def vms= new JSONObject()
+		def dep= Deployment.get(depId)
+		if(!dep.isActive())return new WebServiceException("This deployment is not active")
+		for (image in dep.cluster.images){
+			for(vm in image.virtualMachines){
+				def data= new JSONObject()
+				data.put("belongs_to_image",image.image.name)
+				data.put("status",vm.status.toString())
+				data.put("time_left", vm.remainingTime())
+				data.put("ip",vm.ip.ip)
+				data.put("hostname",vm.name)
+				vms.put("vm_data", data)
+			}
+		}
+		return vms
 	}
 }

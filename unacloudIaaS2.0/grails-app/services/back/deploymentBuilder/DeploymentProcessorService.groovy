@@ -9,9 +9,9 @@ class DeploymentProcessorService {
 	UserRestrictionProcessorService userRestrictionProcessorService
 	PhysicalMachineAllocatorService physicalMachineAllocatorService
 	IpAllocatorService ipAllocatorService
-	def doDeployment(DeployedCluster cluster){
+	def doDeployment(DeployedCluster cluster,boolean addInstancesDeployment){
 		userRestrictionProcessorService.applyUserPermissions(cluster)
-		physicalMachineAllocatorService.allocatePhysicalMachines(cluster)
-		ipAllocatorService.allocateIPAddresses(cluster)
+		physicalMachineAllocatorService.allocatePhysicalMachines(cluster,addInstancesDeployment)
+		ipAllocatorService.allocateIPAddresses(cluster, addInstancesDeployment)
 	}
 }
