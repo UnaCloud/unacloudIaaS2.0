@@ -5,7 +5,10 @@ import back.services.PhysicalMachineStateManagerService;
 import java.util.Comparator;
 
 import javassist.bytecode.stackmap.BasicBlock.Catch;
+
 import org.hibernate.collection.PersistentSet
+
+import pmStateManager.StateManager;
 import groovy.sql.Sql;
 import unacloud2.*
 import unacloudEnums.VirtualMachineExecutionStateEnum;
@@ -15,6 +18,7 @@ class PhysicalMachineAllocatorService {
 	def allocatePhysicalMachines(DeployedCluster cluster, boolean addInstancesDeployment){
 		ArrayList<VirtualMachineExecution> vms=new ArrayList<>();
 		List<PhysicalMachine> pms=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
+		//pms=StateManager.filterPhysicalMachines(pms);
 		Map<Long,PhysicalMachineAllocationDescription> pmDescriptions = getPhysicalMachineUsage()
 		if(!addInstancesDeployment)
 			for(DeployedImage image:cluster.images)vms.addAll(image.virtualMachines);

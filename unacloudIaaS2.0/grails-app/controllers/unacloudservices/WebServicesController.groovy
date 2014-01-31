@@ -45,6 +45,9 @@ class WebServicesController{
 		render webServicesService.getDeploymentInfo(login,apiKey,depId) as JSON
 	}
 	
+	def changeAllocationPolicy(String login,String apiKey, String allocationPolicy){
+		render webServicesService.changeAllocationPolicy(login,apiKey,allocationPolicy)		
+	}
 	def addInstances(){
 		
 	}

@@ -3,6 +3,7 @@ package unacloud2
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 
+import back.pmallocators.AllocatorEnum;
 import webutils.ImageRequestOptions;
 import wsEntities.WebServiceException
 
@@ -106,5 +107,25 @@ class WebServicesService {
 			}
 		}
 		return vms
+	}
+	
+	def changeAllocationPolicy(String login,String apiKey,String allocationPolicy){
+		if(login==null||apiKey==null)return new WebServiceException("invalid request")
+		User user= User.findByUsername(login);
+		if(user.userType.equals("User")) return new WebServiceException("You're not administrator")
+		if(user==null||user.apiKey==null) return new WebServiceException("Invalid User")
+		if(!apiKey.equals(user.apiKey)) return new WebServiceException("Invalid Key")
+		def alloc
+		try{
+			alloc=AllocatorEnum.valueOf(allocationPolicy)
+		}catch(Exception e){
+			return e
+		}
+		
+		if(alloc==null) throw new WebServiceException("Allocator not found")
+		def variable=ServerVariable.findByName("VM_ALLOCATOR_NAME")
+		variable.putAt("variable", alloc.toString())
+		return "Success"
+		
 	}
 }

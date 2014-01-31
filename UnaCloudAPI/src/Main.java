@@ -34,8 +34,10 @@ public class Main {
 		    
 //		    String text = resource.path("getActiveDeployments").queryParam("login","admin").queryParam("apiKey","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA").post(String.class);
 		 
-		    String text = resource.path("getDeploymentInfo").queryParam("login","admin").queryParam("apiKey","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA").queryParam("depId", "15").post(String.class);
-			 
+//		    String text = resource.path("getDeploymentInfo").queryParam("login","admin").queryParam("apiKey","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA").queryParam("depId", "15").post(String.class);
+			
+		    String text = resource.path("changeAllocationPolicy").queryParam("login","admin").queryParam("apiKey","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA").queryParam("allocationPolicy", "ROUND_ROBIN").post(String.class);
+			
 		    System.out.println(text);
 	}
 	public static JsonNode createClusterDeployJSONRequest(int clusterId,VirtualMachineRequest...vms)throws Exception{

@@ -164,13 +164,13 @@ class DeploymentService {
 		return dep.id
 	}
 	def stopVirtualMachineExecution(VirtualMachineExecution vm){
-		if(vm.status==VirtualMachineExecutionStateEnum.DEPLOYED){
+		if(vm.status==VirtualMachineExecutionStateEnum.DEPLOYED||vm.status==VirtualMachineExecutionStateEnum.FAILED){
 		vm.stopTime=new Date()
 		vm.ip.used=false
 		vm.ip.save()
 		vm.status= VirtualMachineExecutionStateEnum.FINISHED
 		vm.save()
-		if(!Environment.isDevelopmentMode())
+		if(!Environment.isDevelopmentMode()||vm.status==VirtualMachineExecutionStateEnum.FAILED)
 		deployerService.stopVirtualMachine(vm)
 		}
 	}
