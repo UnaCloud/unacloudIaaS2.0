@@ -5,6 +5,10 @@
 
 package unacloudws;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import unacloudws.requests.VirtualMachineRequest;
@@ -13,8 +17,11 @@ import unacloudws.responses.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
@@ -28,11 +35,26 @@ public class UnaCloudOperations {
     }
     
     
-    public List<VirtualMachineExecutionWS> getVirtualMachineExecutions(int templateID) {
-        /*UnaCloudWSService service = new UnaCloudWSService();
-        UnaCloudWS port = service.getUnaCloudWSPort();
-        return port.getVirtualMachineExecutions(username, apiKey, templateID);*/
-    	return null;
+    public List<VirtualMachineExecutionWS> getDeploymentInfo(int deploymentId) {
+    	try {
+			String string=(prepareRequest("getDeploymentInfo").queryParam("depId",mapper.writeValueAsString(deploymentId)).post(String.class));
+			System.out.println(string);
+			JsonNode response= mapper.readTree(string);
+			ArrayNode data=(ArrayNode) response.get("data");
+			System.out.println(data.isArray());
+			ArrayList<VirtualMachineExecutionWS> vmList= new ArrayList<VirtualMachineExecutionWS>();
+			Iterator<JsonNode> it=data.iterator();
+			while (it.hasNext()){
+				JsonNode vm= it.next();
+				System.out.println(vm.get("message").asText());
+				VirtualMachineExecutionWS vme= new VirtualMachineExecutionWS(vm.get("belongs_to_image").asText(), vm.get("ip").asText(), vm.get("status").asText(), vm.get("message").asText(), new Date(vm.get("stop_time").asLong()), vm.get("hostname").asText());
+				vmList.add(vme);
+			}
+			return vmList;
+    	} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
 
     public Integer getAvailableVirtualMachines(int templateSelected, int virtualMachineDisk, int virtualMachineCores, int virtualMachineRAM) {
@@ -55,18 +77,39 @@ public class UnaCloudOperations {
 			return null;
 		}
     }
-
+    
+    public String startHeterogeneousVirtualCluster(int clusterId, long time,VirtualMachineRequest...vms) {
+    	JsonNode cluster = mapper.createObjectNode();
+    	ObjectNode clusterON=((ObjectNode) cluster);
+    	clusterON.put("clusterId", clusterId);
+    	clusterON.put("execTime", time);
+    	clusterON.put("images", mapper.valueToTree(vms));
+    	try {
+			return prepareRequest("startHeterogeneousCluster").queryParam("cluster",mapper.writeValueAsString(cluster)).post(String.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
     public String stopVirtualMachine(String virtualMachineExID) {
-        /*UnaCloudWSService service = new UnaCloudWSService();
-        UnaCloudWS port = service.getUnaCloudWSPort();
-        return port.turnOffVirtualMachine(username, apiKey, virtualMachineExID);*/
     	return null;
     }
-    public List<TemplateWS> getClusterList() {
-        /*UnaCloudWSService service = new UnaCloudWSService();
-        UnaCloudWS port = service.getUnaCloudWSPort();
-        return port.getTemplateLists(username, apiKey);*/
+    
+    
+    public List<ClusterWS> getClusterList() {
+    	
+    	JsonNode response=null;
+		try {
+			response = mapper.readTree(prepareRequest("getClusterList").post(String.class));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	List<ClusterWS> list= new ArrayList<ClusterWS>();
+    	 
+		System.out.println(response); 
     	return null;
+    	
     }
 
     public static Integer getTotalUnaCloudResources(int machineDisk, int machineCores, int machineRam) {

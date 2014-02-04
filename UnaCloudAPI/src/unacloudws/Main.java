@@ -20,6 +20,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args){
+    	UnaCloudOperations ops=new UnaCloudOperations("admin","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA");
+    	System.out.println(ops.getDeploymentInfo(29));
         /*System.setErr(new PrintStream(new ByteArrayOutputStream()));
         UnaCloudOperationsTest unacloudOp=new UnaCloudOperationsTest("ga.sotelo69", "asdasdasd");
         List<TemplateWS> ts=unacloudOp.getTemplateLists();

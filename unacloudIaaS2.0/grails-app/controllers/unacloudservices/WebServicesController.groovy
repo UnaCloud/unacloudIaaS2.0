@@ -24,9 +24,9 @@ class WebServicesController{
 		render webServicesService.getClusterList(login,apiKey) as JSON	
 	}
 	
-	def startClusterMultipleOptions(String login,String apiKey, String cluster){
+	def startHeterogeneousCluster(String login,String apiKey, String cluster){
 		JSONObject jsonCluster= new JSONObject(cluster)
-		render webServicesService.startClusterMultipleOptions(login,apiKey,jsonCluster) as JSON
+		render webServicesService.startHeterogeneousCluster(login,apiKey,jsonCluster) as JSON
 	}
 	
 	def stopCluster(String login, String apiKey, String cluster){

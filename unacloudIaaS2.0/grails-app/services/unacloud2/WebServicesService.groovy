@@ -49,7 +49,7 @@ class WebServicesService {
 		return "Success"
 	}
 
-	def startClusterMultipleOptions(String login,String apiKey,JSONObject cluster) {
+	def startHeterogeneousCluster(String login,String apiKey,JSONObject cluster) {
 		println login+":"+apiKey+":"+cluster
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login)
@@ -62,7 +62,7 @@ class WebServicesService {
 			options[i]= new ImageRequestOptions(image.getLong("imageId"), image.getInt("ram").toInteger(), image.getInt("cores"), image.getInt("instances"))
 		}
 		def userCluster= Cluster.get(cluster.get("clusterId"))
-		return deploymentService.deployMultipleOptions(userCluster, user, cluster.getInt("execTime")*60000,options)
+		return deploymentService.deployHeterogeneous(userCluster, user, cluster.getInt("execTime")*60000,options)
 	}
 
 	def getClusterList(String login,String apiKey){
@@ -92,7 +92,9 @@ class WebServicesService {
 		User user= User.findByUsername(login);
 		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
 		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
-		def vms= new JSONObject()
+		def rep= new JSONObject()
+		
+		def vms= new JSONArray()
 		def dep= Deployment.get(depId)
 		if(!dep.isActive())return new WebServiceException("This deployment is not active")
 		for (image in dep.cluster.images){
@@ -100,13 +102,17 @@ class WebServicesService {
 				def data= new JSONObject()
 				data.put("belongs_to_image",image.image.name)
 				data.put("status",vm.status.toString())
-				data.put("time_left", vm.remainingTime())
+				data.put("stop_time", vm.stopTime.getTime())
 				data.put("ip",vm.ip.ip)
+				data.put("message",vm.message)
 				data.put("hostname",vm.name)
-				vms.put("vm_data", data)
+				vms.put( data)
 			}
 		}
-		return vms
+		rep.put("data", vms)
+		rep.put("cluster_id", dep.cluster.cluster.id)
+		rep.put("cluster_name", dep.cluster.cluster.name)
+		return rep
 	}
 	
 	def changeAllocationPolicy(String login,String apiKey,String allocationPolicy){

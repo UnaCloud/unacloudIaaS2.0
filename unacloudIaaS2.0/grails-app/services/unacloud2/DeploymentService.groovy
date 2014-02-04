@@ -36,7 +36,7 @@ class DeploymentService {
 		user.save(failOnError: true)
 	}
 
-	def deployMultipleOptions(Cluster cluster, User user, long time, ImageRequestOptions[] options){
+	def deployHeterogeneous(Cluster cluster, User user, long time, ImageRequestOptions[] options){
 		println "Deploying"
 		DeployedCluster depCluster= new DeployedCluster(cluster: cluster)
 		depCluster.images=[]
