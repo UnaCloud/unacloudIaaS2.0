@@ -6,6 +6,7 @@ import java.util.Date;
 
 public class VirtualMachineExecutionWS {
 	
+	protected String id;
 	protected String imageName;
     protected String virtualMachineExecutionIP;
     protected String virtualMachineExecutionStatus;
@@ -17,13 +18,14 @@ public class VirtualMachineExecutionWS {
     public VirtualMachineExecutionWS(String imageName,
 			String virtualMachineExecutionIP,
 			String virtualMachineExecutionStatus,
-			String virtualMachineExecutionStatusMessage, Date stopTime,
+			String virtualMachineExecutionStatusMessage, String id, Date stopTime,
 			String virtualMachineName) {
 		this.imageName = imageName;
 		this.virtualMachineExecutionIP = virtualMachineExecutionIP;
 		this.virtualMachineExecutionStatus = virtualMachineExecutionStatus;
 		this.virtualMachineExecutionStatusMessage = virtualMachineExecutionStatusMessage;
 		this.stopTime = stopTime;
+		this.id= id;
 		this.virtualMachineName = virtualMachineName;
 	}
     

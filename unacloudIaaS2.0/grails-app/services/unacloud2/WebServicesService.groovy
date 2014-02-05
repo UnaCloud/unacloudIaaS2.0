@@ -25,28 +25,54 @@ class WebServicesService {
 		def userCluster= Cluster.get(cluster.get("clusterId"))
 		return deploymentService.deploy(userCluster, user, (Long)cluster.getInt("execTime")*60000,options)
 	}
-
-	def stopCluster(String login,String apiKey,String clusterId){
+	
+	def stopDeployment(String login,String apiKey,String depId){
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login)
 		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
 		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
-		DeployedCluster cluster= DeployedCluster.get(clusterId)
+		Deployment deployment= Deployment.get(depId)
 		def deps=user.deployments
 		def belongsToUser= false
 		for (dep in deps){
-			if(dep.cluster.equals(cluster)){
+			if(dep.equals(deployment)){
 				belongsToUser=true
 			}
 		}
-		if(!apiKey.equals(user.apiKey))return new WebServiceException("Cannot stop that cluster because it doesn´t belong to user")
-		for(image in cluster.images){
+		if(!belongsToUser)return new WebServiceException("Cannot stop that deployment because it doesn´t belong to user")
+		for(image in deployment.cluster.images){
 			for(vm in image.virtualMachines){
-				deploymentService.stopVirtualMachineExecution(vm)	
+				deploymentService.stopVirtualMachineExecution(vm)
 			}
 		}
 		deploymentService.stopDeployments(user)
-		return "Success"
+		return deployment
+	}
+	
+	def stopVirtualMachine(String login,String apiKey,String machineId){
+		if(login==null||apiKey==null)return new WebServiceException("invalid request")
+		User user= User.findByUsername(login)
+		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
+		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
+		VirtualMachineExecution vme= VirtualMachineExecution.get(machineId)
+		def deps=user.deployments
+		def belongsToUser= false
+		for (dep in deps){
+			if(dep.isActive()){
+			for(image in dep.cluster.images){
+				for (vm in image.virtualMachines){
+					if(vm.equals(vme)){
+						belongsToUser=true
+						break
+					}
+				}
+			}
+			}
+		}
+		if(!apiKey.equals(user.apiKey))return new WebServiceException("Cannot stop that machine because it doesn´t belong to user")
+		def resp =deploymentService.stopVirtualMachineExecution(vme)	
+		deploymentService.stopDeployments(user)
+		return resp
 	}
 
 	def startHeterogeneousCluster(String login,String apiKey,JSONObject cluster) {
@@ -70,7 +96,23 @@ class WebServicesService {
 		User user= User.findByUsername(login);
 		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
 		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
-		return user.userClusters
+		def clusterList= new JSONArray()
+		
+		for(cluster in user.userClusters){
+			def clusterProperties= new JSONObject()
+			clusterProperties.put("cluster_id",cluster.id)
+			clusterProperties.put("name",cluster.name)	
+			def images= new JSONArray()
+			for(image in cluster.images){
+				JSONObject imageProperties= new JSONObject()
+				imageProperties.put("image_id", image.id)
+				imageProperties.put("name", image.name)
+				images.put(imageProperties)
+			}
+			clusterProperties.put("images",images)
+			clusterList.put(clusterProperties)
+		}
+		return clusterList
 	}
 	
 	def getActiveDeployments(String login,String apiKey){
@@ -84,7 +126,15 @@ class WebServicesService {
 			deps.add(dep)
 		}
 		if (deps.isEmpty())return new WebServiceException("There's no active deployments for this user")
-		return deps
+		JSONArray resp= new JSONArray()
+		for(dep in deps){
+			JSONObject depProps= new JSONObject()
+			depProps.put("deployment_id", dep.id)
+			depProps.put("cluster_name", dep.cluster.cluster.name)
+			depProps.put("cluster_id", dep.cluster.cluster.id)
+			resp.put(depProps)
+		}
+		return resp
 	}
 	
 	def getDeploymentInfo(String login,String apiKey,String depId){
@@ -92,7 +142,7 @@ class WebServicesService {
 		User user= User.findByUsername(login);
 		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
 		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
-		def rep= new JSONObject()
+		
 		
 		def vms= new JSONArray()
 		def dep= Deployment.get(depId)
@@ -106,13 +156,11 @@ class WebServicesService {
 				data.put("ip",vm.ip.ip)
 				data.put("message",vm.message)
 				data.put("hostname",vm.name)
+				data.put("id", vm.id)
 				vms.put( data)
 			}
 		}
-		rep.put("data", vms)
-		rep.put("cluster_id", dep.cluster.cluster.id)
-		rep.put("cluster_name", dep.cluster.cluster.name)
-		return rep
+		return vms
 	}
 	
 	def changeAllocationPolicy(String login,String apiKey,String allocationPolicy){
@@ -133,5 +181,26 @@ class WebServicesService {
 		variable.putAt("variable", alloc.toString())
 		return "Success"
 		
+	}
+	
+	def addInstances(String login,String apiKey,String imageId,int instances,long time){
+		if(login==null||apiKey==null)return new WebServiceException("invalid request")
+		User user= User.findByUsername(login);
+		if(user.userType.equals("User")) return new WebServiceException("You're not administrator")
+		if(user==null||user.apiKey==null) return new WebServiceException("Invalid User")
+		if(!apiKey.equals(user.apiKey)) return new WebServiceException("Invalid Key")
+		DeployedImage image= DeployedImage.get(imageId)
+		if(image==null)return new WebServiceException("Image not found")
+		boolean belongsToUser=false
+		for(dep in user.deployments){
+			for(i in dep.cluster.images){
+				if(image.equals(i)){
+					belongsToUser=true
+					break
+				}
+			}
+		}
+		if(!belongsToUser)return new WebServiceException("This image wasn't deployed by the given user")
+		return deploymentService.addInstances(image, instances, time.toLong()*60*1000)
 	}
 }

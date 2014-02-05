@@ -112,7 +112,7 @@ class DeploymentController {
 	def addInstances(){
 		def depImage=DeployedImage.get(params.id)
 		def instance=params.instances.toInteger()
-		deploymentService.addInstances(depImage, instance, params.time)
+		deploymentService.addInstances(depImage, instance, params.time.toLong()*60*60*1000)
 		redirect(action: "index")
 	}
 }

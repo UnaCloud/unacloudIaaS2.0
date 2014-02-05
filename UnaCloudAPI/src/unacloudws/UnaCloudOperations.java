@@ -36,18 +36,21 @@ public class UnaCloudOperations {
     
     
     public List<VirtualMachineExecutionWS> getDeploymentInfo(int deploymentId) {
+    	
     	try {
 			String string=(prepareRequest("getDeploymentInfo").queryParam("depId",mapper.writeValueAsString(deploymentId)).post(String.class));
 			System.out.println(string);
 			JsonNode response= mapper.readTree(string);
-			ArrayNode data=(ArrayNode) response.get("data");
-			System.out.println(data.isArray());
+			if (response.has("message")){
+				System.out.println(response.get("message").asText());
+				return null;
+			}
 			ArrayList<VirtualMachineExecutionWS> vmList= new ArrayList<VirtualMachineExecutionWS>();
-			Iterator<JsonNode> it=data.iterator();
+			Iterator<JsonNode> it=response.iterator();
 			while (it.hasNext()){
 				JsonNode vm= it.next();
 				System.out.println(vm.get("message").asText());
-				VirtualMachineExecutionWS vme= new VirtualMachineExecutionWS(vm.get("belongs_to_image").asText(), vm.get("ip").asText(), vm.get("status").asText(), vm.get("message").asText(), new Date(vm.get("stop_time").asLong()), vm.get("hostname").asText());
+				VirtualMachineExecutionWS vme= new VirtualMachineExecutionWS(vm.get("belongs_to_image").asText(), vm.get("ip").asText(), vm.get("id").asText(),vm.get("status").asText(), vm.get("message").asText(), new Date(vm.get("stop_time").asLong()), vm.get("hostname").asText());
 				vmList.add(vme);
 			}
 			return vmList;
@@ -56,14 +59,17 @@ public class UnaCloudOperations {
 			return null;
 		}
     }
-
-    public Integer getAvailableVirtualMachines(int templateSelected, int virtualMachineDisk, int virtualMachineCores, int virtualMachineRAM) {
-        /*UnaCloudWSService service = new UnaCloudWSService();
-        UnaCloudWS port = service.getUnaCloudWSPort();
-        return port.getAvailableVirtualMachines(templateSelected, virtualMachineDisk, virtualMachineCores, virtualMachineRAM, username, apiKey);*/
+    
+    
+    public String addInstances(int imageId, int instances,long time){
+    	try {
+    		
+			return prepareRequest("addInstances").queryParam("imageId",mapper.writeValueAsString(imageId)).queryParam("instances",mapper.writeValueAsString(instances)).queryParam("time",mapper.writeValueAsString(time)).post(String.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     	return null;
     }
-
     public String startVirtualCluster(int clusterId, long time,VirtualMachineRequest...vms) {
     	JsonNode cluster = mapper.createObjectNode();
     	ObjectNode clusterON=((ObjectNode) cluster);
@@ -91,24 +97,79 @@ public class UnaCloudOperations {
 			return null;
 		}
     }
-    public String stopVirtualMachine(String virtualMachineExID) {
-    	return null;
+    public String stopVirtualMachine(int virtualMachineExId) {
+    	try {
+			return prepareRequest("stopVirtualMachine").queryParam("machineId",mapper.writeValueAsString(virtualMachineExId)).post(String.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
     }
     
+    public String stopDeployment(int depId) {
+    	try {
+			return prepareRequest("stopDeployment").queryParam("depId",mapper.writeValueAsString(depId)).post(String.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
     
+    public List<DeploymentWS> getActiveDeployments(){
+    	try{
+    	String string=(prepareRequest("getActiveDeployments").post(String.class));
+		System.out.println(string);
+		JsonNode response= mapper.readTree(string);
+		if (response.has("message")){
+			System.out.println(response.get("message").asText());
+			return null;
+		}
+		List<DeploymentWS> depList= new ArrayList<DeploymentWS>();
+		Iterator<JsonNode> it=response.iterator();
+		while(it.hasNext()){
+			JsonNode data= it.next();
+			ClusterWS cluster= new ClusterWS(data.get("cluster_id").asLong(), data.get("cluster_name").asText());
+			DeploymentWS dep= new DeploymentWS(data.get("deployment_id").asText(),cluster);
+			depList.add(dep);
+    	}
+		return depList;
+		}
+    	catch(Exception e){
+    		e.printStackTrace();
+        	return null;
+    	}
+    }
     public List<ClusterWS> getClusterList() {
-    	
-    	JsonNode response=null;
 		try {
-			response = mapper.readTree(prepareRequest("getClusterList").post(String.class));
+			JsonNode response = mapper.readTree(prepareRequest("getClusterList").post(String.class));
+			if (response.has("message")){
+				System.out.println(response.get("message").asText());
+				return null;
+			}
+			System.out.println(response); 
+			List<ClusterWS> list= new ArrayList<ClusterWS>();
+	    	Iterator<JsonNode> iterator= response.iterator();
+	    	while(iterator.hasNext()){
+	    		ArrayList<ImageWS> imagesList= new ArrayList<ImageWS>();
+	    		JsonNode clusterProperties= iterator.next();
+	    		Iterator<JsonNode> imageIt= clusterProperties.get("images").iterator();
+	    		while(imageIt.hasNext()){
+	    			JsonNode imageProps=imageIt.next();
+	    			System.out.println(imageProps);
+	    			ImageWS image= new ImageWS(imageProps.get("image_id").asLong(),imageProps.get("name").asText());
+	    			imagesList.add(image);
+	    		}
+	    		ClusterWS cluster= new ClusterWS(clusterProperties.get("cluster_id").asLong(),clusterProperties.get("name").asText(),imagesList);
+	    		list.add(cluster);
+	    	}
+	    	return list;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
-    	List<ClusterWS> list= new ArrayList<ClusterWS>();
-    	 
-		System.out.println(response); 
-    	return null;
+    	
+		
     	
     }
 

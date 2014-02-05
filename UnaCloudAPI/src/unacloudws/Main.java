@@ -9,6 +9,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.List;
 
+import unacloudws.requests.VirtualMachineRequest;
+import unacloudws.responses.VirtualMachineExecutionWS;
+
 
 /**
  *
@@ -21,8 +24,21 @@ public class Main {
      */
     public static void main(String[] args){
     	UnaCloudOperations ops=new UnaCloudOperations("admin","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA");
-    	System.out.println(ops.getDeploymentInfo(29));
-        /*System.setErr(new PrintStream(new ByteArrayOutputStream()));
+    	//System.out.println(ops.getDeploymentInfo(29));
+    	//System.out.println(ops.getClusterList());
+    	/*VirtualMachineRequest vm1= new VirtualMachineRequest(1, 512, 1, 1);
+    	VirtualMachineRequest vm2= new VirtualMachineRequest(1, 1024, 1, 1);
+    	System.out.println(ops.startVirtualCluster(1, 60, vm1));
+    	System.out.println(ops.startHeterogeneousVirtualCluster(1, 60, vm1,vm2));
+    	*/
+    	/*System.out.println(ops.getActiveDeployments());
+    	System.out.println(ops.stopDeployment(35));
+    	*/
+    	
+    	System.out.println(ops.addInstances(85,1,60));
+    	
+    	
+    	/*System.setErr(new PrintStream(new ByteArrayOutputStream()));
         UnaCloudOperationsTest unacloudOp=new UnaCloudOperationsTest("ga.sotelo69", "asdasdasd");
         List<TemplateWS> ts=unacloudOp.getTemplateLists();
         for(TemplateWS t:ts)System.out.println(t.getTemplateName()+" "+t.getTemplateCode());
