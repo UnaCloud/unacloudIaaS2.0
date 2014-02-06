@@ -16,4 +16,28 @@ public class ClusterWS {
 		this.id = id;
 		this.name = name;
 	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<ImageWS> getImages() {
+		return images;
+	}
+
+	public void setImages(List<ImageWS> images) {
+		this.images = images;
+	}
 }
