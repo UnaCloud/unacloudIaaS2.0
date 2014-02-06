@@ -5,23 +5,23 @@
 
 package unacloudws;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import unacloudws.requests.VirtualMachineRequest;
-import unacloudws.responses.*;
+import unacloudws.responses.ClusterWS;
+import unacloudws.responses.DeploymentWS;
+import unacloudws.responses.ImageWS;
+import unacloudws.responses.VirtualMachineExecutionWS;
+import unacloudws.responses.VirtualMachineStatusEnum;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
@@ -50,7 +50,7 @@ public class UnaCloudOperations {
 			while (it.hasNext()){
 				JsonNode vm= it.next();
 				System.out.println(vm.get("message").asText());
-				VirtualMachineExecutionWS vme= new VirtualMachineExecutionWS(vm.get("belongs_to_image").asText(), vm.get("ip").asText(), vm.get("id").asText(),vm.get("status").asText(), vm.get("message").asText(), new Date(vm.get("stop_time").asLong()), vm.get("hostname").asText());
+				VirtualMachineExecutionWS vme= new VirtualMachineExecutionWS(vm.get("belongs_to_image").asText(), vm.get("ip").asText(), VirtualMachineStatusEnum.valueOf(vm.get("status").asText()),vm.get("message").asText(), vm.get("id").asInt(), new Date(vm.get("stop_time").asLong()), vm.get("hostname").asText());
 				vmList.add(vme);
 			}
 			return vmList;
