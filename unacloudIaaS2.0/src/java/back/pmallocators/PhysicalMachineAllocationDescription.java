@@ -41,4 +41,9 @@ public class PhysicalMachineAllocationDescription {
 		this.ram+=ram;
 		
 	}
+	@Override
+	public String toString() {
+		return "PhysicalMachineAllocationDescription [cores=" + cores
+				+ ", ram=" + ram + ", vms=" + vms + "]";
+	}
 }

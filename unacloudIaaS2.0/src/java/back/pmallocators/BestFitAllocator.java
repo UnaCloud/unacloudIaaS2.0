@@ -37,6 +37,9 @@ public class BestFitAllocator extends VirtualMachineAllocator {
 				return Integer.compare(v2.getCores(),v1.getCores());
 			}
 		});
+		for(PhysicalMachine pm:physicalMachines){
+			System.out.println(pm.getDatabaseId()+"\t"+pm.getCores()+"\t"+pm.getRam()+"\t"+physicalMachineDescriptions.get(pm.getDatabaseId()));
+		}
 		vmCycle:for(VirtualMachineExecution vme:virtualMachineList){
 			for(PhysicalMachine pm:physicalMachines){
 				PhysicalMachineAllocationDescription pmad = physicalMachineDescriptions.get(pm.getDatabaseId());

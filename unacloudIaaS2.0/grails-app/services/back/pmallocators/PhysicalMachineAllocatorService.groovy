@@ -2,7 +2,9 @@ package back.pmallocators
 
 import back.services.PhysicalMachineStateManagerService;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import javassist.bytecode.stackmap.BasicBlock.Catch;
 
@@ -15,9 +17,7 @@ import unacloudEnums.VirtualMachineExecutionStateEnum;
 
 class PhysicalMachineAllocatorService {
 	javax.sql.DataSource dataSource
-	def allocatePhysicalMachines(DeployedCluster cluster, boolean addInstancesDeployment){
-		ArrayList<VirtualMachineExecution> vms=new ArrayList<>();
-		List<PhysicalMachine> pms=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
+	def allocatePhysicalMachines(DeployedCluster cluster, ArrayList<VirtualMachineExecution> vms,List<PhysicalMachine> pms,boolean addInstancesDeployment){
 		//pms=StateManager.filterPhysicalMachines(pms);
 		Map<Long,PhysicalMachineAllocationDescription> pmDescriptions = getPhysicalMachineUsage()
 		if(!addInstancesDeployment)
@@ -59,7 +59,7 @@ class PhysicalMachineAllocatorService {
 		def sql = new Sql(dataSource)
 		Map<Long,PhysicalMachineAllocationDescription> pmDescriptions=new TreeMap<>();
 		sql.eachRow('select execution_node_id,count(*) as vms,sum(ram) as ram,sum(cores) as cores from virtual_machine_execution where status != \'FINISHED\' group by execution_node_id'){ row ->
-			if(row.execution_node_id!=null)pmDescriptions.put(row.execution_node_id, new PhysicalMachineAllocationDescription(row.execution_node_id,row.ram.toInteger(),row.cores.toInteger(),row.vms.toInteger()));
+			if(row.execution_node_id!=null)pmDescriptions.put(row.execution_node_id, new PhysicalMachineAllocationDescription(row.execution_node_id,row.cores.toInteger(),row.ram.toInteger(),row.vms.toInteger()));
 		}
 		return pmDescriptions;
 	}

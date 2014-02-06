@@ -21,7 +21,7 @@ public class FirstFitDecreasingAllocator extends VirtualMachineAllocator {
 			PhysicalMachineAllocationDescription pmad1=physicalMachineDescriptions.get(p1.getDatabaseId());
 			PhysicalMachineAllocationDescription pmad2=physicalMachineDescriptions.get(p2.getDatabaseId());
 			int coresUsados1=pmad1==null?0:pmad1.cores,coresUsados2=pmad2==null?0:pmad2.cores;
-			int cores=Integer.compare(p1.getCores()-coresUsados1,p2.getCores()-coresUsados2);
+			int cores=p1.getCores()-coresUsados1-(p2.getCores()-coresUsados2);
 			return cores;
 		}
 	}
@@ -34,6 +34,9 @@ public class FirstFitDecreasingAllocator extends VirtualMachineAllocator {
 				return Integer.compare(v2.getCores(),v1.getCores());
 			}
 		});
+		for(PhysicalMachine pm:physicalMachines){
+			System.out.println(pm.getDatabaseId()+"\t"+pm.getCores()+"\t"+pm.getRam()+"\t"+physicalMachineDescriptions.get(pm.getDatabaseId()));
+		}
 		vmCycle:for(VirtualMachineExecution vme:virtualMachineList){
 			for(PhysicalMachine pm:physicalMachines){
 				PhysicalMachineAllocationDescription pmad = physicalMachineDescriptions.get(pm.getDatabaseId());

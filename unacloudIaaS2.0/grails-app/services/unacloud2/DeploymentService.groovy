@@ -57,7 +57,7 @@ class DeploymentService {
 			depCluster.images.add(depImage)
 		}
 		depCluster.save(failOnError: true)
-		deploymentProcessorService.doDeployment(depCluster,false)
+		deploymentProcessorService.doDeployment(depCluster,user,false)
 		//ipAllocatorService.allocatePhysicalMachinesRandomly(depCluster)
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +time)
@@ -104,7 +104,7 @@ class DeploymentService {
 			depCluster.images.add(depImage)
 		}
 		depCluster.save(failOnError: true)
-		deploymentProcessorService.doDeployment(depCluster,false)
+		deploymentProcessorService.doDeployment(depCluster,user,false)
 		//ipAllocatorService.allocatePhysicalMachines(depCluster)
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +time)
@@ -187,7 +187,7 @@ class DeploymentService {
 		}
 	}
 
-	def addInstances(DeployedImage depImage, int instance, long time){
+	def addInstances(DeployedImage depImage,User user, int instance, long time){
 
 		def iName=depImage.image.name
 		def iRAM=depImage.getDeployedRAM()
@@ -202,7 +202,7 @@ class DeploymentService {
 			depImage.virtualMachines.add(virtualMachine)
 		}
 		DeployedCluster cluster= new DeployedCluster(images: depImage)
-		deploymentProcessorService.doDeployment(cluster,true)
+		deploymentProcessorService.doDeployment(cluster,user,true)
 		runAsync{ deployerService.deployNewInstances(depImage) }
 		depImage.save(failOnError: true)
 		return depImage
