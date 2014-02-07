@@ -1,4 +1,4 @@
-package back.ipallocators
+package back.allocators
 
 import back.services.PhysicalMachineStateManagerService;
 import java.util.Comparator;

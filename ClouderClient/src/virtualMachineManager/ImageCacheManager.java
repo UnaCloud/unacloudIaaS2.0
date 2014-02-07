@@ -56,7 +56,7 @@ public class ImageCacheManager {
 				File root=new File(machineRepository+"\\"+imageId+"\\"+vmName);
 				dest.setMainFile(new File(root,vmName+"."+source.getMainFile().getName().split("\\.")[1]));
 				dest.setStatus(VirtualMachineImageStatus.LOCK);
-				dest.setVirtualMachineName(vmName);
+				//dest.setVirtualMachineName(vmName);
 				SystemUtils.sleep(2000);
 			}
 		}
@@ -100,7 +100,7 @@ public class ImageCacheManager {
 						image.setPassword(br.readLine());
 						image.setUsername(br.readLine());
 						copy.setStatus(VirtualMachineImageStatus.LOCK);
-						copy.setVirtualMachineName(br.readLine());
+						/*copy.setVirtualMachineName();*/br.readLine();
 						image.setConfiguratorClass(br.readLine());
 					}else{
 						try(FileOutputStream fos=new FileOutputStream(new File(root,entry.getName()))){

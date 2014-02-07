@@ -1,7 +1,7 @@
 package back.deploymentBuilder;
 
-import back.ipallocators.IpAllocatorService;
-import back.pmallocators.PhysicalMachineAllocatorService
+import back.allocators.IpAllocatorService;
+import back.allocators.PhysicalMachineAllocatorService;
 import back.userRestrictions.UserRestrictionProcessorService;
 import unacloud2.DeployedCluster;
 import unacloud2.PhysicalMachine;
@@ -16,7 +16,7 @@ class DeploymentProcessorService {
 	def doDeployment(DeployedCluster cluster,User user,boolean addInstancesDeployment){
 		ArrayList<VirtualMachineExecution> vms=new ArrayList<>();
 		List<PhysicalMachine> pms=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
-		userRestrictionProcessorService.applyUserPermissions(user,vms,pms)
+		//userRestrictionProcessorService.applyUserPermissions(user,vms,pms)
 		physicalMachineAllocatorService.allocatePhysicalMachines(cluster,vms,pms,addInstancesDeployment)
 		ipAllocatorService.allocateIPAddresses(cluster, addInstancesDeployment)
 	}

@@ -1,5 +1,7 @@
-package back.pmallocators
+package back.allocators
 
+import back.pmallocators.AllocatorEnum;
+import back.pmallocators.PhysicalMachineAllocationDescription;
 import back.services.PhysicalMachineStateManagerService;
 
 import java.util.ArrayList;

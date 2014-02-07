@@ -13,7 +13,7 @@ import virtualMachineManager.VirtualMachineImageStatus;
 
 public class ImageCopy implements Serializable{
 	private static final long serialVersionUID = 8911955514393569155L;
-	String virtualMachineName;
+	//String virtualMachineName;
 	File mainFile;
 	Image image;
 	transient VirtualMachineImageStatus status=VirtualMachineImageStatus.FREE;
@@ -24,10 +24,11 @@ public class ImageCopy implements Serializable{
 		this.mainFile = mainFile;
 	}
 	public String getVirtualMachineName() {
-		return virtualMachineName;
-	}
-	public void setVirtualMachineName(String virtualMachineName) {
-		this.virtualMachineName = virtualMachineName;
+		if(mainFile==null)return "null";
+		String h=mainFile.getName();
+		int l=h.lastIndexOf(".");
+		if(l==-1)return h;
+		return h.substring(0,l);
 	}
 	public VirtualMachineImageStatus getStatus() {
 		return status;
