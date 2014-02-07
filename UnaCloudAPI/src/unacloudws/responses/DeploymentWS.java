@@ -7,7 +7,10 @@ public class DeploymentWS {
 		this.id = id;
 		this.cluster = cluster;
 	}
-	
-	
-	
+	public String getId() {
+		return id;
+	}
+	public ClusterWS getCluster() {
+		return cluster;
+	}
 }
