@@ -7,7 +7,7 @@ import java.util.Date;
 public class VirtualMachineExecutionWS {
 	
 	protected int id;
-	protected String imageName;
+	protected long imageId;
     protected String virtualMachineExecutionIP;
     protected VirtualMachineStatusEnum virtualMachineExecutionStatus;
     protected String virtualMachineExecutionStatusMessage;
@@ -15,12 +15,12 @@ public class VirtualMachineExecutionWS {
     protected String virtualMachineName;
 	
     
-    public VirtualMachineExecutionWS(String imageName,
+    public VirtualMachineExecutionWS(long imageId,
 			String virtualMachineExecutionIP,
 			VirtualMachineStatusEnum virtualMachineExecutionStatus,
 			String virtualMachineExecutionStatusMessage, int id, Date stopTime,
 			String virtualMachineName) {
-		this.imageName = imageName;
+		this.imageId = imageId;
 		this.virtualMachineExecutionIP = virtualMachineExecutionIP;
 		this.virtualMachineExecutionStatus = virtualMachineExecutionStatus;
 		this.virtualMachineExecutionStatusMessage = virtualMachineExecutionStatusMessage;
@@ -39,16 +39,13 @@ public class VirtualMachineExecutionWS {
 		this.id = id;
 	}
 
-
-	public String getImageName() {
-		return imageName;
+	public long getImageId() {
+		return imageId;
 	}
-
-
-	public void setImageName(String imageName) {
-		this.imageName = imageName;
+	
+	public void setImageId(long imageId) {
+		this.imageId = imageId;
 	}
-
 
 	public String getVirtualMachineExecutionIP() {
 		return virtualMachineExecutionIP;

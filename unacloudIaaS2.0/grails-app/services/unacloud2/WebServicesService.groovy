@@ -150,7 +150,7 @@ class WebServicesService {
 		for (image in dep.cluster.images){
 			for(vm in image.virtualMachines){
 				def data= new JSONObject()
-				data.put("belongs_to_image",image.image.name)
+				data.put("belongs_to_image",image.image.id)
 				data.put("status",vm.status.toString())
 				data.put("stop_time", vm.stopTime.getTime())
 				data.put("ip",vm.ip.ip)
