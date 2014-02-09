@@ -10,7 +10,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import unacloudws.requests.VirtualMachineRequest;
+import unacloudws.requests.VirtualClusterRequest;
+import unacloudws.requests.VirtualImageRequest;
 import unacloudws.responses.ClusterWS;
 import unacloudws.responses.DeploymentWS;
 import unacloudws.responses.ImageWS;
@@ -70,12 +71,12 @@ public class UnaCloudOperations {
 		}
     	return null;
     }
-    public String startVirtualCluster(int clusterId, long time,VirtualMachineRequest...vms) {
+    public String startVirtualCluster(VirtualClusterRequest clusterRequest) {
     	JsonNode cluster = mapper.createObjectNode();
     	ObjectNode clusterON=((ObjectNode) cluster);
-    	clusterON.put("clusterId", clusterId);
-    	clusterON.put("execTime", time);
-    	clusterON.put("images", mapper.valueToTree(vms));
+    	clusterON.put("clusterId", clusterRequest.getClusterId());
+    	clusterON.put("execTime", clusterRequest.getTime());
+    	clusterON.put("images", mapper.valueToTree(clusterRequest.getVms()));
     	try {
 			return prepareRequest("startCluster").queryParam("cluster",mapper.writeValueAsString(cluster)).post(String.class);
 		} catch (JsonProcessingException e) {
@@ -84,7 +85,7 @@ public class UnaCloudOperations {
 		}
     }
     
-    public String startHeterogeneousVirtualCluster(int clusterId, long time,VirtualMachineRequest...vms) {
+    public String startHeterogeneousVirtualCluster(int clusterId, long time,VirtualImageRequest...vms) {
     	JsonNode cluster = mapper.createObjectNode();
     	ObjectNode clusterON=((ObjectNode) cluster);
     	clusterON.put("clusterId", clusterId);

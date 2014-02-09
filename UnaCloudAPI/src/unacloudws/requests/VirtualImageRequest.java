@@ -1,8 +1,8 @@
 package unacloudws.requests;
 
-public class VirtualMachineRequest {
+public class VirtualImageRequest {
 	int instances,ram,cores,imageId;
-	public VirtualMachineRequest(int instances, int ram, int cores, int imageId) {
+	public VirtualImageRequest(int instances, int ram, int cores, int imageId) {
 		this.instances = instances;
 		this.ram = ram;
 		this.cores = cores;
