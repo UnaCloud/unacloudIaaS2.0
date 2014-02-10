@@ -1,10 +1,23 @@
 package back.userRestrictions;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.SessionCookieConfig;
+
 import unacloud2.DeployedCluster;
+import unacloud2.PhysicalMachine;
+import unacloud2.User
+import unacloud2.UserRestriction;
+import unacloud2.VirtualMachineExecution;
 
 class UserRestrictionProcessorService {
-
-	def applyUserPermissions(DeployedCluster cluster){
-		
+	def applyUserPermissions(User user,ArrayList<VirtualMachineExecution> vms,List<PhysicalMachine> pms){
+		for (UserRestriction ur:user.restrictions){
+			UserRestrictionEnum value=UserRestrictionEnum.valueOf(ur.name);
+			if(value!=null){
+				value.getUserRestriction().applyRestriction(ur.value,vms,pms);
+			}
+		}
 	}
 }

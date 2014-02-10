@@ -17,9 +17,10 @@ class PhysicalMachine {
 	PhysicalMachineStateEnum state
 	OperatingSystem operatingSystem
 	Date lastReport
-	//Laboratory laboratory;
-	static belongsTo =[laboratory: Laboratory]
+	Laboratory laboratory;
+	
 	def long getDatabaseId(){
 		return id;
 	}
+	
 }
