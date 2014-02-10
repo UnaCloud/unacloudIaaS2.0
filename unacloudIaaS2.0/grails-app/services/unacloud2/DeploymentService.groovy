@@ -15,7 +15,7 @@ class DeploymentService {
 
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +(60*60*1000))
-		def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: image.name+"-"+1 ,ram:512 , cores:1 ,disk: image.fixedDiskSize , status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
+		def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: image.name+""+1 ,ram:512 , cores:1 ,disk: image.fixedDiskSize , status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
 		virtualMachine.save()
 		DeployedImage depImage= new DeployedImage(image:image)
 		depImage.addToVirtualMachines(virtualMachine)
@@ -49,7 +49,7 @@ class DeploymentService {
 				long stopTimeMillis= new Date().getTime()
 				def stopTime= new Date(stopTimeMillis +time)
 				def iName=depImage.image.name
-				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: iName +"-"+j, ram: image.ram, cores: image.cores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
+				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: iName +""+j, ram: image.ram, cores: image.cores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 				depImage.virtualMachines.add(virtualMachine)
 				virtualMachine.save(failOnError: true)
 				depImage.save(failOnError: true)
@@ -96,7 +96,7 @@ class DeploymentService {
 				def stopTime= new Date(stopTimeMillis +time)
 				println "Stop date"+stopTime
 				def iName=image.name
-				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: iName +"-"+j, ram: options[option].ram, cores: options[option].cores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
+				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: iName +""+j, ram: options[option].ram, cores: options[option].cores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 				depImage.virtualMachines.add(virtualMachine)
 				virtualMachine.save(failOnError: true)
 				depImage.save(failOnError: true)
@@ -142,7 +142,7 @@ class DeploymentService {
 				long stopTimeMillis= new Date().getTime()
 				def stopTime= new Date(stopTimeMillis +time)
 				def iName=image.name
-				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: iName +"-"+j, ram: options[option].ram, cores: options[option].cores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
+				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: iName +""+j, ram: options[option].ram, cores: options[option].cores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 				depImage.virtualMachines.add(virtualMachine)
 				virtualMachine.save(failOnError: true)
 				depImage.save(failOnError: true)
@@ -196,7 +196,7 @@ class DeploymentService {
 		for(int i=index;i<instance+index;i++){
 			long stopTimeMillis= new Date().getTime()
 			def stopTime= new Date(stopTimeMillis +time)
-			def virtualMachine = new VirtualMachineExecution(message: "Adding instance",name: iName+"-"+i ,ram: iRAM, cores:iCores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
+			def virtualMachine = new VirtualMachineExecution(message: "Adding instance",name: iName+""+i ,ram: iRAM, cores:iCores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
 			//ipAllocatorService.allocatePhysicalMachine(virtualMachine)
 			virtualMachine.save(failOnError: true)
 			depImage.virtualMachines.add(virtualMachine)

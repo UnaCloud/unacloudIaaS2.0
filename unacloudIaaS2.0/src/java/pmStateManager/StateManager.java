@@ -20,7 +20,8 @@ public class StateManager {
 		pmReport.lastReport=System.currentTimeMillis();
 		boolean b=pmReport.withUser; 
 		pmReport.withUser=withuser;
-		return (b!=withuser);
+		//return (b!=withuser);
+		return true;
 	}
 	public static synchronized boolean isPMoff(String hostname){
 		PmReportStatus pmReport=pmMap.get(hostname);

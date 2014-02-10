@@ -9,7 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.List;
 
-import unacloudws.requests.VirtualMachineRequest;
+import unacloudws.requests.VirtualImageRequest;
 import unacloudws.responses.VirtualMachineExecutionWS;
 
 
