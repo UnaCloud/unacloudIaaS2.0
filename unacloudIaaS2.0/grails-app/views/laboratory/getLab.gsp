@@ -1,3 +1,4 @@
+<%@page import="unacloud2.PhysicalMachineStateEnum"%>
 <html>
    <head>
       <meta name="layout" content="main"/>
@@ -17,40 +18,53 @@
   	
   	</td>
   </tr>
-  
-  
- <div class="row-fluid text-center">
+  <tr>
+  <th>Name</th>
+  <th>IP</th>
+  <th>State</th>
+  <th>Being used</th>
+  <th>Options</th>
+  </tr>
  
  <g:each in="${machineSet}" status="i" var="machine">    
- <g:if test="${i%6==0 }">
- <tr>
- </g:if>
- <td>
-    <table class="table table-bordered table-condensed text-center" style="background:white">
-      	<tr class="info">
-      		<td>
+      	<tr>
+      	<td>	
       		  <input type="checkbox" name="machine${machine.id}" class="all"/>   		
-              <g:link action="editMachine" params="${[id: machine.id, labId: lab.id] }" class="nav pull-right"><i class="icon-pencil" ></i></g:link>
-      		</td>
-   		</tr>
-   		<tr>
-   		<td>
-   			<g:img file="infrastructure.png"/><p>${machine.name}</p>
+        	  <small>&nbsp;${machine.name}</small> 
+        </td>
+        <td>
+   			<small>${machine.ip.ip}</small>
    		</td>
-   		</tr>
-   	</table>
- </td>
-<g:if test="${i%6==5 }">
- </tr>
- </g:if>
-</g:each>
-</div>
-</td>
-</tr>
-</g:form>
+   		<td>
+   		<g:if test="${machine.state.equals(PhysicalMachineStateEnum.ON) }">
+   			<g:img file="green.png" title="On"/>
+   		</g:if>
+   		<g:if test="${machine.state.equals(PhysicalMachineStateEnum.DISABLED) }">
+   			<g:img file="blue.png" title="Disabled"/>
+   		</g:if>
+   		<g:if test="${machine.state.equals(PhysicalMachineStateEnum.OFF) }">
+   			<g:img file="red.png" title="Off"/>
+   		</g:if>
+   		</td>
+   		<td>
+   		<g:if test="${machine.withUser }">
+   			<small>Yes</small>
+   		</g:if>
+   		<g:if test="${!machine.withUser }">
+   			<small>No</small>
+   		</g:if>
+   		</td>
+   		<td>
+   			<g:link action="editMachine" params="${[id: machine.id, labId: lab.id] }" ><i class="icon-pencil" ></i></g:link>
+   		</td>
+       </tr>	   	
+ </g:each>
 </table>
-
 </div>
+
+</g:form>
+
+
 <script type="text/javascript">
 $(function () {
     $('#selectAll').click(function (event) {
