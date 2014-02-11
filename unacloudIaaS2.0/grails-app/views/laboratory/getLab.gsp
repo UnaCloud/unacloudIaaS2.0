@@ -7,7 +7,7 @@
 <body>
 <g:form>
 <div class="hero-unit span9">
-<table class="table table-bordered text-center" style="background:white" >
+<table class="table table-bordered"  style="background:white" >
   <tr class="info">
   	<td class="info" colspan="12">
   	<input type="checkbox" id="selectAll"><small>&nbsp;Select All</small>
@@ -77,3 +77,4 @@ $(function () {
  });
 </script>
 </body>
+   

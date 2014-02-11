@@ -16,7 +16,7 @@ class DeploymentProcessorService {
 	def doDeployment(DeployedCluster cluster,User user,boolean addInstancesDeployment){
 		ArrayList<VirtualMachineExecution> vms=new ArrayList<>();
 		List<PhysicalMachine> pms=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
-		//userRestrictionProcessorService.applyUserPermissions(user,vms,pms)
+		userRestrictionProcessorService.applyUserPermissions(user,vms,pms)
 		physicalMachineAllocatorService.allocatePhysicalMachines(cluster,vms,pms,addInstancesDeployment)
 		ipAllocatorService.allocateIPAddresses(cluster, addInstancesDeployment)
 	}

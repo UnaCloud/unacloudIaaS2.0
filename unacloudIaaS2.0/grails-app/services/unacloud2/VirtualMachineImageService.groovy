@@ -28,18 +28,17 @@ class VirtualMachineImageService {
 		i.save(failOnError: true)
 		files.each {
 			def e=it.getOriginalFilename()
-			println e 
 			java.io.File newFile= new java.io.File(repository.root+i.name+"_"+user.username+"\\"+it.getOriginalFilename()+"\\")
 			newFile.mkdirs()
 			it.transferTo(newFile)
 			if(i.isPublic){
 			def templateFile= new java.io.File(repository.root+"imageTemplates\\"+i.name+"_"+user.username+"\\"+it.getOriginalFilename())
 			FileUtils.copyFile(newFile, templateFile)
-			if (e.endsWith(".vmx"))
-			println "mainfile"+e
-				i.putAt("mainFile", repository.root+i.name+"_"+user.username+"\\"+it.getOriginalFilename())
 			}
-			}
+			if (e.endsWith(".vmx")||e.endsWith(".vbox"))
+			i.putAt("mainFile", repository.root+i.name+"_"+user.username+"\\"+it.getOriginalFilename())
+		
+		}
 		
 		if(user.images==null)
 			user.images
