@@ -22,19 +22,6 @@ class PhysicalMachineAllocatorService {
 	def allocatePhysicalMachines(DeployedCluster cluster, ArrayList<VirtualMachineExecution> vms,List<PhysicalMachine> pms,boolean addInstancesDeployment){
 		//pms=StateManager.filterPhysicalMachines(pms);
 		Map<Long,PhysicalMachineAllocationDescription> pmDescriptions = getPhysicalMachineUsage()
-		if(!addInstancesDeployment)
-			for(DeployedImage image:cluster.images)vms.addAll(image.virtualMachines);
-		else{
-			println "adding only new instances for allocation"
-			for(DeployedImage image:cluster.images){
-				
-				def virtualMachines= new ArrayList<>()
-				for(VirtualMachineExecution vm:image.virtualMachines)
-				if(vm.message.equals("Adding instance")){
-					virtualMachines.add(vm)}
-				vms.addAll(virtualMachines)
-			}
-		}
 		println vms
 		ServerVariable allocatorName=ServerVariable.findByName("VM_ALLOCATOR_NAME");
 		AllocatorEnum allocator=AllocatorEnum.ROUND_ROBIN;

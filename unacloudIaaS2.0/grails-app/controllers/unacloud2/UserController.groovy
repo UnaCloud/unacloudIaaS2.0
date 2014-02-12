@@ -86,10 +86,10 @@ class UserController {
 		else{
 			def found
 			if(params.data!=null){
-				for(allocPolicy in u.restrictions){
+				for(UserRestriction allocPolicy:u.restrictions){
 					if(allocPolicy.name.equals(params.data)){
 						found=true
-						render "<input id=\"value\" name=\"value\" type=\"text\" value="+allocPolicy.value+">"
+						render "<input id=\"value\" name=\"value\" type=\"text\" value=\""+allocPolicy.getValue()+"\">"
 					}
 				}
 				if(found!=true){

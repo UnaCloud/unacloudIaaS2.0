@@ -9,5 +9,5 @@ import unacloud2.User;
 
 public interface UserRestrictionInterface {
 
-	public void applyRestriction(String value,List<VirtualMachineExecution> vmes,List<PhysicalMachine> pms);
+	public void applyRestriction(String value,List<VirtualMachineExecution> vmes,List<PhysicalMachine> pms) throws UserRestrictionException;
 }

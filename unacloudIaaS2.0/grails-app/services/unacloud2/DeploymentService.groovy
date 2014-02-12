@@ -11,7 +11,7 @@ class DeploymentService {
 	DeploymentProcessorService deploymentProcessorService 
 	DeployerService deployerService
 
-	def deployImage(VirtualMachineImage image, User user){
+	def deployImage(VirtualMachineImage image, User user) throws Exception{
 
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +(60*60*1000))
@@ -36,7 +36,7 @@ class DeploymentService {
 		user.save(failOnError: true)
 	}
 
-	def deployHeterogeneous(Cluster cluster, User user, long time, ImageRequestOptions[] options){
+	def deployHeterogeneous(Cluster cluster, User user, long time, ImageRequestOptions[] options) throws Exception{
 		println "Deploying"
 		DeployedCluster depCluster= new DeployedCluster(cluster: cluster)
 		depCluster.images=[]
@@ -72,7 +72,7 @@ class DeploymentService {
 		return dep
 	}
 
-	def deploy(Cluster cluster, User user, long time, ImageRequestOptions[] options){
+	def deploy(Cluster cluster, User user, long time, ImageRequestOptions[] options) throws Exception{
 		println "Deploying"
 		DeployedCluster depCluster= new DeployedCluster(cluster: cluster)
 		depCluster.images=[]
@@ -119,50 +119,7 @@ class DeploymentService {
 		
 		return dep
 	}
-	def deployCCSACluster(Cluster cluster, User user, long time, ImageRequestOptions[] options){
-		println "Deploying"
-		DeployedCluster depCluster= new DeployedCluster(cluster: cluster)
-		depCluster.images=[]
-		cluster.images.eachWithIndex(){ image,i->
-			def depImage= new DeployedImage(image:image)
-			depImage.virtualMachines= []
-			int option
-			for(int j=0;j<options.length;j++){
-				if (options[j].imageId==image.id){
-					option=j
-					break
-				}
-				
-			}
-			
-			if(option==null){
-				return
-			}
-			for(int j=0;j<options[option].instances;j++){
-				long stopTimeMillis= new Date().getTime()
-				def stopTime= new Date(stopTimeMillis +time)
-				def iName=image.name
-				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: iName +""+j, ram: options[option].ram, cores: options[option].cores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
-				depImage.virtualMachines.add(virtualMachine)
-				virtualMachine.save(failOnError: true)
-				depImage.save(failOnError: true)
-			}
-			depCluster.images.add(depImage)
-		}
-		depCluster.save(failOnError: true)
-		deploymentProcessorService.doDeployment(depCluster,false)
-		//ipAllocatorService.allocatePhysicalMachines(depCluster)
-		long stopTimeMillis= new Date().getTime()
-		def stopTime= new Date(stopTimeMillis +time)
-		Deployment dep= new Deployment(cluster: depCluster,startTime: new Date(),stopTime: stopTime,status: DeploymentStateEnum.ACTIVE)
-		dep.save(failOnError: true)
-		if(user.deployments==null)
-			user.deployments=[]
-		user.deployments.add(dep)
-		user.save(failOnError: true)
-		runAsync{ deployerService.deploy(dep) }
-		return dep.id
-	}
+	
 	def stopVirtualMachineExecution(VirtualMachineExecution vm){
 		if(vm.status==VirtualMachineExecutionStateEnum.DEPLOYED||vm.status==VirtualMachineExecutionStateEnum.FAILED){
 		vm.stopTime=new Date()
@@ -187,7 +144,7 @@ class DeploymentService {
 		}
 	}
 
-	def addInstances(DeployedImage depImage,User user, int instance, long time){
+	def addInstances(DeployedImage depImage,User user, int instance, long time) throws Exception{
 
 		def iName=depImage.image.name
 		def iRAM=depImage.getDeployedRAM()

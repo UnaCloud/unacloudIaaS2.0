@@ -1,6 +1,7 @@
 package unacloud2
 
 import back.userRestrictions.UserRestrictionProcessorService
+
 import java.util.regex.Pattern.Start;
 
 import webutils.ImageRequestOptions;
@@ -34,7 +35,13 @@ class DeploymentController {
 		def image= VirtualMachineImage.get(params.id)
 		def user= User.get(session.user.id)
 		if (!image.isDeployed()){
+			try{
 			deploymentService.deployImage(image, user)
+			}
+			catch (Exception e){
+				flash.message=e.message
+				redirect(action: "error");
+			}
 			redirect(action: "index")
 		}
 		else {
@@ -68,15 +75,15 @@ class DeploymentController {
 						temp[idx]=new ImageRequestOptions(it.id, params.RAM.getAt(idx).toInteger(),params.cores.getAt(idx).toInteger(),params.instances.getAt(idx).toInteger());
 					}
 				}
-//				def machineList
-//				try{ 
-//					machineList=userRestrictionProcessorService.applyUserPermissions()
-//				}
-//				catch(Exception e){
-//					
-//				}
 				println params.time.toLong()*60*60*1000
+				try{
 				deploymentService.deploy(cluster, user, params.time.toLong()*60*60*1000, temp)
+				}
+				catch(Exception e){
+					flash.message=e.getMessage()
+					redirect( uri: "/error",absolute: true )
+					return
+				}
 				redirect(controller:"deployment")
 			}
 			else{
@@ -113,7 +120,14 @@ class DeploymentController {
 		def depImage=DeployedImage.get(params.id)
 		def instance=params.instances.toInteger()
 		User user= User.get(session.user.id)
+		try{
 		deploymentService.addInstances(depImage, user,instance, params.time.toLong()*60*60*1000)
+		}
+		catch(Exception e){
+			flash.message=e.getMessage()
+			redirect( uri: "/error",absolute: true )
+			return
+		}
 		redirect(action: "index")
 	}
 }
