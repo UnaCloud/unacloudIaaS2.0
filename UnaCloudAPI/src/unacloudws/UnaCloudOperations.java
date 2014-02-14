@@ -40,7 +40,6 @@ public class UnaCloudOperations {
     	
     	try {
 			String string=(prepareRequest("getDeploymentInfo").queryParam("depId",mapper.writeValueAsString(deploymentId)).post(String.class));
-			System.out.println(string);
 			JsonNode response= mapper.readTree(string);
 			if (response.has("message")){
 				System.out.println(response.get("message").asText());
@@ -50,7 +49,6 @@ public class UnaCloudOperations {
 			Iterator<JsonNode> it=response.iterator();
 			while (it.hasNext()){
 				JsonNode vm= it.next();
-				System.out.println(vm.get("message").asText());
 				VirtualMachineExecutionWS vme= new VirtualMachineExecutionWS(vm.get("belongs_to_image").asLong(), vm.get("ip").asText(), VirtualMachineStatusEnum.valueOf(vm.get("status").asText()),vm.get("message").asText(), vm.get("id").asInt(), new Date(vm.get("stop_time").asLong()), vm.get("hostname").asText());
 				vmList.add(vme);
 			}
@@ -208,7 +206,7 @@ public class UnaCloudOperations {
     private WebResource prepareRequest(String serviceName){
     	DefaultClientConfig clientConfig = new DefaultClientConfig();
 		Client client = Client.create(clientConfig);
-		WebResource resource = client.resource("http://localhost:8080/unacloudIaaS2.0/WebServices");
+		WebResource resource = client.resource("http://157.253.236.160/Unacloud2/WebServices");
 		return resource.path(serviceName).queryParam("login",username).queryParam("apiKey",apiKey);
     }
     /*public String doRequest(String serviceName,JsonNode cluster){
