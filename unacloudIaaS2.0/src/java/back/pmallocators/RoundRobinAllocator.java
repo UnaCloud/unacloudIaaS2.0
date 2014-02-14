@@ -23,6 +23,7 @@ public class RoundRobinAllocator extends VirtualMachineAllocator {
 			List<PhysicalMachine> current=physicalMachines;
 			List<PhysicalMachine> next=new LinkedList<>();
 			for (PhysicalMachine pm : current) {
+				System.out.println("evaluating machine: "+pm.getName());
 				if (nextVm >= virtualMachineList.size())break;
 				PhysicalMachineAllocationDescription pmad = physicalMachineDescriptions.get(pm.getDatabaseId());
 				VirtualMachineExecution nextVirtualMachine = virtualMachineList.get(nextVm);

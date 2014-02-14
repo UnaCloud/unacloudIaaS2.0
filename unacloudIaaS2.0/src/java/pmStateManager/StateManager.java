@@ -11,7 +11,8 @@ public class StateManager {
 
 	static Map<String,PmReportStatus> pmMap=new TreeMap<String, PmReportStatus>();
 	public static synchronized boolean registerPhysicalMachineReport(String hostname,String user){
-		PmReportStatus pmReport=pmMap.get(hostname);
+		return true;
+		/*PmReportStatus pmReport=pmMap.get(hostname);
 		boolean withuser=user!=null&&!user.isEmpty()&&!user.equals("null")&&!user.equals(">null");
 		if(pmReport==null){
 			pmMap.put(hostname,new PmReportStatus(withuser,System.currentTimeMillis()));
@@ -21,16 +22,16 @@ public class StateManager {
 		boolean b=pmReport.withUser; 
 		pmReport.withUser=withuser;
 		//return (b!=withuser);
-		return true;
+		return true;*/
 	}
 	public static synchronized boolean isPMoff(String hostname){
 		PmReportStatus pmReport=pmMap.get(hostname);
 		return pmReport==null||(System.currentTimeMillis()-pmReport.lastReport)>10000;
 	}
 	public static List<PhysicalMachine> filterPhysicalMachines(List<PhysicalMachine> pms){
-		List<PhysicalMachine> ret=new ArrayList<>(); 
-		for(PhysicalMachine pm:pms)if(!isPMoff(pm.getName()))ret.add(pm);
-		return ret;
+		//List<PhysicalMachine> ret=new ArrayList<>(); 
+		//for(PhysicalMachine pm:pms)if(!isPMoff(pm.getName()))ret.add(pm);
+		return pms;
 	}
 	public static class PmReportStatus{
 		boolean withUser;

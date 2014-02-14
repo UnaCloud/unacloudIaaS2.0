@@ -8,6 +8,7 @@ import unacloud2.VirtualMachineExecution;
 class LaboratoryRestriction implements UserRestrictionInterface{
 	@Override
 	public void applyRestriction(String value,List<VirtualMachineExecution> vms, List<PhysicalMachine> pms) {
+		if(value!=null && !value.isEmpty()){
 		String[] values= value.split(":");
 		boolean isFromValues;
 		for (int j=0;j<pms.size();j++){
@@ -23,6 +24,7 @@ class LaboratoryRestriction implements UserRestrictionInterface{
 				pms.remove(j);
 				j--;
 			}
+		}
 		}
 	}
 }

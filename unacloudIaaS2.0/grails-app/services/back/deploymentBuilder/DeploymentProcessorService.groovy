@@ -33,7 +33,9 @@ class DeploymentProcessorService {
 			}
 		}
 		List<PhysicalMachine> pms=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
+		println "tamaño en doDeployment:"+pms.size()
 		userRestrictionProcessorService.applyUserPermissions(user,vms,pms)
+		println "tamaño después de userRestriction:"+pms.size()
 		physicalMachineAllocatorService.allocatePhysicalMachines(cluster,vms,pms,addInstancesDeployment)
 		ipAllocatorService.allocateIPAddresses(cluster, addInstancesDeployment)
 	}

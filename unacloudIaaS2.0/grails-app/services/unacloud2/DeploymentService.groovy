@@ -29,8 +29,8 @@ class DeploymentService {
 			user.deployments=[]
 		user.addToDeployments(dep)
 		println "allocando"
+		deploymentProcessorService.doDeployment(cluster,false)
 		if(depImage.virtualMachines.size()>0 && !Environment.isDevelopmentMode()){
-			deploymentProcessorService.doDeployment(cluster,false)
 			runAsync{ deployerService.deploy(dep) }
 		}
 		user.save(failOnError: true)
