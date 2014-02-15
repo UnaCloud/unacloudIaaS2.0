@@ -209,36 +209,4 @@ public class UnaCloudOperations {
 		WebResource resource = client.resource("http://157.253.236.160/Unacloud2/WebServices");
 		return resource.path(serviceName).queryParam("login",username).queryParam("apiKey",apiKey);
     }
-    /*public String doRequest(String serviceName,JsonNode cluster){
-    	UnaCloudOperations ops=new UnaCloudOperations("admin","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA");
-		ops.startVirtualCluster(1,60,new VirtualMachineRequest(1,4,2,1),new VirtualMachineRequest(1,1,1,1),new VirtualMachineRequest(2,2,2,1));
-		DefaultClientConfig clientConfig = new DefaultClientConfig();
-		Client client = Client.create(clientConfig);
-		
-		//JsonNode cluster=createClusterDeployJSONRequest();
-	    WebResource resource = client.resource("http://localhost:8080/unacloudIaaS2.0/WebServices");
-	    // lets get the XML as a String
-	    
-	    	//System.out.println("Enviando "+mapper.writeValueAsString(rootNode));
-			//String text = resource.path("getClusterList").queryParam("login","admin").queryParam("apiKey", "UJNDE79XH5U0OE45VIRPLSD5GVEU0PWX").accept("application/text").post(String.class);
-			//System.out.println(text);
-			//JsonNode rootNode = mapper.readValue(text, JsonNode.class);
-		    try{
-		    	System.out.println(mapper.writeValueAsString(cluster));
-		    }catch(Exception ex){
-		    	
-		    }
-//		    String text = resource.path("startCluster").queryParam("login","admin").queryParam("apiKey","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA").
-//		    		queryParam("cluster",mapper.writeValueAsString(cluster)).accept("application/text").post(String.class);
-
-//		    String text = resource.path("stopCluster").queryParam("login","admin").queryParam("apiKey","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA").
-//		    		queryParam("cluster","28").accept("application/text").post(String.class);
-//		 
-		    
-//		    String text = resource.path("getActiveDeployments").queryParam("login","admin").queryParam("apiKey","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA").post(String.class);
-		 
-//		    String text = resource.path("getDeploymentInfo").queryParam("login","admin").queryParam("apiKey","3NA4ABDVBQRWDYD9TIY0HVW5V9XYYQEA").queryParam("depId", "15").post(String.class);
-	    return "";
-    }*/
-
 }

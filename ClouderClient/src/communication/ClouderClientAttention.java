@@ -1,6 +1,7 @@
 package communication;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -78,5 +79,8 @@ public class ClouderClientAttention{
             instance.serverSocket.close();
         } catch (Exception e) {
         }
+    }
+    public static void main(String...args){
+    	System.out.println(new Date()+"");
     }
 }
