@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -18,21 +16,27 @@ import unacloudws.responses.VirtualMachineStatusEnum;
 
 public class Tester {
 	public static void main(String[] args){
-		try{
-			int number=Integer.parseInt(args[0]);
-			ClusterDescription c=startCluster(number);
-			PrintWriter pw=new PrintWriter(new FileOutputStream(c.id+"/times.txt"),true);
-			if(c!=null&&c.vms!=null&&!c.vms.isEmpty()){
-				Thread[] ts=new Thread[number];
-				for(int e=0;e<ts.length;e++)ts[e]=new HiloVm(e,c.id,c.vms.get(e).getVirtualMachineExecutionIP());
-				pw.println("Arrandando en "+new Date());
-				for(int e=0;e<ts.length;e++)ts[e].start();
-				for(int e=0;e<ts.length;e++)ts[e].join();
-				pw.println("Terminando en "+new Date());
+		final int times=Integer.parseInt(args[0]);
+		final int number=Integer.parseInt(args[1]);
+		for(int i=0;i<times;i++){
+			try{
+				ClusterDescription c=startCluster(number);
+				PrintWriter pw=new PrintWriter(new FileOutputStream(c.id+"/times.txt"),true);
+				if(c!=null&&c.vms!=null&&!c.vms.isEmpty()){
+					Thread[] ts=new Thread[number];
+					for(int e=0;e<ts.length;e++){
+						ts[e]=new HiloVm(c.vms.get(e).getId(),c.id,c.vms.get(e).getVirtualMachineExecutionIP());
+					}
+					pw.println("Arrandando en "+new Date());
+					for(int e=0;e<ts.length;e++)ts[e].start();
+					for(int e=0;e<ts.length;e++)ts[e].join();
+					pw.println("Terminando en "+new Date());
+				}
+				pw.close();
+				if(c!=null)apagarCluster(c.id);
+			}catch(Exception ex){
+				ex.printStackTrace();
 			}
-			if(c!=null)apagarCluster(c.id);
-		}catch(Exception ex){
-			ex.printStackTrace();
 		}
 		
 	}
