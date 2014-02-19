@@ -23,7 +23,18 @@ class DeploymentController {
 	}
 
 	def index() {
-		[deployments: session.user.getActiveDeployments()]
+		if(params.viewAll==null || params.viewAll=="false" ){
+			[deployments: session.user.getActiveDeployments(), checkViewAll: false]
+		}
+		else if(params.viewAll=="true"){
+			List deployments= new ArrayList()
+			for(user in User.all){
+				def deps=user.getActiveDeployments()
+				if(deps.size()!=0)
+				deployments.addAll(deps)
+			}
+			[deployments: deployments,checkViewAll: true ]
+		}
 	}
 	
 	def addInstancesOptions(){

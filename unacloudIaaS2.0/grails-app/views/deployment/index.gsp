@@ -2,6 +2,7 @@
 <html>
    <head>
       <meta name="layout" content="main"/>
+    
       <r:require modules="bootstrap"/>
    </head>
 <body>
@@ -15,11 +16,12 @@ function reload()
 	
 }
 </script>
-<table class="table table-bordered table-condensed text-center" style="background:white">
+<table class="table table-bordered table-condensed text-center" style="background:white" >
   <g:if test="${session.user.userType == 'Administrator'}">
   <tr class="info">
   	<td class="info" colspan="7">
-  	<input type="checkbox" name="View All" ><small>&nbsp;View All</small>
+  	 
+  	<input type="checkbox" id="View All" ${checkViewAll?"checked":""}  onChange="${remoteFunction(action:'index', update:'body',params:'\'viewAll=\' + this.checked') }"><small>&nbsp;View All</small>
   	</td>
   </tr>
   </g:if>

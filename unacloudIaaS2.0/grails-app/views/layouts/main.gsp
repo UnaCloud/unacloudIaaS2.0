@@ -35,7 +35,7 @@
       
    	
    </head>
-   <body>
+   <body id="body">
       
       <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
