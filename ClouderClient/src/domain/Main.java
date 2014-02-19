@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 import hypervisorManager.HypervisorFactory;
+import monitoring.IntelPowerGadgetMonitor;
 import monitoring.PhysicalMachineMonitor;
 import monitoring.PhysicalMachineState;
 import monitoring.PhysicalMachineStateReporter;
@@ -51,6 +52,7 @@ public class Main {
             PhysicalMachineStateReporter.getInstance().start();
             PersistentExecutionManager.loadData();
             new TreeDistributionChannelManager();
+            IntelPowerGadgetMonitor.startMonitoring();
             ClouderClientAttention.getInstance().connect();
         }
         else if(mainCase==TURN_OFF_DB) PhysicalMachineState.reportPhyisicalMachineStop();
