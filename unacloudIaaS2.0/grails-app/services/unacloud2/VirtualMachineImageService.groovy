@@ -32,7 +32,7 @@ class VirtualMachineImageService {
 			newFile.mkdirs()
 			it.transferTo(newFile)
 			if(i.isPublic){
-			def templateFile= new java.io.File(repository.root+"imageTemplates\\"+i.name+"_"+user.username+"\\"+it.getOriginalFilename())
+			def templateFile= new java.io.File(repository.root+"imageTemplates\\"+i.name+"\\"+it.getOriginalFilename())
 			FileUtils.copyFile(newFile, templateFile)
 			}
 			if (e.endsWith(".vmx")||e.endsWith(".vbox"))
@@ -73,13 +73,12 @@ class VirtualMachineImageService {
 		def repository= Repository.findByName("Main Repository")
 		folder.listFiles().each
 		{
-		def file= new java.io.File(repository.root+"imageTemplates\\"+publicImage.name+"_"+user.username+"\\"+it.getName())
+		def file= new java.io.File(repository.root+"imageTemplates\\"+publicImage.name+"\\"+it.getName())
 		def newFile= new java.io.File(repository.root+i.name+"_"+user.username+"\\"+it.getName())
 		FileUtils.copyFile(file, newFile)
 		if (it.getName().endsWith(".vmx"))
 		i.putAt("mainFile", repository.root+i.name+"_"+user.username+"\\"+newFile.getName())
 		}
-		
 		if(user.images==null)
 			user.images
 		user.images.add(i)

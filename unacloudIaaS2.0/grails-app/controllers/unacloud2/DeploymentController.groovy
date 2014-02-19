@@ -33,7 +33,7 @@ class DeploymentController {
 				if(deps.size()!=0)
 				deployments.addAll(deps)
 			}
-			[deployments: deployments,checkViewAll: true ]
+			[deployments: deployments,checkViewAll: true]
 		}
 	}
 	
