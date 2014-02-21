@@ -1,7 +1,9 @@
 package unacloud2
 
 class GroupService {
-
+	
+	UserService userService
+	
     def addGroup(Grupo g, users){
 		g.users = []
 		if(users.getClass().equals(String))
@@ -16,6 +18,12 @@ class GroupService {
 	
 	def deleteGroup(Grupo g){
 		g.delete()
+	}
+	
+	def setPolicy(Grupo g, String name, String value){
+		for(user in g.users){
+			userService.setPolicy(user, name, value)
+		}
 	}
 	
 	def setValues(Grupo group, users,String name){

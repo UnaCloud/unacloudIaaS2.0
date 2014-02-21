@@ -28,9 +28,9 @@ function reload()
   <tr class="info">
   	<td class="info" colspan="7" >
   	<input type="checkbox" id="selectAll"><small>&nbsp;Select All</small>
-  	          <g:actionSubmitImage value="stop" src="${resource(dir: 'images', file: 'empty.gif')}" action="stop" class="icon-off pull-right"/>
+  	          <g:actionSubmitImage value="stop" src="${resource(dir: 'images', file: 'empty.gif')}" action="stop" class="icon-off pull-right" title="Stop Selected Instances"/>
               
-              <g:actionSubmitImage value="refresh " src="${resource(dir: 'images', file: 'empty.gif')}"action="index" class="icon-refresh pull-right"/>
+              <g:actionSubmitImage value="reset" src="${resource(dir: 'images', file: 'empty.gif')}" action="reset" class="icon-refresh pull-right" title="Reset Selected Instances"/>
               
     </td>
   </tr>	
@@ -63,7 +63,7 @@ function reload()
     <td rowspan="${image.numberOfActiveMachines() }">
    	<small>${image.image.name }</small>
    	<br>
-   	<g:link action="addInstancesOptions" controller="deployment" params="${ [id:image.id] }"><i class="icon-plus-sign"></i></g:link></td>
+   	<g:link action="addInstancesOptions" controller="deployment" params="${ [id:image.id] }"><i class="icon-plus-sign" title="Add Instances"></i></g:link></td>
     <td rowspan="${image.numberOfActiveMachines() }">
     <small>${image.image.accessProtocol }</small>
     </td> 

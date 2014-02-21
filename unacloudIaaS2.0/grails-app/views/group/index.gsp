@@ -8,7 +8,7 @@
 <table class="table table-bordered table-condensed text-center" style="background:white">
   <tr class="info">
   	<td class="info" colspan="6">
-  	 <g:link action="create"><i class="icon-plus-sign"></i></g:link>
+  	 <g:link action="create"><i class="icon-plus-sign" title="New Group"></i></g:link>
     </td>
   </tr>
   	
@@ -33,8 +33,9 @@
     
     <td >
     <div class="row-fluid text-center">
-    <g:link action="edit" params="${[name: group.name]}"><i class="icon-pencil"></i></g:link>
-    <g:link action="delete" params="${[name:group.name]}"><i class="icon-remove-sign"></i></g:link>
+    <g:link action="edit" params="${[name: group.name]}"><i class="icon-pencil" title="Edit Group"></i></g:link>
+    <g:link action="editPerms" params="${[name:group.name]}"><i class="icon-check" title="Set Group Restriction"></i></g:link>
+    <g:link action="delete" params="${[name:group.name]}"><i class="icon-remove-sign" title="Delete Group"></i></g:link>
     </div>
     </td>
   </tr>

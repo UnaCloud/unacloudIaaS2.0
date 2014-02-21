@@ -73,7 +73,6 @@ class UserController {
 
 	def setPolicy(){
 		User u= User.findByUsername(params.username)
-		println u
 		userService.setPolicy(u, params.type,  params.value)
 		redirect(action:"index")
 	}

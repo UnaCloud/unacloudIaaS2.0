@@ -8,7 +8,7 @@
 <table class="table table-bordered table-condensed text-center" style="background:white">
   <tr class="info">
   	<td class="info" colspan="6">
-  	<a href="${createLink(uri: '/operatingSystem/create', absolute: true)}"><i class="icon-plus-sign"></i></a>
+  	<a href="${createLink(uri: '/operatingSystem/create', absolute: true)}"><i class="icon-plus-sign" title="New OS"></i></a>
   	</td>
   </tr>
   	
@@ -28,8 +28,8 @@
     </td>
     <td >
     <div class="row-fluid text-center">
-    <g:link action="edit" params="${[id:os.id]}"><i class="icon-pencil"></i></g:link>
-    <g:link action="delete" params="${[id:os.id]}"><i class="icon-remove-sign"></i></g:link>
+    <g:link action="edit" params="${[id:os.id]}"><i class="icon-pencil" title="Edit OS"></i></g:link>
+    <g:link action="delete" params="${[id:os.id]}"><i class="icon-remove-sign" title="Delete OS"></i></g:link>
     </div>
     </td>
   </tr>

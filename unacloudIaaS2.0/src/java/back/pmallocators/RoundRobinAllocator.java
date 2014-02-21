@@ -10,7 +10,7 @@ import unacloud2.PhysicalMachine;
 import unacloud2.VirtualMachineExecution;
 
 public class RoundRobinAllocator extends VirtualMachineAllocator {
-	private static final int MAX_VM_PER_PM = 1;
+	private static final int MAX_VM_PER_PM = 2;
 
 	@Override
 	public void allocateVirtualMachines(List<VirtualMachineExecution> virtualMachineList,List<PhysicalMachine> physicalMachines,Map<Long, PhysicalMachineAllocationDescription> physicalMachineDescriptions)throws AllocatorException{

@@ -42,8 +42,14 @@ class UserService {
 		}
 		else{
 			println "setting value on oldAlloc:"+oldAlloc
+			if(value.equals("")){
+				u.restrictions.remove(oldAlloc)
+				oldAlloc.delete()	
+			}
+			else{
 			oldAlloc.setValue(value)
 			oldAlloc.save(failOnError: true)
+			}
 		}
 	}
 	

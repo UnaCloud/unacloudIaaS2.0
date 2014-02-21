@@ -13,6 +13,8 @@ class UrlMappings {
 		"/functionalities"(view:"/functionalities")
 		"/administration"(view:"/administration")
 		"/configuration"(view:"/configuration")
+		"/configuration/serverVariables"(view:"/configuration/serverVariables")
+		"/configuration/agentVersion"(view:"/configuration/agentVersion")
 		"/user/create"(view:"user/create")
 		"/hypervisor/create"(view:"hypervisor/create")
 		"/operatingSystem/create"(view:"operatingSystem/create")

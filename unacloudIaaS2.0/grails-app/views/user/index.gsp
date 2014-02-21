@@ -8,7 +8,7 @@
 <table class="table table-bordered table-condensed text-center" style="background:white">
   <tr class="info">
   	<td class="info" colspan="6">
-  	<a href="${createLink(uri: '/user/create', absolute: true)}"><i class="icon-plus-sign"></i></a>
+  	<a href="${createLink(uri: '/user/create', absolute: true)}"><i class="icon-plus-sign" title="New User"></i></a>
   	</td>
   </tr>
   	
@@ -45,9 +45,9 @@
     </td>
     <td >
     <div class="row-fluid text-center">
-    <g:link action="edit" params="${[username:user.username]}"><i class="icon-pencil"></i></g:link>
-    <g:link action="editPerms" params="${[username:user.username]}"><i class="icon-check"></i></g:link>
-    <g:link action="delete" params="${[username:user.username]}"><i class="icon-remove-sign"></i></g:link>
+    <g:link action="edit" params="${[username:user.username]}"><i class="icon-pencil" title="Edit User"></i></g:link>
+    <g:link action="editPerms" params="${[username:user.username]}"><i class="icon-check" title="Edit User Restrictions"></i></g:link>
+    <g:link action="delete" params="${[username:user.username]}"><i class="icon-remove-sign" title="Delete User"></i></g:link>
     </div>
     </td>
   </tr>

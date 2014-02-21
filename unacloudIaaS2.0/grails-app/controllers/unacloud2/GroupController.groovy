@@ -44,6 +44,21 @@ class GroupController {
 		}
 	}
 	
+	def setPolicy(){
+		Grupo g= Grupo.findByName(params.name)
+		println "Grupo:"+g
+		groupService.setPolicy(g, params.type,  params.value)
+		redirect(action:"index")
+	}
+	
+	def editPerms(){
+		def g= Grupo.findByName(params.name)
+		if (!g) {
+			redirect(action:"index")
+		}
+		[group: g]		
+	}
+	
 	def edit(){
 		def g= Grupo.findByName(params.name)		
 		if (!g)
