@@ -20,16 +20,13 @@ public class RoundRobinAllocator extends VirtualMachineAllocator {
 			}
 		});
 		for (int nextVm = 0, lastNextVm = 0; nextVm < virtualMachineList.size();) {
-			List<PhysicalMachine> current=physicalMachines;
-			List<PhysicalMachine> next=new LinkedList<>();
-			for (PhysicalMachine pm : current) {
+			for (PhysicalMachine pm : physicalMachines) {
 				System.out.println("evaluating machine: "+pm.getName());
 				if (nextVm >= virtualMachineList.size())break;
 				PhysicalMachineAllocationDescription pmad = physicalMachineDescriptions.get(pm.getDatabaseId());
 				VirtualMachineExecution nextVirtualMachine = virtualMachineList.get(nextVm);
 				if(fitVMonPM(nextVirtualMachine, pm, pmad)&&(pmad==null||pmad.getVms()<MAX_VM_PER_PM)){
 					nextVirtualMachine.setExecutionNode(pm);
-					next.add(pm);
 					if(pmad==null){
 						pmad=new PhysicalMachineAllocationDescription(pm.getDatabaseId(),0,0,0);
 						physicalMachineDescriptions.put(pmad.getNodeId(),pmad);
@@ -38,7 +35,6 @@ public class RoundRobinAllocator extends VirtualMachineAllocator {
 					nextVm++;
 				}
 			}
-			current=next;next=new LinkedList<>();
 			if (lastNextVm == nextVm) {
 				throw new AllocatorException("Cannot allocate all VMs on available insfrastructure");
 			}

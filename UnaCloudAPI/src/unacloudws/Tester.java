@@ -31,6 +31,8 @@ public class Tester {
 					for(int e=0;e<ts.length;e++)ts[e].start();
 					for(int e=0;e<ts.length;e++)ts[e].join();
 					pw.println("Terminando en "+new Date());
+				}else{
+					i--;
 				}
 				pw.close();
 				if(c!=null)apagarCluster(c.id);
@@ -51,13 +53,17 @@ public class Tester {
 			System.out.println("El id es "+deploymentId.substring(ini,fin));
 			desc.id=Long.parseLong(deploymentId.substring(ini+1,fin));
 			new File(""+desc.id).mkdirs();
+			long startTime=System.currentTimeMillis();
 			for(int encendidas=0;encendidas<size;encendidas=0){
 				Thread.sleep(60000);
 				List<VirtualMachineExecutionWS> vms=uop.getDeploymentInfo((int)desc.id);
 				for(VirtualMachineExecutionWS vm:vms){
 					if(vm.getVirtualMachineExecutionStatus()==VirtualMachineStatusEnum.DEPLOYED)encendidas++;
-					if(vm.getVirtualMachineExecutionStatus()==VirtualMachineStatusEnum.FAILED){
+					else if(vm.getVirtualMachineExecutionStatus()==VirtualMachineStatusEnum.FAILED){
 						System.out.println("El cluster fallo, inicie de nuevo.");
+						return desc;
+					}
+					else if((System.currentTimeMillis()-startTime)>60000l*20l&&vm.getVirtualMachineExecutionStatus()==VirtualMachineStatusEnum.DEPLOYING){
 						return desc;
 					}
 				}
