@@ -10,7 +10,7 @@ import unacloud2.PhysicalMachine;
 import unacloud2.VirtualMachineExecution;
 
 public class RoundRobinAllocator extends VirtualMachineAllocator {
-	private static final int MAX_VM_PER_PM = 2;
+	private static final int MAX_VM_PER_PM = 3;
 
 	@Override
 	public void allocateVirtualMachines(List<VirtualMachineExecution> virtualMachineList,List<PhysicalMachine> physicalMachines,Map<Long, PhysicalMachineAllocationDescription> physicalMachineDescriptions)throws AllocatorException{
@@ -19,20 +19,25 @@ public class RoundRobinAllocator extends VirtualMachineAllocator {
 				return Long.compare(p1.getDatabaseId(), p2.getDatabaseId());
 			}
 		});
-		for (int nextVm = 0, lastNextVm = 0; nextVm < virtualMachineList.size();) {
+		ciclo1:for (int nextVm = 0, lastNextVm = 0; nextVm < virtualMachineList.size();) {
 			for (PhysicalMachine pm : physicalMachines) {
 				System.out.println("evaluating machine: "+pm.getName());
-				if (nextVm >= virtualMachineList.size())break;
+				if (nextVm >= virtualMachineList.size())break ciclo1;
 				PhysicalMachineAllocationDescription pmad = physicalMachineDescriptions.get(pm.getDatabaseId());
 				VirtualMachineExecution nextVirtualMachine = virtualMachineList.get(nextVm);
-				if(fitVMonPM(nextVirtualMachine, pm, pmad)&&(pmad==null||pmad.getVms()<MAX_VM_PER_PM)){
+				System.out.println("Antes:"+pmad);
+				System.out.println("Fitin vm:"+nextVirtualMachine.getCores()+" "+nextVirtualMachine.getRam());
+				if(fitVMonPM(nextVirtualMachine, pm, pmad)){
 					nextVirtualMachine.setExecutionNode(pm);
 					if(pmad==null){
 						pmad=new PhysicalMachineAllocationDescription(pm.getDatabaseId(),0,0,0);
 						physicalMachineDescriptions.put(pmad.getNodeId(),pmad);
 					}
 					pmad.addResources(nextVirtualMachine.getCores(),nextVirtualMachine.getRam(), 1);
+					System.out.println("Despues: "+pmad);
 					nextVm++;
+				}else{
+					System.out.println("No hace fit");
 				}
 			}
 			if (lastNextVm == nextVm) {

@@ -34,7 +34,7 @@ class MachineStateController {
 		try{
 			physicalMachineStateManagerService.reportPhysicalMachine(hostname,hostuser)
 		}catch(Exception ex){
-			println "  Error on reportPhysicalMachineLogin "+ hostname+" "+hostuser;
+			println "  Error on reportPhysicalMachineLogin "+ hostname+" "+hostuser+" "+ex.getMessage();
 		}
 		render "succeeded"
 	}

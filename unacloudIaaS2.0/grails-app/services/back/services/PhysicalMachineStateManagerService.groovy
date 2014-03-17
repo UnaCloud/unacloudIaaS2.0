@@ -8,6 +8,7 @@ class PhysicalMachineStateManagerService {
 
     def reportPhysicalMachine(String hostname,String hostUser){
 		boolean update=StateManager.registerPhysicalMachineReport(hostname, hostUser);
+		//println "reportPhysicalMachine "+hostname+" \""+hostUser+"\" "+((hostUser!=null&&!hostUser.isEmpty()&&!(hostUser.replace(">","").replace(" ","")).equals("null")));
 		if(update){
 			PhysicalMachine pm=PhysicalMachine.findByName(hostname)
 			if(pm!=null){
@@ -15,7 +16,7 @@ class PhysicalMachineStateManagerService {
 				if(pm.state!=PhysicalMachineStateEnum.DISABLED){
 					pm.state=PhysicalMachineStateEnum.ON;
 					pm.lastReport=currentTime;
-					pm.withUser=hostUser!=null&&!hostUser.isEmpty();
+					pm.withUser=(hostUser!=null&&!hostUser.isEmpty()&&!(hostUser.replace(">","").replace(" ","")).equals("null"));
 					pm.save()
 				}
 				

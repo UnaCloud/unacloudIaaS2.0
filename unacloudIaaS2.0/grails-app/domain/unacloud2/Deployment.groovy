@@ -23,13 +23,26 @@ class Deployment {
 		return totalVMs
 	}
 	
-	def isActive(){
+	def updateState(){
 		for(image in cluster.images) {
 			for(vm in image.virtualMachines){
+				if(!(vm.status ==VirtualMachineExecutionStateEnum.FINISHED)){
 				if(vm.stopTime.compareTo(new Date())<0){
 					vm.status= VirtualMachineExecutionStateEnum.FINISHED
-					vm.ip.used= false
+					if (vm.ip != null) vm.ip.used= false
 				}
+				else if((((vm.stopTime.getTime()-new Date().getTime())/60000))<30 && vm.status==VirtualMachineExecutionStateEnum.DEPLOYING){
+					vm.status=VirtualMachineExecutionStateEnum.FAILED
+					vm.message='Request timeout'
+				}
+				}			}
+		}
+	}
+	
+	def isActive(){
+		updateState()
+		for(image in cluster.images) {
+			for(vm in image.virtualMachines){
 				if(!(vm.status ==VirtualMachineExecutionStateEnum.FINISHED))
 					return true
 			}

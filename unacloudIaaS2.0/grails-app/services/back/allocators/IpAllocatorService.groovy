@@ -1,10 +1,12 @@
 package back.allocators
 
+import back.pmallocators.AllocatorException
 import back.services.PhysicalMachineStateManagerService;
 import java.util.Comparator;
 import unacloud2.*
 
 class IpAllocatorService {
+	
 	def allocateIPAddresses(DeployedCluster cluster, boolean addInstancesDeployment){
 		if(!addInstancesDeployment){
 			for (DeployedImage im in cluster.images){
@@ -17,6 +19,12 @@ class IpAllocatorService {
 							ip.used=true
 							break
 						}
+					}
+					if (vme.ip==null){ 
+						for(VirtualMachineExecution vm in im.virtualMachines){
+							vm.ip.used=false
+						}
+						throw new AllocatorException("Not enough IPs for this deployment")
 					}
 				}
 			}
@@ -33,6 +41,12 @@ class IpAllocatorService {
 								ip.used=true
 								break
 							}
+						}
+						if (vme.ip==null){ 
+							for(VirtualMachineExecution vm in im.virtualMachines){
+								if(vm.ip!=null)	vm.ip.used=false
+							}
+							throw new AllocatorException("Not enough IPs for this deployment")
 						}
 					}
 				}

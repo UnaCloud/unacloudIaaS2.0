@@ -107,9 +107,13 @@ public class OperatingSystem {
             InputStream is = p.getInputStream();
             try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
                 br.readLine();
-                for (String linea; (linea = br.readLine()) != null;) {
-                    final String user = linea.trim().split(" |\t")[0].replaceAll("[^\\w\\.-]","");
-                    userName = (userName == null ? "" : (userName+";")) + user;
+                for (String linea,lw; (linea = br.readLine()) != null;) {
+                	lw=linea.toLowerCase();
+                	if(lw.contains("active")||lw.contains("activo")){
+                		final String user = linea.trim().split(" |\t")[0].replaceAll("[^\\w\\.-]","");
+                        userName = (userName == null ? "" : (userName+";")) + user;
+                	}
+                    
                 }
             }
             p.destroy();

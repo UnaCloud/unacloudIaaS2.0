@@ -23,7 +23,8 @@ class WebServicesService {
 			options[i]= new ImageRequestOptions(image.get("imageId"), image.getInt("ram"), image.getInt("cores"), image.getInt("instances"))
 		}
 		def userCluster= Cluster.get(cluster.get("clusterId"))
-		return deploymentService.deploy(userCluster, user, (Long)cluster.getInt("execTime")*60000,options)
+		if (userCluster.isDeployed()) return new WebServiceException("Cluster already deployed")
+		else return deploymentService.deploy(userCluster, user, (Long)cluster.getInt("execTime")*60000,options)
 	}
 	
 	def stopDeployment(String login,String apiKey,String depId){
@@ -88,7 +89,9 @@ class WebServicesService {
 			options[i]= new ImageRequestOptions(image.getLong("imageId"), image.getInt("ram").toInteger(), image.getInt("cores"), image.getInt("instances"))
 		}
 		def userCluster= Cluster.get(cluster.get("clusterId"))
-		return deploymentService.deployHeterogeneous(userCluster, user, cluster.getInt("execTime")*60000,options)
+		if (userCluster.isDeployed()) return new WebServiceException("Cluster already deployed")
+		else return deploymentService.deployHeterogeneous(userCluster, user, cluster.getInt("execTime")*60000,options)
+		
 	}
 
 	def getClusterList(String login,String apiKey){

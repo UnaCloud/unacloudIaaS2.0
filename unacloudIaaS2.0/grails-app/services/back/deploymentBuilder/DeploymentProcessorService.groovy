@@ -4,6 +4,7 @@ import org.springframework.aop.ThrowsAdvice;
 
 import back.allocators.IpAllocatorService;
 import back.allocators.PhysicalMachineAllocatorService;
+import back.pmallocators.AllocatorException;
 import back.userRestrictions.UserRestrictionException;
 import back.userRestrictions.UserRestrictionProcessorService;
 import unacloud2.DeployedCluster;
@@ -17,7 +18,7 @@ class DeploymentProcessorService {
 	UserRestrictionProcessorService userRestrictionProcessorService
 	PhysicalMachineAllocatorService physicalMachineAllocatorService
 	IpAllocatorService ipAllocatorService
-	def doDeployment(DeployedCluster cluster,User user,boolean addInstancesDeployment) throws UserRestrictionException{
+	def doDeployment(DeployedCluster cluster,User user,boolean addInstancesDeployment) throws UserRestrictionException, AllocatorException{
 		ArrayList<VirtualMachineExecution> vms=new ArrayList<>();
 		if(!addInstancesDeployment)
 		for(DeployedImage image:cluster.images)vms.addAll(image.virtualMachines);

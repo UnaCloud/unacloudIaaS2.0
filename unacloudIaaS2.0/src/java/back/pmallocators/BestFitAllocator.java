@@ -37,12 +37,10 @@ public class BestFitAllocator extends VirtualMachineAllocator {
 				return Integer.compare(v2.getCores(),v1.getCores());
 			}
 		});
-		for(PhysicalMachine pm:physicalMachines){
-			System.out.println(pm.getDatabaseId()+"\t"+pm.getCores()+"\t"+pm.getRam()+"\t"+physicalMachineDescriptions.get(pm.getDatabaseId()));
-		}
 		vmCycle:for(VirtualMachineExecution vme:virtualMachineList){
 			for(PhysicalMachine pm:physicalMachines){
 				PhysicalMachineAllocationDescription pmad = physicalMachineDescriptions.get(pm.getDatabaseId());
+				System.out.println("Evaluating "+pm.getName()+" "+pmad+" "+vme.getCores()+" "+vme.getRam());
 				if(fitVMonPM(vme, pm, pmad)){
 					vme.setExecutionNode(pm);
 					if(pmad==null){
@@ -50,8 +48,11 @@ public class BestFitAllocator extends VirtualMachineAllocator {
 						physicalMachineDescriptions.put(pmad.getNodeId(),pmad);
 					}
 					pmad.addResources(vme.getCores(),vme.getRam(), 1);
+					System.out.println("");
 					Collections.sort(physicalMachines, new PhysicalMachineComparator(physicalMachineDescriptions));
 					continue vmCycle;
+				}else{
+					//System.out.println("No hace fit "+pmad+" "+vme.getCores()+" "+vme.getRam());
 				}
 			}
 			throw new AllocatorException("Cannot allocate all VMs on available insfrastructure");
