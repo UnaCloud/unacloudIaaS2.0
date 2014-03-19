@@ -18,7 +18,33 @@ class VirtualMachineImageController {
 		 
 		[images: session.user.getOrderedImages()]
 	}
-	
+	def changeVersion(){
+		[id:params.id]
+	}
+	def updateFiles(){
+		VirtualMachineImage i= VirtualMachineImage.get(params.id)
+		def user= User.get(session.user.id)
+		if (i!= null){
+			def files = request.multiFileMap.files
+			files.each {
+			if(it.isEmpty()){
+				flash.message = 'file cannot be empty'
+				render(view: 'newUploadImage')
+			}
+			else{ 
+			def e=it.getOriginalFilename()
+			if(!(e.endsWith("vmx")|| e.endsWith("vmdk")||e.endsWith("vbox")|| e.endsWith("vdi"))){
+				flash.message = 'invalid file type'
+				render(view: 'newUploadImage')
+			}
+			else{
+				virtualMachineImageService.updateFiles(i,files,user)
+				redirect(action: "index")
+			}
+			}	
+		}
+		}
+	}
 	def newImage(){
 		
 	}

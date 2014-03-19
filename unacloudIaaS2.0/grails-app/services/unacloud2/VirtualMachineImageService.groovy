@@ -18,12 +18,31 @@ class VirtualMachineImageService {
 		image.putAt("password", password)
 	}
 	
+	def updateFiles(VirtualMachineImage i, files, User user){
+		FileUtils.cleanDirectory(new java.io.File(i.mainFile).getParentFile())
+		def repository= Repository.findByName("Main Repository")
+		files.each {
+			def e=it.getOriginalFilename()
+			java.io.File newFile= new java.io.File(repository.root+i.name+"_"+user.username+"\\"+it.getOriginalFilename()+"\\")
+			newFile.mkdirs()
+			it.transferTo(newFile)
+			if(i.isPublic){
+			def templateFile= new java.io.File(repository.root+"imageTemplates\\"+i.name+"\\"+it.getOriginalFilename())
+			FileUtils.copyFile(newFile, templateFile)
+			}
+			if (e.endsWith(".vmx")||e.endsWith(".vbox"))
+			i.putAt("mainFile", repository.root+i.name+"_"+user.username+"\\"+it.getOriginalFilename())
+			i.putAt("imageVersion", i.imageVersion++)
+		}
+		
+	}
+	
 	def uploadImage(files, diskSize, name, isPublic, accessProtocol, operatingSystemId, username, password,User user) {
 		
 		//TODO define repository assignment schema
 		def repository= Repository.findByName("Main Repository")
 		def i= new VirtualMachineImage( fixedDiskSize: diskSize, name: name , avaliable: true,
-			isPublic: isPublic, accessProtocol: accessProtocol , operatingSystem: OperatingSystem.get(operatingSystemId),
+			isPublic: isPublic, imageVersion: 0,accessProtocol: accessProtocol , operatingSystem: OperatingSystem.get(operatingSystemId),
 			user: username, password: password)
 		i.save(failOnError: true)
 		files.each {
@@ -65,7 +84,7 @@ class VirtualMachineImageService {
 	}
 	
 	def newPublic(name, VirtualMachineImage publicImage, User user){
-		def i= new VirtualMachineImage( fixedDiskSize: 0, name: name, isPublic: false, accessProtocol: publicImage.accessProtocol ,operatingSystem: publicImage.operatingSystem, user: publicImage.user, password: publicImage.password)
+		def i= new VirtualMachineImage( fixedDiskSize: 0, imageVersion: 0,name: name, isPublic: false, accessProtocol: publicImage.accessProtocol ,operatingSystem: publicImage.operatingSystem, user: publicImage.user, password: publicImage.password)
 		i.save(onFailError:true)
 		java.io.File folder= new java.io.File(publicImage.mainFile.substring(0, publicImage.mainFile.lastIndexOf("\\")))
 		println folder.toString()

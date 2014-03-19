@@ -11,6 +11,7 @@ class VirtualMachineImage implements Comparable<VirtualMachineImage>{
 	OperatingSystem operatingSystem
 	String accessProtocol
 	String mainFile
+	int imageVersion
 	
 	static constraints = {
     	mainFile (nullable: true)

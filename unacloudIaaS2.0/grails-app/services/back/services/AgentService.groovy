@@ -12,6 +12,7 @@ import communication.messages.ao.*;
 import javassist.bytecode.stackmap.BasicBlock.Catch;
 import unacloud2.PhysicalMachine;
 import unacloud2.ServerVariable;
+import unacloud2.VirtualMachineImage;
 
 class AgentService {
 	VariableManagerService variableManagerService
@@ -20,6 +21,10 @@ class AgentService {
 	}
 	def stopMachine(PhysicalMachine pm){
 		sendMessage(pm,new StopAgentMessage());
+	}
+	def clearImageFromCache(VirtualMachineImage image){
+		for(pm in PhysicalMachine.all)
+		sendMessage(pm,new ClearImageFromCacheMessage(image.id));
 	}
 	def clearCache(PhysicalMachine pm){
 		sendMessage(pm,new ClearVMCacheMessage());

@@ -28,6 +28,8 @@
     <div class="row-fluid text-center">
     <g:link action="edit" params="${[id: image.id]}"><i class="icon-pencil" title="Edit Image"></i></g:link>
     <g:link action="delete" params="${[id: image.id]}"><i class="icon-remove-sign" title="Delete Image"></i></g:link>
+    <g:link action="changeVersion" params="${[id: image.id]}"><i class="icon-repeat" title="Change Version"></i></g:link>
+    
     <g:link controller="deployment" action="deployImage" params="${[id: image.id]}"><i class="icon-play" title="Deploy Image (For edition only)"></i></g:link>
     </div>
     </td>
