@@ -127,9 +127,11 @@ public class ImageCacheManager {
 		f.delete();
 	}
 	public static synchronized String clearCache(){
+		System.out.println("clearCache");
 		loadImages();
 		imageList.clear();
 		try{
+			for(File f:new File(machineRepository).listFiles())cleanDir(f);
 			((VirtualBox)HypervisorFactory.getHypervisor(Constants.VIRTUAL_BOX)).unregisterAllVms();
 		}catch(Exception ex){
 			ex.printStackTrace();

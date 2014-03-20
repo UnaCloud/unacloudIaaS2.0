@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -53,24 +54,21 @@ public class Tester {
 			System.out.println("El id es "+deploymentId.substring(ini,fin));
 			desc.id=Long.parseLong(deploymentId.substring(ini+1,fin));
 			new File(""+desc.id).mkdirs();
-			long startTime=System.currentTimeMillis();
+			final long startTime=System.currentTimeMillis();
 			for(int encendidas=0;encendidas<size;encendidas=0){
 				Thread.sleep(60000);
 				List<VirtualMachineExecutionWS> vms=uop.getDeploymentInfo((int)desc.id);
-				for(VirtualMachineExecutionWS vm:vms){
-					if(vm.getVirtualMachineExecutionStatus()==VirtualMachineStatusEnum.DEPLOYED)encendidas++;
-					else if(vm.getVirtualMachineExecutionStatus()==VirtualMachineStatusEnum.FAILED){
-						System.out.println("El cluster fallo, inicie de nuevo.");
-						return desc;
-					}
-					else if((System.currentTimeMillis()-startTime)>60000l*20l&&vm.getVirtualMachineExecutionStatus()==VirtualMachineStatusEnum.DEPLOYING){
-						return desc;
-					}
+				if(vms==null){
+					System.out.println("El cluster fallo, inicie de nuevo.");
+					return desc;
 				}
-				if(encendidas==vms.size()){
-					desc.vms=vms;
+				for(VirtualMachineExecutionWS vm:vms)if(vm.getVirtualMachineExecutionStatus()==VirtualMachineStatusEnum.DEPLOYED)encendidas++;
+				
+				if(encendidas==vms.size()||(System.currentTimeMillis()-startTime)>=20l*60000l){
+					desc.vms=new ArrayList<VirtualMachineExecutionWS>();
+					for(VirtualMachineExecutionWS vm:vms)if(vm.getVirtualMachineExecutionStatus()==VirtualMachineStatusEnum.DEPLOYED)desc.vms.add(vm);
 					PrintWriter pw=new PrintWriter(desc.id+"/ips.txt");
-					for(VirtualMachineExecutionWS vm:vms)pw.println(vm.getVirtualMachineExecutionIP());
+					for(VirtualMachineExecutionWS vm:vms)pw.println(vm.getVirtualMachineExecutionIP()+" "+vm.getVirtualMachineExecutionStatus());
 					pw.close();
 					break;
 				}
@@ -87,18 +85,24 @@ public class Tester {
 	}
 	public static VirtualImageRequest[] createRandomCluster(int n){
 		VirtualImageRequest[] ret=new VirtualImageRequest[n];
-		for(int e=0;e<n;e++){
-			int c=getCores();
-			ret[e]=new VirtualImageRequest(1,c*1024,c,2);
+		ciclo1:while(true){
+			for(int e=0,s=0;e<n;e++){
+				int c=getCores();
+				ret[e]=new VirtualImageRequest(1,c*1024,c,2);
+				s+=c;
+				if(s>436)continue ciclo1;
+			}
+			break;
 		}
 		return ret;
 	}
 	public static int getCores(){
-		int c;
-		do{
-			c=r.nextInt(4)+1;
-		}while(c==3);
-		return c;
+		switch (r.nextInt(3)) {
+			case 0:return 1;
+			case 1:return 2;
+			case 2:return 4;
+		}
+		return 0;
 	}
 	static class ClusterDescription{
 		long id;
