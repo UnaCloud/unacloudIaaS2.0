@@ -47,13 +47,12 @@ public class PersistentExecutionManager {
      * @param turnOffMEssage
      * @return
      */
-    public static UnaCloudAbstractResponse removeExecution(long virtualMachineExecutionId,boolean checkTime) {
+    public static void removeExecution(long virtualMachineExecutionId,boolean checkTime) {
     	VirtualMachineExecution execution=executionList.remove(virtualMachineExecutionId);
 		if(execution!=null&&(!checkTime||System.currentTimeMillis()>execution.getShutdownTime())){
 			execution.getImage().stopAndUnregister();
 		}
 		saveData();
-    	return null;
     }
 
     /**
@@ -82,7 +81,6 @@ public class PersistentExecutionManager {
      * @return
      */
     public static String startUpMachine(VirtualMachineExecution execution,boolean started){
-    	System.out.println("Execution time: "+System.currentTimeMillis()+" "+execution.getExecutionTime()*3600000l);
     	execution.setShutdownTime(System.currentTimeMillis()+((long)execution.getExecutionTime()*3600000l));
         try {
             if(!started)execution.getImage().startVirtualMachine();

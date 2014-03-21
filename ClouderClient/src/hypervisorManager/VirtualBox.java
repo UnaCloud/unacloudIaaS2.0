@@ -100,13 +100,7 @@ public class VirtualBox extends Hypervisor {
         
     }
 
-    private void sleep(long l) {
-        try {
-            Thread.sleep(l);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(VirtualBox.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+    
 
 	@Override
 	public void restoreVirtualMachineSnapshot(ImageCopy image, String snapshotname) throws HypervisorOperationException {

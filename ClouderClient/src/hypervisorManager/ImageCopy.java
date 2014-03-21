@@ -2,6 +2,7 @@ package hypervisorManager;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Date;
 
 import communication.ServerMessageSender;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
@@ -56,9 +57,9 @@ public class ImageCopy implements Serializable{
     			hypervisor.restoreVirtualMachineSnapshot(this,"unacloudbase");
         		hypervisor.configureVirtualMachineHardware(machineExecution.getCores(),machineExecution.getMemory(),this);
     			hypervisor.startVirtualMachine(this);
-    			SystemUtils.sleep(50000);
     			configurator.configureHostname();
     			configurator.configureIP();
+    			System.out.println("imagen configurada "+new Date());
     	        PersistentExecutionManager.startUpMachine(machineExecution,!configurator.doPostConfigure());
 			}else ServerMessageSender.reportVirtualMachineState(machineExecution.getId(), VirtualMachineExecutionStateEnum.FAILED,"Invalid virtual machine configurator.");
 		} catch (Exception e) {

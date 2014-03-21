@@ -40,6 +40,7 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
         if (h.contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
         }
+        sleep(30000);
     }
     
     @Override

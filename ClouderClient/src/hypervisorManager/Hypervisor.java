@@ -1,6 +1,8 @@
 package hypervisorManager;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import virtualMachineManager.ImageCacheManager;
 
@@ -81,5 +83,12 @@ abstract class Hypervisor {
         	unregisterVirtualMachine(image);
         	ImageCacheManager.freeLockedImageCopy(image);
 		}
+    }
+    void sleep(long l) {
+        try {
+            Thread.sleep(l);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(VirtualBox.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

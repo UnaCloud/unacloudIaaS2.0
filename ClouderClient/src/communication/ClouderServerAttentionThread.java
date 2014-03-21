@@ -10,7 +10,9 @@ import java.net.Socket;
 
 import monitoring.PhysicalMachineMonitor;
 import physicalmachine.OperatingSystem;
-import virtualMachineConfiguration.VirtualMachineConfigurer;
+import tasks.ExecutorService;
+import tasks.StartVirtualMachineTask;
+import tasks.StopVirtualMachineTask;
 import virtualMachineManager.ImageCacheManager;
 import virtualMachineManager.PersistentExecutionManager;
 import virtualMachineManager.VirtualMachineExecution;
@@ -23,13 +25,14 @@ import communication.messages.pmo.PhysicalMachineTurnOnMessage;
 import communication.messages.vmo.VirtualMachineAddTimeMessage;
 import communication.messages.vmo.VirtualMachineRestartMessage;
 import communication.messages.vmo.VirtualMachineStartMessage;
+import communication.messages.vmo.VirtualMachineStartResponse;
 import communication.messages.vmo.VirtualMachineStopMessage;
 
 /**
  * Responsible for attending or discarding a Clouder
  * Server operation request in a thread
  */
-public class ClouderServerAttentionThread extends Thread {
+public class ClouderServerAttentionThread implements Runnable {
 
     /**
      * Abstract communicator used to receive the request and send a response
@@ -84,9 +87,14 @@ public class ClouderServerAttentionThread extends Thread {
     private UnaCloudAbstractResponse attendVirtualMachineOperation(UnaCloudAbstractMessage message,ObjectInputStream ois,ObjectOutputStream pw) {
         switch (message.getSubOp()) {
             case VirtualMachineOperationMessage.VM_START:
-            	return new VirtualMachineConfigurer(VirtualMachineExecution.getFromStartVirtualMachineMessage((VirtualMachineStartMessage)message)).startProcess();
+            	VirtualMachineStartResponse resp=new VirtualMachineStartResponse();
+        		resp.setState(VirtualMachineStartResponse.VirtualMachineState.STARTING);
+        		resp.setMessage("Starting virtual machine...");
+        		ExecutorService.execute(new StartVirtualMachineTask(VirtualMachineExecution.getFromStartVirtualMachineMessage((VirtualMachineStartMessage)message)));
+            	return resp;
             case VirtualMachineOperationMessage.VM_STOP:
-                return PersistentExecutionManager.removeExecution(((VirtualMachineStopMessage)message).getVirtualMachineExecutionId(),false);
+            	ExecutorService.execute(new StopVirtualMachineTask((VirtualMachineStopMessage)message));
+                return null;
             case VirtualMachineOperationMessage.VM_RESTART:
                 return PersistentExecutionManager.restartMachine((VirtualMachineRestartMessage)message);
             case VirtualMachineOperationMessage.VM_TIME:

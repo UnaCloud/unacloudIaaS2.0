@@ -10,23 +10,18 @@ import com.losandes.utils.VariableManager;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import tasks.ExecutorService;
+
 /**
  * Responsible for listening to the Clouder Server
  */
 public class ClouderClientAttention{
         
-    public static int POOL_THREAD_SIZE = 2;
-
     private ServerSocket serverSocket;
     /**
      * Port to be used by the listening server socket
      */
     private static int localPort;
-
-    /**
-     * A pool of threads used to attend UnaCloud server requests
-     */
-    private Executor poolExe;
 
     private static ClouderClientAttention instance;
     public synchronized static ClouderClientAttention getInstance() {
@@ -37,9 +32,7 @@ public class ClouderClientAttention{
      * Responsible for obtaining data connection and listening to Clouder Server
      */
     private ClouderClientAttention() {
-        poolExe = Executors.newFixedThreadPool(POOL_THREAD_SIZE);
         localPort = VariableManager.global.getIntValue("CLOUDER_CLIENT_PORT");
-        
     }
 
     /**
@@ -59,7 +52,7 @@ public class ClouderClientAttention{
 	            	break;
 	            }
 	            try {
-	            	poolExe.execute(new ClouderServerAttentionThread(s));
+	            	ExecutorService.execute(new ClouderServerAttentionThread(s));
 	            } catch (Exception ex) {
 	            	ex.printStackTrace();
 	            	break;
@@ -79,8 +72,5 @@ public class ClouderClientAttention{
             instance.serverSocket.close();
         } catch (Exception e) {
         }
-    }
-    public static void main(String...args){
-    	System.out.println(new Date()+"");
     }
 }

@@ -27,28 +27,14 @@ public class VirtualMachineStateViewer {
      */
     public VirtualMachineStateViewer(long virtualMachineCode,String vmIP){
         ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.DEPLOYING,"Starting virtual machine");
-        /*boolean encendio=false,red=false;
-        if(v.getHypervisorId()==VIRTUAL_BOX){
-            encendio=true;
-        }else{
-            for(int e=0;e<2&&!encendio;e++){
-                if(vmrunListVerification(v.getExecutablePath(),v.getExecutablePath())){
-                    encendio=true;
-                }
-                try{Thread.sleep(10000);}catch(Exception ex){}
-            }
-        }*/
-        boolean encendio=true,red=false;
-        if(encendio)for(int e=0;e<8&&!red;e++){
-            if(pingVerification(vmIP))red=true;
-            if(!red)try{Thread.sleep(30000);}catch(Exception ex){}
+        boolean red=false;
+        for(int e=0;e<8&&!red;e++){
+            if(!(red=pingVerification(vmIP)))try{Thread.sleep(30000);}catch(Exception ex){}
         }
-        if(encendio&&red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.DEPLOYED,"Machine started");
+        if(red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.DEPLOYED,"Machine started");
         else{
             PersistentExecutionManager.removeExecution(virtualMachineCode,false);
-            if(encendio&&!red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.FAILED,"Machine not configured");
-            else if(!encendio&&red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.FAILED,"Machine didn't start");
-            else if(!encendio&&!red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.FAILED,"Machine didn't start");
+            ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.FAILED,"Machine not configured");
         }
     }
 
