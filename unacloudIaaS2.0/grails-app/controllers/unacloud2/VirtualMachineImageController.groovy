@@ -1,8 +1,11 @@
 package unacloud2
 
+import back.services.AgentService
+
 class VirtualMachineImageController {
 	
 	VirtualMachineImageService virtualMachineImageService
+	AgentService agentService
 	
 	def beforeInterceptor = {
 		if(!session.user){
@@ -18,9 +21,16 @@ class VirtualMachineImageController {
 		 
 		[images: session.user.getOrderedImages()]
 	}
+	
 	def changeVersion(){
 		[id:params.id]
 	}
+	
+	def clearImageFromCache(){
+		agentService.clearImageFromCache(VirtualMachineImage.get(params.id))
+		redirect(action: 'index')
+	}
+	
 	def updateFiles(){
 		VirtualMachineImage i= VirtualMachineImage.get(params.id)
 		def user= User.get(session.user.id)

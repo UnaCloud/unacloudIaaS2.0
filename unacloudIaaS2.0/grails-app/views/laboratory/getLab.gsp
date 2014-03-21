@@ -14,7 +14,7 @@
   	<g:link controller="laboratory" action="createMachine" params="${[id: lab.id]}" title="Create PM"><i class="icon-plus-sign pull-right"></i></g:link>
   	<g:actionSubmitImage value="refresh" src="${resource(dir: 'images', file: 'empty.gif')}" action="updateMachines" title="Update agents" class="icon-refresh pull-right"/>
   	<g:actionSubmitImage value="stop" src="${resource(dir: 'images', file: 'empty.gif')}" action="stopMachines" title="Stop agents" class="icon-stop pull-right"/>
-    <g:actionSubmitImage value="clearCache" src="${resource(dir: 'images', file: 'empty.gif')}" action="clearCache" title="Clear VM cache" class="icon-leaf pull-right"/>
+    <g:actionSubmitImage value="clearCache" src="${resource(dir: 'images', file: 'empty.gif')}" action="clearCache" title="Clear VM cache" class="icon-fire pull-right"/>
   	
   	</td>
   </tr>
