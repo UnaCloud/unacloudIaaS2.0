@@ -7,6 +7,7 @@ class IP {
 	IPPool ipPool
 	
 	static constraints = {
-		ipPool nullable:true 	
-    }
+		ipPool nullable:true
+		ip unique: true	
+	}
 }
