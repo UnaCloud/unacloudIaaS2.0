@@ -50,7 +50,7 @@ Unacloud has three main functional entities: Clusters, Images and Virtual Machin
 
 In order to use Unacloud, you must create an image. In the “My Image” page, under the “Functionalities” menu, you can create a new image pressing the add button. There, you can upload a new image by pressing “Upload Image”. You should fill the form with the image data, like in this example:
 
-
+![alt tag](https://raw.githubusercontent.com/UnaCloud/unacloudIaaS2.0/gh-pages/imageCreation.png)
  
 When you click submit, the image files will be sent to Unacloud. This upload may take some time, depending on the files size. You should upload main executable files (.vmx, .vbox) and disk files (.vmdk, .vdi) only. If you mark your image as public, other users can make clusters and images based on it.  
 To use a VMware virtual machine, it must have installed the latest version of vmware tools. You can (and must) check that your virtual machine is compatible. To do this use the next commands:
