@@ -7,11 +7,13 @@ UnaCloud deals with the problems associated to use commodity, non-dedicated, dis
 # Installation Guide
 This guide allows you to install UnaCloud 2.0 on your infrastructure.
 ## Requirements
+
 For UnaCloud Server:
 * A 4GB and 2 cores machine
 * Windows Server 2003 or Windows 7 SO.
 * 1 GB for UnaCloud Server and at least 80 GB of hard disk for Virtual Machines
 * Java JDK SE 7
+
 For UnaCloud Agents:
 * At least 200 MB of free RAM.
 * 50 MB for UnaCloud client and at least 20 GB of hard disk for Virtual Machines.
@@ -19,12 +21,13 @@ For UnaCloud Agents:
 * At least one of the following hypervisors:
 * VMware Player 7, VMware Workstation 6 or better (if you use VMWare Player, you must install VMware Player and VMware VIX together)
 *Oracle VM VirtualBox 4.2.14 or better.
+
 ##Unacloud WAR Download
 In order to download unacloud war, you can access to http://unacloud.uniandes.edu.co/warconfigurer/. You must have a mySQL DB with an empty schema already configured. In this site you’ll enter the database configuration, and the admin password. Then you will be able to download the server WAR file.
 ## UnaCloud Server Deployment
 You can deploy the WAR file with Apache Tomcat 8.0 (preferred), or a server of your choice. You can go to http://tomcat.apache.org/tomcat-8.0-doc/deployer-howto.html  for more information about deployment.
+
 #UnaCloud server configuration guide
-Create admin user
 ## Creating Physical Laboratories
 UnaCloud sorts Physical machines by Laboratories for GUI convenience. By default, a Laboratory is created in the database to add physical machines to it. If you need to change or create more laboratories you must do it directly in the database. A physical machine is a desktop or dedicated machine that has UnaCloud agent installed and is used to deploy opportunistic virtual machines. Each physical machine is associated to a Laboratory. In order to create a physical machine, go to Administration\Infrastructure Management and click on a laboratory. Then, you can click the new icon to add physical machines.
 On the popup panel, insert your Physical Machine parameters. Do this step for each machine in your infrastructure. As an example we have the next Machine on our UnaCloud instance:
@@ -38,10 +41,15 @@ On the popup panel, insert your Physical Machine parameters. Do this step for ea
 * Hypervisor Path: C:\Program Files\VMware\VIX (The path to hypervisor binaries. For VMware products you must put the path that contains the vmrun.exe.)
 * Operating System: Windows 7
 In the same way you can add more operating systems, users, groups or hypervisors if needed.
+
 # Using Unacloud
+
 Unacloud has three main functional entities: Clusters, Images and Virtual Machines. Virtual Machine Images are the AMI equivalent in the AWS EC2, and each one represents the virtual machine files that will be copied and deployed in the physical machines. A cluster is an image aggrupation, which allows making deployments of different images at once (like needed in a master-slave cluster schema). Finally, a virtual machine is an image already in execution.
+
 ##Creating Images
+
 In order to use Unacloud, you must create an image. In the “My Image” page, under the “Functionalities” menu, you can create a new image pressing the add button. There, you can upload a new image by pressing “Upload Image”. You should fill the form with the image data, like in this example:
+
 
  
 When you click submit, the image files will be sent to Unacloud. This upload may take some time, depending on the files size. You should upload main executable files (.vmx, .vbox) and disk files (.vmdk, .vdi) only. If you mark your image as public, other users can make clusters and images based on it.  
