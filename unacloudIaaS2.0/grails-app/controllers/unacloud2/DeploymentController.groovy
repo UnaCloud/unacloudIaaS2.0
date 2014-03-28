@@ -79,11 +79,11 @@ class DeploymentController {
 			if(totalInstances<=avaliableInstances){
 				def temp=new ImageRequestOptions[cluster.images.size()];
 				if(imageNumber==1){
-					temp[0]=new ImageRequestOptions(cluster.images.first().id, params.RAM.toInteger(),params.cores.toInteger(),params.instances.toInteger());
+					temp[0]=new ImageRequestOptions(cluster.images.first().id, params.RAM.toInteger(),params.cores.toInteger(),params.instances.toInteger(),params.hostname);
 				}
 				else{
 					cluster.images.eachWithIndex {it,idx->
-						temp[idx]=new ImageRequestOptions(it.id, params.RAM.getAt(idx).toInteger(),params.cores.getAt(idx).toInteger(),params.instances.getAt(idx).toInteger());
+						temp[idx]=new ImageRequestOptions(it.id, params.RAM.getAt(idx).toInteger(),params.cores.getAt(idx).toInteger(),params.instances.getAt(idx).toInteger(), params.hostname.getAt(idx));
 					}
 				}
 				println params.time.toLong()*60*60*1000

@@ -17,6 +17,9 @@ class IpAllocatorService {
 						if(ip.used==false){
 							vme.ip= ip
 							ip.used=true
+							String[] subname= ip.ip.split("\\.")
+							println subname
+							vme.name= vme.name+subname[2]+subname[3]
 							break
 						}
 					}

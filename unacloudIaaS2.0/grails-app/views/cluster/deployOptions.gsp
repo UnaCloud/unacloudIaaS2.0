@@ -72,6 +72,11 @@
 						<td><label>High Availability</label></td>
 						<td><input type="checkbox" name="highAvaliability"></td>
 					</tr>
+					
+					<tr>
+						<td><label>Hostname</label></td>
+						<td colspan="2"><input type="text" name="hostname"></td>
+					</tr>
 				</table>
 				<br>
 			</g:each>

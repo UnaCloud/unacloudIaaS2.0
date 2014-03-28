@@ -96,7 +96,7 @@ class DeploymentService {
 				def stopTime= new Date(stopTimeMillis +time)
 				println "Stop date"+stopTime
 				def iName=image.name
-				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: iName +""+j, ram: options[option].ram, cores: options[option].cores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
+				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: options[option].hostname, ram: options[option].ram, cores: options[option].cores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 				depImage.virtualMachines.add(virtualMachine)
 				virtualMachine.save(failOnError: true)
 				depImage.save(failOnError: true)
