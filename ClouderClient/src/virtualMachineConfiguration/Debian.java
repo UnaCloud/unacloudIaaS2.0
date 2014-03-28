@@ -48,6 +48,7 @@ public class Debian extends AbstractVirtualMachineConfigurator{
 		}
     	execution.getImage().copyFileOnVirtualMachine("/etc/network/interfaces",out);
     	execution.getImage().executeCommandOnMachine("/etc/init.d/networking","restart");
+    	execution.getImage().executeCommandOnMachine("/usr/bin/wget","www.google.com");
         out.delete();
     }
 
