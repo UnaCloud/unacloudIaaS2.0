@@ -75,7 +75,7 @@
 					
 					<tr>
 						<td><label>Hostname</label></td>
-						<td colspan="2"><input type="text" name="hostname"></td>
+						<td colspan="2"><input type="text" name="hostname" value="${image.name}"></td>
 					</tr>
 				</table>
 				<br>

@@ -2,11 +2,13 @@ package unacloudws.requests;
 
 public class VirtualImageRequest {
 	int instances,ram,cores,imageId;
-	public VirtualImageRequest(int instances, int ram, int cores, int imageId) {
+	String hostname;
+	public VirtualImageRequest(int instances, int ram, int cores, int imageId, String hostname) {
 		this.instances = instances;
 		this.ram = ram;
 		this.cores = cores;
 		this.imageId = imageId;
+		this.hostname = hostname;
 	}
 	public int getCores() {
 		return cores;

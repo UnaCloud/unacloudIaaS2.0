@@ -88,7 +88,7 @@ public class Tester {
 		ciclo1:while(true){
 			for(int e=0,s=0;e<n;e++){
 				int c=getCores();
-				ret[e]=new VirtualImageRequest(1,c*1024,c,2);
+				ret[e]=new VirtualImageRequest(1,c*1024,c,2,"prueba");
 				s+=c;
 				if(s>436)continue ciclo1;
 			}

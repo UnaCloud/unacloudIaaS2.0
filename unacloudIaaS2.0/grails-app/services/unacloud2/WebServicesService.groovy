@@ -20,7 +20,7 @@ class WebServicesService {
 		ImageRequestOptions[] options= new ImageRequestOptions[images.length()]
 		for(int i=0; i<images.length();i++){
 			JSONObject image=images.get(i)
-			options[i]= new ImageRequestOptions(image.get("imageId"), image.getInt("ram"), image.getInt("cores"), image.getInt("instances"))
+			options[i]= new ImageRequestOptions(image.get("imageId"), image.getInt("ram"), image.getInt("cores"), image.getInt("instances"), image.getString("hostname"))
 		}
 		def userCluster= Cluster.get(cluster.get("clusterId"))
 		if (userCluster.isDeployed()) return new WebServiceException("Cluster already deployed")
@@ -86,7 +86,7 @@ class WebServicesService {
 		ImageRequestOptions[] options= new ImageRequestOptions[images.length()]
 		for(int i=0; i<images.length();i++){
 			JSONObject image=images.get(i)
-			options[i]= new ImageRequestOptions(image.getLong("imageId"), image.getInt("ram").toInteger(), image.getInt("cores"), image.getInt("instances"))
+			options[i]= new ImageRequestOptions(image.getLong("imageId"), image.getInt("ram").toInteger(), image.getInt("cores"), image.getInt("instances"),image.getString("hostname"))
 		}
 		def userCluster= Cluster.get(cluster.get("clusterId"))
 		if (userCluster.isDeployed()) return new WebServiceException("Cluster already deployed")

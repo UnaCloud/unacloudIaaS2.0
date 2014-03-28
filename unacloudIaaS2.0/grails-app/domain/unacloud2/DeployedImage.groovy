@@ -42,6 +42,12 @@ class DeployedImage {
 		}
 	}
 	
+	def getDeployedHostname(){
+		for(virtualMachine in virtualMachines){
+			return virtualMachine.name.substring(0, virtualMachine.name.length()-6)
+		}
+	}
+	
 	
 	
 }
