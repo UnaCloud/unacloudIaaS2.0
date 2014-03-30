@@ -31,7 +31,7 @@ class Deployment {
 					vm.status= VirtualMachineExecutionStateEnum.FINISHED
 					if (vm.ip != null) vm.ip.used= false
 				}
-				else if((((vm.stopTime.getTime()-new Date().getTime())/60000))<30 && vm.status==VirtualMachineExecutionStateEnum.DEPLOYING){
+				else if((((new Date().getTime()-vm.startTime.getTime())/60000))>30 && vm.status==VirtualMachineExecutionStateEnum.DEPLOYING){
 					vm.status=VirtualMachineExecutionStateEnum.FAILED
 					vm.message='Request timeout'
 				}
