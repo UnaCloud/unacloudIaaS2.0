@@ -12,7 +12,7 @@ public abstract class VirtualMachineAllocator{
 	public boolean fitVMonPM(VirtualMachineExecution vme,PhysicalMachine pm,PhysicalMachineAllocationDescription pmad){
 		if (pmad == null && vme.getCores() <= pm.getCores() && vme.getRam() <= pm.getRam()) {
 			return true;
-		} else if (pmad.getCores() + vme.getCores() <= pm.getCores()&& pmad.getRam() + vme.getRam() <= pm.getRam()) {
+		} else if (pmad!= null && pmad.getCores() + vme.getCores() <= pm.getCores()&& pmad.getRam() + vme.getRam() <= pm.getRam()) {
 			return true;
 		}
 		return false;
