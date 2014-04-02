@@ -31,30 +31,7 @@ class VirtualMachineImageController {
 		redirect(action: 'index')
 	}
 	
-	def updateFiles(){
-		VirtualMachineImage i= VirtualMachineImage.get(params.id)
-		def user= User.get(session.user.id)
-		if (i!= null){
-			def files = request.multiFileMap.files
-			files.each {
-			if(it.isEmpty()){
-				flash.message = 'file cannot be empty'
-				render(view: 'newUploadImage')
-			}
-			else{ 
-			def e=it.getOriginalFilename()
-			if(!(e.endsWith("vmx")|| e.endsWith("vmdk")||e.endsWith("vbox")|| e.endsWith("vdi"))){
-				flash.message = 'invalid file type'
-				render(view: 'newUploadImage')
-			}
-			else{
-				virtualMachineImageService.updateFiles(i,files,user)
-				redirect(action: "index")
-			}
-			}	
-		}
-		}
-	}
+	
 	def newImage(){
 		
 	}
@@ -102,6 +79,30 @@ class VirtualMachineImageController {
 		}
 		virtualMachineImageService.uploadImage(files, 0, params.name, (params.isPublic!=null), params.accessProtocol, params.osId, params.user, params.password,user)	
 		redirect(action: 'index')
+	}
+	
+	def updateFiles(){
+		VirtualMachineImage i= VirtualMachineImage.get(params.id)
+		def files = request.multiFileMap.files
+		def user= User.get(session.user.id)
+		if (i!= null){
+			files.each {
+			if(it.isEmpty()){
+				flash.message = 'file cannot be empty'
+				render(view: 'newUploadImage')
+			}
+			else{
+			def e=it.getOriginalFilename()
+			if(!(e.endsWith("vmx")|| e.endsWith("vmdk")||e.endsWith("vbox")|| e.endsWith("vdi"))){
+				flash.message = 'invalid file type'
+				render(view: 'newUploadImage')
+			}
+			}
+			}
+			
+			virtualMachineImageService.updateFiles(i,files,user)
+			redirect(action: "index")
+		}
 	}
 	
 	def edit(){

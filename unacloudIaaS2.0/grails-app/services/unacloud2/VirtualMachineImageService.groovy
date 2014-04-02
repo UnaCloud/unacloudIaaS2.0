@@ -19,7 +19,7 @@ class VirtualMachineImageService {
 	}
 	
 	def updateFiles(VirtualMachineImage i, files, User user){
-		FileUtils.cleanDirectory(new java.io.File(i.mainFile).getParentFile())
+		new java.io.File(i.mainFile).getParentFile().deleteDir()
 		def repository= Repository.findByName("Main Repository")
 		files.each {
 			def e=it.getOriginalFilename()
