@@ -10,7 +10,7 @@ import wsEntities.WebServiceException
 
 class WebServicesService {
 	DeploymentService deploymentService
-	def startCluster(String login,String apiKey,JSONObject cluster) {
+	def startCluster(String login,String apiKey,JSONObject cluster) throws Exception{
 		println login+":"+apiKey+":"+cluster
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login)
@@ -50,7 +50,7 @@ class WebServicesService {
 		return deployment
 	}
 	
-	def stopVirtualMachine(String login,String apiKey,String machineId){
+	def stopVirtualMachine(String login,String apiKey,String machineId) throws Exception{
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login)
 		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
@@ -76,7 +76,7 @@ class WebServicesService {
 		return resp
 	}
 
-	def startHeterogeneousCluster(String login,String apiKey,JSONObject cluster) {
+	def startHeterogeneousCluster(String login,String apiKey,JSONObject cluster) throws Exception{
 		println login+":"+apiKey+":"+cluster
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login)
@@ -94,7 +94,7 @@ class WebServicesService {
 		
 	}
 
-	def getClusterList(String login,String apiKey){
+	def getClusterList(String login,String apiKey) throws Exception{
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login);
 		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
@@ -118,7 +118,7 @@ class WebServicesService {
 		return clusterList
 	}
 	
-	def getActiveDeployments(String login,String apiKey){
+	def getActiveDeployments(String login,String apiKey) throws Exception{
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login);
 		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
@@ -140,7 +140,7 @@ class WebServicesService {
 		return resp
 	}
 	
-	def getDeploymentInfo(String login,String apiKey,String depId){
+	def getDeploymentInfo(String login,String apiKey,String depId) throws Exception{
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login);
 		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
@@ -166,7 +166,7 @@ class WebServicesService {
 		return vms
 	}
 	
-	def changeAllocationPolicy(String login,String apiKey,String allocationPolicy){
+	def changeAllocationPolicy(String login,String apiKey,String allocationPolicy) throws Exception{
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login);
 		if(user.userType.equals("User")) return new WebServiceException("You're not administrator")
@@ -186,7 +186,7 @@ class WebServicesService {
 		
 	}
 	
-	def addInstances(String login,String apiKey,String imageId,int instances,long time){
+	def addInstances(String login,String apiKey,String imageId,int instances,long time) throws Exception{
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login);
 		if(user.userType.equals("User")) return new WebServiceException("You're not administrator")

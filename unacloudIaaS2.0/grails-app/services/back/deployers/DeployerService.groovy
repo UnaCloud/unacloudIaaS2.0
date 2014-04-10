@@ -34,8 +34,11 @@ class DeployerService {
 		println "Deploying Image ----->" +image.image.name+" "+image.virtualMachines.size()
 
 		image.virtualMachines.eachWithIndex() { vm, i ->
+			println vm.name+" "+vm.message
 			if(vm.message.equals("Adding instance")&&vm.status== VirtualMachineExecutionStateEnum.DEPLOYING){
 				vm.setMessage("Initializing")
+				vm.save()
+				println vm.name+" "+vm.message
 				if(!Environment.isDevelopmentMode()){
 					try{
 

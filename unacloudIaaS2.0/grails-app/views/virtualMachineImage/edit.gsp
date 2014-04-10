@@ -8,7 +8,7 @@
    </head>
    <body>
    	<div class="hero-unit span9" >
-   		<g:form class="form-horizontal" controller="virtualMachineImage" action="upload" enctype="multipart/form-data" >
+   		<g:form class="form-horizontal" controller="virtualMachineImage" action="setValues" enctype="multipart/form-data" >
    			<div class="control-group">
    			<label class="control-label">Image Name</label>
 	    		<div class="controls">
@@ -25,8 +25,10 @@
    			<label class="control-label">Password</label>
 	    		<div class="controls">
 	    			<input name="password" type="password" value="${image.password }">
+	    			<input name="id" type="hidden" value="${image.id}"/>
 	    		</div>
     		</div>
+    		
     		<div class="controls">
   			<g:submitButton name="createUser" class="btn" value="Submit" />
    			</div>
