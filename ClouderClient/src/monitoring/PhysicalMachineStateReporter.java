@@ -26,6 +26,7 @@ public class PhysicalMachineStateReporter extends Thread{
      */
     @Override
     public void run() {
+       System.out.println("PhysicalMachineStateReporter");
        while(true){
            try{
                PhysicalMachineState.reportPhyisicalMachineUserLogin();

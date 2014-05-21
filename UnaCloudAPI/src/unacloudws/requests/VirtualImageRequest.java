@@ -22,4 +22,7 @@ public class VirtualImageRequest {
 	public int getImageId() {
 		return imageId;
 	}
+	public String getHostname() {
+		return hostname;
+	}
 }

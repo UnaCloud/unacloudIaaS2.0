@@ -52,7 +52,7 @@ public class ClouderClientAttention{
 	            	break;
 	            }
 	            try {
-	            	ExecutorService.execute(new ClouderServerAttentionThread(s));
+	            	ExecutorService.executeRequestTask(new ClouderServerAttentionThread(s));
 	            } catch (Exception ex) {
 	            	ex.printStackTrace();
 	            	break;

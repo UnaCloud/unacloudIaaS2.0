@@ -90,10 +90,10 @@ public class ClouderServerAttentionThread implements Runnable {
             	VirtualMachineStartResponse resp=new VirtualMachineStartResponse();
         		resp.setState(VirtualMachineStartResponse.VirtualMachineState.STARTING);
         		resp.setMessage("Starting virtual machine...");
-        		ExecutorService.execute(new StartVirtualMachineTask(VirtualMachineExecution.getFromStartVirtualMachineMessage((VirtualMachineStartMessage)message)));
+        		ExecutorService.executeBackgroundTask(new StartVirtualMachineTask(VirtualMachineExecution.getFromStartVirtualMachineMessage((VirtualMachineStartMessage)message)));
             	return resp;
             case VirtualMachineOperationMessage.VM_STOP:
-            	ExecutorService.execute(new StopVirtualMachineTask((VirtualMachineStopMessage)message));
+            	ExecutorService.executeBackgroundTask(new StopVirtualMachineTask((VirtualMachineStopMessage)message));
                 return null;
             case VirtualMachineOperationMessage.VM_RESTART:
                 return PersistentExecutionManager.restartMachine((VirtualMachineRestartMessage)message);
