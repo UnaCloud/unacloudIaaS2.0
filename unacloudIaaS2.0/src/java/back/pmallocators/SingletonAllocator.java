@@ -27,8 +27,9 @@ public class SingletonAllocator extends VirtualMachineAllocator{
 							pmad.addResources(vm.getCores(),vm.getRam(), 1);
 							System.out.println("Despues: "+pmad);
 						}
-						else throw new AllocatorException("Cannot allocate all VMs on a single machine");
+						else throw new AllocatorException("Cannot allocate all VMs on a single machine");	
 					}
+					break;
 				}
 				
 			}
