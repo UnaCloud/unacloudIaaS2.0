@@ -29,13 +29,6 @@ public class Main {
      */
     public static void main(String[] args){
         HypervisorFactory.registerHypervisors();
-        try {
-        	PrintStream ps=new PrintStream(new FileOutputStream("log.txt"),true);
-			System.setOut(ps);
-			System.setErr(ps);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
         int mainCase = 1;
         if (args != null && args.length>0 && !args[0].matches("[0-9]+"))mainCase = Integer.parseInt(args[0]);
         
@@ -45,6 +38,13 @@ public class Main {
         }
         if(mainCase==LOGIN_DB) PhysicalMachineState.reportPhyisicalMachineUserLogin();
         else if(mainCase==TURN_ON_DB){
+        	try {
+            	PrintStream ps=new PrintStream(new FileOutputStream("log.txt"),true);
+    			System.setOut(ps);
+    			System.setErr(ps);
+    		} catch (FileNotFoundException e) {
+    			e.printStackTrace();
+    		}
         	PhysicalMachineState.reportPhyisicalMachineStart();
         	PhysicalMachineMonitor.restart();
             //DataServerSocket.init();

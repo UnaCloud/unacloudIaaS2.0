@@ -175,13 +175,13 @@ public class ClouderServerAttentionThread implements Runnable {
             case PhysicalMachineOperationMessage.PM_MONITOR:
                     PhysicalMachineMonitorMessage monitor=(PhysicalMachineMonitorMessage)message;
                     switch (monitor.getOperation()) {
-                                        case "STOP":
-                                                PhysicalMachineMonitor.stop();
-                                                break;
-                                        case "START":
-                                                PhysicalMachineMonitor.start(monitor.getMonitorFrequency(),monitor.getRegisterFrequency());
-                                                break;
-                                }
+	                    case "STOP":
+                            PhysicalMachineMonitor.stop();
+                            break;
+	                    case "START":
+                            PhysicalMachineMonitor.start(monitor.getMonitorFrequency(),monitor.getRegisterFrequency());
+                            break;
+                    }
                     return "Successful operation";
                 //TODO do something
             /*case PM_RETRIEVE_FOLDER:

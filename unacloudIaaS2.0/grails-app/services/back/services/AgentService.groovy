@@ -27,9 +27,11 @@ class AgentService {
 		sendMessage(pm,new ClearImageFromCacheMessage(image.id));
 	}
 	def clearCache(PhysicalMachine pm){
+		println "clearCache "+pm.ip
 		sendMessage(pm,new ClearVMCacheMessage());
 	}
 	def sendMessage(PhysicalMachine pm,UnaCloudAbstractMessage message){
+		
 		String ipAddress=pm.ip.ip;
 		try{
 			Socket s=new Socket(ipAddress,variableManagerService.getIntValue("CLOUDER_CLIENT_PORT"));
@@ -54,7 +56,7 @@ class AgentService {
 		copyFile(zos,"ClouderClient.jar",new File(appDir,"agentSources/ClouderClient.jar"),true);
 		zos.putNextEntry(new ZipEntry("vars"));
 		PrintWriter pw=new PrintWriter(zos);
-		for(ServerVariable sv:ServerVariable.all)pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
+		for(ServerVariable sv:ServerVariable.all)if(!sv.isServerOnly())pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
 		pw.flush();
 		zos.closeEntry();
 		zos.close();
@@ -65,7 +67,7 @@ class AgentService {
 		zos.putNextEntry(new ZipEntry("vars"));
 		PrintWriter pw=new PrintWriter(zos);
 		for(ServerVariable sv:ServerVariable.all){
-			if(!sv.name.equals("AGENT_VERSION")){
+			if(!sv.name.equals("AGENT_VERSION")&&!sv.isServerOnly()){
 				pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
 			}
 		}

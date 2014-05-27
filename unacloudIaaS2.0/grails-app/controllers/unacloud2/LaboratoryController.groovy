@@ -76,6 +76,7 @@ class LaboratoryController {
 		redirect( action: "index")
 	}
 	def clearCache(){
+		println "clearCache"
 		params.each {
 			if (it.key.contains("machine")){
 				if(it.value.contains("on")){

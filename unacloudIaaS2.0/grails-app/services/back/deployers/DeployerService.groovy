@@ -115,10 +115,7 @@ class DeployerService {
 	}
 	def stopVirtualMachine(VirtualMachineExecution vm){
 		VirtualMachineStopMessage vmsm=new VirtualMachineStopMessage();
-		vmsm.setHypervisorName(1)
-		vmsm.setHypervisorPath("C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe")
 		vmsm.setVirtualMachineExecutionId(vm.id)
-		vmsm.setVmPath("D:\\DebianPaaS64\\DebianPaaS64.vmx")
 		String pmIp=vm.executionNode.ip.ip;
 		try{
 			Socket s=new Socket(pmIp,81);
