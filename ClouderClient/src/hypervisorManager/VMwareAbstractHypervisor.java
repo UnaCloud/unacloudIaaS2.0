@@ -113,6 +113,13 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
 	public abstract String getType();
 	@Override
 	public void cloneVirtualMachine(ImageCopy source, ImageCopy dest) {
-		// TODO Auto-generated method stub
+		LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"clone",source.getMainFile().getAbsolutePath(),dest.getMainFile().getAbsolutePath(),"full","unacloudbase");
+		sleep(20000);
+		try {
+			takeVirtualMachineSnapshot(dest,"unacloudbase");
+		} catch (HypervisorOperationException e) {
+			e.printStackTrace();
+		}
+        unregisterVirtualMachine(dest);
 	}
 }

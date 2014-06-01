@@ -40,4 +40,9 @@ public class ClusterWS {
 	public void setImages(List<ImageWS> images) {
 		this.images = images;
 	}
+
+	@Override
+	public String toString() {
+		return "ClusterWS [id=" + id + ", name=" + name + ", images=" + images + "]";
+	}
 }

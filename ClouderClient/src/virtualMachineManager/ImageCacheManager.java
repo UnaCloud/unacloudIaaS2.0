@@ -35,6 +35,7 @@ public class ImageCacheManager {
 		Image vmi=getImage(imageId);
 		ImageCopy source,dest;
 		synchronized (vmi){
+			System.out.println("Tiene "+vmi.getImageCopies().size()+" copias");
 			if(vmi.getImageCopies().isEmpty()){
 				ImageCopy copy=new ImageCopy();
 				dowloadImageCopy(vmi,copy);
@@ -56,7 +57,7 @@ public class ImageCacheManager {
 				File root=new File(machineRepository+"\\"+imageId+"\\"+vmName);
 				dest.setMainFile(new File(root,vmName+"."+source.getMainFile().getName().split("\\.")[1]));
 				dest.setStatus(VirtualMachineImageStatus.LOCK);
-				//dest.setVirtualMachineName(vmName);
+				saveImages();
 				SystemUtils.sleep(2000);
 			}
 		}

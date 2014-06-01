@@ -5,6 +5,7 @@
 
 package unacloudws;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -69,18 +70,24 @@ public class UnaCloudOperations {
 		}
     	return null;
     }
-    public String startVirtualCluster(VirtualClusterRequest clusterRequest) {
+    public DeploymentWS startVirtualCluster(VirtualClusterRequest clusterRequest) {
     	JsonNode cluster = mapper.createObjectNode();
     	ObjectNode clusterON=((ObjectNode) cluster);
     	clusterON.put("clusterId", clusterRequest.getClusterId());
     	clusterON.put("execTime", clusterRequest.getTime());
     	clusterON.put("images", mapper.valueToTree(clusterRequest.getVms()));
     	try {
-			return prepareRequest("startCluster").queryParam("cluster",mapper.writeValueAsString(cluster)).post(String.class);
+			JsonNode response = mapper.readTree(prepareRequest("startCluster").queryParam("cluster",mapper.writeValueAsString(cluster)).post(String.class));
+			long id=response.get("id").asLong();
+			JsonNode clus=response.get("cluster");
+			ClusterWS cl=new ClusterWS(clus.get("id").asLong(),"");
+			return new DeploymentWS(id, cl);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+    	return null;
     }
     
     public String startHeterogeneousVirtualCluster(int clusterId, long time,VirtualImageRequest...vms) {
@@ -96,7 +103,7 @@ public class UnaCloudOperations {
 			return null;
 		}
     }
-    public String stopVirtualMachine(int virtualMachineExId) {
+    public String stopVirtualMachine(long virtualMachineExId) {
     	try {
 			return prepareRequest("stopVirtualMachine").queryParam("machineId",mapper.writeValueAsString(virtualMachineExId)).post(String.class);
 		} catch (JsonProcessingException e) {
@@ -105,7 +112,7 @@ public class UnaCloudOperations {
 		}
     }
     
-    public String stopDeployment(int depId) {
+    public String stopDeployment(long depId) {
     	try {
 			return prepareRequest("stopDeployment").queryParam("depId",mapper.writeValueAsString(depId)).post(String.class);
 		} catch (JsonProcessingException e) {
@@ -128,7 +135,7 @@ public class UnaCloudOperations {
 		while(it.hasNext()){
 			JsonNode data= it.next();
 			ClusterWS cluster= new ClusterWS(data.get("cluster_id").asLong(), data.get("cluster_name").asText());
-			DeploymentWS dep= new DeploymentWS(data.get("deployment_id").asText(),cluster);
+			DeploymentWS dep= new DeploymentWS(data.get("deployment_id").asLong(),cluster);
 			depList.add(dep);
     	}
 		return depList;
