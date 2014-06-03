@@ -1,0 +1,4 @@
+String.LOCAL_HOSTNAME=ZENBOOK
+String.VBOX_PATH=C:\Program Files (x86)\VMware\VMware VIX
+String.VMRUN_PATH=C:\Program Files (x86)\VMware\VMware VIX
+String.VM_REPO_PATH=D
