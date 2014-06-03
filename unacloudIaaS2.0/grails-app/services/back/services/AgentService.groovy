@@ -64,6 +64,7 @@ class AgentService {
 	def copyUpdaterOnStream(OutputStream outputStream,File appDir){
 		ZipOutputStream zos=new ZipOutputStream(outputStream);
 		copyFile(zos,"ClientUpdater.jar",new File(appDir,"agentSources/ClientUpdater.jar"),true);
+		copyFile(zos,"ClientConfigurer.jar",new File(appDir,"agentSources/ClientConfigurer.jar"),true);
 		zos.putNextEntry(new ZipEntry("vars"));
 		PrintWriter pw=new PrintWriter(zos);
 		for(ServerVariable sv:ServerVariable.all){
