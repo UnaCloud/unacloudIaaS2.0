@@ -33,7 +33,7 @@ class BootStrap {
 			String randomString = RandomStringUtils.random(length, charset.toCharArray())
 			new User(name:'Guest',username:'admin',password:'admin', userType: 'Administrator',apiKey: randomString).save()
 		}
-		/*if(Laboratory.count() ==0){
+		if(Laboratory.count() ==0){
 			def win7=new OperatingSystem(name:'Windows 7',configurer:'Windows');
 			win7.save()
 			wayra1:{
@@ -110,7 +110,7 @@ class BootStrap {
 			new Hypervisor(name: Constants.VIRTUAL_BOX, hypervisorVersion: "4.3.4").save()
 			new Hypervisor(name: Constants.VM_WARE_WORKSTATION, hypervisorVersion: "10").save()
 			new Hypervisor(name: Constants.VM_WARE_PLAYER, hypervisorVersion: "10").save()
-		}*/
+		}
 		databaseService.initDatabase()
 		DataServerSocket.startServices(variableManagerService.getIntValue("DATA_SOCKET"));
 		//String applicationPath = request.getSession().getServletContext().getRealPath("")
