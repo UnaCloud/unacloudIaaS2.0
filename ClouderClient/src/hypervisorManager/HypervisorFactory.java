@@ -3,6 +3,8 @@ package hypervisorManager;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.losandes.utils.VariableManager;
+
 /**
  * Factory responsible for managing hypervisor classes and instances. This class provides methods to dinamically load hypervisor clasees and instantiate them.
  * @author Clouder
@@ -19,9 +21,9 @@ public class HypervisorFactory {
     private static Map<String,Hypervisor> map = new HashMap<>();
     
     public static void registerHypervisors(){
-    	map.put(VMwareWorkstation.HYPERVISOR_ID,new VMwareWorkstation("C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe"));
-    	map.put(VMwarePlayer.HYPERVISOR_ID,new VMwarePlayer("C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe"));
-    	map.put(VirtualBox.HYPERVISOR_ID,new VirtualBox("C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe"));
+    	map.put(VMwareWorkstation.HYPERVISOR_ID,new VMwareWorkstation(VariableManager.local.getsetStringValue("VMRUN_PATH","C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe")));
+    	map.put(VMwarePlayer.HYPERVISOR_ID,new VMwarePlayer(VariableManager.local.getsetStringValue("VMRUN_PATH","C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe")));
+    	map.put(VirtualBox.HYPERVISOR_ID,new VirtualBox(VariableManager.local.getsetStringValue("VBOX_PATH","C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe")));
     }
 
     /**

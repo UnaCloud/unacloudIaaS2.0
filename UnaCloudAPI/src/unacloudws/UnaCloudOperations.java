@@ -37,7 +37,7 @@ public class UnaCloudOperations {
     }
     
     
-    public List<VirtualMachineExecutionWS> getDeploymentInfo(int deploymentId) {
+    public List<VirtualMachineExecutionWS> getDeploymentInfo(long deploymentId) {
     	
     	try {
 			String string=(prepareRequest("getDeploymentInfo").queryParam("depId",mapper.writeValueAsString(deploymentId)).post(String.class));

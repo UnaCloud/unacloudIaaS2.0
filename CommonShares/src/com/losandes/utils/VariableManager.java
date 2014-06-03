@@ -43,6 +43,17 @@ public class VariableManager {
     	map.put("String." + key, v);
     	saveChanges();
     }
+    
+    /**
+     * Returns the value stored on the manager, if it doesn't exists then creates a new one with the given value
+     * @param key
+     * @param v
+     */
+    public synchronized String getsetStringValue(String key, String v) {
+    	if(map.containsKey("String."+key))return getStringValue(key);
+    	setStringValue(key, v);
+    	return v;
+    }
 
     /**
      * Return the value of the int variable with the given key.

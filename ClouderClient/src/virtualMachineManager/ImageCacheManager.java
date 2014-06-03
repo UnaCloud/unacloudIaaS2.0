@@ -27,7 +27,7 @@ import com.losandes.utils.Constants;
 import com.losandes.utils.VariableManager;
 
 public class ImageCacheManager {
-	static String machineRepository="E:\\GRID\\";
+	static String machineRepository=VariableManager.local.getsetStringValue("VM_REPO_PATH","E:\\GRID\\");
 	private static File imageListFile=new File("imageList");
 	private static Map<Long,Image> imageList=null;
 	public static ImageCopy getFreeImageCopy(long imageId){
