@@ -33,7 +33,7 @@ In order to deploy UnaCloud Agent in your infrastructure, you must download its 
 Now you must open a console and configure the local variables executing the client configuration program (“java –jar ClientConfigurer.jar”). This program will ask for the machine hostname (LOCAL_HOSTNAME, name used by the agent to identify itself against the server), VMWare “vmrun.exe” location (VMRUN_DIRECTORY, found on “C:\Program Files\VMware\VMware VIX\vmrun.exe” as default), VirtualBox “VBoxManage.exe” location (VBOX_DIRECTORY, found on “C:\Program Files\Oracle\VirtualBox\VBoxManage.exe” as default) and repository path (VM_REPO_PATH, directory used to copy and save the virtual machines) variables. You require to configure at least one hypervisor path and the repository location. If you don’t insert a specific hostname, the agent will use the machine hostname.
 
 Finally, when the configuration process is finished, you must add the ClientUpdater.jar file as a boot script, following these steps:
-*	Create a text file like the next one that will include commands in order to change the path and executes client updater jar. Save it as a .bat file. 
+*	Create a text file like the next one that will include commands in order to change the path and execute the client updater jar. Save it as a .bat file. 
 
 > ####startUnacloud.bat
 
@@ -57,10 +57,9 @@ On the popup panel, insert your Physical Machine parameters. Do this step for ea
 * MAC Address: AA:BB:CC:DD:EE:FF (used to automatically start physical machines using Wake-On-Lan)
 * CPU Cores: 8
 * RAM Memory: 16384 MB
-* Hard Disk Space: 50 GB (for UnaCloud)
-* Architecture: x86
-* Hypervisor Path: C:\Program Files\VMware\VIX (The path to hypervisor binaries. For VMware products you must put the path that contains the vmrun.exe.)
 * Operating System: Windows 7
+* Hypervisor Path: C:\Program Files\VMware\VIX (The path to hypervisor binaries. For VMware products you must put the path that contains the vmrun.exe.)
+
 In the same way you can add more operating systems, users, groups or hypervisors if needed.
 
 # Using Unacloud
