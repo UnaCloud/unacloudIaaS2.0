@@ -27,9 +27,30 @@ In order to download unacloud war, you can access to http://unacloud.uniandes.ed
 ## UnaCloud Server Deployment
 You can deploy the WAR file with Apache Tomcat 8.0 (preferred), or a server of your choice. You can go to http://tomcat.apache.org/tomcat-8.0-doc/deployer-howto.html  for more information about deployment.
 
+##UnaCloud Agent Deployment
+In order to deploy UnaCloud Agent in your infrastructure, you must download its files. The agent files could be downloaded from the web app route “/UnaCloudServices/updater”. Up next you must decompress the zip file, and copy the files contained in each agent machine. For each machine in your infrastructure, copy the uncompressed content in a directory of your choice. 
+
+Now you must open a console and configure the local variables executing the client configuration program (“java –jar ClientConfigurer.jar”). This program will ask for the machine hostname (LOCAL_HOSTNAME, name used by the agent to identify itself against the server), VMWare “vmrun.exe” location (VMRUN_DIRECTORY, found on “C:\Program Files\VMware\VMware VIX\vmrun.exe” as default), VirtualBox “VBoxManage.exe” location (VBOX_DIRECTORY, found on “C:\Program Files\Oracle\VirtualBox\VBoxManage.exe” as default) and repository path (VM_REPO_PATH, directory used to copy and save the virtual machines) variables. You require to configure at least one hypervisor path and the repository location. If you don’t insert a specific hostname, the agent will use the machine hostname.
+
+Finally, when the configuration process is finished, you must add the ClientUpdater.jar file as a boot script, following these steps:
+*	Create a text file like the next one that will include commands in order to change the path and executes client updater jar. Save it as a .bat file. 
+
+> ####startUnacloud.bat
+
+> cd C:/UnaCloud/
+
+> java –jar ClientUpdater-jar 1
+
+*	Open the Local Group Policy Editor (Type gpedit.msc from the start menu)
+*	In the console tree, click Scripts (Startup/Shutdown). The path is Computer Configuration\Windows Settings\Scripts (Startup/Shutdown) 
+*	Click Startup and then Add…
+*	Insert the path of your .bat file on script name.
+*	Click ok and then ok. The next time that you restart the machine, it will start with UnaCloud Agent.
+
 #UnaCloud server configuration guide
 ## Creating Physical Laboratories
 UnaCloud sorts Physical machines by Laboratories for GUI convenience. By default, a Laboratory is created in the database to add physical machines to it. If you need to change or create more laboratories you must do it directly in the database. A physical machine is a desktop or dedicated machine that has UnaCloud agent installed and is used to deploy opportunistic virtual machines. Each physical machine is associated to a Laboratory. In order to create a physical machine, go to Administration\Infrastructure Management and click on a laboratory. Then, you can click the new icon to add physical machines.
+
 On the popup panel, insert your Physical Machine parameters. Do this step for each machine in your infrastructure. As an example we have the next Machine on our UnaCloud instance:
 * Name: ISC401 (should be the hostname of the machine, on windows you can get it executing hostname on command line console)
 * IP Address: 157.253.201.141
