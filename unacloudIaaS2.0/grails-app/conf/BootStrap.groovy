@@ -33,50 +33,8 @@ class BootStrap {
 			String randomString = RandomStringUtils.random(length, charset.toCharArray())
 			new User(name:'Guest',username:'admin',password:'admin', userType: 'Administrator',apiKey: randomString).save()
 		}
-		if(Laboratory.count() ==0){
-			def win7=new OperatingSystem(name:'Windows 7',configurer:'Windows');
-			win7.save()
-			wayra1:{
-				IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.202.1', mask: '255.255.255.0').save()
-				virtualIpPool.ips= []
-				for(int i=0;i<30;i++){
-					def virtualIp= new IP(used:false, ip: ('157.253.202.'+(111+i)), ipPool: virtualIpPool).save()
-					virtualIpPool.ips.add(virtualIp)
-				}
-				virtualIpPool.save()
-				def labWaira1 = new Laboratory( virtualMachinesIPs: virtualIpPool, name: 'Wuaira 1', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS);
-				labWaira1.physicalMachines = []
-				for(int e=0;e<30;e++){
-					def ip=new IP(used:false, ip: ('157.253.202.'+(11+e)));
-					ip.save()
-					def pm=new PhysicalMachine(cores: 4, highAvaliability: false, hypervisorPath: "/", ip: ip, name: "ISC"+(201+e), mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, laboratory: labWaira1, lastReport: new Date(0));
-					labWaira1.physicalMachines.add(pm)
-				}
-				labWaira1.save()
-			}
-			wayra2:{
-				IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.239.1', mask: '255.255.255.0').save()
-				virtualIpPool.ips= []
-				for(int i=0;i<30;i++){
-					def virtualIp= new IP(used:false, ip: ('157.253.239.'+(111+i)), ipPool: virtualIpPool).save()
-					virtualIpPool.ips.add(virtualIp)
-				}
-				virtualIpPool.save()
-				def labWaira2 = new Laboratory( virtualMachinesIPs: virtualIpPool, name: 'Wuaira 2', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS);
-				labWaira2.physicalMachines = []
-				for(int e=0;e<30;e++){
-					def ip=new IP(used:false, ip: ('157.253.239.'+(11+e)));
-					ip.save();
-					def pm=new PhysicalMachine(cores: 4, highAvaliability: false, hypervisorPath: "/", ip: ip, name: "ISC"+(301+e), mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, laboratory: labWaira2, lastReport: new Date(0));
-					labWaira2.physicalMachines.add(pm)
-				}
-				labWaira2.save()
-			}
-		}
-		if(Repository.count()==0){
-			new Repository(name: "Main Repository", capacity: 20, root: "C:\\images\\").save();
-		}
 		if(OperatingSystem.count() == 1){
+			new OperatingSystem(name:'Windows 7',configurer:'Windows').save();
 			new OperatingSystem(name:'Windows 8',configurer:'Windows').save()
 
 			new OperatingSystem(name:'Windows XP',configurer:'Windows').save()
@@ -87,6 +45,49 @@ class BootStrap {
 			new OperatingSystem(name:'Ubuntu 11',configurer:'Ubuntu').save();
 			new OperatingSystem(name:'Scientific Linux',configurer:'Linux').save();
 		}
+//		if(Laboratory.count() ==0){
+//			
+//			wayra1:{
+//				IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.202.1', mask: '255.255.255.0').save()
+//				virtualIpPool.ips= []
+//				for(int i=0;i<30;i++){
+//					def virtualIp= new IP(used:false, ip: ('157.253.202.'+(111+i)), ipPool: virtualIpPool).save()
+//					virtualIpPool.ips.add(virtualIp)
+//				}
+//				virtualIpPool.save()
+//				def labWaira1 = new Laboratory( virtualMachinesIPs: virtualIpPool, name: 'Wuaira 1', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS);
+//				labWaira1.physicalMachines = []
+//				for(int e=0;e<30;e++){
+//					def ip=new IP(used:false, ip: ('157.253.202.'+(11+e)));
+//					ip.save()
+//					def pm=new PhysicalMachine(cores: 4, highAvaliability: false, hypervisorPath: "/", ip: ip, name: "ISC"+(201+e), mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, laboratory: labWaira1, lastReport: new Date(0));
+//					labWaira1.physicalMachines.add(pm)
+//				}
+//				labWaira1.save()
+//			}
+//			wayra2:{
+//				IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.239.1', mask: '255.255.255.0').save()
+//				virtualIpPool.ips= []
+//				for(int i=0;i<30;i++){
+//					def virtualIp= new IP(used:false, ip: ('157.253.239.'+(111+i)), ipPool: virtualIpPool).save()
+//					virtualIpPool.ips.add(virtualIp)
+//				}
+//				virtualIpPool.save()
+//				def labWaira2 = new Laboratory( virtualMachinesIPs: virtualIpPool, name: 'Wuaira 2', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS);
+//				labWaira2.physicalMachines = []
+//				for(int e=0;e<30;e++){
+//					def ip=new IP(used:false, ip: ('157.253.239.'+(11+e)));
+//					ip.save();
+//					def pm=new PhysicalMachine(cores: 4, highAvaliability: false, hypervisorPath: "/", ip: ip, name: "ISC"+(301+e), mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, laboratory: labWaira2, lastReport: new Date(0));
+//					labWaira2.physicalMachines.add(pm)
+//				}
+//				labWaira2.save()
+//			}
+//		}
+		if(Repository.count()==0){
+			new Repository(name: "Main Repository", capacity: 20, root: "C:\\images\\").save();
+		}
+		
 		if(ServerVariable.count() ==0){
 			new ServerVariable(name:'CLOUDER_SERVER_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable:'26').save()
 			new ServerVariable(name:'CLOUDER_CLIENT_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable:'81').save()
