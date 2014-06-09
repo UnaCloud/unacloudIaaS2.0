@@ -28,6 +28,17 @@ class LaboratoryController {
 		def machineSet= lab.getOrderedMachines()
 		[lab: Laboratory.get(params.id), machineSet:machineSet]
 	}
+	
+	def addLab(){
+		def networkConfigurations = ['ETHERNET10MBPS','ETHERNET100MBPS','ETHERNET1GBPS']
+		[netConfigurations: networkConfigurations]
+	}
+	
+	def createLab(){
+		laboratoryService.createLab(params.name, (params.highAvailability!=null),params.netConfig, (params.virtual!=null),params.netGateway, params.netMask);
+		redirect(action: "index");
+	}
+	
 	def createMachine() {
 		[lab: Laboratory.get(params.id),oss: OperatingSystem.list()]
 	}

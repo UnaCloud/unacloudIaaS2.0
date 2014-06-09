@@ -29,4 +29,9 @@ class LaboratoryService {
 		machine.putAt("ram", Integer.parseInt(ram))
 		machine.putAt("hypervisorPath", hyperPath)
 	}
+	
+	def createLab(name, highAvailability,netConfig, virtual, netGateway, netMask){
+		def ipPool=new IPPool(virtual:virtual,gateway: netGateway, mask: netMask).save()
+		new Laboratory (virtualMachinesIPs: ipPool, name: name, highAvaliability: highAvailability,networkQuality: netConfig ).save();
+	}
 }

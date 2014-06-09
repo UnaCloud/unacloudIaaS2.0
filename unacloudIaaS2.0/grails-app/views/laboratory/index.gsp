@@ -15,6 +15,11 @@
         	</div>
         	<g:if test="${i%3==2}"></div></g:if>
         </g:each>
+        <div class="span4 text-center">
+        		<g:link controller="laboratory" action="addLab"><g:img file="add.png"/></g:link>
+        		<p>Add New Lab</p>
+        		
+        </div>
     </div>
 </div>
 </body>
