@@ -27,8 +27,9 @@ In order to download unacloud war, you can access to http://unacloud.uniandes.ed
 ## UnaCloud Server Deployment
 You can deploy the WAR file with Apache Tomcat 8.0 (preferred), or a server of your choice. You can go to http://tomcat.apache.org/tomcat-8.0-doc/deployer-howto.html  for more information about deployment.
 
+Please be careful with Java enviromental variables configuration.
 ##UnaCloud Agent Deployment
-In order to deploy UnaCloud Agent in your infrastructure, you must download its files. The agent files could be downloaded from the web app route “/UnaCloudServices/updater”. Up next you must decompress the zip file, and copy the files contained in each agent machine. For each machine in your infrastructure, copy the uncompressed content in a directory of your choice. 
+In order to deploy UnaCloud Agent in your infrastructure, you must download its files. The agent files could be downloaded from the web app route “/UnaCloudServices/updater” or simply the "Download Agent Files" button under "Configuration". Up next, you must decompress the zip file and copy the files contained in each agent machine. For each machine in your infrastructure, copy the uncompressed content in a directory of your choice. 
 
 Now you must open a console and configure the local variables executing the client configuration program (“java –jar ClientConfigurer.jar”). This program will ask for the machine hostname (LOCAL_HOSTNAME, name used by the agent to identify itself against the server), VMWare “vmrun.exe” location (VMRUN_DIRECTORY, found on “C:\Program Files\VMware\VMware VIX\vmrun.exe” as default), VirtualBox “VBoxManage.exe” location (VBOX_DIRECTORY, found on “C:\Program Files\Oracle\VirtualBox\VBoxManage.exe” as default) and repository path (VM_REPO_PATH, directory used to copy and save the virtual machines) variables. You require to configure at least one hypervisor path and the repository location. If you don’t insert a specific hostname, the agent will use the machine hostname.
 
