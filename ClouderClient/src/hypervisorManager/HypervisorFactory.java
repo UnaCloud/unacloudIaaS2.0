@@ -21,9 +21,12 @@ public class HypervisorFactory {
     private static Map<String,Hypervisor> map = new HashMap<>();
     
     public static void registerHypervisors(){
-    	map.put(VMwareWorkstation.HYPERVISOR_ID,new VMwareWorkstation(VariableManager.local.getsetStringValue("VMRUN_PATH","C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe")));
-    	map.put(VMwarePlayer.HYPERVISOR_ID,new VMwarePlayer(VariableManager.local.getsetStringValue("VMRUN_PATH","C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe")));
-    	map.put(VirtualBox.HYPERVISOR_ID,new VirtualBox(VariableManager.local.getsetStringValue("VBOX_PATH","C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe")));
+    	String vmRun=VariableManager.local.getStringValue("VMRUN_PATH");
+    	String vBox=VariableManager.local.getStringValue("VBOX_PATH");
+    	if(vmRun!=null)map.put(VMwareWorkstation.HYPERVISOR_ID,new VMwareWorkstation(vmRun));
+    	if(vBox!=null)map.put(VirtualBox.HYPERVISOR_ID,new VirtualBox(vBox));
+    	//TODO add support to vmWarePlayer
+    	//map.put(VMwarePlayer.HYPERVISOR_ID,new VMwarePlayer(VariableManager.local.getsetStringValue("VMRUN_PATH","C:\\Program Files (x86)\\VMware\\VMware VIX\\vmrun.exe")));
     }
 
     /**

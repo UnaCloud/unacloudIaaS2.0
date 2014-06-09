@@ -36,7 +36,9 @@ public class VariableManager {
      * @return The value of the variable or null if there is no value for the given key
      */
     public synchronized String getStringValue(String key) {
-        return (String) map.get("String." + key);
+    	Object c=map.get("String." + key);
+    	if(c==null)return null;
+    	return (String) c;
     }
 
     public synchronized void setStringValue(String key, String v) {
@@ -61,7 +63,9 @@ public class VariableManager {
      * @return The value of the variable or null if there is no value for the given key
      */
     public synchronized int getIntValue(String key) {
-        return (Integer) map.get("Integer." + key);
+    	Object c=map.get("String." + key);
+    	if(c==null)return -1;
+        return (Integer) c;
     }
 
     public synchronized void setIntValue(String key, int v) {
