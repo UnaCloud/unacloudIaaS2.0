@@ -70,7 +70,7 @@
 					</tr>
 					<tr>
 						<td><label>High Availability</label></td>
-						<td><input type="checkbox" name="highAvaliability"></td>
+						<td><input type="checkbox" name="highAvailability${image.id.toString()}"></td>
 					</tr>
 					
 					<tr>

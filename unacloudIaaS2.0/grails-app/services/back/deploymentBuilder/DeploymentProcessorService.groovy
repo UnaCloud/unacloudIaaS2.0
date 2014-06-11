@@ -18,26 +18,27 @@ class DeploymentProcessorService {
 	UserRestrictionProcessorService userRestrictionProcessorService
 	PhysicalMachineAllocatorService physicalMachineAllocatorService
 	IpAllocatorService ipAllocatorService
-	def doDeployment(DeployedCluster cluster,User user,boolean addInstancesDeployment) throws UserRestrictionException, AllocatorException{
+	def doDeployment(DeployedImage image,User user,boolean addInstancesDeployment) throws UserRestrictionException, AllocatorException{
 		ArrayList<VirtualMachineExecution> vms=new ArrayList<>();
 		if(!addInstancesDeployment)
-		for(DeployedImage image:cluster.images)vms.addAll(image.virtualMachines);
+		 vms.addAll(image.virtualMachines);
 		else{
-		println "adding only new instances for allocation"
-		for(DeployedImage image:cluster.images){
-			
+			println "adding only new instances for allocation"
 			def virtualMachines= new ArrayList<>()
 			for(VirtualMachineExecution vm:image.virtualMachines)
 			if(vm.message.equals("Adding instance")){
 				virtualMachines.add(vm)}
 			vms.addAll(virtualMachines)
-			}
 		}
-		List<PhysicalMachine> pms=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
+		List<PhysicalMachine> pms
+		if(image.highAvaliavility)
+		pms=PhysicalMachine.findAllWhere(state:PhysicalMachineStateEnum.ON,highAvailability: true);
+		else
+		pms=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
 		println "tamaño en doDeployment:"+pms.size()
 		userRestrictionProcessorService.applyUserPermissions(user,vms,pms)
 		println "tamaño después de userRestriction:"+pms.size()
-		physicalMachineAllocatorService.allocatePhysicalMachines(cluster,vms,pms,addInstancesDeployment)
-		ipAllocatorService.allocateIPAddresses(cluster, addInstancesDeployment)
+		physicalMachineAllocatorService.allocatePhysicalMachines(image,vms,pms,addInstancesDeployment)
+		ipAllocatorService.allocateIPAddresses(image, addInstancesDeployment)
 	}
 }

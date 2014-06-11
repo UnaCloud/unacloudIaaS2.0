@@ -10,7 +10,7 @@ class PhysicalMachine {
 	boolean withUser
 	int cores
 	int ram
-	boolean highAvaliability
+	boolean highAvailability
 	String hypervisorPath
 	IP ip
 	String mac

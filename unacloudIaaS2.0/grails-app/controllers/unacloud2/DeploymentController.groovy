@@ -62,7 +62,10 @@ class DeploymentController {
 	}
 
 	def deploy(){
-		Cluster cluster= Cluster.get(params.id)
+		Cluster cluster= Cluster.get(params.get('id'))
+		println "10 "+params.get('id')
+		println "10 "+params.get('highAvailability10')
+		println "11 "+params.get('highAvailability11')
 		User user= User.get(session.user.id)
 		if(!cluster.isDeployed()){
 			int totalInstances
@@ -75,32 +78,35 @@ class DeploymentController {
 					totalInstances+=params.instances.getAt(i).toInteger()
 				}
 			}
-			def avaliableInstances= PhysicalMachine.findAllByState("ON").size()
-			if(totalInstances<=avaliableInstances){
-				def temp=new ImageRequestOptions[cluster.images.size()];
-				if(imageNumber==1){
-					temp[0]=new ImageRequestOptions(cluster.images.first().id, params.RAM.toInteger(),params.cores.toInteger(),params.instances.toInteger(),params.hostname);
-				}
-				else{
-					cluster.images.eachWithIndex {it,idx->
-						temp[idx]=new ImageRequestOptions(it.id, params.RAM.getAt(idx).toInteger(),params.cores.getAt(idx).toInteger(),params.instances.getAt(idx).toInteger(), params.hostname.getAt(idx));
-					}
-				}
-				println params.time.toLong()*60*60*1000
-				try{
-				deploymentService.deploy(cluster, user, params.time.toLong()*60*60*1000, temp)
-				}
-				catch(Exception e){
-					flash.message=e.getMessage()
-					redirect( uri: "/error",absolute: true )
-					return
-				}
-				redirect(controller:"deployment")
+			
+			def temp=new ImageRequestOptions[cluster.images.size()];
+			def highAvail= new boolean[cluster.images.size()]
+			println "params: "+params
+			if(imageNumber==1){
+				temp[0]=new ImageRequestOptions(cluster.images.first().id, params.RAM.toInteger(),params.cores.toInteger(),params.instances.toInteger(),params.hostname);
+				highAvail[0]= (params.get('highAvailability'+cluster.images.first().id))!=null
 			}
 			else{
-				flash.message="Instance limit exceeded"
-				redirect( controller: "cluster",action: "deployOptions", id:cluster.id )
+				cluster.images.eachWithIndex {it,idx->
+					highAvail[idx]=(params.get('highAvailability'+it.id))!=null
+					temp[idx]=new ImageRequestOptions(it.id, params.RAM.getAt(idx).toInteger(),params.cores.getAt(idx).toInteger(),params.instances.getAt(idx).toInteger(), params.hostname.getAt(idx));
 			}
+			}
+			println highAvail
+//			try{
+			deploymentService.deploy(cluster, user, params.time.toLong()*60*60*1000, temp, highAvail)
+//			}
+//			catch(Exception e){
+//				if(e.getMessage()==null)
+//				flash.message= e.getCause()
+//				else
+//				flash.message= e.getMessage()
+//				redirect( uri: "/error",absolute: true )
+//				return
+//			}
+			redirect(controller:"deployment")
+			
+			
 		}
 		else{
 			flash.message="Cluster already deployed"
@@ -134,9 +140,12 @@ class DeploymentController {
 		try{
 		deploymentService.addInstances(depImage, user,instance, params.time.toLong()*60*60*1000)
 		}
-		catch(Exception e){
-			flash.message=e.getMessage()
-			redirect( uri: "/error",absolute: true )
+		catch (Exception e){
+			if(e.getMessage()==null)
+			flash.message= e.getCause()
+			else
+			flash.message= e.getMessage()
+			redirect(uri:"/error", absolute:true)
 			return
 		}
 		redirect(action: "index")

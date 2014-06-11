@@ -19,7 +19,7 @@ import unacloudEnums.VirtualMachineExecutionStateEnum;
 
 class PhysicalMachineAllocatorService {
 	javax.sql.DataSource dataSource
-	def allocatePhysicalMachines(DeployedCluster cluster, ArrayList<VirtualMachineExecution> vms,List<PhysicalMachine> pms,boolean addInstancesDeployment){
+	def allocatePhysicalMachines(DeployedImage image, ArrayList<VirtualMachineExecution> vms,List<PhysicalMachine> pms,boolean addInstancesDeployment){
 		//pms=StateManager.filterPhysicalMachines(pms);
 		Map<Long,PhysicalMachineAllocationDescription> pmDescriptions = getPhysicalMachineUsage()
 		println vms

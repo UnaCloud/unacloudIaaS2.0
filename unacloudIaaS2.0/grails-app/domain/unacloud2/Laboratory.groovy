@@ -3,7 +3,7 @@ package unacloud2
 class Laboratory {
 
     String name
-	boolean highAvaliability
+	boolean highAvailability
 	IPPool virtualMachinesIPs
 	NetworkQualityEnum networkQuality
 	

@@ -5,10 +5,12 @@ class LaboratoryService {
     def addMachine(ip, name, cores, ram, disk, hyperPath, osId, mac, labId) {
 		def machineIP=new IP(ip:ip, used:true)
 		machineIP.save(failOnError:true)
-		def physicalMachine = new PhysicalMachine( lastReport: new Date(),name:name, state: PhysicalMachineStateEnum.OFF, cores:cores,
-			ram: ram, hardDisk: disk, highAvaliability:false, hypervisorPath:hyperPath,
-			ip:machineIP, operatingSystem: OperatingSystem.get(osId), mac:mac)
 		def lab= Laboratory.get(labId)
+		println "creating machine in laboratory"+ lab.name+"-"+lab.highAvailability
+		def physicalMachine = new PhysicalMachine( lastReport: new Date(),name:name, state: PhysicalMachineStateEnum.OFF, cores:cores,
+			ram: ram, hardDisk: disk, highAvailability:(lab.highAvailability), hypervisorPath:hyperPath,
+			ip:machineIP, operatingSystem: OperatingSystem.get(osId), mac:mac)
+		
 		physicalMachine.laboratory=lab
 		physicalMachine.save(failOnError:true)
 		lab.physicalMachines.add(physicalMachine)
@@ -32,6 +34,6 @@ class LaboratoryService {
 	
 	def createLab(name, highAvailability,netConfig, virtual, netGateway, netMask){
 		def ipPool=new IPPool(virtual:virtual,gateway: netGateway, mask: netMask).save()
-		new Laboratory (virtualMachinesIPs: ipPool, name: name, highAvaliability: highAvailability,networkQuality: netConfig ).save();
+		new Laboratory (virtualMachinesIPs: ipPool, name: name, highAvailability: highAvailability,networkQuality: netConfig ).save();
 	}
 }
