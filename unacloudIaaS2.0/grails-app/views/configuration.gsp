@@ -18,6 +18,10 @@
 			<a href="configuration/agentVersion/"><g:img file="agent.png"/></a>
 			<p>Update Agent Version</p>
 		</div>
+		<div class="span4">
+			<a href="UnaCloudServices/updater/"><g:img file="download.png"/></a>
+			<p>Download Agent Files</p>
+		</div>
     </div>
 </div>
     

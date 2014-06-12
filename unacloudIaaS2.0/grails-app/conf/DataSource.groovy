@@ -24,10 +24,10 @@ hibernate {
 environments {
     development {
         dataSource {
-			username = "iaasdev"
-			password = "2fsGR5T1vJV3mJ9QXaw4"
+			username = "root"
+			password = "root"
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:mysql://157.253.202.170:100/iaas2dev?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
+            url = "jdbc:mysql://127.0.0.1:3306/unacloud2?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
         }
     }
     test {

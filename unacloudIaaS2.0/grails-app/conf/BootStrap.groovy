@@ -8,6 +8,7 @@ import com.losandes.utils.VariableManager;
 import fileManager.DataServerSocket;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.junit.internal.runners.statements.FailOnTimeout;
 
 import unacloud2.Hypervisor;
 import unacloud2.IP
@@ -33,7 +34,7 @@ class BootStrap {
 			String randomString = RandomStringUtils.random(length, charset.toCharArray())
 			new User(name:'Guest',username:'admin',password:'admin', userType: 'Administrator',apiKey: randomString).save()
 		}
-		if(OperatingSystem.count() == 1){
+		if(OperatingSystem.count() == 0){
 			new OperatingSystem(name:'Windows 7',configurer:'Windows').save();
 			new OperatingSystem(name:'Windows 8',configurer:'Windows').save()
 
@@ -46,6 +47,8 @@ class BootStrap {
 			new OperatingSystem(name:'Scientific Linux',configurer:'Linux').save();
 		}
 //		if(Laboratory.count() ==0){
+//			println OperatingSystem.count()+" os encontrados"
+//			def win7= OperatingSystem.findByName('Windows 7')
 //			
 //			wayra1:{
 //				IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.202.1', mask: '255.255.255.0').save()

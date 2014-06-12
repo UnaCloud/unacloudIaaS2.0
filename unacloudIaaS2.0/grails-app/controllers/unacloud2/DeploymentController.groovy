@@ -63,12 +63,8 @@ class DeploymentController {
 
 	def deploy(){
 		Cluster cluster= Cluster.get(params.get('id'))
-		println "10 "+params.get('id')
-		println "10 "+params.get('highAvailability10')
-		println "11 "+params.get('highAvailability11')
-		User user= User.get(session.user.id)
-		if(!cluster.isDeployed()){
-			int totalInstances
+		int totalInstances
+			def user= User.get(session.user.id)
 			def imageNumber= cluster.images.size()
 			if(imageNumber==1){
 				totalInstances= params.instances.toInteger()
@@ -93,25 +89,18 @@ class DeploymentController {
 			}
 			}
 			println highAvail
-//			try{
+			try{
 			deploymentService.deploy(cluster, user, params.time.toLong()*60*60*1000, temp, highAvail)
-//			}
-//			catch(Exception e){
-//				if(e.getMessage()==null)
-//				flash.message= e.getCause()
-//				else
-//				flash.message= e.getMessage()
-//				redirect( uri: "/error",absolute: true )
-//				return
-//			}
-			redirect(controller:"deployment")
-			
-			
-		}
-		else{
-			flash.message="Cluster already deployed"
-			redirect( controller: "cluster",action: "deployOptions", id:cluster.id )
-		}
+			}
+			catch(Exception e){
+				if(e.getMessage()==null)
+				flash.message= e.getCause()
+				else
+				flash.message= e.getMessage()
+				redirect( uri: "/error",absolute: true )
+				return
+			}
+			redirect(controller:"deployment")	
 	}
 
 	def history(){

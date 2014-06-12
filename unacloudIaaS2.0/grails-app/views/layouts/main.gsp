@@ -75,6 +75,7 @@
               <li><a class="nav-header" href="${createLink(uri: '/configuration', absolute: true)}">Configuration</a></li>
               <li><a href="${createLink(uri: '/configuration/serverVariables', absolute: true)}">Server Variables</a></li>
           	  <li><a href="${createLink(uri: '/configuration/agentVersion', absolute: true)}">Update Agent Version</a></li>
+              <li><a href="${createLink(uri: '/UnaCloudServices/updater', absolute: true)}">Download Agent Files</a></li>
               </g:if>
             </ul>
           </div><!--/.well -->

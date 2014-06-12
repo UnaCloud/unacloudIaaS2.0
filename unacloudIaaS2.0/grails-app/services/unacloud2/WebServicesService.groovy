@@ -23,8 +23,7 @@ class WebServicesService {
 			options[i]= new ImageRequestOptions(image.get("imageId"), image.getInt("ram"), image.getInt("cores"), image.getInt("instances"), image.getString("hostname"))
 		}
 		def userCluster= Cluster.get(cluster.get("clusterId"))
-		if (userCluster.isDeployed()) return new WebServiceException("Cluster already deployed")
-		else return deploymentService.deploy(userCluster, user, (Long)cluster.getInt("execTime")*60000,options)
+		return deploymentService.deploy(userCluster, user, (Long)cluster.getInt("execTime")*60000,options)
 	}
 	
 	def stopDeployment(String login,String apiKey,String depId){
