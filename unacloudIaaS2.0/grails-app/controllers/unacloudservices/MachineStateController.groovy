@@ -32,7 +32,7 @@ class MachineStateController {
 		String hostname=params['hostname']
 		String hostuser=params['hostuser']
 		try{
-			physicalMachineStateManagerService.reportPhysicalMachine(hostname,hostuser)
+			physicalMachineStateManagerService.reportPhysicalMachine(hostname,hostuser,request.getRemoteAddr())
 		}catch(Exception ex){
 			println "  Error on reportPhysicalMachineLogin "+ hostname+" "+hostuser+" "+ex.getMessage();
 		}
