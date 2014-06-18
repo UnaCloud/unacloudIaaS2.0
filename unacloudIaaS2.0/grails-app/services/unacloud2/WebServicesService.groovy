@@ -18,12 +18,14 @@ class WebServicesService {
 		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
 		JSONArray images= cluster.getJSONArray("images")
 		ImageRequestOptions[] options= new ImageRequestOptions[images.length()]
+		boolean[] highAvailability = new boolean[images.length()]
 		for(int i=0; i<images.length();i++){
 			JSONObject image=images.get(i)
 			options[i]= new ImageRequestOptions(image.get("imageId"), image.getInt("ram"), image.getInt("cores"), image.getInt("instances"), image.getString("hostname"))
+			highAvailability[i]=false
 		}
 		def userCluster= Cluster.get(cluster.get("clusterId"))
-		return deploymentService.deploy(userCluster, user, (Long)cluster.getInt("execTime")*60000,options)
+		return deploymentService.deploy(userCluster, user, (Long)cluster.getInt("execTime")*60000,options,highAvailability)
 	}
 	
 	def stopDeployment(String login,String apiKey,String depId){
