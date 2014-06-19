@@ -15,7 +15,7 @@ class MachineStateController {
 	PhysicalMachineStateManagerService physicalMachineStateManagerService;
 	def physicalMachineStart(){
 		String hostname=params['hostname']
-		physicalMachineStateManagerService.reportPhysicalMachine(hostname,null)
+		physicalMachineStateManagerService.reportPhysicalMachine(hostname,null,request.getRemoteAddr())
 		render "succeeded"
 	}
 	def physicalMachineStop(){
@@ -25,7 +25,11 @@ class MachineStateController {
 	}
 	def physicalMachineLogoff(){
 		String hostname=params['hostname']
-		physicalMachineStateManagerService.reportPhysicalMachine(hostname,null)
+		try{
+			physicalMachineStateManagerService.reportPhysicalMachine(hostname,null,request.getRemoteAddr())
+		}catch(Exception ex){
+			//println "  Error on reportPhysicalMachineLogin "+ hostname+" "+hostuser+" "+ex.getMessage();
+		}
 		render "succeeded"
 	}
 	def reportPhysicalMachineLogin(){

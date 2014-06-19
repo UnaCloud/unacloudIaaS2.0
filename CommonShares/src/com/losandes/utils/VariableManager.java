@@ -63,7 +63,7 @@ public class VariableManager {
      * @return The value of the variable or null if there is no value for the given key
      */
     public synchronized int getIntValue(String key) {
-    	Object c=map.get("String." + key);
+    	Object c=map.get("Integer." + key);
     	if(c==null)return -1;
         return (Integer) c;
     }
@@ -110,9 +110,13 @@ public class VariableManager {
         }
     }
     private static void processLine(Map<String,Object> map,String line){
-    	String[] j = line.split("=");
-        if (j[0].startsWith("String."))map.put(j[0], j[1]);
-        else if (j[0].startsWith("Integer."))map.put(j[0], Integer.parseInt(j[1]));
-        else if (j[0].startsWith("Boolean."))map.put(j[0], Boolean.parseBoolean(j[1]));
+    	try{
+    		String[] j = line.split("=");
+            if (j[0].startsWith("String."))map.put(j[0], j[1]);
+            else if (j[0].startsWith("Integer."))map.put(j[0], Integer.parseInt(j[1]));
+            else if (j[0].startsWith("Boolean."))map.put(j[0], Boolean.parseBoolean(j[1]));
+    	}catch(Exception ex){
+    		
+    	}
     }
 }

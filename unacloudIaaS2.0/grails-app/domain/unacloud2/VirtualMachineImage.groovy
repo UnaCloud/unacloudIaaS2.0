@@ -16,6 +16,9 @@ class VirtualMachineImage implements Comparable<VirtualMachineImage>{
 	static constraints = {
     	mainFile (nullable: true)
 	}
+	static mapping = {
+		operatingSystem(lazy:false)
+	}
 	
 	def isDeployed(){
 		boolean isDeployed=false

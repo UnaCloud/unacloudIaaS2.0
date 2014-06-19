@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 
+import Exceptions.VirtualMachineExecutionException;
 import communication.ServerMessageSender;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import utils.SystemUtils;
@@ -63,6 +64,7 @@ public class ImageCopy implements Serializable{
     	        PersistentExecutionManager.startUpMachine(machineExecution,!configurator.doPostConfigure());
 			}else ServerMessageSender.reportVirtualMachineState(machineExecution.getId(), VirtualMachineExecutionStateEnum.FAILED,"Invalid virtual machine configurator.");
 		} catch (Exception e) {
+			e.printStackTrace(System.out);
 			ServerMessageSender.reportVirtualMachineState(machineExecution.getId(), VirtualMachineExecutionStateEnum.FAILED,"Configurator class error: "+e.getMessage());
 		}
 	}
@@ -71,8 +73,9 @@ public class ImageCopy implements Serializable{
 		hypervisor.cloneVirtualMachine(this,dest);
 		return dest;
 	}
-	public synchronized void init(){
+	public synchronized void init()throws VirtualMachineExecutionException{
 		Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
+		if(hypervisor==null)throw new VirtualMachineExecutionException("Hypervisor doesn't exists on machine. Hypervisor was "+image.getHypervisorId());
 		hypervisor.registerVirtualMachine(this);
 		try {
 			hypervisor.changeVirtualMachineMac(this);
