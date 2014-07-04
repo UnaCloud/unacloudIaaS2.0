@@ -43,7 +43,7 @@ environments {
 			username = "iaasprod"
 			password = "6659a954f47c63b4bbd296c0efe0b73a"
             dbCreate = "update"
-            url = "jdbc:mysql://localhost:3306/iaas2prod?useUnicode=yes&characterEncoding=UTF-8"
+            url = "jdbc:mysql://157.253.236.160:3306/iaas2prod?useUnicode=yes&characterEncoding=UTF-8"
             pooled = true
             properties {
                maxActive = -1
