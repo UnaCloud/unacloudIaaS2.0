@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -112,7 +113,7 @@ public class VariableManager {
     private static void processLine(Map<String,Object> map,String line){
     	try{
     		String[] j = line.split("=");
-            if (j[0].startsWith("String."))map.put(j[0], j[1]);
+    		if (j[0].startsWith("String."))map.put(j[0], j[1]);
             else if (j[0].startsWith("Integer."))map.put(j[0], Integer.parseInt(j[1]));
             else if (j[0].startsWith("Boolean."))map.put(j[0], Boolean.parseBoolean(j[1]));
     	}catch(Exception ex){
