@@ -14,6 +14,7 @@ public class DataServerSocket extends Thread{
 	}
 	public static void startServices(int port){
 		if(instance==null){
+			System.out.println("DataServerSocket on port "+port);
 			instance=new DataServerSocket(port);
 			instance.start();
 		}

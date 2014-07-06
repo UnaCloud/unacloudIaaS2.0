@@ -54,7 +54,7 @@ public class ClouderServerAttentionThread implements Runnable {
      * request
      */
     public void run() {
-        try(ObjectInputStream ois=new ObjectInputStream(communication.getInputStream());ObjectOutputStream oos=new ObjectOutputStream(communication.getOutputStream())){
+        try(Socket s=communication;ObjectInputStream ois=new ObjectInputStream(communication.getInputStream());ObjectOutputStream oos=new ObjectOutputStream(communication.getOutputStream())){
         	UnaCloudAbstractMessage clouderServerRequest=(UnaCloudAbstractMessage)ois.readObject();
             System.out.println(clouderServerRequest);
             switch (clouderServerRequest.getMainOp()) {
@@ -74,10 +74,6 @@ public class ClouderServerAttentionThread implements Runnable {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        try {
-			communication.close();
-		} catch (IOException e) {
-		}
      }
 
     /**

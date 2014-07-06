@@ -9,6 +9,7 @@ import com.losandes.utils.VariableManager;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 import tasks.ExecutorService;
 
@@ -43,24 +44,19 @@ public class ClouderClientAttention{
 			serverSocket = new ServerSocket(localPort);
 			System.out.println("Escuchando en "+localPort);
 	        while (true) {
-	        	Socket s;
-	            try {
-	            	s=serverSocket.accept();
-	            	System.out.println("Atendiendo");
-	            } catch (IOException ex) {
-	            	ex.printStackTrace();
+	        	try{
+	        		Socket s=serverSocket.accept();
+	        		ExecutorService.executeRequestTask(new ClouderServerAttentionThread(s));
+	            }catch(SocketException ex){
 	            	break;
 	            }
-	            try {
-	            	ExecutorService.executeRequestTask(new ClouderServerAttentionThread(s));
-	            } catch (Exception ex) {
+	        	catch (IOException ex) {
 	            	ex.printStackTrace();
-	            	break;
 	            }
-                
 	        }
         } catch (IOException ex) {
         	ex.printStackTrace();
+        	System.exit(0);
         }
     }
 

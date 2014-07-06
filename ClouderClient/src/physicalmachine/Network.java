@@ -83,7 +83,11 @@ public class Network extends SigarCommandBase {
      * @return
      */
     public static String getHostname() {
-        return VariableManager.local.getsetStringValue("LOCAL_HOSTNAME",LocalProcessExecutor.executeCommandOutput("hostname").trim());
+    	String hostname=VariableManager.local.getStringValue("LOCAL_HOSTNAME");
+    	if(hostname!=null)return hostname;
+    	hostname=LocalProcessExecutor.executeCommandOutput("hostname").trim();
+    	VariableManager.local.setStringValue("LOCAL_HOSTNAME",hostname);
+        return hostname;
     }
 
     /**

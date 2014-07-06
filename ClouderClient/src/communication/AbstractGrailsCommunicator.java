@@ -17,7 +17,6 @@ public class AbstractGrailsCommunicator{
 		String urlParams=null;
 		for(int e=0,i=params.length;e<i;e+=2)urlParams=(urlParams==null?"?":(urlParams+"&"))+params[e]+"="+params[e+1];
 		try {
-			System.out.println((serverUrl+"/"+serviceName+urlParams).replace(" ","%20"));
 			URL url=new URL((serverUrl+"/"+serviceName+urlParams).replace(" ","%20"));
 			HttpURLConnection http = (HttpURLConnection)url.openConnection();
 			http.connect();

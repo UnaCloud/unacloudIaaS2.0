@@ -5,7 +5,9 @@ import static com.losandes.utils.Constants.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.net.ServerSocket;
 
+import physicalmachine.OperatingSystem;
 import hypervisorManager.HypervisorFactory;
 import monitoring.PhysicalMachineMonitor;
 import monitoring.PhysicalMachineState;
@@ -28,8 +30,7 @@ public class Main {
      * @param args[0] = {0 = TURN_OFF_DB, 1 = TURN_ON_DB , 2 = LOGIN_DB, 3 = LOGOUT_DB}
      */
     public static void main(String[] args){
-    	args=new String[]{"1"};
-        HypervisorFactory.registerHypervisors();
+    	HypervisorFactory.registerHypervisors();
         int mainCase = 1;
         if (args != null && args.length>0 && !args[0].matches("[0-9]+"))mainCase = Integer.parseInt(args[0]);
         
@@ -39,13 +40,14 @@ public class Main {
         }
         if(mainCase==LOGIN_DB) PhysicalMachineState.reportPhyisicalMachineUserLogin();
         else if(mainCase==TURN_ON_DB){
-        	/*try {
+        	if(OperatingSystem.getUserName()!=null)System.exit(0);
+        	try {
             	PrintStream ps=new PrintStream(new FileOutputStream("log.txt"),true);
     			System.setOut(ps);
     			System.setErr(ps);
     		} catch (FileNotFoundException e) {
     			e.printStackTrace();
-    		}*/
+    		}
         	PhysicalMachineState.reportPhyisicalMachineStart();
         	PhysicalMachineMonitor.restart();
             //DataServerSocket.init();

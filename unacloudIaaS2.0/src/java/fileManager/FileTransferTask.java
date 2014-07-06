@@ -18,6 +18,7 @@ import unacloud2.VirtualMachineImageService;
 public class FileTransferTask implements Runnable{
 	Socket s;
 	public FileTransferTask(Socket s) {
+		System.out.println("Atending "+s.getRemoteSocketAddress());
 		this.s = s;
 	}
 	@Override

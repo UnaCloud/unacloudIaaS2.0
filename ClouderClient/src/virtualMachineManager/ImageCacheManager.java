@@ -84,7 +84,9 @@ public class ImageCacheManager {
 		root.mkdirs();
 		final int puerto = VariableManager.global.getIntValue("DATA_SOCKET");
 		final String ip=VariableManager.global.getStringValue("CLOUDER_SERVER_IP");
+		System.out.println("Conectando a "+ip+":"+puerto);
 		try(Socket s=new Socket(ip,puerto);PrintWriter pw=new PrintWriter(s.getOutputStream())){
+			System.out.println("Conexion exitosa");
 			pw.println(image.getId());
 			pw.flush();
 			try(ZipInputStream zis=new ZipInputStream(s.getInputStream())){
