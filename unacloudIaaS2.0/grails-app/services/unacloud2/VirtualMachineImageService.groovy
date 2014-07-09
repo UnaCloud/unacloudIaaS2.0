@@ -7,6 +7,7 @@ import org.apache.commons.io.FileUtils
 import org.junit.internal.runners.statements.FailOnTimeout;
 
 class VirtualMachineImageService {
+	def separator = FileSystem.getSeparator(); 
 	
 	public VirtualMachineImage getImage(long id){
 		return VirtualMachineImage.get(id)
@@ -23,15 +24,15 @@ class VirtualMachineImageService {
 		def repository= Repository.findByName("Main Repository")
 		files.each {
 			def e=it.getOriginalFilename()
-			java.io.File newFile= new java.io.File(repository.root+i.name+"_"+user.username+"\\"+it.getOriginalFilename()+"\\")
+			java.io.File newFile= new java.io.File(repository.root+i.name+"_"+user.username+separator+it.getOriginalFilename()+separator)
 			newFile.mkdirs()
 			it.transferTo(newFile)
 			if(i.isPublic){
-			def templateFile= new java.io.File(repository.root+"imageTemplates\\"+i.name+"\\"+it.getOriginalFilename())
+			def templateFile= new java.io.File(repository.root+"imageTemplates"+separator+i.name+separator+it.getOriginalFilename())
 			FileUtils.copyFile(newFile, templateFile)
 			}
 			if (e.endsWith(".vmx")||e.endsWith(".vbox"))
-			i.putAt("mainFile", repository.root+i.name+"_"+user.username+"\\"+it.getOriginalFilename())
+			i.putAt("mainFile", repository.root+i.name+"_"+user.username+separator+it.getOriginalFilename())
 			i.putAt("imageVersion", i.imageVersion++)
 		}
 		
@@ -47,15 +48,15 @@ class VirtualMachineImageService {
 		i.save(failOnError: true)
 		files.each {
 			def e=it.getOriginalFilename()
-			java.io.File newFile= new java.io.File(repository.root+i.name+"_"+user.username+"\\"+it.getOriginalFilename()+"\\")
+			java.io.File newFile= new java.io.File(repository.root+i.name+"_"+user.username+separator+it.getOriginalFilename()+separator)
 			newFile.mkdirs()
 			it.transferTo(newFile)
 			if(i.isPublic){
-			def templateFile= new java.io.File(repository.root+"imageTemplates\\"+i.name+"\\"+it.getOriginalFilename())
+			def templateFile= new java.io.File(repository.root+"imageTemplates"+separator+i.name+separator+it.getOriginalFilename())
 			FileUtils.copyFile(newFile, templateFile)
 			}
 			if (e.endsWith(".vmx")||e.endsWith(".vbox"))
-			i.putAt("mainFile", repository.root+i.name+"_"+user.username+"\\"+it.getOriginalFilename())
+			i.putAt("mainFile", repository.root+i.name+"_"+user.username+separator+it.getOriginalFilename())
 		
 		}
 		
@@ -86,17 +87,17 @@ class VirtualMachineImageService {
 	def newPublic(name, VirtualMachineImage publicImage, User user){
 		def i= new VirtualMachineImage( fixedDiskSize: 0, imageVersion: 0,name: name, isPublic: false, accessProtocol: publicImage.accessProtocol ,operatingSystem: publicImage.operatingSystem, user: publicImage.user, password: publicImage.password)
 		i.save(onFailError:true)
-		java.io.File folder= new java.io.File(publicImage.mainFile.substring(0, publicImage.mainFile.lastIndexOf("\\")))
+		java.io.File folder= new java.io.File(publicImage.mainFile.substring(0, publicImage.mainFile.lastIndexOf(separator)))
 		println folder.toString()
 		//TODO define repository assignment schema
 		def repository= Repository.findByName("Main Repository")
 		folder.listFiles().each
 		{
-		def file= new java.io.File(repository.root+"imageTemplates\\"+publicImage.name+"\\"+it.getName())
-		def newFile= new java.io.File(repository.root+i.name+"_"+user.username+"\\"+it.getName())
+		def file= new java.io.File(repository.root+"imageTemplates"+separator+publicImage.name+separator+it.getName())
+		def newFile= new java.io.File(repository.root+i.name+"_"+user.username+separator+it.getName())
 		FileUtils.copyFile(file, newFile)
 		if (it.getName().endsWith(".vmx"))
-		i.putAt("mainFile", repository.root+i.name+"_"+user.username+"\\"+newFile.getName())
+		i.putAt("mainFile", repository.root+i.name+"_"+user.username+separator+newFile.getName())
 		}
 		if(user.images==null)
 			user.images
