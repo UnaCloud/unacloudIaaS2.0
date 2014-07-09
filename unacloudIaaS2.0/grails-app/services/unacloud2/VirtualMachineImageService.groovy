@@ -7,7 +7,7 @@ import org.apache.commons.io.FileUtils
 import org.junit.internal.runners.statements.FailOnTimeout;
 
 class VirtualMachineImageService {
-	def separator = FileSystem.getSeparator(); 
+	def separator =  java.io.File.separatorChar
 	
 	public VirtualMachineImage getImage(long id){
 		return VirtualMachineImage.get(id)
