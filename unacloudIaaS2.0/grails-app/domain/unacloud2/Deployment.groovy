@@ -3,15 +3,41 @@ package unacloud2
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 
 class Deployment {
+	//-----------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------
 	
+	/**
+	 * Deployed cluster representation 
+	 */
 	DeployedCluster cluster
+	
+	/**
+	 * start time of the deployment
+	 */
 	Date startTime
+	
+	/**
+	 * stop time of the deployment
+	 */
 	Date stopTime
+	
+	/**
+	 * present status of the deployment (ACTIVE of FINISHED)
+	 */
 	DeploymentStateEnum status
 	
 	static constraints = {	
     }
 	
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Counts all deployment active virtual machines
+	 * @return number of active virtual machines in this deployment
+	 */
 	def getTotalActiveVMs(){
 		def totalVMs =0
 		cluster.images.each {
@@ -23,6 +49,9 @@ class Deployment {
 		return totalVMs
 	}
 	
+	/**
+	 * Refresh the deployment status verifying all nodes
+	 */
 	def updateState(){
 		for(image in cluster.images) {
 			for(vm in image.virtualMachines){
@@ -39,6 +68,10 @@ class Deployment {
 		}
 	}
 	
+	/**
+	 * Verifies and refresh the deployment status
+	 * @return if the deployment is active or not after refreshing
+	 */
 	def isActive(){
 		if (status==DeploymentStateEnum.ACTIVE){
 		updateState()
