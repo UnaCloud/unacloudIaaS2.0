@@ -8,8 +8,29 @@ import webutils.ImageRequestOptions;
 
 class DeploymentController {
 	
+	//-----------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Representation of user restriction services
+	 */
+	
 	UserRestrictionProcessorService userRestrictionProcessorService
+	
+	/**
+	 * Representation of deployment services
+	 */
+	
 	DeploymentService deploymentService
+	
+	//-----------------------------------------------------------------
+	// Actions
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Makes session verifications before executing any method
+	 */
 	
 	def beforeInterceptor = {
 		if(!session.user){
@@ -21,7 +42,12 @@ class DeploymentController {
 		session.user.refresh()
 		deploymentService.stopDeployments(User.get(session.user.id))
 	}
-
+	
+	/**
+	 * Deployment index action. Controls view all function 
+	 * @return deployments that must be shown according to view all checkbox
+	 */
+	
 	def index() {
 		if(params.viewAll==null || params.viewAll=="false" ){
 			[deployments: session.user.getActiveDeployments(), checkViewAll: false]
@@ -37,10 +63,19 @@ class DeploymentController {
 		}
 	}
 	
+	/**
+	 * add instances action. it passes the image id
+	 * @return id of the image in order to add instances
+	 */
 	def addInstancesOptions(){
 		[id:params.id]
 	}
-
+	
+	/**
+	 * Deploys a single image for edit purposes
+	 * @return
+	 */
+	
 	def deployImage(){
 
 		def image= VirtualMachineImage.get(params.id)
@@ -60,7 +95,13 @@ class DeploymentController {
 			redirect(controller:"virtualMachineImage",action:"index")
 		}
 	}
-
+	
+	/**
+	 * Deploy action. Checks image number and depending on it, forms the parameters in 
+	 * order to pass them to the service layer. It also catches exceptions and pass 
+	 * them to error view. If everything works it redirects to index view.
+	 */
+	
 	def deploy(){
 		Cluster cluster= Cluster.get(params.get('id'))
 		int totalInstances
@@ -102,12 +143,22 @@ class DeploymentController {
 			}
 			redirect(controller:"deployment")	
 	}
-
+	
+	/**
+	 * History action. Returns all data of every deployments
+	 * @return deployments list
+	 */
+	
 	def history(){
 
 		[deployments: session.user.deployments]
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
+	
 	def stop(){
 		def user= User.get(session.user.id)
 		params.each {
@@ -121,6 +172,11 @@ class DeploymentController {
 		deploymentService.stopDeployments(user)
 		redirect(action:"index")
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 
 	def addInstances(){
 		def depImage=DeployedImage.get(params.id)
