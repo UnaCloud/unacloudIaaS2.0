@@ -78,16 +78,15 @@ public class Network extends SigarCommandBase {
         networkGateway = info.getDefaultGateway();
     }
     
+    static String hostname=null;
     /**
      * Responsible for obtaining the hostname
      * @return
      */
     public static String getHostname() {
-    	String hostname=VariableManager.local.getStringValue("LOCAL_HOSTNAME");
     	if(hostname!=null)return hostname;
     	hostname=LocalProcessExecutor.executeCommandOutput("hostname").trim();
-    	VariableManager.local.setStringValue("LOCAL_HOSTNAME",hostname);
-        return hostname;
+    	return hostname;
     }
 
     /**
