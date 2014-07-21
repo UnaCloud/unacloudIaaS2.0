@@ -29,7 +29,7 @@ class DeploymentController {
 	//-----------------------------------------------------------------
 	
 	/**
-	 * Makes session verifications before executing any method
+	 * Makes session verifications before executing any other action
 	 */
 	
 	def beforeInterceptor = {
@@ -145,7 +145,7 @@ class DeploymentController {
 	}
 	
 	/**
-	 * History action. Returns all data of every deployments
+	 * History action. Returns all data of every deployment
 	 * @return deployments list
 	 */
 	
@@ -155,8 +155,8 @@ class DeploymentController {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Stop execution action. All nodes selected on the deployment interface will be
+	 * stopped. Redirects to index when the operation is finished.
 	 */
 	
 	def stop(){
@@ -174,8 +174,8 @@ class DeploymentController {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Adds and executes new nodes to the selected deployed image. Redirects to 
+	 * index when finished
 	 */
 
 	def addInstances(){

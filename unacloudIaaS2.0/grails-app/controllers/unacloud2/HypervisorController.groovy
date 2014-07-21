@@ -2,7 +2,24 @@ package unacloud2
 
 class HypervisorController {
 	
+	//-----------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Representation of hypervisor services
+	 */
+	
 	HypervisorService hypervisorService
+	
+	//-----------------------------------------------------------------
+	// Actions
+	//-----------------------------------------------------------------
+	
+	
+	/**
+	 * Makes session verifications before executing any other action
+	 */
 	
 	def beforeInterceptor = {
 		if(!session.user){
@@ -17,14 +34,26 @@ class HypervisorController {
 		}
 	}
 	
+	/**
+	 * Hypervisor index action
+	 * @return list of all hypervisors
+	 */
 	def index() {
 		[hypervisors: Hypervisor.list(params)];
 	}
+	
+	/**
+	 * Add hypervisor action. Redirects to index when finished
+	 */
 	
 	def add() {
 		hypervisorService.addHypervisor(params.name, params.hyperVersion)
 		redirect(action:"index")
 	}
+	
+	/**
+	 * Delete hypervisor action. Redirects to index when finished 
+	 */
 	
 	def delete(){
 		def hypervisor = Hypervisor.get(params.id)
@@ -37,6 +66,10 @@ class HypervisorController {
 		}
 	}
 	
+	/**
+	 * Edit hypervisor form action.
+	 * @return hypervisor selected by user
+	 */
 	def edit(){
 		def h= Hypervisor.get(params.id)
 		
@@ -48,6 +81,9 @@ class HypervisorController {
 		}
 	}
 	
+	/**
+	 * Saves changes of edited hypervisor. Redirects to index when finished
+	*/
 	def setValues(){
 		def hypervisor = Hypervisor.get(params.id)
 		hypervisorService.setValues(hypervisor, params.name)

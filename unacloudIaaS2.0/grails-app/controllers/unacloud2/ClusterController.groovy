@@ -19,7 +19,7 @@ class ClusterController {
 	//-----------------------------------------------------------------
 	
 	/**
-	 * Makes session verifications before executing any method
+	 * Makes session verifications before executing any other action
 	 */
 	
 	def beforeInterceptor = {
