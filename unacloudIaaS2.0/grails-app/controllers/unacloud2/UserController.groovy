@@ -1,9 +1,25 @@
 package unacloud2
 
 class UserController {
-
+	
+	//-----------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Representation of user services
+	 */
+	
 	UserService userService
-
+	
+	//-----------------------------------------------------------------
+	// Actions
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Makes session verifications before executing user administration actions
+	 */
+	
 	def beforeInterceptor = [action:{
 			if(!session.user){
 				flash.message="You must log in first"
@@ -24,11 +40,19 @@ class UserController {
 			'changePass',
 			'refreshAPIKey'
 		]]
-
+	
+	/**
+	 * User index action
+	 * @return List of all users
+	 */
 	def index() {
 		[users: User.list(params)];
 	}
-
+	
+	/**
+	 * Home action. Selects redirection depending on session status and privileges
+	 */
+	
 	def home(){
 		if(!session.user){
 			redirect(uri:"/login", absolute:true)
@@ -40,11 +64,21 @@ class UserController {
 			redirect(uri:"/adminHome", absolute:true)
 		}
 	}
-
+	
+	/**
+	 * Redirects to administration users home
+	 * @return
+	 */
+	
 	def adminHome(){
 		redirect(uri:"/mainpage", absolute:true)
 	}
-
+	
+	/**
+	 * Redirects to normal users home
+	 * @return
+	 */
+	
 	def userHome(){
 		if(session.user)
 			redirect(uri:"/functionalities", absolute:true)
@@ -54,12 +88,22 @@ class UserController {
 			return false
 		}
 	}
+	
+	/**
+	 * Saves a new user. Redirects so user index when finished.
+	 */
+	
 	def add() {
 		userService.addUser(params.username, params.name+" "+params.lastname, params.userType,
 				params.password )
 		redirect(controller:"user" ,action:"index")
 	}
-
+	
+	/**
+	 * My Account form action
+	 * @return session user for edition
+	 */
+	
 	def account(){
 
 		def u= User.get(session.user.id)
@@ -70,13 +114,21 @@ class UserController {
 			[user: u]
 		}
 	}
-
+	
+	/**
+	 * Sets or changes an user restriction. Redirects to user index when finished.
+	 */
+	
 	def setPolicy(){
 		User u= User.findByUsername(params.username)
 		userService.setPolicy(u, params.type,  params.value)
 		redirect(action:"index")
 	}
-
+	
+	/**
+	 * Edit restrictions form action. Controls part of the interface render.
+	 * @return User selected by user
+	 */
 	def editPerms(){
 		def u= User.findByUsername(params.username)
 		if (!u) {
@@ -101,6 +153,10 @@ class UserController {
 		}
 	}
 
+	/**
+	 * Changes user password. Redirects to my account page when finished.
+	 */
+	
 	def changePass(){
 		def u= User.get(session.user.id)
 		if (!u) {
@@ -123,7 +179,11 @@ class UserController {
 			}
 		}
 	}
-
+	
+	/**
+	 * Generates a new API key and saves it. Redirects to my account page when finished.
+	 * @return
+	 */
 	def refreshAPIKey(){
 		def u= User.get(session.user.id)
 		if (!u) {
@@ -134,7 +194,11 @@ class UserController {
 			redirect (action:"account")
 		}
 	}
-
+	
+	/**
+	 * Deletes the selected user. Redirects to user index when finished.
+	 */
+	
 	def delete(){
 		def user = User.findByUsername(params.username)
 		if (!user) {
@@ -145,7 +209,12 @@ class UserController {
 			redirect(controller:"user" ,action:"index")
 		}
 	}
-
+	
+	/**
+	 * User edition form action.  
+	 * @return selected user 
+	 */
+	
 	def edit(){
 		def u= User.findByUsername(params.username)
 
@@ -156,13 +225,22 @@ class UserController {
 			[user: u]
 		}
 	}
-
+	
+	/**
+	 * Saves user's information changes. Redirects to user index when finished. 
+	 */
+	
 	def setValues(){
 		def user = User.findByUsername(params.oldUsername)
 		userService.setValues(user,params.username, params.name+" "+params.lastname, params.userType, params.password)
 		redirect(action:"index")
 	}
-
+	
+	/**
+	 * Validates passwords and changes session user. Redirects to home page 
+	 * if credentials are correct, or to login page if they're not  
+	 */
+	
 	def login(){
 		def user = User.findWhere(username:params.username,
 		password:params.password)
@@ -177,7 +255,11 @@ class UserController {
 			redirect(uri: '/login', absolute: true)
 		}
 	}
-
+	
+	/**
+	 * Removes the current session user. Redirects to login page
+	 * @return
+	 */
 	def logout(){
 		session.invalidate()
 		redirect(uri: '/', absolute: true)
