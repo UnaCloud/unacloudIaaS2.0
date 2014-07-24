@@ -14,6 +14,17 @@ import unacloud2.UserRestriction;
 import unacloud2.VirtualMachineExecution;
 
 class UserRestrictionProcessorService {
+	
+	/**
+	 * Applies the list of user restrictions to the configured deployment. The
+	 * list of restrictions is taken form the UserRestrictionEnum  
+	 * @param user session user in order to apply restrictions
+	 * @param vms list of virtual machines and their properties
+	 * @param pms list of physical machines and their properties
+	 * @throws UserRestrictionException if the user is not allowed to 
+	 * make the configured deployment
+	 */
+	
 	def applyUserPermissions(User user,ArrayList<VirtualMachineExecution> vms,List<PhysicalMachine> pms) throws UserRestrictionException{
 		for (UserRestriction ur:user.restrictions){
 			UserRestrictionEnum value=UserRestrictionEnum.valueOf(ur.name);

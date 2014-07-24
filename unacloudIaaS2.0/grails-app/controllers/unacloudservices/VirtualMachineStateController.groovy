@@ -4,7 +4,25 @@ import unacloudEnums.VirtualMachineExecutionStateEnum;
 import back.services.BackPersistenceService;
 
 class VirtualMachineStateController {
+	
+	//-----------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Representation of back persistence service
+	 */
+	
 	BackPersistenceService backPersistenceService
+	
+	//-----------------------------------------------------------------
+	// Actions
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Makes a virtual machine state validation and renders a response
+	 */
+	
     def updateVirtualMachineState() {
 		String executionId=params['executionId']
 		def stateString=params['state']

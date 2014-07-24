@@ -12,17 +12,46 @@ import com.losandes.utils.VirtualMachineCPUStates;
 import back.services.PhysicalMachineStateManagerService;
 
 class MachineStateController {
+	
+	//-----------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Representation of physical machine state manager
+	 */
+	
 	PhysicalMachineStateManagerService physicalMachineStateManagerService;
+	
+	//-----------------------------------------------------------------
+	// Actions
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Receives agent reports and renders a response
+	 */
+	
 	def physicalMachineStart(){
 		String hostname=params['hostname']
 		physicalMachineStateManagerService.reportPhysicalMachine(hostname,null,request.getRemoteAddr())
 		render "succeeded"
 	}
+	
+	/**
+	 * Receives physical machine stop requests and renders a response
+	 */
+	
 	def physicalMachineStop(){
 		String hostname=params['hostname']
 		physicalMachineStateManagerService.turnOffPhysicalMachine(hostname)
 		render "succeeded"
 	}
+	
+	/**
+	 * Receives log out info from agents, making physical machine info changes 
+	 *  and rendering a response
+	 */
+	
 	def physicalMachineLogoff(){
 		String hostname=params['hostname']
 		try{
@@ -32,6 +61,12 @@ class MachineStateController {
 		}
 		render "succeeded"
 	}
+	
+	/**
+	 * Receives log in info from agents, making physical machine info changes 
+	 *  and rendering a response
+	 */
+	
 	def reportPhysicalMachineLogin(){
 		String hostname=params['hostname']
 		String hostuser=params['hostuser']
@@ -42,6 +77,11 @@ class MachineStateController {
 		}
 		render "succeeded"
 	}
+	
+	/**
+	 * Not implemented yet
+	 */
+	
 	def registerPhysicalMachine(){
 		String hostname=params['hostname']
 		String cores=params['cores']

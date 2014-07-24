@@ -18,9 +18,34 @@ import unacloud2.*
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 
 class PhysicalMachineAllocatorService {
+	
+	//-----------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Representation of datasource in order to make queries 
+	 */
+	
 	javax.sql.DataSource dataSource
-	def allocatePhysicalMachines(DeployedImage image, ArrayList<VirtualMachineExecution> vms,List<PhysicalMachine> pms,boolean addInstancesDeployment){
-		//pms=StateManager.filterPhysicalMachines(pms);
+	
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Allocates the virtual machines' list in the given physical machines' list 
+	 * @param vms list of virtual machines
+	 * @param pms list of physical machines
+	 * @param addInstancesDeployment indicates if the deployment is new or 
+	 * add instance type 
+	 */
+	
+	def allocatePhysicalMachines( ArrayList<VirtualMachineExecution> vms,List<PhysicalMachine> pms,boolean addInstancesDeployment){
+		
+		/*
+		 * Finds the allocation method set in server variables
+		 */
 		Map<Long,PhysicalMachineAllocationDescription> pmDescriptions = getPhysicalMachineUsage()
 		println vms
 		ServerVariable allocatorName=ServerVariable.findByName("VM_ALLOCATOR_NAME");
@@ -30,11 +55,21 @@ class PhysicalMachineAllocatorService {
 				AllocatorEnum allocEnum=AllocatorEnum.valueOf(allocatorName.getVariable());
 				if(allocEnum!=null)allocator=allocEnum;
 			}
-		}catch(Exception ex){
 		}
-
+		catch(Exception ex){
+		}
+		/*
+		 * Calls the correspondent allocation method 
+		 */
 		allocator.getAllocator().allocateVirtualMachines(vms,pms,pmDescriptions);
 	}
+	
+	
+	/**
+	 * Allocates a single virtual machine in a random physical machine
+	 * @param vme virtual machine to be allocated
+	 */
+	
 	def allocatePhysicalMachine(VirtualMachineExecution vme ){
 		List<PhysicalMachine> l=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
 		Collections.sort(l,new Comparator<PhysicalMachine>(){
@@ -44,6 +79,13 @@ class PhysicalMachineAllocatorService {
 				});
 		vme.executionNode = l.first();
 	}
+	
+	/**
+	 * Calculates the usage of the infrastructure
+	 * @return pmDescriptions map with information of every physical machine 
+	 * remaining capacity
+	 */
+	
 	def getPhysicalMachineUsage(){
 		def sql = new Sql(dataSource)
 		Map<Long,PhysicalMachineAllocationDescription> pmDescriptions=new TreeMap<>();

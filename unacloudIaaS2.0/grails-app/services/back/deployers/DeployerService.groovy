@@ -12,30 +12,54 @@ import unacloud2.*;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 
 class DeployerService {
-
-	TransferService transferService
-
+	
+	//-----------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------
+	
+	
+	/**
+	 * Representation of server variable manager service
+	 */
+	
 	VariableManagerService variableManagerService
-
+	
 	static transactional = false
-
+	
+	/**
+	 * Deploys a complete deployment
+	 * @param deployment 
+	 */
+	
 	def	deploy(Deployment deployment){
 
-		println "llamando"
-		//transferService.transferVM(deployment.cluster)
-		println "llamé"
 		deployVMs(deployment.cluster);
 
 	}
 
+	/**
+	 * Deploys only new instances. This method is called with the add instance
+	 * function 
+	 * @param image Image with the new instances 
+	 */
+	
 	def	deployNewInstances(DeployedImage image){
-
+		
 		VirtualMachineStartMessage vmsm=new VirtualMachineStartMessage();
 		println "Deploying Image ----->" +image.image.name+" "+image.virtualMachines.size()
-
+		/*
+		 * Iterates all VMs in the image selecting only those which 
+		 * are not deployed. This is verified thanks to the VM message
+		 */
 		image.virtualMachines.eachWithIndex() { vm, i ->
+			
 			println vm.name+" "+vm.message
 			if(vm.message.equals("Adding instance")&&vm.status== VirtualMachineExecutionStateEnum.DEPLOYING){
+				
+				/*
+				 * creates a message in order to start the machine
+				 */
+				
 				vm.setMessage("Initializing")
 				vm.save()
 				println vm.name+" "+vm.message
@@ -52,6 +76,10 @@ class DeployerService {
 						vmsm.setVirtualMachineImageId(image.image.id)
 						String pmIp=vm.executionNode.ip.ip;
 						try{
+						/*
+						 * Sends the message to the physical machine agent
+						 * where the virtual machine was allocated
+						 */
 							println "Abriendo socket a "+pmIp+" "+variableManagerService.getIntValue("CLOUDER_CLIENT_PORT");
 							Socket s=new Socket(pmIp,variableManagerService.getIntValue("CLOUDER_CLIENT_PORT"));
 							s.setSoTimeout(15000);
@@ -73,14 +101,27 @@ class DeployerService {
 			}
 		}
 	}
-
+	
+	/**
+	 * Deploys all VMs in the cluster. 
+	 * @param cluster Deployed cluster with the virtual machines
+	 * @return
+	 */
 	def deployVMs(DeployedCluster cluster){
+		/*
+		 * Iterates over all virtual machines
+		 */
 		for(image in cluster.images) {
 			VirtualMachineStartMessage vmsm=new VirtualMachineStartMessage();
 			println "Deploying Image ----->" +image.image.name+" "+image.virtualMachines.size()
 
 			image.virtualMachines.eachWithIndex() { vm, i ->
 				try{
+					
+					/*
+					 * creates a message in order to start the machine
+					 */
+					
 					vmsm.setExecutionTime(vm.runningTimeInHours())
 					vmsm.setHostname(vm.name)
 					vmsm.setVirtualMachineIP(vm.ip.ip)
@@ -93,6 +134,11 @@ class DeployerService {
 					String pmIp=vm.executionNode.ip.ip;
 
 					try{
+						/*
+						 * Sends the message to the physical machine agent
+						 * where the virtual machine was allocated
+						 */
+						
 						println "Abriendo socket a "+pmIp+" "+variableManagerService.getIntValue("CLOUDER_CLIENT_PORT");
 						Socket s=new Socket(pmIp,variableManagerService.getIntValue("CLOUDER_CLIENT_PORT"));
 						s.setSoTimeout(15000);
@@ -113,6 +159,13 @@ class DeployerService {
 			}
 		}
 	}
+	
+	/**
+	 * Stops a single virtual machine. Creates an stop message and sends it 
+	 * to the physical machine agent where the virtual machine was allocated
+	 * @param vm virtual machine to be stopped
+	 */
+	
 	def stopVirtualMachine(VirtualMachineExecution vm){
 		VirtualMachineStopMessage vmsm=new VirtualMachineStopMessage();
 		vmsm.setVirtualMachineExecutionId(vm.id)
