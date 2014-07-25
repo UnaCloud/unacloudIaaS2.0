@@ -21,12 +21,19 @@ import unacloudEnums.VirtualMachineExecutionStateEnum;
 import groovy.sql.Sql;
 
 import com.losandes.utils.VirtualMachineCPUStates;
-/**
- * Prueba la implementacion de la interfaz SecurityServiceTest proveida por la aplicación
- * @author German Sotelo
- */
+
 class BackPersistenceService {
 	
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Updates the virtual machine on persistence service
+	 * @param virtualMachineExecutionCode virtual machine id
+	 * @param state new VM state
+	 * @param message new VM message
+	 */
 	def updateVirtualMachineState(long virtualMachineExecutionCode, VirtualMachineExecutionStateEnum state, String message) {
 		def vm=VirtualMachineExecution.get(virtualMachineExecutionCode)
 		if(vm!=null){

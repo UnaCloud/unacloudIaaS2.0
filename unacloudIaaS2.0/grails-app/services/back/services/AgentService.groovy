@@ -15,21 +15,64 @@ import unacloud2.ServerVariable;
 import unacloud2.VirtualMachineImage;
 
 class AgentService {
+	
+	//-----------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Representation of server variable manager service
+	 */
 	VariableManagerService variableManagerService
+	
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Sends an update message to the given physical machine
+	 * @param pm Physical machine to be updated 
+	 */
     def updateMachine(PhysicalMachine pm){
 		sendMessage(pm,new UpdateAgentMessage());
 	}
+	
+	/**
+	 * Sends a stop message to the given physical machine
+	 * @param pm Physical machine which agent will be stopped
+	 */
+    
 	def stopMachine(PhysicalMachine pm){
 		sendMessage(pm,new StopAgentMessage());
 	}
+	
+	/**
+	 * Sends a clear image message to all physical machines
+	 * @param image Virtual machine image to be deleted from cache
+	 */
+	
 	def clearImageFromCache(VirtualMachineImage image){
 		for(pm in PhysicalMachine.all)
 		sendMessage(pm,new ClearImageFromCacheMessage(image.id));
 	}
+	
+	/**
+	 * Sends a clear cache message to the given physical machine. All images
+	 * in the machine cache will be deleted
+	 * @param pm Physical machine which cache will be deleted 
+	 */
+	
 	def clearCache(PhysicalMachine pm){
 		println "clearCache "+pm.ip
 		sendMessage(pm,new ClearVMCacheMessage());
 	}
+	
+	/**
+	 * Sends a generic message to the agent
+	 * @param pm Physical machine to which message will be sent
+	 * @param message
+	 */
+	
 	def sendMessage(PhysicalMachine pm,UnaCloudAbstractMessage message){
 		
 		String ipAddress=pm.ip.ip;
@@ -50,6 +93,13 @@ class AgentService {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Prepares the agent files and sends them in a zip.
+	 * @param outputStream file output stream for download
+	 * @param appDir directory where the zip will be stored
+	 */
+	
 	def copyAgentOnStream(OutputStream outputStream,File appDir){
 		ZipOutputStream zos=new ZipOutputStream(outputStream);
 		copyFile(zos,"ClientUpdater.jar",new File(appDir,"agentSources/ClientUpdater.jar"),true);
@@ -61,6 +111,13 @@ class AgentService {
 		zos.closeEntry();
 		zos.close();
 	}
+	
+	/**
+	 * Prepares the updater files and sends them in a zip.
+	 * @param outputStream file output stream for download
+	 * @param appDir directory where the zip will be stored
+	 */
+	
 	def copyUpdaterOnStream(OutputStream outputStream,File appDir){
 		ZipOutputStream zos=new ZipOutputStream(outputStream);
 		copyFile(zos,"ClientUpdater.jar",new File(appDir,"agentSources/ClientUpdater.jar"),true);
@@ -76,6 +133,15 @@ class AgentService {
 		zos.closeEntry();
 		zos.close();
 	}
+	
+	/**
+	 * Auxiliary method that copies a file in the zip.
+	 * @param zos zip output stream in order to copy
+	 * @param filePath zip file path
+	 * @param f file to be copied
+	 * @param tells if the file is in root directory
+	 */
+	
 	private static void copyFile(ZipOutputStream zos,String filePath,File f,boolean root)throws IOException{
 		if(f.isDirectory())for(File r:f.listFiles())copyFile(zos,(root?"":(filePath+"/"))+r.getName(),r,false);
 		else if(f.isFile()){

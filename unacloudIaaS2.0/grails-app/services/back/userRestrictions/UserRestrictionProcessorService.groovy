@@ -15,6 +15,10 @@ import unacloud2.VirtualMachineExecution;
 
 class UserRestrictionProcessorService {
 	
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
+	
 	/**
 	 * Applies the list of user restrictions to the configured deployment. The
 	 * list of restrictions is taken form the UserRestrictionEnum  

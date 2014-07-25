@@ -1,7 +1,18 @@
 package unacloud2
 
 class ClusterService {
-
+	
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Creates a new cluster with the given parameters
+	 * @param images Virtual machine images belonging to new cluster
+	 * @param cluster empty new cluster
+	 * @param user cluster owner
+	 */
+	
     def saveCluster(images, Cluster cluster, User user) {
 		cluster.images=[]
 		if(images.getClass().equals(String)){
@@ -19,6 +30,11 @@ class ClusterService {
 		user.save()
     }
 	
+	/**
+	 * Deletes the cluster given as parameter
+	 * @param cluster cluster to be deleted
+	 * @param user cluster owner
+	 */
 	def deleteCluster(Cluster cluster, User user){
 		for (depCluster in DeployedCluster.getAll()){
 			if(depCluster.cluster!= null){
