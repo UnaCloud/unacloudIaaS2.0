@@ -7,17 +7,49 @@ import org.apache.commons.io.FileUtils
 import org.junit.internal.runners.statements.FailOnTimeout;
 
 class VirtualMachineImageService {
+	
+	//-----------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------
+	
+	/**
+	 * System separator 
+	 */
 	def separator =  java.io.File.separatorChar
 	
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Gets the image given its id
+	 * @param id id of the image
+	 * @return image requested if exists
+	 */
 	public VirtualMachineImage getImage(long id){
 		return VirtualMachineImage.get(id)
 	}
     
+	/**
+	 * Sets new values for the image
+	 * @param image image to be edited
+	 * @param name new image name
+	 * @param user new belonging user
+	 * @param password new image password
+	 */
+	
 	def setValues(VirtualMachineImage image, name, user, password){
 		image.putAt("name", name)
 		image.putAt("user", user)
 		image.putAt("password", password)
 	}
+	
+	/**
+	 * Changes image files for the files uploaded by user
+	 * @param i image to be edited
+	 * @param files new set of files
+	 * @param user owner user 
+	 */
 	
 	def updateFiles(VirtualMachineImage i, files, User user){
 		new java.io.File(i.mainFile).getParentFile().deleteDir()
@@ -37,6 +69,19 @@ class VirtualMachineImageService {
 		}
 		
 	}
+	
+	/**
+	 * Uploads a new image
+	 * @param files image files
+	 * @param diskSize image disk size
+	 * @param name image name
+	 * @param isPublic indicates if the image will be uploaded as a public image
+	 * @param accessProtocol indicates the access protocol configured in the image
+	 * @param operatingSystemId image OS
+	 * @param username image access user
+	 * @param password image access password
+	 * @param user owner user
+	 */
 	
 	def uploadImage(files, diskSize, name, isPublic, accessProtocol, operatingSystemId, username, password,User user) {
 		
@@ -70,6 +115,13 @@ class VirtualMachineImageService {
 		repository.save()
     }
 	
+	/**
+	 * Deletes the virtual machine image
+	 * @param user owner user
+	 * @param repository image repository 
+	 * @param image image to be removed
+	 */
+	
 	def deleteImage(User user, Repository repository, VirtualMachineImage image){
 		for(depImage in DeployedImage.getAll()){
 			if(depImage.image.equals(image)){
@@ -83,6 +135,13 @@ class VirtualMachineImageService {
 		user.save()
 		image.delete()
 	}
+	
+	/**
+	 * Creates a new image based on a public one
+	 * @param name image name
+	 * @param publicImage public image used as template
+	 * @param user owner user
+	 */
 	
 	def newPublic(name, VirtualMachineImage publicImage, User user){
 		def i= new VirtualMachineImage( fixedDiskSize: 0, imageVersion: 0,name: name, isPublic: false, accessProtocol: publicImage.accessProtocol ,operatingSystem: publicImage.operatingSystem, user: publicImage.user, password: publicImage.password)

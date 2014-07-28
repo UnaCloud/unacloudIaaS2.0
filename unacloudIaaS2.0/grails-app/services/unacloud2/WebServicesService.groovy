@@ -9,7 +9,29 @@ import wsEntities.WebServiceException
 
 
 class WebServicesService {
+	
+	//-----------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Representation of deployment services
+	 */
+	
 	DeploymentService deploymentService
+	
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
+	
+	/**
+	 * 
+	 * @param login
+	 * @param apiKey
+	 * @param cluster
+	 * @return
+	 * @throws Exception
+	 */
 	def startCluster(String login,String apiKey,JSONObject cluster) throws Exception{
 		println login+":"+apiKey+":"+cluster
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
@@ -27,6 +49,14 @@ class WebServicesService {
 		def userCluster= Cluster.get(cluster.get("clusterId"))
 		return deploymentService.deploy(userCluster, user, (Long)cluster.getInt("execTime")*60000,options,highAvailability)
 	}
+	
+	/**
+	 * 
+	 * @param login
+	 * @param apiKey
+	 * @param depId
+	 * @return
+	 */
 	
 	def stopDeployment(String login,String apiKey,String depId){
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
@@ -50,6 +80,15 @@ class WebServicesService {
 		deploymentService.stopDeployments(user)
 		return deployment
 	}
+	
+	/**
+	 * 
+	 * @param login
+	 * @param apiKey
+	 * @param machineId
+	 * @return
+	 * @throws Exception
+	 */
 	
 	def stopVirtualMachine(String login,String apiKey,String machineId) throws Exception{
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
@@ -76,7 +115,16 @@ class WebServicesService {
 		deploymentService.stopDeployments(user)
 		return resp
 	}
-
+	
+	/**
+	 * 
+	 * @param login
+	 * @param apiKey
+	 * @param cluster
+	 * @return
+	 * @throws Exception
+	 */
+	
 	def startHeterogeneousCluster(String login,String apiKey,JSONObject cluster) throws Exception{
 		println login+":"+apiKey+":"+cluster
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
@@ -94,7 +142,15 @@ class WebServicesService {
 		else return deploymentService.deployHeterogeneous(userCluster, user, cluster.getInt("execTime")*60000,options)
 		
 	}
-
+	
+	/**
+	 * 
+	 * @param login
+	 * @param apiKey
+	 * @return
+	 * @throws Exception
+	 */
+	
 	def getClusterList(String login,String apiKey) throws Exception{
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login);
@@ -119,6 +175,14 @@ class WebServicesService {
 		return clusterList
 	}
 	
+	/**
+	 * 
+	 * @param login
+	 * @param apiKey
+	 * @return
+	 * @throws Exception
+	 */
+	
 	def getActiveDeployments(String login,String apiKey) throws Exception{
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login);
@@ -140,6 +204,15 @@ class WebServicesService {
 		}
 		return resp
 	}
+	
+	/**
+	 * 
+	 * @param login
+	 * @param apiKey
+	 * @param depId
+	 * @return
+	 * @throws Exception
+	 */
 	
 	def getDeploymentInfo(String login,String apiKey,String depId) throws Exception{
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
@@ -167,6 +240,15 @@ class WebServicesService {
 		return vms
 	}
 	
+	/**
+	 * 
+	 * @param login
+	 * @param apiKey
+	 * @param allocationPolicy
+	 * @return
+	 * @throws Exception
+	 */
+	
 	def changeAllocationPolicy(String login,String apiKey,String allocationPolicy) throws Exception{
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login);
@@ -186,6 +268,17 @@ class WebServicesService {
 		return "Success"
 		
 	}
+	
+	/**
+	 * 
+	 * @param login
+	 * @param apiKey
+	 * @param imageId
+	 * @param instances
+	 * @param time
+	 * @return
+	 * @throws Exception
+	 */
 	
 	def addInstances(String login,String apiKey,String imageId,int instances,long time) throws Exception{
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
