@@ -25,13 +25,14 @@ class WebServicesService {
 	//-----------------------------------------------------------------
 	
 	/**
-	 * 
-	 * @param login
-	 * @param apiKey
-	 * @param cluster
-	 * @return
-	 * @throws Exception
+	 * Builds a new cluster and deploys it
+	 * @param login request owner username
+	 * @param apiKey request owner API key
+	 * @param cluster JSON Object with the deployment option data
+	 * @return deployment object created
+	 * @throws Exception if the user credentials doesn't match or the deployment fails
 	 */
+	
 	def startCluster(String login,String apiKey,JSONObject cluster) throws Exception{
 		println login+":"+apiKey+":"+cluster
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
@@ -51,11 +52,11 @@ class WebServicesService {
 	}
 	
 	/**
-	 * 
-	 * @param login
-	 * @param apiKey
-	 * @param depId
-	 * @return
+	 * Stops a deployment execution
+	 * @param login request owner username
+	 * @param apiKey request owner API key
+	 * @param depId id of deployment to be stopped
+	 * @return deployment with the stop changes
 	 */
 	
 	def stopDeployment(String login,String apiKey,String depId){
@@ -82,12 +83,12 @@ class WebServicesService {
 	}
 	
 	/**
-	 * 
-	 * @param login
-	 * @param apiKey
-	 * @param machineId
-	 * @return
-	 * @throws Exception
+	 * Stops a single virtual machine
+	 * @param login request owner username
+	 * @param apiKey request owner API key
+	 * @param machineId virtual machine's id
+	 * @return virtual machine with the stop changes
+	 * @throws Exception if stop process fails or credentials doesn't match
 	 */
 	
 	def stopVirtualMachine(String login,String apiKey,String machineId) throws Exception{
@@ -117,12 +118,12 @@ class WebServicesService {
 	}
 	
 	/**
-	 * 
-	 * @param login
-	 * @param apiKey
-	 * @param cluster
-	 * @return
-	 * @throws Exception
+	 * Starts a cluster with different VM configurations per image   
+	 * @param login request owner username
+	 * @param apiKey request owner API key
+	 * @param cluster heterogeneous cluster deployment options
+	 * @return deployment object created
+	 * @throws Exception if the user credentials doesn't match or the deployment fails
 	 */
 	
 	def startHeterogeneousCluster(String login,String apiKey,JSONObject cluster) throws Exception{
@@ -145,10 +146,10 @@ class WebServicesService {
 	
 	/**
 	 * 
-	 * @param login
-	 * @param apiKey
-	 * @return
-	 * @throws Exception
+	 * @param login request owner username
+	 * @param apiKey request owner API key
+	 * @return cluster list with its properties
+	 * @throws Exception if the user credentials didn't match
 	 */
 	
 	def getClusterList(String login,String apiKey) throws Exception{
@@ -176,11 +177,11 @@ class WebServicesService {
 	}
 	
 	/**
-	 * 
-	 * @param login
-	 * @param apiKey
-	 * @return
-	 * @throws Exception
+	 * Returns a list with the active deployments for the user
+	 * @param login request owner username
+	 * @param apiKey request owner API key
+	 * @return active deployments list
+	 * @throws Exception if the user credentials didn't match
 	 */
 	
 	def getActiveDeployments(String login,String apiKey) throws Exception{
@@ -206,12 +207,12 @@ class WebServicesService {
 	}
 	
 	/**
-	 * 
-	 * @param login
-	 * @param apiKey
+	 * Returns deployment detailed info per VM  
+	 * @param login request owner username
+	 * @param apiKey request owner API key
 	 * @param depId
-	 * @return
-	 * @throws Exception
+	 * @return list of all VM details in the deployment
+	 * @throws Exception if the user credentials didn't match
 	 */
 	
 	def getDeploymentInfo(String login,String apiKey,String depId) throws Exception{
@@ -241,12 +242,12 @@ class WebServicesService {
 	}
 	
 	/**
-	 * 
-	 * @param login
-	 * @param apiKey
-	 * @param allocationPolicy
-	 * @return
-	 * @throws Exception
+	 * Changes the VM/PM allocation algorithm
+	 * @param login request owner username
+	 * @param apiKey request owner API key
+	 * @param allocationPolicy new allocation policy to be used
+	 * @return Success response
+	 * @throws Exception if the user credentials didn't match
 	 */
 	
 	def changeAllocationPolicy(String login,String apiKey,String allocationPolicy) throws Exception{
@@ -270,14 +271,14 @@ class WebServicesService {
 	}
 	
 	/**
-	 * 
-	 * @param login
-	 * @param apiKey
-	 * @param imageId
-	 * @param instances
-	 * @param time
-	 * @return
-	 * @throws Exception
+	 * Adds new instances to the selected image
+	 * @param login request owner username
+	 * @param apiKey request owner API key
+	 * @param imageId image id to which instances will be increased
+	 * @param instances number of new instances
+	 * @param time new instances execution time 
+	 * @return deployed image with the new instances
+	 * @throws Exception if the user credentials didn't match or the deployment fails
 	 */
 	
 	def addInstances(String login,String apiKey,String imageId,int instances,long time) throws Exception{
