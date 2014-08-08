@@ -4,7 +4,13 @@ import java.math.BigInteger;
 import java.util.Random;
 
 public class RandomUtils {
+	
 	private static Random r=new Random();
+	
+	/**
+	 * Generates a random string
+	 * @param lenght string length
+	 */
 	public static String generateRandomString(int lenght){
 		byte[] buffer=new byte[128];
 		r.nextBytes(buffer);

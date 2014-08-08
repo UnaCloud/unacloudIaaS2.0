@@ -27,9 +27,17 @@ import com.losandes.utils.Constants;
 import com.losandes.utils.VariableManager;
 
 public class ImageCacheManager {
+	
+	
 	static String machineRepository=VariableManager.local.getsetStringValue("VM_REPO_PATH","E:\\GRID\\");
 	private static File imageListFile=new File("imageList");
 	private static Map<Long,Image> imageList=null;
+	
+	/**
+	 * Returns a free copy of the image
+	 * @param imageId image Id 
+	 * @return image available copy
+	 */
 	public static ImageCopy getFreeImageCopy(long imageId){
 		System.out.println("getFreeImageCopy "+imageId);
 		Image vmi=getImage(imageId);
@@ -64,6 +72,11 @@ public class ImageCacheManager {
 		System.out.println(" clonning");
 		return source.cloneCopy(dest);
 	}
+	/**
+	 * returns or creates an image
+	 * @param imageId image Id
+	 * @return desired image
+	 */
 	private synchronized static Image getImage(long imageId){
 		loadImages();
 		Image vmi=imageList.get(imageId);
@@ -75,9 +88,20 @@ public class ImageCacheManager {
 		}
 		return vmi;
 	}
+	
+	/**
+	 * Unlocks a freed image
+	 * @param vmiCopy image to be freed
+	 */
 	public synchronized static void freeLockedImageCopy(ImageCopy vmiCopy){
 		vmiCopy.setStatus(VirtualMachineImageStatus.FREE);
 	}
+	
+	/**
+	 * Creates a new image copy
+	 * @param image base image
+	 * @param copy empty copy
+	 */
 	private static void dowloadImageCopy(Image image,ImageCopy copy){
 		File root=new File(machineRepository+"\\"+image.getId()+"\\base");
 		cleanDir(root);
@@ -125,10 +149,20 @@ public class ImageCacheManager {
 			e1.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Removes a directory from physical machine disk
+	 * @param f file or directory to be deleted
+	 */
 	private static void cleanDir(File f){
 		if(f.isDirectory())for(File r:f.listFiles())cleanDir(r);
 		f.delete();
 	}
+	
+	/**
+	 * Removes all images for physical machine disk
+	 * @return operation confirmation
+	 */
 	public static synchronized String clearCache(){
 		System.out.println("clearCache");
 		loadImages();
@@ -142,6 +176,10 @@ public class ImageCacheManager {
 		saveImages();
 		return "Successful";
 	}
+	
+	/**
+	 * Saves the images data in a file
+	 */
 	private static synchronized void saveImages(){
 		try(ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(imageListFile))){
 			oos.writeObject(imageList);
@@ -149,6 +187,10 @@ public class ImageCacheManager {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Loads image info from file
+	 */
 	@SuppressWarnings("unchecked")
 	private static void loadImages(){
 		if(imageList==null){

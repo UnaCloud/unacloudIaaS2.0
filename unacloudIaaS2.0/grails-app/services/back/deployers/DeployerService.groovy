@@ -26,6 +26,11 @@ class DeployerService {
 	
 	static transactional = false
 	
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
+	
+	
 	/**
 	 * Deploys a complete deployment
 	 * @param deployment 
@@ -91,6 +96,7 @@ class DeployerService {
 							oos.close();
 							s.close();
 						}catch(Exception e){
+							vm.setStatus(VirtualMachineExecutionStateEnum.FAILED)
 							vm.setMessage("Connection error")
 							println e.getMessage()+" "+pmIp;
 						}

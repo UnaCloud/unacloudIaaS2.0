@@ -8,6 +8,10 @@ import unacloudEnums.VirtualMachineExecutionStateEnum;
  * @author Clouder
  */
 public class ServerMessageSender {
+	
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
 
     /**
      * Sends to UnaCloud server a message reporting the state of a virtual machine

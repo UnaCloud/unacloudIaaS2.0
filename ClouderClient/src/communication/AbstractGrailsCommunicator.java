@@ -12,6 +12,18 @@ import java.net.URL;
 import com.losandes.utils.VariableManager;
 
 public class AbstractGrailsCommunicator{
+	
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
+		
+	/**
+	 * Sends a new message to a given server service with a group of parameters
+	 * @param serviceName exact service name to be called
+	 * @param params params requested by the server
+	 * @return true if the message was sent or false otherwise 
+	 */
+	
 	public static boolean pushInfo(String serviceName,Object...params){
 		final String serverUrl=VariableManager.global.getStringValue("SERVER_URL");
 		String urlParams=null;
@@ -28,33 +40,5 @@ public class AbstractGrailsCommunicator{
 			return false;
 		}
 		return true;
-	}
-	public static String doRequest(String serviceName,String message){
-		final String serverUrl=VariableManager.global.getStringValue("SERVER_URL");
-		String ret="";
-		try {
-			URL url=new URL(serverUrl+"/"+serviceName+"?type=2");
-			HttpURLConnection http = (HttpURLConnection)url.openConnection();
-			http.setRequestMethod("POST");
-			http.setDoOutput(true);
-			//http.setDoInput(false);
-			OutputStream os=http.getOutputStream();
-			PrintWriter pw=new PrintWriter(os);
-			pw.println("req="+message);
-			pw.flush();
-			pw.close();
-			http.connect();
-			BufferedReader br=new BufferedReader(new InputStreamReader(http.getInputStream()));
-			for(String h;(h=br.readLine())!=null;)ret+=h;
-			http.disconnect();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return ret;
-	}
-	public static String doRequest(String message){
-		return doRequest("UnaCloudServices/clouderClientAttention", message);
 	}
 }

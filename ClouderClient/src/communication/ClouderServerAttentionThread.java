@@ -33,12 +33,20 @@ import communication.messages.vmo.VirtualMachineStopMessage;
  * Server operation request in a thread
  */
 public class ClouderServerAttentionThread implements Runnable {
+	
+	//-----------------------------------------------------------------
+	// Variables
+	//-----------------------------------------------------------------
 
     /**
      * Abstract communicator used to receive the request and send a response
      */
     private Socket communication;
     
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
+
     /**
      * Constructs an attention thread for a given communicator channel. Receives an owner object for stop requests
      *

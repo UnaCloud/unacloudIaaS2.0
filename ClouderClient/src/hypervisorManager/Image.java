@@ -5,16 +5,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Image implements Serializable{
+	
 	private static final long serialVersionUID = -2386734224180305694L;
+	
+	/**
+	 * image properties
+	 * 
+	 */
+	
 	long id;
 	String username;
 	String password;
 	String configuratorClass;
 	String hypervisorId;
+	
+	/**
+	 * image copies in disk
+	 */
 	List<ImageCopy> imageCopies=new ArrayList<>();
+	
+	/**
+	 * getters and setters
+	 */
+	
 	public long getId() {
 		return id;
 	}
+	
 	public void setId(long id) {
 		this.id = id;
 	}

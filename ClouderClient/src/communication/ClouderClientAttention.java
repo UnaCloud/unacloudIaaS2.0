@@ -17,12 +17,20 @@ import tasks.ExecutorService;
  * Responsible for listening to the Clouder Server
  */
 public class ClouderClientAttention{
-        
+    
+	//-----------------------------------------------------------------
+	// Variables
+	//-----------------------------------------------------------------
+
     private ServerSocket serverSocket;
     /**
      * Port to be used by the listening server socket
      */
     private static int localPort;
+    
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
 
     private static ClouderClientAttention instance;
     public synchronized static ClouderClientAttention getInstance() {

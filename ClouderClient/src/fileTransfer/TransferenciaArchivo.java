@@ -12,12 +12,12 @@ import java.util.Arrays;
 import physicalmachine.Network;
 
 /**
- *
+ * 
  * @author Clouder
  */
 public class TransferenciaArchivo {
-
-    private RandomAccessFile rafarchivo;
+	
+	private RandomAccessFile rafarchivo;
     private DataInputStream dis;
     private DataOutputStream dos;
     private Socket s;
@@ -28,6 +28,17 @@ public class TransferenciaArchivo {
     boolean dtCnt =false;
     final long tamano;
     File archivo;
+    volatile boolean enviando=false;
+    
+    /**
+     * Class constructor
+     * @param ipDestinos 
+     * @param idTransferencia
+     * @param nParticiones
+     * @param archivo
+     * @param tamano
+     * @throws IOException
+     */
     public TransferenciaArchivo(String[] ipDestinos,long idTransferencia,int nParticiones,File archivo,long tamano)throws IOException{
         this.archivo=archivo;
         this.idTransferencia=idTransferencia;
@@ -37,7 +48,11 @@ public class TransferenciaArchivo {
         rafarchivo=new RandomAccessFile(archivo,"rw");
         this.tamano=tamano;
     }
-
+    /**
+     * Opens the file transfer agent collection
+     * @param s socket with connection information
+     * @param dis data input stream necessary for initialization
+     */
     public void connect(Socket s,DataInputStream dis){
         if(conected)return;
         try {
@@ -57,7 +72,10 @@ public class TransferenciaArchivo {
             conected=false;
         }
     }
-
+    
+    /**
+     * Closes the file transfer agent connection
+     */
     public void close(){
         if(conected){
             try {s.close();} catch (IOException ex) {}
@@ -68,7 +86,11 @@ public class TransferenciaArchivo {
         } catch (IOException ex) {
         }
     }
-    volatile boolean enviando=false;
+    
+    
+    /**
+     * Receives a file and sends it to destinations if needed
+     */
     public void recibirArchivo(){
         try {
             byte[] buffer = new byte[1024*5];
@@ -91,7 +113,12 @@ public class TransferenciaArchivo {
             //cerrar hijos y padre
         }
     }
-
+    /**
+     * Creates new destinations
+     * @param ips new destinations IPs
+     * @param nParticiones number of destinations groups
+     * @return
+     */
     public ArrayList<Destination> crearDestinos(String[] ips,int nParticiones){
         if(ips.length==0)return new ArrayList<Destination>();
         System.out.println("-------------- "+Arrays.toString(ips));

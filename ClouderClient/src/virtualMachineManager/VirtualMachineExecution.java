@@ -7,7 +7,14 @@ import java.io.Serializable;
 import communication.messages.vmo.VirtualMachineStartMessage;
 
 public class VirtualMachineExecution implements Serializable{
+	
+	
 	private static final long serialVersionUID = -6555573326780712925L;
+	
+	/**
+	 * Virtual machine properties
+	 */
+	
 	long id;
 	int cores;
 	int memory;
@@ -16,12 +23,24 @@ public class VirtualMachineExecution implements Serializable{
     boolean persistent;
     String hostname;
     
+    long shutdownTime;
+    
+    /**
+     * Virtual machine image 
+     */
     long imageId;
     ImageCopy image;
     
-    long shutdownTime;
+    /**
+     * Class constructor
+     */
     public VirtualMachineExecution() {
 	}
+    
+    /**
+     * Getters and setters
+     */
+    
 	public long getId() {
 		return id;
 	}
@@ -88,6 +107,12 @@ public class VirtualMachineExecution implements Serializable{
 	public void setImageId(long imageId) {
 		this.imageId = imageId;
 	}
+	
+	/**
+	 * Returns a virtual machine based on a start message
+	 * @param message message with VM data
+	 * @return VM object based on message
+	 */
 	public static VirtualMachineExecution getFromStartVirtualMachineMessage(VirtualMachineStartMessage message){
 		VirtualMachineExecution vme=new VirtualMachineExecution();
 		vme.setCores(message.getVmCores());

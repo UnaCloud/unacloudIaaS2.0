@@ -25,6 +25,10 @@ import fileTransfer.TreeDistributionChannelManager;
  */
 public class Main {
 	
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
+
     /**
      * Responsible for sorting and starting the Clouder Client
      * @param args[0] = {0 = TURN_OFF_DB, 1 = TURN_ON_DB , 2 = LOGIN_DB, 3 = LOGOUT_DB}

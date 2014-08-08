@@ -10,14 +10,19 @@ import java.net.NetworkInterface;
 import java.util.Enumeration;
 
 /**
- *
  * @author Clouder
  */
 public class AddressUtility {
-
-    private String ip,netmask;
+	
+	private String ip,netmask;
+    
     private String network,broadcast,gateway;
-
+    
+    /**
+     * Class constructor
+     * @param ip physical machine IP address
+     * @param netmask IP's netmask
+     */
     public AddressUtility(String ip, String netmask) {
         this.ip = ip;
         this.netmask = netmask;
@@ -46,7 +51,11 @@ public class AddressUtility {
             }
         }
     }
-
+    
+    /**
+     * getter methods
+     */
+    
     public String getBroadcast() {
         return broadcast;
     }
@@ -66,6 +75,11 @@ public class AddressUtility {
     public String getNetwork() {
         return network;
     }
+    
+    /**
+     * Selects the default network interface
+     * @return network interface
+     */
     public static NetworkInterface getDefaultNetworkInterface(){
     	try{
     		Enumeration<NetworkInterface> networks=NetworkInterface.getNetworkInterfaces();

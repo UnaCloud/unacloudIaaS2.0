@@ -8,9 +8,17 @@ import virtualMachineManager.VirtualMachineExecution;
 
 public class StartVirtualMachineTask implements Runnable{
 	VirtualMachineExecution machineExecution;
+	/**
+	 * class constructor
+	 * @param machineExecution VM instance to be started
+	 */
 	public StartVirtualMachineTask(VirtualMachineExecution machineExecution) {
 		this.machineExecution = machineExecution;
 	}
+	
+	/**
+	 * Executes start machine task
+	 */
 	@Override
 	public void run() {
 		System.out.println("startStart+VirtualMachine on "+new Date());
