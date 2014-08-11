@@ -20,12 +20,16 @@ import communication.messages.monitoring.MonitorInitialReport;
 import communication.messages.monitoring.MonitorReport;
 
 public class MonitorReportGenerator extends SigarCommandBase {
-
-    private static MonitorReportGenerator instance = new MonitorReportGenerator();
+	
+	private static MonitorReportGenerator instance = new MonitorReportGenerator();
     private static String UUID = java.util.UUID.randomUUID().toString();
     ;
 	private static int contadorRegistros;
-
+	
+	/**
+	 * Generates initial monitoring report info
+	 * @return initial report
+	 */
     public static MonitorInitialReport generateInitialReport() {
         PhysicalMachine monitor = new PhysicalMachine();
         java.util.Date date;
@@ -66,11 +70,16 @@ public class MonitorReportGenerator extends SigarCommandBase {
         }
         return null;
     }
-
+    
     private static class RepetitionCounter extends HashMap<String, Integer> {
-
+    	
+    	
 		private static final long serialVersionUID = -5259022218756213835L;
-
+		
+		/**
+		 * adds new input
+		 * @param input
+		 */
 		public void add(String input) {
             Integer n = get(input);
             if (n == null) {
@@ -79,7 +88,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
             n++;
             put(input, n);
         }
-
+		
         @Override
         public String toString() {
             String ret = null;
@@ -89,7 +98,11 @@ public class MonitorReportGenerator extends SigarCommandBase {
             return ret == null ? "" : ret;
         }
     }
-
+    
+    /**
+     * generates a physical machine state report
+     * @return report collected
+     */
     public static MonitorReport generateStateReport() {
         LinpackJava.Linpack CPUMflops = new LinpackJava.Linpack();
         CPUMflops.run_benchmark();

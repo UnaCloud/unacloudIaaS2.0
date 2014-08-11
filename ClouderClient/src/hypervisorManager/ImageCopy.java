@@ -14,11 +14,24 @@ import virtualMachineManager.VirtualMachineExecution;
 import virtualMachineManager.VirtualMachineImageStatus;
 
 public class ImageCopy implements Serializable{
+	
 	private static final long serialVersionUID = 8911955514393569155L;
+	
 	//String virtualMachineName;
+	/**
+	 * executable file name
+	 */
 	File mainFile;
+	/**
+	 * Original image
+	 */
 	Image image;
+	
 	transient VirtualMachineImageStatus status=VirtualMachineImageStatus.FREE;
+	
+	/**
+	 * Getters and setters
+	 */
 	public File getMainFile() {
 		return mainFile;
 	}
@@ -44,6 +57,12 @@ public class ImageCopy implements Serializable{
 	public void setImage(Image image) {
 		this.image = image;
 	}
+	
+	/**
+	 * Configures and starts the copy
+	 * @param machineExecution
+	 */
+	
 	public synchronized void configureAndStart(VirtualMachineExecution machineExecution){
 		Hypervisor hypervisor=HypervisorFactory.getHypervisor(getImage().getHypervisorId());
 		try {
@@ -69,11 +88,22 @@ public class ImageCopy implements Serializable{
 			ServerMessageSender.reportVirtualMachineState(machineExecution.getId(), VirtualMachineExecutionStateEnum.FAILED,"Configurator class error: "+e.getMessage());
 		}
 	}
+	
+	/**
+	 * Clones the copy 
+	 * @param dest empty image copy
+	 * @return cloned image
+	 */
 	public synchronized ImageCopy cloneCopy(ImageCopy dest){
 		Hypervisor hypervisor=HypervisorFactory.getHypervisor(this.getImage().getHypervisorId());
 		hypervisor.cloneVirtualMachine(this,dest);
 		return dest;
 	}
+	
+	/**
+	 * Makes initialization process in copy before starting
+	 * @throws VirtualMachineExecutionException
+	 */
 	public synchronized void init()throws VirtualMachineExecutionException{
 		Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
 		if(hypervisor==null)throw new VirtualMachineExecutionException("Hypervisor doesn't exists on machine. Hypervisor was "+image.getHypervisorId());
@@ -86,26 +116,50 @@ public class ImageCopy implements Serializable{
 		}
 		hypervisor.unregisterVirtualMachine(this);
 	}
+	
+	/**
+	 * Starts copy
+	 * @throws HypervisorOperationException
+	 */
 	public void startVirtualMachine()throws HypervisorOperationException{
 		Hypervisor hypervisor=HypervisorFactory.getHypervisor(this.getImage().getHypervisorId());
 		hypervisor.startVirtualMachine(this);
 	}
     
+	/**
+	 * Executes given command on this copy
+	 * @param command command to get executed
+	 * @param args command arguments
+	 * @throws HypervisorOperationException
+	 */
     public void executeCommandOnMachine( String command,String...args) throws HypervisorOperationException{
     	Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
     	hypervisor.executeCommandOnMachine(this,command,args);
     }
-
+    
+    /**
+     * copies a file in this image clone
+     * @param destinationRoute destination path in the VM
+     * @param sourceFile original file
+     * @throws HypervisorOperationException
+     */
     public void copyFileOnVirtualMachine(String destinationRoute, File sourceFile) throws HypervisorOperationException{
     	Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
     	hypervisor.copyFileOnVirtualMachine(this,destinationRoute,sourceFile);
     }
+    
+    /**
+     * Restarts this VM
+     * @throws HypervisorOperationException
+     */
     public void restartVirtualMachine() throws HypervisorOperationException{
     	Hypervisor hypervisor=HypervisorFactory.getHypervisor(this.getImage().getHypervisorId());
 		hypervisor.restartVirtualMachine(this);
     }
     
-    
+    /**
+     * Finalizes copy execution
+     */
     public synchronized void stopAndUnregister(){
     	Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
     	hypervisor.stopAndUnregister(this);

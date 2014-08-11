@@ -17,9 +17,18 @@ import java.util.logging.Logger;
  * @author jcadavid
  */
 public class MonitorDatabaseConnection {
-
+	
+	/**
+	 * Class Constructor
+	 */
     private MonitorDatabaseConnection() {
     }
+    
+    /**
+     * Connects to monitoring database
+     * @return connection done
+     * @throws SQLException if connection was not possible
+     */
     private static Connection generateConnection() throws SQLException {
         Connection conexion;
         String ip = VariableManager.global.getStringValue("MONITORING_SERVER_IP");
@@ -31,7 +40,11 @@ public class MonitorDatabaseConnection {
         conexion.setAutoCommit(false);
         return conexion;
     }
-
+    
+    /**
+     * Reports the initial monitoring info
+     * @param initialReport
+     */
     public static void doInitialReport(MonitorInitialReport initialReport) {
         final String insertQuery = "INSERT INTO "
                 + "Nodes "
@@ -66,7 +79,11 @@ public class MonitorDatabaseConnection {
             Logger.getLogger(MonitorDatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    /**
+     * Makes a monitoring report in batch
+     * @param statusReports reports to be saved
+     */
     public static void doBatchReport(MonitorReport... statusReports) {
         int[] results=null;
         final String insertQuery = "INSERT INTO "
@@ -134,7 +151,11 @@ public class MonitorDatabaseConnection {
         }
         checkUpdateCounts(results);
     }
-
+    
+    /**
+     * Check update results and prints if something went wrong 
+     * @param updateCounts
+     */
     private static void checkUpdateCounts(int[] updateCounts) {
         if(updateCounts==null)return;
         for (int i = 0; i < updateCounts.length; i++) {

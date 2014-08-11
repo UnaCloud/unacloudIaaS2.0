@@ -26,11 +26,19 @@ import org.hyperic.sigar.NfsFileSystem;
  * Responsible for obtaining local Hard disk information
  */
 public class HardDisk extends SigarWrapper {
-
+	
+	/**
+	 * disk properties
+	 */
     private long hardDiskSpace;
     private long hardDiskUsedSpace;
     private long hardDiskFreeSpace;
     private String hardDiskFileSystem="";
+    
+    /**
+     * Class constructor
+     * calculates and initializes disk variables 
+     */
     public HardDisk() {
         try {
             FileSystem[] fslist = sigar.getFileSystemList();

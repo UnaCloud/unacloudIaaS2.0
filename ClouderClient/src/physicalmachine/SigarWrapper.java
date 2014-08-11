@@ -10,7 +10,7 @@ import java.text.NumberFormat;
 import org.hyperic.sigar.Sigar;
 
 /**
- *
+ * Defines a new sigar wrapper
  * @author Clouder
  */
 public abstract class SigarWrapper {

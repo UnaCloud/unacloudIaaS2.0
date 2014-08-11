@@ -18,7 +18,10 @@ import static com.losandes.utils.Constants.*;
  *  Not completed for Mac operating system (networkInterface, networkNetmask, networkGateway)
  */
 public class Network extends SigarCommandBase {
-
+	
+	/**
+	 * network properties
+	 */
     private String networkInterface;
     private String networkHostname;
     private String networkIPAddress;
@@ -33,7 +36,10 @@ public class Network extends SigarCommandBase {
     public Network() {
         super();
     }
-
+    
+    /**
+     * obtains network interface and sets properties
+     */
     public void output(String[] args) throws SigarException {
         
         InetAddress ip;

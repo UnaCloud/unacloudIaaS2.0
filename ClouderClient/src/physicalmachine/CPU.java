@@ -5,16 +5,33 @@ import org.hyperic.sigar.CpuInfo;
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.SigarException;
 public class CPU extends SigarWrapper {
-
+	/**
+	 * number of processors
+	 */
     private int cPUCores;
-
+    /**
+     * CPU usage percentage 
+     */
     private CpuPerc cpuPer;
+    /**
+     * sigar CPU representation
+     */
     private Cpu cpu;
+    /**
+     * CPU info 
+     */
     private org.hyperic.sigar.CpuInfo[] infos;
-
+    
+    /**
+     * Class constructor
+     */
     public CPU() {
     }
 
+    /**
+     * calculates CPU usage percentage
+     * @return calculated cpuPerc
+     */
     private CpuPerc getCpuPer() {
         if(cpuPer==null)try {
             cpuPer = sigar.getCpuPerc();
@@ -22,7 +39,11 @@ public class CPU extends SigarWrapper {
         }
         return cpuPer;
     }
-
+    
+    /**
+     * obtains CPU info
+     * @return sigar cpuinfo list
+     */
     private CpuInfo[] getInfos() {
         if(infos==null){
             try {
@@ -34,6 +55,7 @@ public class CPU extends SigarWrapper {
     }
 
     /**
+     * Calculates idle CPU
      * @return the CPUidle
      */
     public String getCPUidle() {
@@ -43,6 +65,7 @@ public class CPU extends SigarWrapper {
     }
 
     /**
+     * Obtains CPU vendor
      * @return the CPUVendor
      */
     public String getCPUVendor() {
@@ -53,6 +76,7 @@ public class CPU extends SigarWrapper {
     }
 
     /**
+     * Obtains CPU model
      * @return the CPUModel
      */
     public String getCPUModel() {
@@ -63,6 +87,7 @@ public class CPU extends SigarWrapper {
     }
 
     /**
+     * Obtains CPU mHz
      * @return the CPUMhz
      */
     public String getCPUMhz() {
@@ -73,6 +98,7 @@ public class CPU extends SigarWrapper {
     }
 
     /**
+     * gets cpu cores
      * @return the CPUCores
      */
     public int getCPUCores() {
@@ -80,6 +106,7 @@ public class CPU extends SigarWrapper {
     }
 
     /**
+     * calculates used CPU
      * @return the cPuUsed
      */
     public String getCPUUsed() {
@@ -87,13 +114,20 @@ public class CPU extends SigarWrapper {
         double d = cpuPer.getIdle();
         return format.format(100-d);
     }
-
+    
+    /**
+     * Obtains the total system cpu user time
+     * @return cpu user time
+     */
     public Long getCPUUserTime() {
         getCPUCores();
         return cpu.getUser();
     }
-
-    //retorna CPUUserTime
+    
+    /**
+     * Obtains the total sytem cpu time
+     * @return cpu total time
+     */
     public Long getCPUTotalTime() {
         getCPUCores();
         return cpu.getTotal();

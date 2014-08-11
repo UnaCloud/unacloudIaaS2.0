@@ -29,6 +29,9 @@ import org.hyperic.sigar.Swap;
  */
 public class Memory extends SigarWrapper {
     
+	/**
+	 * Memory properties
+	 */
     private float rAMMemorySize;
     private float rAMMemoryFree;
     private float rAMMemoryUsed;
@@ -38,10 +41,19 @@ public class Memory extends SigarWrapper {
     private float swapMemoryPageOut;
     private float swapMemoryUsed;
 
-
+    /**
+     * sigar memory representation
+     */
     private Mem mem;
+    /**
+     * sigar swap representation
+     */
     private Swap swap;
 
+    /**
+     * Class constructor
+     * Calculates and initializes memory properties
+     */
     public Memory() {
         try {
             mem = sigar.getMem();
@@ -58,31 +70,22 @@ public class Memory extends SigarWrapper {
             Logger.getLogger(Memory.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     /**
-     * @return the RAMMemorySize
+     * getter methods
      */
-    public float getRAMMemorySize() {
+     public float getRAMMemorySize() {
         return rAMMemorySize;
     }
 
-    /**
-     * @return the RAMMemoryFree
-     */
     public float getRAMMemoryFree() {
         return rAMMemoryFree;
     }
 
-    /**
-     * @return the RAMMemoryUsed
-     */
     public float getRAMMemoryUsed() {
         return rAMMemoryUsed;
     }
 
-    /**
-     * @return the SwapMemorySize
-     */
     public float getSwapMemorySize() {
         return swapMemorySize;
     }

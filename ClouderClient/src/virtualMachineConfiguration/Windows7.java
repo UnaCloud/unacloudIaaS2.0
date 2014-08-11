@@ -8,7 +8,9 @@ import utils.AddressUtility;
  * @author Clouder
  */
 public class Windows7 extends AbstractVirtualMachineConfigurator{
-
+	/**
+	 * Check AbstractVirtualMachineConfigurator for more information
+	 */
     @Override
     public void configureIP() throws HypervisorOperationException {
     	AddressUtility au = new AddressUtility(execution.getIp(),execution.getNetMask());

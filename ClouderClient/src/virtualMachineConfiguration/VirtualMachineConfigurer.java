@@ -6,10 +6,23 @@ import virtualMachineManager.VirtualMachineExecution;
 import virtualMachineManager.ImageCacheManager;
 
 public final class VirtualMachineConfigurer extends Thread{
+	/**
+	 * VM to be configured
+	 */
 	VirtualMachineExecution machineExecution;
+	
+	/**
+	 * Class constructor
+	 * @param machineExecution VM
+	 */
 	public VirtualMachineConfigurer(VirtualMachineExecution machineExecution) {
 		this.machineExecution = machineExecution;
 	}
+	
+	/**
+	 * Starts a new thread with configuration
+	 * @return response of start process
+	 */
 	public VirtualMachineStartResponse startProcess(){
 		VirtualMachineStartResponse resp=new VirtualMachineStartResponse();
 		resp.setState(VirtualMachineStartResponse.VirtualMachineState.STARTING);
@@ -17,6 +30,9 @@ public final class VirtualMachineConfigurer extends Thread{
 		start();
 		return resp;
 	}
+	/**
+	 * Thread run modification. Starts configuration process
+	 */
 	@Override
 	public void run() {
 		System.out.println("startVirtualMachine");
