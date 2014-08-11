@@ -18,7 +18,7 @@ class LaboratoryService {
 	 * @param labId physical machine's laboratory id
 	 */
     
-	def addMachine(ip, name, cores, ram, disk, hyperPath, osId, mac, labId) {
+	def addMachine(ip, name, cores, ram, disk, osId, mac, labId) {
 		def machineIP=new IP(ip:ip, used:true)
 		machineIP.save(failOnError:true)
 		def lab= Laboratory.get(labId)
@@ -45,7 +45,7 @@ class LaboratoryService {
 	 * @param disk new machine disk available size
 	 */
 	
-	def setValues(PhysicalMachine machine, name, ip,osId,cores,mac,ram,disk,hyperPath){
+	def setValues(PhysicalMachine machine, name, ip,osId,cores,mac,ram,disk){
 		machine.putAt("name", name)
 		if(!machine.ip.ip.equals(ip)){
 			machine.ip.delete()

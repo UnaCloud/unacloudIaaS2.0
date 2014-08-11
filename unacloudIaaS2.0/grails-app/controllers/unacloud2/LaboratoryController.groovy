@@ -88,7 +88,7 @@ class LaboratoryController {
 	 * @return
 	 */
 	def addMachine(){
-		laboratoryService.addMachine(params.ip, params.name, params.cores, params.ram, params.disk, params.hyperPath, params.osId, params.mac, params.labId)
+		laboratoryService.addMachine(params.ip, params.name, params.cores, params.ram, params.disk, params.osId, params.mac, params.labId)
 		redirect(action:"getLab", params:[id:params.labId])
 	}
 	
@@ -114,7 +114,7 @@ class LaboratoryController {
 	 */
 	def setValues(){
 		def machine = PhysicalMachine.get(params.id)
-		laboratoryService.setValues(machine, params.name, params.ip, params.osId, params.cores, params.mac, params.ram, params.disk, params.hyperPath)
+		laboratoryService.setValues(machine, params.name, params.ip, params.osId, params.cores, params.mac, params.ram, params.disk)
 		redirect(action:"getLab", params:[id: params.labId])
 	}
 	

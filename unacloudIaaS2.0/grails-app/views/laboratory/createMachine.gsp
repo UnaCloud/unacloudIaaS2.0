@@ -52,12 +52,6 @@
 	  				</select>
 	    		</div>
     		</div>
-    		<div class="control-group">
-   			<label class="control-label">Hypervisor Path</label>
-	    		<div class="controls">
-	    			<input name="hyperPath" type="text">
-	    		</div>
-    		</div>
     		<input name="labId" type="hidden" value="${lab.id }">
     		<div class="controls">
   			<g:submitButton name="createUser" class="btn" value="Create" />

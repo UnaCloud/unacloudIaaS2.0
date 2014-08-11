@@ -52,12 +52,6 @@
 	  				</select>
 	    		</div>
     		</div>
-    		<div class="control-group">
-   			<label class="control-label">Hypervisor Path</label>
-	    		<div class="controls">
-	    			<input name="hyperPath" type="text" value="${machine.hypervisorPath }">
-	    		</div>
-    		</div>
     		<input name="labId" type="hidden" value="${lab.id }">
     		<input name="id" type="hidden" value="${machine.id }">
     		<div class="controls">
