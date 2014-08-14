@@ -34,12 +34,7 @@ class PhysicalMachine {
 	 * Indicates if this machine has high availability
 	 */
 	boolean highAvailability
-	
-	/**
-	 * Path where hypervisor is installed 
-	 */
-	String hypervisorPath
-	
+
 	/**
 	 * physical machine's IP address
 	 */
