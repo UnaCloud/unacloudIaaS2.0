@@ -63,7 +63,7 @@ class BootStrap {
 //				for(int e=0;e<30;e++){
 //					def ip=new IP(used:false, ip: ('157.253.202.'+(11+e)));
 //					ip.save()
-//					def pm=new PhysicalMachine(cores: 4, highAvaliability: false, hypervisorPath: "/", ip: ip, name: "ISC"+(201+e), mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, laboratory: labWaira1, lastReport: new Date(0));
+//					def pm=new PhysicalMachine(cores: 4, highAvaliability: false, ip: ip, name: "ISC"+(201+e), mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, laboratory: labWaira1, lastReport: new Date(0));
 //					labWaira1.physicalMachines.add(pm)
 //				}
 //				labWaira1.save()
@@ -81,7 +81,7 @@ class BootStrap {
 //				for(int e=0;e<30;e++){
 //					def ip=new IP(used:false, ip: ('157.253.239.'+(11+e)));
 //					ip.save();
-//					def pm=new PhysicalMachine(cores: 4, highAvaliability: false, hypervisorPath: "/", ip: ip, name: "ISC"+(301+e), mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, laboratory: labWaira2, lastReport: new Date(0));
+//					def pm=new PhysicalMachine(cores: 4, highAvaliability: false, ip: ip, name: "ISC"+(301+e), mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, laboratory: labWaira2, lastReport: new Date(0));
 //					labWaira2.physicalMachines.add(pm)
 //				}
 //				labWaira2.save()

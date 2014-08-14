@@ -24,7 +24,7 @@ class LaboratoryService {
 		def lab= Laboratory.get(labId)
 		println "creating machine in laboratory"+ lab.name+"-"+lab.highAvailability
 		def physicalMachine = new PhysicalMachine( lastReport: new Date(),name:name, state: PhysicalMachineStateEnum.OFF, cores:cores,
-			ram: ram, hardDisk: disk, highAvailability:(lab.highAvailability), hypervisorPath:hyperPath,
+			ram: ram, hardDisk: disk, highAvailability:(lab.highAvailability), 
 			ip:machineIP, operatingSystem: OperatingSystem.get(osId), mac:mac)
 		
 		physicalMachine.laboratory=lab
