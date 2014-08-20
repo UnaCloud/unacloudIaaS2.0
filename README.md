@@ -38,9 +38,9 @@ Finally, when the configuration process is finished, you must add the ClientUpda
 
 > ####startUnacloud.bat
 
-> cd C:/UnaCloud/
+> cd C:\UnaCloud\
 
-> java –jar ClientUpdater-jar 1
+> java –jar ClientUpdater.jar 1
 
 *	Open the Local Group Policy Editor (Type gpedit.msc from the start menu)
 *	In the console tree, click Scripts (Startup/Shutdown). The path is Computer Configuration\Windows Settings\Scripts (Startup/Shutdown) 
