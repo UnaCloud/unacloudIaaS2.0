@@ -1,7 +1,10 @@
 package virtualMachineConfiguration;
 
+import Exceptions.VirtualMachineExecutionException;
 import hypervisorManager.ImageCopy;
+import communication.ServerMessageSender;
 import communication.messages.vmo.VirtualMachineStartResponse;
+import unacloudEnums.VirtualMachineExecutionStateEnum;
 import virtualMachineManager.VirtualMachineExecution;
 import virtualMachineManager.ImageCacheManager;
 
@@ -36,8 +39,13 @@ public final class VirtualMachineConfigurer extends Thread{
 	@Override
 	public void run() {
 		System.out.println("startVirtualMachine");
-		ImageCopy image=ImageCacheManager.getFreeImageCopy(machineExecution.getImageId());
-		machineExecution.setImage(image);
-		image.configureAndStart(machineExecution);
+		try{
+			ImageCopy image=ImageCacheManager.getFreeImageCopy(machineExecution.getImageId());
+			machineExecution.setImage(image);
+			image.configureAndStart(machineExecution);
+		}catch(VirtualMachineExecutionException ex){
+			ServerMessageSender.reportVirtualMachineState(machineExecution.getId(), VirtualMachineExecutionStateEnum.FAILED,ex.getMessage());
+		}
+		
 	}
 }

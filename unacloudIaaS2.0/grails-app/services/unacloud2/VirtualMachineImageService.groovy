@@ -1,6 +1,5 @@
 package unacloud2
 
-import java.awt.Image;
 import java.nio.file.Path
 
 import org.apache.commons.io.FileUtils

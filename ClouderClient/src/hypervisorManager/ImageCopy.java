@@ -7,7 +7,6 @@ import java.util.Date;
 import Exceptions.VirtualMachineExecutionException;
 import communication.ServerMessageSender;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
-import utils.SystemUtils;
 import virtualMachineConfiguration.AbstractVirtualMachineConfigurator;
 import virtualMachineManager.PersistentExecutionManager;
 import virtualMachineManager.VirtualMachineExecution;

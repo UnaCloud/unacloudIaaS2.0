@@ -22,6 +22,7 @@ import java.util.zip.ZipInputStream;
 
 import utils.RandomUtils;
 import utils.SystemUtils;
+import Exceptions.VirtualMachineExecutionException;
 
 import com.losandes.utils.Constants;
 import com.losandes.utils.VariableManager;
@@ -38,7 +39,7 @@ public class ImageCacheManager {
 	 * @param imageId image Id 
 	 * @return image available copy
 	 */
-	public static ImageCopy getFreeImageCopy(long imageId){
+	public static ImageCopy getFreeImageCopy(long imageId)throws VirtualMachineExecutionException{
 		System.out.println("getFreeImageCopy "+imageId);
 		Image vmi=getImage(imageId);
 		ImageCopy source,dest;
@@ -46,7 +47,14 @@ public class ImageCacheManager {
 			System.out.println("Tiene "+vmi.getImageCopies().size()+" copias");
 			if(vmi.getImageCopies().isEmpty()){
 				ImageCopy copy=new ImageCopy();
-				dowloadImageCopy(vmi,copy);
+				try{
+					dowloadImageCopy(vmi,copy);
+				}catch(VirtualMachineExecutionException ex){
+					throw ex;
+				}catch(Exception ex){
+					ex.printStackTrace();
+					throw new VirtualMachineExecutionException("Error downloading image",ex);
+				}
 				System.out.println(" downloaded");
 				return copy;
 			}else{
@@ -102,7 +110,7 @@ public class ImageCacheManager {
 	 * @param image base image
 	 * @param copy empty copy
 	 */
-	private static void dowloadImageCopy(Image image,ImageCopy copy){
+	private static void dowloadImageCopy(Image image,ImageCopy copy)throws VirtualMachineExecutionException{
 		File root=new File(machineRepository+"\\"+image.getId()+"\\base");
 		cleanDir(root);
 		root.mkdirs();
@@ -114,6 +122,7 @@ public class ImageCacheManager {
 			pw.println(image.getId());
 			pw.flush();
 			try(ZipInputStream zis=new ZipInputStream(s.getInputStream())){
+				System.out.println("Zip abierto");
 				byte[] buffer=new byte[1024*100];
 				for(ZipEntry entry;(entry=zis.getNextEntry())!=null;){
 					if(entry.getName().equals("unacloudinfo")){
@@ -121,7 +130,7 @@ public class ImageCacheManager {
 						image.setHypervisorId(br.readLine());
 						String mainFile=br.readLine();
 						if(mainFile==null){
-							//Lanzar excepción
+							throw new VirtualMachineExecutionException("Error: image mainFile is null");
 						}
 						copy.setMainFile(new File(root,mainFile));
 						image.setPassword(br.readLine());
@@ -145,8 +154,10 @@ public class ImageCacheManager {
 			image.getImageCopies().add(copy);
 			copy.init();
 			saveImages();
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (VirtualMachineExecutionException e1) {
+			throw e1;
+		}catch (Exception e) {
+			throw new VirtualMachineExecutionException("Error opening connection",e);
 		}
 	}
 	
