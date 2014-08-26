@@ -54,9 +54,9 @@ class DeploymentController {
 		}
 		else if(params.viewAll=="true"){
 			List deployments= new ArrayList()
-			for(user in User.all){
-				def deps=user.getActiveDeployments()
-				if(deps.size()!=0)
+			def deps=Deployment.findByStatus('ACTIVE')
+			for (dep in deps){
+			if(dep.isActive())
 				deployments.addAll(deps)
 			}
 			[deployments: deployments,checkViewAll: true]
