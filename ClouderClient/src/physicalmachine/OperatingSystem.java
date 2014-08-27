@@ -121,5 +121,18 @@ public class OperatingSystem {
         }
         return userName;
     }
+    public static String getWhoAmI() {
+        String userName = null;
+        try {
+            Process p = Runtime.getRuntime().exec(new String[]{"whoami"});
+            InputStream is = p.getInputStream();
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+                userName = br.readLine();
+            }
+            p.destroy();
+        } catch (IOException ex) {
+        }
+        return userName;
+    }
 }
 

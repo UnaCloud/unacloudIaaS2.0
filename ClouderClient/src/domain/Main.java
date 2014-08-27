@@ -44,7 +44,14 @@ public class Main {
         }
         if(mainCase==LOGIN_DB) PhysicalMachineState.reportPhyisicalMachineUserLogin();
         else if(mainCase==TURN_ON_DB){
-        	if(OperatingSystem.getUserName()!=null)System.exit(0);
+        	//TODO quitar esto
+        	{
+        		String user=OperatingSystem.getWhoAmI();
+            	if(user!=null&&!user.toLowerCase().contains("system")){
+            		System.out.println("No se puede ejecutar el agente como "+user);
+            		System.exit(0);
+            	}
+        	}
         	try {
             	PrintStream ps=new PrintStream(new FileOutputStream("log.txt"),true);
     			System.setOut(ps);
