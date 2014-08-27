@@ -57,7 +57,7 @@ class DeploymentController {
 			def deps=Deployment.findByStatus('ACTIVE')
 			for (dep in deps){
 			if(dep.isActive())
-				deployments.addAll(deps)
+				deployments.add(dep)
 			}
 			[deployments: deployments,checkViewAll: true]
 		}
