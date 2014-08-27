@@ -54,10 +54,13 @@ class DeploymentController {
 		}
 		else if(params.viewAll=="true"){
 			List deployments= new ArrayList()
-			def deps=Deployment.findByStatus('ACTIVE')
-			for (dep in deps){
-			if(dep.isActive())
+			def deps=Deployment.findAllByStatus('ACTIVE')
+			println "Deployments:"+deps
+			for (Deployment dep in deps){
+				println "Deployment:" +dep.id
+				if(dep.isActive())
 				deployments.add(dep)
+			
 			}
 			[deployments: deployments,checkViewAll: true]
 		}
