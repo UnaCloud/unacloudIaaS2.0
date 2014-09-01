@@ -27,6 +27,10 @@ import Exceptions.VirtualMachineExecutionException;
 import com.losandes.utils.Constants;
 import com.losandes.utils.VariableManager;
 
+import communication.UnaCloudAbstractResponse;
+import communication.messages.InvalidOperationResponse;
+import communication.messages.vmo.VirtualMachineSaveImageMessage;
+
 public class ImageCacheManager {
 	
 	
@@ -215,5 +219,30 @@ public class ImageCacheManager {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	/**
+	 * Send a image copy to be saved by server
+	 * @param pw 
+	 * @param message 
+	 * @return 
+	 */
+	public static UnaCloudAbstractResponse returnCopyImage(VirtualMachineSaveImageMessage message, ObjectOutputStream pw){
+		try {			
+			loadImages();
+		
+			Image vmi=imageList.get(message.getImageId());
+			if(vmi!=null){
+				//TODO validar la imagen que es
+				String prueba = "";
+				for (ImageCopy im: vmi.getImageCopies()) {
+					prueba+=im.getVirtualMachineName()+" "+im.getImage().getId()+" "+im.getImage()+" - ";
+				}
+				return new InvalidOperationResponse("Test "+prueba+" "+message.getSubOp());
+			}else return new InvalidOperationResponse("Image doesn't exist "+message.getImageId()+" "+message.getVirtualMachineId()+" "+message.getVirtualMachineExecutionId()+" "+message.getSubOp());
+		} catch (Exception e) {
+			return new InvalidOperationResponse("Error: "+e);
+		}		
+		
 	}
 }

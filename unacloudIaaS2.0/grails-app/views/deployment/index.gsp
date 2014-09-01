@@ -1,9 +1,9 @@
 <%@page import="unacloudEnums.*"%>
 <html>
    <head>
-      <meta name="layout" content="main"/>
-    
+      <meta name="layout" content="main"/>  
       <r:require modules="bootstrap"/>
+	 
    </head>
 <body>
 <div class="hero-unit span9">
@@ -19,15 +19,15 @@ function reload()
 <table class="table table-bordered table-condensed text-center" style="background:white" >
   <g:if test="${session.user.userType == 'Administrator'}">
   <tr class="info">
-  	<td class="info" colspan="7">
+  	<td class="info" colspan="8">
   	 
   	<input type="checkbox" id="View All" ${checkViewAll?"checked":""}  onChange="${remoteFunction(action:'index', update:'body',params:'\'viewAll=\' + this.checked') }"><small>&nbsp;View All</small>
   	</td>
   </tr>
   </g:if>
   <tr class="info">
-  	<td class="info" colspan="7" >
-  	<input type="checkbox" id="selectAll"><small>&nbsp;Select All</small>
+  	<td class="info" colspan="8" >
+  		<input type="checkbox" id="selectAll"><small>&nbsp;Select All</small>
   	          <g:actionSubmitImage value="stop" src="${resource(dir: 'images', file: 'empty.gif')}" action="stop" class="icon-off pull-right" title="Stop Selected Instances"/>
               
               <g:actionSubmitImage value="reset" src="${resource(dir: 'images', file: 'empty.gif')}" action="reset" class="icon-refresh pull-right" title="Reset Selected Instances"/>
@@ -42,6 +42,7 @@ function reload()
   <th>Status</th>
   <th>Time Left</th>
   <th>IP</th>
+  <th>Options</th>
   </tr>
  <div class="all">
  <g:each in="${deployments}" status="i" var="deployment">   
@@ -60,51 +61,65 @@ function reload()
     
     <g:each in="${deployment.cluster.images}" status="j" var="image">
    		
-    <td rowspan="${image.numberOfActiveMachines() }">
-   	<small>${image.image.name }</small>
-   	<br>
-   	<g:link action="addInstancesOptions" controller="deployment" params="${ [id:image.id] }"><i class="icon-plus-sign" title="Add Instances"></i></g:link></td>
-    <td rowspan="${image.numberOfActiveMachines() }">
-    <small>${image.image.accessProtocol }</small>
-    </td> 
-    <g:each in="${image.getOrderedVMs() }" status="k" var="virtualMachine">  
-   	<g:if test="${ virtualMachine.status!= VirtualMachineExecutionStateEnum.FINISHED}">
-   	<td >
-   	<input type="checkbox" name="hostname${virtualMachine.id}" class="hostname${i} all">
-   	<small>${virtualMachine.name }</small>
-    </td>
-    <td>
-    <g:if test="${virtualMachine.status== VirtualMachineExecutionStateEnum.CONFIGURING || virtualMachine.status== VirtualMachineExecutionStateEnum.COPYING}">
-     <g:img file="blue.png" title="${virtualMachine.message }"/>
-     </g:if>
-     <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.DEPLOYING}">
-     <g:img file="amber.png" title="${virtualMachine.message }"/>
-     </g:if>
-     <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.DEPLOYED}">
-     <g:img file="green.png" title="${virtualMachine.message }"/>
-     </g:if>
-    <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.FAILED}">
-     <g:img file="red.png" title="${virtualMachine.message }"/>
-     </g:if>
-    </td>
-  	<td>
-  	<small>${ virtualMachine.remainingTime()}</small>
-    </td>
-    <td>
-    <g:if test="${virtualMachine.ip!=null}">
-    <small>${virtualMachine.ip.ip }</small>	
-    </g:if>
-     <g:if test="${virtualMachine.ip==null}">
-    <small>None</small>	
-    </g:if>
-    </td>
-    
-    </tr>
-    <tr>
-    </g:if>
+	    <td rowspan="${image.numberOfActiveMachines() }">
+	   	<small>${image.image.name }</small>
+	   	<br>
+	   	<g:link action="addInstancesOptions" controller="deployment" params="${ [id:image.id] }"><i class="icon-plus-sign" title="Add Instances"></i></g:link></td>
+	    <td rowspan="${image.numberOfActiveMachines() }">
+	    <small>${image.image.accessProtocol }</small>
+	    </td> 
+	    <g:each in="${image.getOrderedVMs() }" status="k" var="virtualMachine">  
+		   	<g:if test="${ virtualMachine.status!= VirtualMachineExecutionStateEnum.FINISHED}">
+			   	<td >
+
+				   	<input type="checkbox" name="hostname${virtualMachine.id}" class="hostname${i} all">
+				   	<small>${virtualMachine.name }</small>
+			    </td>
+			    <td>
+				    <g:if test="${virtualMachine.status== VirtualMachineExecutionStateEnum.CONFIGURING || virtualMachine.status== VirtualMachineExecutionStateEnum.COPYING}">
+				    	 <g:img file="blue.png" title="${virtualMachine.message }"/>
+				    </g:if>
+				    <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.DEPLOYING}">
+				    	 <g:img file="amber.png" title="${virtualMachine.message }"/>
+				    </g:if>
+				    <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.DEPLOYED}">
+				    	 <g:img file="green.png" title="${virtualMachine.message }"/>
+				    </g:if>
+				    <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.FAILED}">
+				    	 <g:img file="red.png" title="${virtualMachine.message }"/>
+				    </g:if>
+				</td>
+				<td>
+				  	<small>${ virtualMachine.remainingTime()}</small>
+				</td>
+				<td>
+				    <g:if test="${virtualMachine.ip!=null}">
+				    	<small>${virtualMachine.ip.ip }</small>	
+				    </g:if>
+				    <g:if test="${virtualMachine.ip==null}">
+				  	    <small>None</small>	
+				    </g:if>
+			    </td>	
+			    <td>		
+			        		  
+				    <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.DEPLOYED}">
+				        
+						<g:link action="save" method="post" params="${[image: image.id, machine: virtualMachine.id]}" ><i class="icon-download-alt" title="Save image"></i></g:link>
+    				
+				    </g:if>
+					<g:else>					    
+						<g:link action="save" method="post" params="${[image: image.id, machine: virtualMachine.id]}"><i class="icon-download-alt" title="Save image"></i></g:link>
+    				</g:else>
+			    </td>		    
+
+
+			    </tr>
+			    <tr>
+		    </g:if>
+	    </g:each>    
     </g:each>
-    
-    </g:each>
+
+
   </tr>
   <tr>
 </g:each>
@@ -134,7 +149,6 @@ $(function () {
 
     });
 </script>
-</g:each>
-
+</g:each> 
 </body>
 

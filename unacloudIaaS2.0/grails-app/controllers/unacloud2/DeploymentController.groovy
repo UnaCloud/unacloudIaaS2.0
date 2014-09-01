@@ -198,4 +198,45 @@ class DeploymentController {
 		}
 		redirect(action: "index")
 	}
+	
+	/**
+	 * TODO 
+	 * Documentation is missing
+	 */
+	def save(){
+		if(session.user==null){
+			flash.message="Your session has expired."
+			redirect(uri:"/error",absolute:true)
+		}else{
+			try {
+				println params.image
+				  def user= User.get(session.user.id)
+				  [imageId:params.image,machineId:params.machine,imageName:DeployedImage.get(params.image).image.name]
+				
+			} catch (Exception e) {
+				e.printStackTrace()
+				flash.message=e.message
+				redirect(uri:"/error",absolute:true)
+				return
+			}
+		}
+	}
+	def saveImage(){
+		try {
+			long imageId = Long.parseLong(params.image)
+			long virtualMachineId = Long.parseLong(params.machine)
+			String imageName = params.name
+			//def image= DeployedImage.get(imageId).image
+			VirtualMachineExecution vm = VirtualMachineExecution.get(virtualMachineId)
+			DeployedImage di = DeployedImage.get(imageId);
+			deploymentService.saveImage(vm,di,virtualMachineId,imageName)
+			
+		} catch (Exception e) {
+			e.printStackTrace()
+			flash.message=e.message
+			redirect(uri:"/error",absolute:true)
+			return
+		}
+		redirect(controller:"deployment", action:"index")
+	}
 }
