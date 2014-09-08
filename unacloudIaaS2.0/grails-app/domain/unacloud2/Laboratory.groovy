@@ -41,7 +41,7 @@ class Laboratory {
 	 */
 	ArrayList <PhysicalMachine> getOrderedMachines(){
 		PhysicalMachineComparator c= new PhysicalMachineComparator()
-		ArrayList <PhysicalMachine> array = new ArrayList(physicalMachines).sort(c)
+		ArrayList <PhysicalMachine> array = new ArrayList(physicalMachines).sort(true,c)
 		return array
 	}
 }

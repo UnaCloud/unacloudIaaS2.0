@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-   <g:validateSession>
+   <g:if test="${session.user==null}">
+   	 <g:javascript>
+		window.location.href = '<g:createLink uri='/' absolute='true' />';
+	</g:javascript>
+   </g:if>
    <head>
    		<meta charset="utf-8">
    	
@@ -9,11 +13,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 	<link rel="shortcut icon" href="/~unacloud/dokuwiki/lib/tpl/PlantillaLab/images/favicon.ico" />
-	
+	<asset:stylesheet href="application.css"/>
     <!-- Le styles -->
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
+    
     <style type="text/css">
       body {
+        
         padding-top: 60px;
         padding-bottom: 40px;
       }
@@ -31,12 +36,12 @@
       }
     </style>
       <g:layoutTitle/>
-      <r:layoutResources/>
+      
       
    	
    </head>
    <body id="body">
-      
+      <asset:javascript src="application.js"/>
       <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
@@ -81,9 +86,7 @@
           </div><!--/.well -->
         </div><!--/span-->
         <g:layoutBody/>
-      	<r:layoutResources/>
         </div>
         </div>
    </body>
-   </g:validateSession>
 </html>

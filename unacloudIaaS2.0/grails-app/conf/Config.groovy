@@ -61,6 +61,8 @@ grails.hibernate.cache.queries = false
 
 environments {
     development {
+		disable.auto.recompile=false
+		grails.gsp.enable.reload=true
         grails.logging.jul.usebridge = true
     }
     production {

@@ -1,21 +1,9 @@
 package back.allocators
 
-import back.pmallocators.AllocatorEnum;
-import back.pmallocators.PhysicalMachineAllocationDescription;
-import back.services.PhysicalMachineStateManagerService;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
-import javassist.bytecode.stackmap.BasicBlock.Catch;
-
-import org.hibernate.collection.PersistentSet
-
-import pmStateManager.StateManager;
-import groovy.sql.Sql;
+import groovy.sql.Sql
 import unacloud2.*
-import unacloudEnums.VirtualMachineExecutionStateEnum;
+import back.pmallocators.AllocatorEnum
+import back.pmallocators.PhysicalMachineAllocationDescription
 
 class PhysicalMachineAllocatorService {
 	

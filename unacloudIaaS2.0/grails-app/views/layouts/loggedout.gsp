@@ -9,7 +9,7 @@
     <meta name="author" content="">
 	
     <!-- Le styles -->
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
+    <asset:stylesheet src="application.css"/>
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -37,12 +37,11 @@
       }
     </style>
       <g:layoutTitle/>
-      <r:layoutResources/>
       
    	
    </head>
    <body>
-      
+      <asset:javascript src="application.js"/>
       <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
@@ -58,7 +57,7 @@
     <div class="container-fluid">
 	<div class="row-fluid">
 	<g:layoutBody/>
-      	<r:layoutResources/>
+      	
         </div>
         </div>
    </body>

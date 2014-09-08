@@ -51,7 +51,7 @@ class User {
 	 */
 	ArrayList <VirtualMachineImage> getOrderedImages(){
 		VirtualMachineImageComparator c= new VirtualMachineImageComparator()
-		ArrayList <VirtualMachineImage> array = new ArrayList(images).sort(c)
+		ArrayList <VirtualMachineImage> array = new ArrayList(images).sort(true,c)
 		return array
 	}
 	
@@ -61,7 +61,7 @@ class User {
 	 */
 	ArrayList <Cluster> getOrderedClusters(){
 		ClusterComparator c= new ClusterComparator()
-		ArrayList <Cluster> array = new ArrayList(userClusters).sort(c)
+		ArrayList <Cluster> array = new ArrayList(userClusters).sort(true,c)
 		return array
 	}
 	

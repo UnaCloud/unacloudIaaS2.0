@@ -30,14 +30,14 @@
     </td>
     <td>
     <ul>
-    <g:each in="${user.getOrderedImages()}" var="image">
+    <g:each in="${user.getImages()}" var="image">
       <li><small>${image.name }</small></li>
     </g:each>
     </ul>
     </td>
     <td>
     <ul>
-    <g:each in="${user.getOrderedClusters()}" var="cluster">
+    <g:each in="${user.getUserClusters()}" var="cluster">
       <li><small>${cluster.name }</small></li>
     </g:each>
     </ul>
