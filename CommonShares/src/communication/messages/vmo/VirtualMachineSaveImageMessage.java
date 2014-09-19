@@ -4,7 +4,8 @@ import communication.messages.VirtualMachineOperationMessage;
 
 public class VirtualMachineSaveImageMessage extends VirtualMachineOperationMessage{
 
-	private long imageId, virtualMachineId;
+	private long imageId;
+	private String tokenCom;
 	private static final long serialVersionUID = 3147489071041260127L;
 	
 	public VirtualMachineSaveImageMessage() {
@@ -19,12 +20,13 @@ public class VirtualMachineSaveImageMessage extends VirtualMachineOperationMessa
 		this.imageId = imageId;
 	}
 
-	public long getVirtualMachineId() {
-		return virtualMachineId;
+	public String getTokenCom() {
+		return tokenCom;
 	}
 
-	public void setVirtualMachineId(long virtualMachineId) {
-		this.virtualMachineId = virtualMachineId;
+	public void setTokenCom(String tokenCom) {
+		this.tokenCom = tokenCom;
 	}
-		
+
+	
 }

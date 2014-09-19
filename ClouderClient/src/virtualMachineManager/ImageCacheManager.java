@@ -6,6 +6,7 @@ import hypervisorManager.ImageCopy;
 import hypervisorManager.VirtualBox;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,23 +14,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import utils.RandomUtils;
 import utils.SystemUtils;
 import Exceptions.VirtualMachineExecutionException;
 
 import com.losandes.utils.Constants;
+import com.losandes.utils.RandomUtils;
 import com.losandes.utils.VariableManager;
-
-import communication.UnaCloudAbstractResponse;
-import communication.messages.InvalidOperationResponse;
-import communication.messages.vmo.VirtualMachineSaveImageMessage;
 
 public class ImageCacheManager {
 	
@@ -121,10 +117,13 @@ public class ImageCacheManager {
 		final int puerto = VariableManager.global.getIntValue("DATA_SOCKET");
 		final String ip=VariableManager.global.getStringValue("CLOUDER_SERVER_IP");
 		System.out.println("Conectando a "+ip+":"+puerto);
-		try(Socket s=new Socket(ip,puerto);PrintWriter pw=new PrintWriter(s.getOutputStream())){
+		try(Socket s=new Socket(ip,puerto);DataOutputStream ds=new DataOutputStream(s.getOutputStream())){
 			System.out.println("Conexion exitosa");
-			pw.println(image.getId());
-			pw.flush();
+			ds.write(1);
+			ds.flush();
+			System.out.println("Envio ID");
+			ds.writeLong(image.getId());
+			ds.flush();
 			try(ZipInputStream zis=new ZipInputStream(s.getInputStream())){
 				System.out.println("Zip abierto");
 				byte[] buffer=new byte[1024*100];
@@ -219,30 +218,14 @@ public class ImageCacheManager {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	/**
-	 * Send a image copy to be saved by server
-	 * @param pw 
-	 * @param message 
-	 * @return 
-	 */
-	public static UnaCloudAbstractResponse returnCopyImage(VirtualMachineSaveImageMessage message, ObjectOutputStream pw){
-		try {			
-			loadImages();
-		
-			Image vmi=imageList.get(message.getImageId());
-			if(vmi!=null){
-				//TODO validar la imagen que es
-				String prueba = "";
-				for (ImageCopy im: vmi.getImageCopies()) {
-					prueba+=im.getVirtualMachineName()+" "+im.getImage().getId()+" "+im.getImage()+" - ";
-				}
-				return new InvalidOperationResponse("Test "+prueba+" "+message.getSubOp());
-			}else return new InvalidOperationResponse("Image doesn't exist "+message.getImageId()+" "+message.getVirtualMachineId()+" "+message.getVirtualMachineExecutionId()+" "+message.getSubOp());
-		} catch (Exception e) {
-			return new InvalidOperationResponse("Error: "+e);
-		}		
-		
+	}	
+
+	public static void deleteImage(Long imageId){
+		loadImages();
+		Image vmi=imageList.get(imageId);
+		if(vmi!=null){
+			imageList.remove(imageId);
+			saveImages();
+		}
 	}
 }

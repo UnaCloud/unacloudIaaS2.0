@@ -71,6 +71,13 @@ public abstract class VMwareAbstractHypervisor extends Hypervisor{
         }
     }
     @Override
+    public void deleteVirtualMachineSnapshot(ImageCopy image, String snapshotname) throws HypervisorOperationException {
+    	String h = LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"-T",getType(),"deleteSnapshot",image.getMainFile().getPath(),snapshotname);
+        if (h.contains(ERROR_MESSAGE)) {
+            throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
+        }
+    };
+    @Override
     public void configureVirtualMachineHardware(int cores, int ram, ImageCopy image) throws HypervisorOperationException {
     	if(cores!=0&&ram!=0){
             new Context(image.getMainFile().getPath()).changeVMXFileContext(cores,ram);

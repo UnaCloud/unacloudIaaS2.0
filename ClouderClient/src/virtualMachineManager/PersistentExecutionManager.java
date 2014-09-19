@@ -3,6 +3,7 @@ package virtualMachineManager;
 import static com.losandes.utils.Constants.ERROR_MESSAGE;
 import hypervisorManager.HypervisorOperationException;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -13,11 +14,17 @@ import java.util.Timer;
 import java.util.TreeMap;
 
 import monitoring.VirtualMachineStateViewer;
+import tasks.ExecutorService;
+import tasks.SaveImageVirtualMachineTask;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import communication.ServerMessageSender;
 import communication.UnaCloudAbstractResponse;
+import communication.messages.InvalidOperationResponse;
 import communication.messages.vmo.VirtualMachineAddTimeMessage;
 import communication.messages.vmo.VirtualMachineRestartMessage;
+import communication.messages.vmo.VirtualMachineSaveImageMessage;
+import communication.messages.vmo.VirtualMachineSaveImageResponse;
+import communication.messages.vmo.VirtualMachineStartResponse.VirtualMachineState;
 
 /**
  * Responsible for managing virtual machine executions. This class is responsible to schedule virtual machine startups and
@@ -54,7 +61,24 @@ public class PersistentExecutionManager {
 		}
 		saveData();
     }
+    
+    public static void stopExecution(long virtualMachineExecutionId) {
+    	VirtualMachineExecution execution=executionList.get(virtualMachineExecutionId);
+		if(execution!=null){
+			execution.getImage().stop();
+		}
+    }
+    public static void unregisterExecution(long virtualMachineExecutionId) {
+    	VirtualMachineExecution execution=executionList.get(virtualMachineExecutionId);
+		if(execution!=null){
+			execution.getImage().unregister();
+		}
+    }
 
+	public static void cleanDir(File f){
+		if(f.isDirectory())for(File r:f.listFiles())cleanDir(r);
+		f.delete();
+	}
     /**
      * Restarts the given virtual machine
      * @param hypervisorName The hypervisor that must be used to stop this virtual machine
@@ -138,5 +162,29 @@ public class PersistentExecutionManager {
     	        } catch (Exception ex){}
     		};
     	}.start();
+    }
+    /**
+     * TODO: documentation
+     * @param message
+     * @return
+     */
+    public static UnaCloudAbstractResponse sendImageCopy(VirtualMachineSaveImageMessage message){
+    	try {
+    		VirtualMachineExecution execution=executionList.get(message.getVirtualMachineExecutionId());
+    		VirtualMachineSaveImageResponse response = new VirtualMachineSaveImageResponse();
+    		if(execution!=null&&execution.getImageId()==message.getImageId()){
+    			System.out.println("Comienza envio de copia con token "+message.getTokenCom());
+				response.setMessage("Copying image");
+				response.setState(VirtualMachineState.COPYNG);
+				ExecutorService.executeBackgroundTask(new SaveImageVirtualMachineTask(execution,message.getTokenCom()));
+            }else{
+				response.setMessage("Failed: Execution doesn't exist");
+				response.setState(VirtualMachineState.FAILED);
+			}
+    		return response;
+		} catch (Exception e) {
+			
+			return new InvalidOperationResponse("Error: "+e);
+		}       
     }
 }

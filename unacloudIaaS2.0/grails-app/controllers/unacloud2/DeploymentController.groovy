@@ -1,7 +1,9 @@
 package unacloud2
 
+import back.services.ImageUploadService;
 import back.userRestrictions.UserRestrictionProcessorService
 
+import grails.converters.JSON
 import java.util.regex.Pattern.Start;
 
 import webutils.ImageRequestOptions;
@@ -23,6 +25,11 @@ class DeploymentController {
 	 */
 	
 	DeploymentService deploymentService
+	
+	/**
+	 * TODO: documentation
+	 */
+	ImageUploadService imageUploadService
 	
 	//-----------------------------------------------------------------
 	// Actions
@@ -186,7 +193,7 @@ class DeploymentController {
 		def instance=params.instances.toInteger()
 		User user= User.get(session.user.id)
 		try{
-		deploymentService.addInstances(depImage, user,instance, params.time.toLong()*60*60*1000)
+			deploymentService.addInstances(depImage, user,instance, params.time.toLong()*60*60*1000)
 		}
 		catch (Exception e){
 			if(e.getMessage()==null)
@@ -203,40 +210,60 @@ class DeploymentController {
 	 * TODO 
 	 * Documentation is missing
 	 */
+	def validate(){
+		if(session.user==null){
+			render('403',"Your session has expired.")			
+			return
+		}else{
+			try {
+				def result = []
+				def user= User.get(session.user.id)
+				DeployedImage di = DeployedImage.get(params.image);
+				String nameW =  params.name;
+				print nameW
+				VirtualMachineImage vm = VirtualMachineImage.findByName(nameW);
+				boolean rep=false;
+				if(vm){
+					def query = User.where{images{vm} && id == session.user.id};
+					def owner = query.find();
+					if(owner)rep= true;
+				}					
+				result = [replace: rep, imageId:params.image,machineId:params.machine,imageName:params.name]
+				render result as JSON;
+			} catch (Exception e) {
+				e.printStackTrace()
+				render("505",e.message)
+				return
+			}
+		}
+	}
 	def save(){
 		if(session.user==null){
 			flash.message="Your session has expired."
 			redirect(uri:"/error",absolute:true)
 		}else{
+			def user= User.get(session.user.id)
 			try {
-				println params.image
-				  def user= User.get(session.user.id)
-				  [imageId:params.image,machineId:params.machine,imageName:DeployedImage.get(params.image).image.name]
-				
+				long imageId = Long.parseLong(params.image)
+				long virtualMachineId = Long.parseLong(params.machine)
+				String imageName = params.name
+				print imageName
+				VirtualMachineExecution vm = VirtualMachineExecution.get(virtualMachineId)
+				DeployedImage di = DeployedImage.get(imageId);
+				if(User.where{id == user.id && images{di.image}}.find()){
+					imageUploadService.saveImage(vm,di,virtualMachineId,imageName,user)					
+				}else{
+					flash.message="The image is not registered to user."
+					redirect(uri:"/error",absolute:true)
+					return
+				}
 			} catch (Exception e) {
 				e.printStackTrace()
 				flash.message=e.message
 				redirect(uri:"/error",absolute:true)
 				return
 			}
+			redirect(controller:"deployment", action:"index")
 		}
-	}
-	def saveImage(){
-		try {
-			long imageId = Long.parseLong(params.image)
-			long virtualMachineId = Long.parseLong(params.machine)
-			String imageName = params.name
-			//def image= DeployedImage.get(imageId).image
-			VirtualMachineExecution vm = VirtualMachineExecution.get(virtualMachineId)
-			DeployedImage di = DeployedImage.get(imageId);
-			deploymentService.saveImage(vm,di,virtualMachineId,imageName)
-			
-		} catch (Exception e) {
-			e.printStackTrace()
-			flash.message=e.message
-			redirect(uri:"/error",absolute:true)
-			return
-		}
-		redirect(controller:"deployment", action:"index")
 	}
 }

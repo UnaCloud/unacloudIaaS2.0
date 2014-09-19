@@ -1,9 +1,8 @@
 package fileManager;
 
-import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -16,16 +15,16 @@ import unacloud2.VirtualMachineImage;
 import unacloud2.VirtualMachineImageService;
 
 public class FileTransferTask implements Runnable{
-	Socket s;
+	Socket s;	
 	public FileTransferTask(Socket s) {
 		System.out.println("Atending "+s.getRemoteSocketAddress());
 		this.s = s;
 	}
 	@Override
 	public void run() {
-		try(Socket ss=s;BufferedReader br=new BufferedReader(new InputStreamReader(s.getInputStream()));OutputStream os=s.getOutputStream()){
+		try(Socket ss=s;DataInputStream ds=new DataInputStream(s.getInputStream());OutputStream os=s.getOutputStream()){
 			ZipOutputStream zos=new ZipOutputStream(os);
-			long imageId=Long.parseLong(br.readLine());
+			long imageId=ds.readLong();
 			System.out.println("\tAtendiendo "+imageId);
 			VirtualMachineImage image=new VirtualMachineImageService().getImage(imageId);
 			final byte[] buffer=new byte[1024*100];

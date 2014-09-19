@@ -58,6 +58,8 @@ abstract class Hypervisor {
 
     public abstract void takeVirtualMachineSnapshot(ImageCopy image,String snapshotname) throws HypervisorOperationException;
 
+    public abstract void deleteVirtualMachineSnapshot(ImageCopy image,String snapshotname) throws HypervisorOperationException;
+    
     public abstract void restoreVirtualMachineSnapshot(ImageCopy image,String snapshotname)throws HypervisorOperationException;
     
     public abstract boolean existsVirtualMachineSnapshot(ImageCopy image,String snapshotname)throws HypervisorOperationException;
@@ -84,6 +86,7 @@ abstract class Hypervisor {
         	ImageCacheManager.freeLockedImageCopy(image);
 		}
     }
+    
     void sleep(long l) {
         try {
             Thread.sleep(l);

@@ -7,6 +7,7 @@
    </head>
 <body>
 <div class="hero-unit span9">
+
 <g:form controller="deployment">
 <script>
 var myVar=setInterval(function(){reload()},8000);
@@ -104,22 +105,16 @@ function reload()
 			        		  
 				    <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.DEPLOYED}">
 				        
-						<g:link action="save" method="post" params="${[image: image.id, machine: virtualMachine.id]}" ><i class="icon-download-alt" title="Save image"></i></g:link>
-    				
-				    </g:if>
-					<g:else>					    
-						<g:link action="save" method="post" params="${[image: image.id, machine: virtualMachine.id]}"><i class="icon-download-alt" title="Save image"></i></g:link>
-    				</g:else>
-			    </td>		    
-
-
+				        <a class="dialog_button" data-imageid="${image.id}" data-vmachineid="${virtualMachine.id}" data-imagename="${image.image.name}">
+				            <i class="icon-download-alt" title="Save image"></i>							
+				        </a>    					
+				    </g:if>					
+			    </td>		
 			    </tr>
 			    <tr>
 		    </g:if>
 	    </g:each>    
     </g:each>
-
-
   </tr>
   <tr>
 </g:each>
@@ -128,6 +123,10 @@ function reload()
 
 </g:form>
 </div>
+ <script src="../js/bootbox.js"></script>
+ <script src="../js/ui.js"></script>
+ <script src="../js/pages.js"></script>
+ <script>$(document).on('ready',page.deploy)</script>
 <script type="text/javascript">
 $(function () {
     $('#selectAll').click(function (event) {

@@ -35,7 +35,7 @@ environments {
 			username = "iaasdev"
 			password = "2fsGR5T1vJV3mJ9QXaw4"
             dbCreate = "create-drop"
-            url = "jdbc:mysql://157.253.204.12:100/iaas2dev?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
+            url = "jdbc:mysql://157.253.204.12:100/iaas2test?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
         }
     }
     production {
