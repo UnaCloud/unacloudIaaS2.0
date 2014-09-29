@@ -67,7 +67,7 @@ class User {
 	
 	/**
 	 * return the active deployments belonging to the user
-	 * @return active deployments realted to user
+	 * @return active deployments related to user
 	 */
 	def getActiveDeployments(){
 		ArrayList activeDeployments= new ArrayList()
@@ -77,6 +77,7 @@ class User {
 		}
 		return activeDeployments
 	}
+	
 	
 	
 }

@@ -71,7 +71,17 @@ class ClusterController {
 	 */
 	def deployOptions(){
 		def cluster=Cluster.get(params.id);
-		[cluster: cluster,limit: PhysicalMachine.count, limitHA: 2]
+		int limit
+		int limitHA
+		def machines=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON)
+		for (machine in machines)
+		{
+			if(machine.highAvailability)
+			limitHA++
+			else
+			limit++
+		}
+		[cluster: cluster,limit: limit, limitHA: limitHA, hardwareProfiles: HardwareProfile.list()]
 	}
 	
 	/**

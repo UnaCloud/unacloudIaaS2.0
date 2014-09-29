@@ -25,7 +25,7 @@ public class FirstFitAllocator extends VirtualMachineAllocator {
 						pmad=new PhysicalMachineAllocationDescription(pm.getDatabaseId(),0,0,0);
 						physicalMachineDescriptions.put(pmad.getNodeId(),pmad);
 					}
-					pmad.addResources(vme.getCores(),vme.getRam(), 1);
+					pmad.addResources(vme.getHardwareProfile().getCores(),vme.getHardwareProfile().getRam(), 1);
 					continue vmCycle;
 				}
 			}

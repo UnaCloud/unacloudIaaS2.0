@@ -20,13 +20,7 @@ class VirtualMachineExecution {
 	/**
 	 * Virtual machine number of processors
 	 */
-	int cores	
-	
-	/**
-	 * Virtual machine RAM memory in MB
-	 */
-	int ram
-	
+	HardwareProfile hardwareProfile
 	/**
 	 * Virtual machine IP address
 	 */

@@ -32,41 +32,21 @@
 				<table border="0" cellpadding="10"">
 					<tr>
 						<td><label>Instances to deploy</label></td>
-						<td><label>RAM per instance</label></td>
-						<td><label>Cores per instance</label></td>
+						<td><label>Hardware Profile</label></td>
+						
 					</tr>
 					<tr>
 						<td><input name="instances" class="input-small" type="text">
 						</td>
-						<td><select name="RAM" class="input-small">
-								<option value="${512}">
-									${512}
+						<td><select name="hardwareProfile" class="input-small">
+								<g:each in="${hardwareProfiles}" status="j" var="hp">
+								<option value="${hp.id}">
+									${hp.name}
 								</option>
-								<option value="${1024}">
-									${1024}
-								</option>
-								<option value="${2048}">
-									${2048}
-								</option>
-								<option value="${4096}">
-									${4096}
-								</option>
+								</g:each>
 							</select>
 						</td>
-						<td><select name="cores" class="input-small">
-								<option value="${1}">
-									${1}
-								</option>
-								<option value="${2}">
-									${2}
-								</option>
-								<option value="${4}">
-									${4}
-								</option>
-								<option value="${8}">
-									${8}
-								</option>
-						</select></td>
+						
 					</tr>
 					<tr>
 						<td><label>High Availability</label></td>

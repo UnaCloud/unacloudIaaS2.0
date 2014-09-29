@@ -94,6 +94,31 @@
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry excluding="BuildConfig.groovy|*DataSource.groovy|UrlMappings.groovy|Config.groovy|BootStrap.groovy|spring/resources.groovy" kind="src" path=".link_to_grails_plugins/jaxrs-0.11/grails-app/conf">
+		<attributes>
+			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path=".link_to_grails_plugins/jaxrs-0.11/grails-app/controllers">
+		<attributes>
+			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path=".link_to_grails_plugins/jaxrs-0.11/grails-app/i18n">
+		<attributes>
+			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path=".link_to_grails_plugins/jaxrs-0.11/src/groovy">
+		<attributes>
+			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path=".link_to_grails_plugins/jaxrs-0.11/src/java">
+		<attributes>
+			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" path=".link_to_grails_plugins/jquery-1.11.1/grails-app/assets">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
@@ -160,5 +185,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.grails.ide.eclipse.core.CLASSPATH_CONTAINER"/>
+	<classpathentry kind="con" path="com.amazonaws.eclipse.sdk.AWS_JAVA_SDK"/>
 	<classpathentry kind="output" path="target-eclipse/classes"/>
 </classpath>

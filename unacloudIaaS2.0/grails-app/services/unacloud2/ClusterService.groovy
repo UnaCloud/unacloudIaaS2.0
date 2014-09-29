@@ -23,11 +23,11 @@ class ClusterService {
 			cluster.images.add(VirtualMachineImage.get(image))
 		}
 		}
-		cluster.save()
+		cluster.save(failOnError: true)
 		if(user.userClusters==null)
 			user.userClusters
 		user.userClusters.add(cluster)
-		user.save()
+		user.save(failOnError: true)
     }
 	
 	/**

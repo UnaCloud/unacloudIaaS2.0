@@ -12,7 +12,7 @@ public class MaxRamPerVMRestriction implements UserRestrictionInterface{
 			List<VirtualMachineExecution> vmes, List<PhysicalMachine> pms) throws UserRestrictionException {
 		int ram= Integer.parseInt(value);
 		for (VirtualMachineExecution  vme:vmes){
-			if (vme.getRam()>ram)
+			if (vme.getHardwareProfile().getRam()>ram)
 				throw new UserRestrictionException("Max RAM allowed:"+ram);
 		}
 		

@@ -53,7 +53,8 @@ grails.project.dependency.resolution = {
 		compile ":twitter-bootstrap:2.3.2.2"
 		compile ":executor:0.3"
 		compile ":asset-pipeline:1.9.9"
-		build ':tomcat:7.0.54'
+		build	':tomcat:7.0.54'
+		compile ":jaxrs:0.11"
         
 		runtime ":database-migration:1.3.2"
 

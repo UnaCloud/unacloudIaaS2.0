@@ -26,14 +26,14 @@ public class RoundRobinAllocator extends VirtualMachineAllocator {
 				PhysicalMachineAllocationDescription pmad = physicalMachineDescriptions.get(pm.getDatabaseId());
 				VirtualMachineExecution nextVirtualMachine = virtualMachineList.get(nextVm);
 				System.out.println("Antes:"+pmad);
-				System.out.println("Fitin vm:"+nextVirtualMachine.getCores()+" "+nextVirtualMachine.getRam());
+				System.out.println("Fitin vm:"+nextVirtualMachine.getHardwareProfile().getCores()+" "+nextVirtualMachine.getHardwareProfile().getRam());
 				if(fitVMonPM(nextVirtualMachine, pm, pmad)){
 					nextVirtualMachine.setExecutionNode(pm);
 					if(pmad==null){
 						pmad=new PhysicalMachineAllocationDescription(pm.getDatabaseId(),0,0,0);
 						physicalMachineDescriptions.put(pmad.getNodeId(),pmad);
 					}
-					pmad.addResources(nextVirtualMachine.getCores(),nextVirtualMachine.getRam(), 1);
+					pmad.addResources(nextVirtualMachine.getHardwareProfile().getCores(),nextVirtualMachine.getHardwareProfile().getRam(), 1);
 					System.out.println("Despues: "+pmad);
 					nextVm++;
 				}else{

@@ -10,6 +10,7 @@ import java.util.TreeMap;
 
 import org.junit.Test;
 
+import unacloud2.HardwareProfile;
 import unacloud2.PhysicalMachine;
 import unacloud2.PhysicalMachineStateEnum;
 import unacloud2.VirtualMachineExecution;
@@ -38,8 +39,10 @@ public class FirstFitTest {
 			}
 			for(int i=r.nextInt(400);i>=0;i--){
 				VirtualMachineExecution vme=new VirtualMachineExecution();
-				vme.setCores(r.nextInt(3)+1);
-				vme.setRam((r.nextInt(15)+1)*1024);
+				HardwareProfile hp= new HardwareProfile();
+				vme.setHardwareProfile(hp);
+				vme.getHardwareProfile().setCores(r.nextInt(3)+1);
+				vme.getHardwareProfile().setRam((r.nextInt(15)+1)*1024);
 				vms.add(vme);
 			}
 			try {

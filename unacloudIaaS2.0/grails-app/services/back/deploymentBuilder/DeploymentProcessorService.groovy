@@ -1,5 +1,6 @@
 package back.deploymentBuilder;
 
+import javax.websocket.DeploymentException
 import org.springframework.aop.ThrowsAdvice;
 
 import back.allocators.IpAllocatorService;
@@ -89,6 +90,7 @@ class DeploymentProcessorService {
 		/*
 		 * Allocates a physical machine and an IP to every selected virtual machine
 		 */
+		if(pms.size()==0) throw new AllocatorException('No physical machines available') 
 		physicalMachineAllocatorService.allocatePhysicalMachines(vms,pms,addInstancesDeployment)
 		ipAllocatorService.allocateIPAddresses(image, addInstancesDeployment)
 	}

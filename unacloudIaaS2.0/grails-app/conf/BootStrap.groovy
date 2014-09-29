@@ -10,6 +10,7 @@ import fileManager.DataServerSocket;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.internal.runners.statements.FailOnTimeout;
 
+import unacloud2.HardwareProfile;
 import unacloud2.Hypervisor;
 import unacloud2.IP
 import unacloud2.IPPool;
@@ -28,6 +29,13 @@ class BootStrap {
 	VariableManagerService variableManagerService
 
 	def init = { servletContext ->
+		if(HardwareProfile.count() ==0){
+			new HardwareProfile(name:'small', cores:1, ram:1024).save()
+			new HardwareProfile(name:'medium', cores:2, ram:2048).save()
+			new HardwareProfile(name:'large', cores:4, ram:4096).save()
+			new HardwareProfile(name:'xlarge',cores:4, ram:8192).save()
+			
+		}
 		if(User.count() ==0){
 			String charset = (('A'..'Z') + ('0'..'9')).join()
 			Integer length = 32

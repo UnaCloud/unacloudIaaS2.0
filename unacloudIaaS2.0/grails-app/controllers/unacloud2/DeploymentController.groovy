@@ -55,9 +55,7 @@ class DeploymentController {
 		else if(params.viewAll=="true"){
 			List deployments= new ArrayList()
 			def deps=Deployment.findAllByStatus('ACTIVE')
-			println "Deployments:"+deps
 			for (Deployment dep in deps){
-				println "Deployment:" +dep.id
 				if(dep.isActive())
 				deployments.add(dep)
 			
@@ -71,32 +69,16 @@ class DeploymentController {
 	 * @return id of the image in order to add instances
 	 */
 	def addInstancesOptions(){
-		[id:params.id]
-	}
-	
-	/**
-	 * Deploys a single image for edit purposes
-	 * @return
-	 */
-	
-	def deployImage(){
-
-		def image= VirtualMachineImage.get(params.id)
-		def user= User.get(session.user.id)
-		if (!image.isDeployed()){
-			try{
-			deploymentService.deployImage(image, user)
-			}
-			catch (Exception e){
-				flash.message=e.message
-				redirect(action: "error");
-			}
-			redirect(action: "index")
+		def machines=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON)
+		def limit=0, limitHA=0
+		for (machine in machines)
+		{
+			if(machine.highAvailability)
+			limitHA++
+			else
+			limit++
 		}
-		else {
-			flash.message= "Image already deployed"
-			redirect(controller:"virtualMachineImage",action:"index")
-		}
+		[id:params.id, limit:limit, limitHA:limitHA]
 	}
 	
 	/**
@@ -107,6 +89,7 @@ class DeploymentController {
 	
 	def deploy(){
 		Cluster cluster= Cluster.get(params.get('id'))
+		
 		int totalInstances
 			def user= User.get(session.user.id)
 			def imageNumber= cluster.images.size()
@@ -121,18 +104,20 @@ class DeploymentController {
 			
 			def temp=new ImageRequestOptions[cluster.images.size()];
 			def highAvail= new boolean[cluster.images.size()]
-			println "params: "+params
+			
 			if(imageNumber==1){
-				temp[0]=new ImageRequestOptions(cluster.images.first().id, params.RAM.toInteger(),params.cores.toInteger(),params.instances.toInteger(),params.hostname);
+				HardwareProfile hp= HardwareProfile.get(params.get('hardwareProfile'))
+				temp[0]=new ImageRequestOptions(cluster.images.first().id, hp.ram,hp.cores,params.instances.toInteger(),params.hostname);
 				highAvail[0]= (params.get('highAvailability'+cluster.images.first().id))!=null
 			}
 			else{
+				
 				cluster.images.eachWithIndex {it,idx->
+					HardwareProfile hp= HardwareProfile.get(params.hardwareProfile.getAt(idx))
 					highAvail[idx]=(params.get('highAvailability'+it.id))!=null
-					temp[idx]=new ImageRequestOptions(it.id, params.RAM.getAt(idx).toInteger(),params.cores.getAt(idx).toInteger(),params.instances.getAt(idx).toInteger(), params.hostname.getAt(idx));
+					temp[idx]=new ImageRequestOptions(it.id, hp.ram,hp.cores,params.instances.getAt(idx).toInteger(), params.hostname.getAt(idx));
 			}
 			}
-			println highAvail
 			try{
 			deploymentService.deploy(cluster, user, params.time.toLong()*60*60*1000, temp, highAvail)
 			}

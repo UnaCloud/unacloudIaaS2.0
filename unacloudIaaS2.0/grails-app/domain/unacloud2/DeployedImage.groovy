@@ -40,7 +40,7 @@ class DeployedImage {
 	 */
 	ArrayList <VirtualMachineExecution> getOrderedVMs(){
 		VirtualMachineComparator c= new VirtualMachineComparator()
-		ArrayList <VirtualMachineExecution> array = new ArrayList(virtualMachines).sort(c)
+		ArrayList <VirtualMachineExecution> array = new ArrayList(virtualMachines).sort(true,c)
 		return array
 	}
 	
@@ -63,7 +63,7 @@ class DeployedImage {
 	 */
 	def getDeployedRAM(){
 		for(virtualMachine in virtualMachines){
-			return virtualMachine.ram
+			return virtualMachine.hardwareProfile.ram
 		}
 	}
 	
@@ -73,7 +73,7 @@ class DeployedImage {
 	 */
 	def getDeployedCores(){
 		for(virtualMachine in virtualMachines){
-			return virtualMachine.cores
+			return virtualMachine.hardwareProfile.cores
 		}
 	}
 	
@@ -83,7 +83,9 @@ class DeployedImage {
 	 */
 	def getDeployedHostname(){
 		for(virtualMachine in virtualMachines){
-			return virtualMachine.name.substring(0, virtualMachine.name.length()-6)
+			def ip =virtualMachine.ip.ip.split('\\.')
+			println ip
+			return virtualMachine.name.substring(0, virtualMachine.name.length()-(ip[2].length()+ip[3].length()))
 		}
 	}
 	

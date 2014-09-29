@@ -75,8 +75,8 @@ class DeployerService {
 						vmsm.setHostname(vm.name)
 						vmsm.setVirtualMachineIP(vm.ip.ip)
 						vmsm.setVirtualMachineNetMask(vm.ip.ipPool.mask)
-						vmsm.setVmCores(vm.cores)
-						vmsm.setVmMemory(vm.ram)
+						vmsm.setVmCores(vm.hardwareProfile.cores)
+						vmsm.setVmMemory(vm.hardwareProfile.ram)
 						vmsm.setVirtualMachineExecutionId(vm.id)
 						vmsm.setVirtualMachineImageId(image.image.id)
 						String pmIp=vm.executionNode.ip.ip;
@@ -133,8 +133,8 @@ class DeployerService {
 					vmsm.setVirtualMachineIP(vm.ip.ip)
 					println "vmsm.setVirtualMachineIP --->"+ vm.ip.ip
 					vmsm.setVirtualMachineNetMask(vm.ip.ipPool.mask)
-					vmsm.setVmCores(vm.cores)
-					vmsm.setVmMemory(vm.ram)
+					vmsm.setVmCores(vm.hardwareProfile.cores)
+					vmsm.setVmMemory(vm.hardwareProfile.ram)
 					vmsm.setVirtualMachineExecutionId(vm.id)
 					vmsm.setVirtualMachineImageId(image.image.id)
 					String pmIp=vm.executionNode.ip.ip;

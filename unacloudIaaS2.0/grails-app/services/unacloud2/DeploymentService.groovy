@@ -1,12 +1,13 @@
 package unacloud2
 
+import grails.transaction.Transactional;
 import grails.util.Environment;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import webutils.ImageRequestOptions;
 import back.deployers.DeployerService;
 import back.deploymentBuilder.DeploymentProcessorService;
 
-
+@Transactional
 class DeploymentService {
 	
 	//-----------------------------------------------------------------
@@ -60,7 +61,9 @@ class DeploymentService {
 				long stopTimeMillis= new Date().getTime()
 				def stopTime= new Date(stopTimeMillis +time)
 				def iName=depImage.image.name
-				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: image.hostname, ram: image.ram, cores: image.cores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
+				def hp= HardwareProfile.findWhere(ram:image.ram, cores: image.cores)
+				if(hp==null) throw new Exception('Hardware profile whit the described ram and cores does not exist')
+				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: image.hostname, hardwareProfile: hp ,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 				depImage.virtualMachines.add(virtualMachine)
 				virtualMachine.save(failOnError: true)
 				depImage.save(failOnError: true)
@@ -100,7 +103,7 @@ class DeploymentService {
 	 * heterogeneous for the same image  
 	 * @param cluster cluster to be deployed
 	 * @param user owner of the deployment
-	 * @param time execution time in minutes
+	 * @param time execution time in millisecond
 	 * @param options group of deployment properties for each image
 	 * @param highAvailability indicates if the images will be executed in a
 	 * dedicated server
@@ -144,7 +147,9 @@ class DeploymentService {
 				def stopTime= new Date(stopTimeMillis +time)
 				println "Stop date"+stopTime
 				def iName=image.name
-				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: options[option].hostname, ram: options[option].ram, cores: options[option].cores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
+				def hp= HardwareProfile.findWhere(ram:options[option].ram, cores: options[option].cores)
+				if(hp==null) throw new Exception('Hardware profile whit the described ram and cores does not exist')
+				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: options[option].hostname, hardwareProfile: hp,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 				depImage.virtualMachines.add(virtualMachine)
 				virtualMachine.save(failOnError: true)
 				depImage.save(failOnError: true)
@@ -181,7 +186,7 @@ class DeploymentService {
 	}
 	
 	/**
-	 * Stops an execution of a virtual machine
+	 * Stops a virtual machine execution
 	 * @param vm Virtual machine to be stopped
 	 * @return vm virtual machine with the new state
 	 */
@@ -198,6 +203,15 @@ class DeploymentService {
 		return vm
 	}
 	
+	/**
+	 * Restarts a virtual machine execution
+	 * @param vm Virtual machine to be restarted
+	 * @return vm virtual machine with the new state
+	 */
+	def restartVirtualMachineExecution(VirtualMachineExecution vm){
+		//TODO Unimplemented function
+		return vm
+	}
 	/**
 	 * Refreshes all user deployment states. 
 	 * @param user deployment owner
@@ -239,8 +253,8 @@ class DeploymentService {
 		for(int i=index;i<instance+index;i++){
 			long stopTimeMillis= new Date().getTime()
 			def stopTime= new Date(stopTimeMillis +time)
-			def virtualMachine = new VirtualMachineExecution(message: "Adding instance",name: iName,ram: iRAM, cores:iCores,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
-			//ipAllocatorService.allocatePhysicalMachine(virtualMachine)
+			def hp= HardwareProfile.findWhere(ram:iRAM,cores: iCores)
+			def virtualMachine = new VirtualMachineExecution(message: "Adding instance",name: iName,hardwareProfile: hp,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
 			virtualMachine.save(failOnError: true)
 			depImage.virtualMachines.add(virtualMachine)
 		}

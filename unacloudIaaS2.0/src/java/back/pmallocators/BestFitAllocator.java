@@ -31,20 +31,20 @@ public class BestFitAllocator extends VirtualMachineAllocator {
 		Collections.sort(physicalMachines, new PhysicalMachineComparator(physicalMachineDescriptions));
 		Collections.sort(virtualMachineList, new Comparator<VirtualMachineExecution>() {
 			public int compare(VirtualMachineExecution v1, VirtualMachineExecution v2) {
-				return Integer.compare(v2.getCores(),v1.getCores());
+				return Integer.compare(v2.getHardwareProfile().getCores(),v1.getHardwareProfile().getCores());
 			}
 		});
 		vmCycle:for(VirtualMachineExecution vme:virtualMachineList){
 			for(PhysicalMachine pm:physicalMachines){
 				PhysicalMachineAllocationDescription pmad = physicalMachineDescriptions.get(pm.getDatabaseId());
-				System.out.println("Evaluating "+pm.getName()+" "+pmad+" "+vme.getCores()+" "+vme.getRam());
+				System.out.println("Evaluating "+pm.getName()+" "+pmad+" "+vme.getHardwareProfile().getCores()+" "+vme.getHardwareProfile().getRam());
 				if(fitVMonPM(vme, pm, pmad)){
 					vme.setExecutionNode(pm);
 					if(pmad==null){
 						pmad=new PhysicalMachineAllocationDescription(pm.getDatabaseId(),0,0,0);
 						physicalMachineDescriptions.put(pmad.getNodeId(),pmad);
 					}
-					pmad.addResources(vme.getCores(),vme.getRam(), 1);
+					pmad.addResources(vme.getHardwareProfile().getCores(),vme.getHardwareProfile().getRam(), 1);
 					System.out.println("");
 					Collections.sort(physicalMachines, new PhysicalMachineComparator(physicalMachineDescriptions));
 					continue vmCycle;

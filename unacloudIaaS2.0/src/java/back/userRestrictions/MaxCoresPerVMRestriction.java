@@ -13,8 +13,8 @@ public class MaxCoresPerVMRestriction implements UserRestrictionInterface{
 		int cores= Integer.parseInt(value);
 		System.out.println(cores);
 		for (VirtualMachineExecution  vme:vmes){
-			System.out.println("restriction:"+cores+" request:"+ vme.getCores());
-			if (vme.getCores()>cores)
+			System.out.println("restriction:"+cores+" request:"+ vme.getHardwareProfile().getCores());
+			if (vme.getHardwareProfile().getCores()>cores)
 				throw new UserRestrictionException("Max cores allowed: "+cores);
 		}
 	}
