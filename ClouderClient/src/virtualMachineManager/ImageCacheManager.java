@@ -119,6 +119,7 @@ public class ImageCacheManager {
 		System.out.println("Conectando a "+ip+":"+puerto);
 		try(Socket s=new Socket(ip,puerto);DataOutputStream ds=new DataOutputStream(s.getOutputStream())){
 			System.out.println("Conexion exitosa");
+			System.out.println("Envio Operacion 1");
 			ds.write(1);
 			ds.flush();
 			System.out.println("Envio ID");

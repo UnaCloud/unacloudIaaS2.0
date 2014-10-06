@@ -46,47 +46,47 @@ class BootStrap {
 			new OperatingSystem(name:'Ubuntu 11',configurer:'Ubuntu').save();
 			new OperatingSystem(name:'Scientific Linux',configurer:'Linux').save();
 		}
-		if(Laboratory.count() ==0){
-			println OperatingSystem.count()+" os encontrados"
-			def win7= OperatingSystem.findByName('Windows 7')
-			
-			wayra1:{
-				IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.202.1', mask: '255.255.255.0').save()
-				virtualIpPool.ips= []
-				for(int i=0;i<30;i++){
-					def virtualIp= new IP(used:false, ip: ('157.253.202.'+(111+i)), ipPool: virtualIpPool).save()
-					virtualIpPool.ips.add(virtualIp)
-				}
-				virtualIpPool.save()
-				def labWaira1 = new Laboratory( virtualMachinesIPs: virtualIpPool, name: 'Wuaira 1', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS);
-				labWaira1.physicalMachines = []
-				for(int e=0;e<30;e++){
-					def ip=new IP(used:false, ip: ('157.253.202.'+(11+e)));
-					ip.save()
-					def pm=new PhysicalMachine(cores: 4, highAvaliability: false, ip: ip, name: "ISC"+(201+e), mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, laboratory: labWaira1, lastReport: new Date(0));
-					labWaira1.physicalMachines.add(pm)
-				}
-				labWaira1.save()
-			}
-			wayra2:{
-				IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.239.1', mask: '255.255.255.0').save()
-				virtualIpPool.ips= []
-				for(int i=0;i<30;i++){
-					def virtualIp= new IP(used:false, ip: ('157.253.239.'+(111+i)), ipPool: virtualIpPool).save()
-					virtualIpPool.ips.add(virtualIp)
-				}
-				virtualIpPool.save()
-				def labWaira2 = new Laboratory( virtualMachinesIPs: virtualIpPool, name: 'Wuaira 2', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS);
-				labWaira2.physicalMachines = []
-				for(int e=0;e<30;e++){
-					def ip=new IP(used:false, ip: ('157.253.239.'+(11+e)));
-					ip.save();
-					def pm=new PhysicalMachine(cores: 4, highAvaliability: false, ip: ip, name: "ISC"+(301+e), mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, laboratory: labWaira2, lastReport: new Date(0));
-					labWaira2.physicalMachines.add(pm)
-				}
-				labWaira2.save()
-			}
-		}
+//		if(Laboratory.count() ==0){
+//			println OperatingSystem.count()+" os encontrados"
+//			def win7= OperatingSystem.findByName('Windows 7')
+//			
+//			wayra1:{
+//				IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.202.1', mask: '255.255.255.0').save()
+//				virtualIpPool.ips= []
+//				for(int i=0;i<30;i++){
+//					def virtualIp= new IP(used:false, ip: ('157.253.202.'+(111+i)), ipPool: virtualIpPool).save()
+//					virtualIpPool.ips.add(virtualIp)
+//				}
+//				virtualIpPool.save()
+//				def labWaira1 = new Laboratory( virtualMachinesIPs: virtualIpPool, name: 'Wuaira 1', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS);
+//				labWaira1.physicalMachines = []
+//				for(int e=0;e<30;e++){
+//					def ip=new IP(used:false, ip: ('157.253.202.'+(11+e)));
+//					ip.save()
+//					def pm=new PhysicalMachine(cores: 4, highAvaliability: false, ip: ip, name: "ISC"+(201+e), mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, laboratory: labWaira1, lastReport: new Date(0));
+//					labWaira1.physicalMachines.add(pm)
+//				}
+//				labWaira1.save()
+//			}
+//			wayra2:{
+//				IPPool virtualIpPool = new IPPool( virtual: false, gateway: '157.253.239.1', mask: '255.255.255.0').save()
+//				virtualIpPool.ips= []
+//				for(int i=0;i<30;i++){
+//					def virtualIp= new IP(used:false, ip: ('157.253.239.'+(111+i)), ipPool: virtualIpPool).save()
+//					virtualIpPool.ips.add(virtualIp)
+//				}
+//				virtualIpPool.save()
+//				def labWaira2 = new Laboratory( virtualMachinesIPs: virtualIpPool, name: 'Wuaira 2', highAvaliability: false, networkQuality: NetworkQualityEnum.ETHERNET100MBPS);
+//				labWaira2.physicalMachines = []
+//				for(int e=0;e<30;e++){
+//					def ip=new IP(used:false, ip: ('157.253.239.'+(11+e)));
+//					ip.save();
+//					def pm=new PhysicalMachine(cores: 4, highAvaliability: false, ip: ip, name: "ISC"+(301+e), mac: "AA:BB:CC:DD:EE", ram: 8192, withUser: false, state: PhysicalMachineStateEnum.OFF, operatingSystem: win7, laboratory: labWaira2, lastReport: new Date(0));
+//					labWaira2.physicalMachines.add(pm)
+//				}
+//				labWaira2.save()
+//			}
+//		}
 		if(Repository.count()==0){
 			new Repository(name: "Main Repository", capacity: 20, root: "C:\\images\\").save();
 		}
@@ -100,15 +100,15 @@ class BootStrap {
 			new ServerVariable(name:'MONITOR_FREQUENCY',serverVariableType: ServerVariableTypeEnum.INT,variable:'60').save()
 			new ServerVariable(name:'MONITOR_REGISTER_FREQUENCY',serverVariableType: ServerVariableTypeEnum.INT,variable:'300').save()
 			new ServerVariable(name:'VERSION_MANAGER_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable:'2003').save()
-			new ServerVariable(name:'CLOUDER_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable:'157.253.202.50').save()
-			//new ServerVariable(name:'CLOUDER_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable:'157.253.236.160').save()
+			//new ServerVariable(name:'CLOUDER_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable:'157.253.202.50').save()
+			new ServerVariable(name:'CLOUDER_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable:'157.253.236.164').save()
 			new ServerVariable(name:'MONITORING_DATABASE_NAME',serverVariableType: ServerVariableTypeEnum.STRING,variable:'clouderqos').save()
 			new ServerVariable(name:'MONITORING_DATABASE_PASSWORD',serverVariableType: ServerVariableTypeEnum.STRING,variable:'pmonitoreo$#').save()
 			new ServerVariable(name:'MONITORING_DATABASE_USER',serverVariableType: ServerVariableTypeEnum.STRING,variable:'pmonitoreo').save()
 			new ServerVariable(name:'MONITORING_ENABLE',serverVariableType: ServerVariableTypeEnum.STRING,variable:'true').save()
 			new ServerVariable(name:'MONITORING_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable: '157.253.236.160').save()
 			new ServerVariable(name:'AGENT_VERSION',serverVariableType: ServerVariableTypeEnum.STRING,variable: '2.0.1').save()
-			new ServerVariable(name:'SERVER_URL',serverVariableType: ServerVariableTypeEnum.STRING,variable: 'http://'+InetAddress.getLocalHost().getHostAddress()+':8080/unacloudIaaS2.0').save()
+			new ServerVariable(name:'SERVER_URL',serverVariableType: ServerVariableTypeEnum.STRING,variable: 'http://'+InetAddress.getLocalHost().getHostAddress()+':8080/Unacloud2').save()
 			//new ServerVariable(name:'SERVER_URL',serverVariableType: ServerVariableTypeEnum.STRING,variable: 'http://'+InetAddress.getLocalHost().getHostAddress()+'/Unacloud2').save()
 			new ServerVariable(name:'VM_ALLOCATOR_NAME',serverVariableType: ServerVariableTypeEnum.STRING,variable: AllocatorEnum.RANDOM).save()
 		}

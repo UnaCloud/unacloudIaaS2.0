@@ -27,7 +27,7 @@ class DeploymentController {
 	DeploymentService deploymentService
 	
 	/**
-	 * TODO: documentation
+	 * Representation of image upload services
 	 */
 	ImageUploadService imageUploadService
 	
@@ -125,6 +125,12 @@ class DeploymentController {
 					totalInstances+=params.instances.getAt(i).toInteger()
 				}
 			}
+			def unavailable = cluster.images.findAll {it.state==VirtualMachineImageEnum.AVAILABLE}
+			if(unavailable.size()!=cluster.images.size()){
+				flash.message= "Some images of this cluster are not available at this moment. Please, change cluster to deploy or images in cluster."
+				redirect( controller: "cluster",action: "deployOptions",  params: [id: cluster.id])
+				return
+			}
 			
 			def temp=new ImageRequestOptions[cluster.images.size()];
 			def highAvail= new boolean[cluster.images.size()]
@@ -137,11 +143,11 @@ class DeploymentController {
 				cluster.images.eachWithIndex {it,idx->
 					highAvail[idx]=(params.get('highAvailability'+it.id))!=null
 					temp[idx]=new ImageRequestOptions(it.id, params.RAM.getAt(idx).toInteger(),params.cores.getAt(idx).toInteger(),params.instances.getAt(idx).toInteger(), params.hostname.getAt(idx));
-			}
+				}
 			}
 			println highAvail
 			try{
-			deploymentService.deploy(cluster, user, params.time.toLong()*60*60*1000, temp, highAvail)
+				deploymentService.deploy(cluster, user, params.time.toLong()*60*60*1000, temp, highAvail)
 			}
 			catch(Exception e){
 				if(e.getMessage()==null)
@@ -207,8 +213,8 @@ class DeploymentController {
 	}
 	
 	/**
-	 * TODO 
-	 * Documentation is missing
+	 * Validates if a name to create an image copy is not already in use.
+	 * @params image: image id, machine: virtual machine execution id, name: name to validate
 	 */
 	def validate(){
 		if(session.user==null){
@@ -237,6 +243,10 @@ class DeploymentController {
 			}
 		}
 	}
+	/**
+	 * Send a request to a physical machine agent asking it to send an image file which will be stored on the server.
+	 * @params image: image id, machine: virtual machine execution id, name: name to validate
+	 */
 	def save(){
 		if(session.user==null){
 			flash.message="Your session has expired."
@@ -253,7 +263,7 @@ class DeploymentController {
 				if(User.where{id == user.id && images{di.image}}.find()){
 					imageUploadService.saveImage(vm,di,virtualMachineId,imageName,user)					
 				}else{
-					flash.message="The image is not registered to user."
+					flash.message="The image is not registered to your user."
 					redirect(uri:"/error",absolute:true)
 					return
 				}

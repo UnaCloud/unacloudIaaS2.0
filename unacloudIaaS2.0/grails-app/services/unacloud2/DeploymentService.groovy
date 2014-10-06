@@ -179,8 +179,7 @@ class DeploymentService {
 		 * Finally it sends the deployment message to the agents
 		 */
 		
-		//TODO uncomment this line
-		//if(!Environment.isDevelopmentMode())
+		if(!Environment.isDevelopmentMode())
 		runAsync{ deployerService.deploy(dep) }
 		
 		return dep

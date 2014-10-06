@@ -1,9 +1,7 @@
 package fileManager;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -29,6 +27,7 @@ public class DataServerSocket extends Thread{
 		try(ServerSocket ss = new ServerSocket(listenPort)){
 			while(true){
 				Socket s=ss.accept();
+				System.out.println("Communication from "+s);
 				try {		
 					DataInputStream ds = new DataInputStream(s.getInputStream());
 					int byteOp=ds.read();					

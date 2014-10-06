@@ -17,16 +17,41 @@ import unacloud2.VirtualMachineImageService;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 
 class ImageUploadService {
-
-    VariableManagerService variableManagerService
+	//-----------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------
+	
+	
+	/**
+	 * Representation of Variable Manager Service
+	 */	
+	VariableManagerService variableManagerService
+	
+	/**
+	 * Representation of Virtual Machine Image Service
+	 */
 	VirtualMachineImageService virtualMachineImageService
 	
+	//-----------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------
+   
+	/**
+	 * Sends a message to physical machine agent asking it to send an image file belongs to a current execution. 
+	 * Validates if should creates or replaces old image, adds a token to image and sends it in message.
+	 * @param vm
+	 * @param image
+	 * @param virtualMachineId
+	 * @param imageName
+	 * @param user
+	 * @return
+	 */
 	def saveImage(VirtualMachineExecution vm, DeployedImage image, long virtualMachineId,String imageName, User user){
 		print "Empieza servicio de copia"		
 		VirtualMachineSaveImageMessage vmsim = new VirtualMachineSaveImageMessage();
 		if(vm.status== VirtualMachineExecutionStateEnum.DEPLOYED){
 			println vm.name+" "+vm.message
-			if(Environment.isDevelopmentMode()){//TODO this must be false
+			if(!Environment.isDevelopmentMode()){
 				try{
 					String token = RandomUtils.generateRandomString(32);
 					VirtualMachineImage otherVm = VirtualMachineImage.findByName(imageName);
@@ -100,7 +125,6 @@ class ImageUploadService {
 						oos.close();
 						s.close();
 					}catch(Exception e){
-				     	//TODO si falle eliminar o habilitar
 					    VirtualMachineImage vi = virtualMachineImageService.getImage(vmsim.getImageId())
 						if(vi!=null){
 							if(vi.getMainFile().endsWith("temp")){
