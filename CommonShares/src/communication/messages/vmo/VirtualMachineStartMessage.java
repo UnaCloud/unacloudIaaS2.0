@@ -70,4 +70,8 @@ public class VirtualMachineStartMessage extends VirtualMachineOperationMessage i
 	public long getVirtualMachineImageId() {
 		return virtualMachineImageId;
 	}
+	@Override
+	public String toString() {
+		return super.toString()+" executionTime: "+executionTime;
+	}
 }
