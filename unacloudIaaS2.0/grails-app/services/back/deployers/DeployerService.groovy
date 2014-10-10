@@ -1,10 +1,14 @@
+
 package back.deployers
+
+import java.util.concurrent.TimeUnit;
 
 import grails.util.Environment;
 import javassist.bytecode.stackmap.BasicBlock.Catch;
 import back.services.VariableManagerService;
 
 import com.losandes.utils.Constants;
+import com.losandes.utils.Time;
 
 import communication.messages.vmo.VirtualMachineStartMessage;
 import communication.messages.vmo.VirtualMachineStopMessage;
@@ -71,7 +75,7 @@ class DeployerService {
 				if(!Environment.isDevelopmentMode()){
 					try{
 
-						vmsm.setExecutionTime(vm.runningTimeInHours())
+						vmsm.setExecutionTime(new Time(vm.runningTimeInHours(), TimeUnit.HOURS))
 						vmsm.setHostname(vm.name)
 						vmsm.setVirtualMachineIP(vm.ip.ip)
 						vmsm.setVirtualMachineNetMask(vm.ip.ipPool.mask)
