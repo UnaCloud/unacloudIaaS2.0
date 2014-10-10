@@ -26,7 +26,7 @@
 		<link>
 			<name>.link_to_grails_plugins</name>
 			<type>2</type>
-			<locationURI>GRAILS_ROOT/2.4.3/projects/unacloud2/plugins</locationURI>
+			<location>D:/.grails/2.4.3/projects/unacloud2/plugins</location>
 		</link>
 	</linkedResources>
 </projectDescription>

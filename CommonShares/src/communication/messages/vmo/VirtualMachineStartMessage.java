@@ -1,5 +1,7 @@
 package communication.messages.vmo;
 
+import com.losandes.utils.Time;
+
 import communication.messages.VirtualMachineOperationMessage;
 
 public class VirtualMachineStartMessage extends VirtualMachineOperationMessage implements Comparable<VirtualMachineStartMessage>{
@@ -7,7 +9,7 @@ public class VirtualMachineStartMessage extends VirtualMachineOperationMessage i
 	
 	long virtualMachineImageId;
 	int vmCores,vmMemory;
-    int executionTime;
+    Time executionTime;
     String virtualMachineIP,virtualMachineNetMask,snapshotRoute;
     boolean persistent;
     String hostname;
@@ -21,7 +23,7 @@ public class VirtualMachineStartMessage extends VirtualMachineOperationMessage i
 	public int getVmMemory() {
 		return vmMemory;
 	}
-	public int getExecutionTime() {
+	public Time getExecutionTime() {
 		return executionTime;
 	}
 	public String getVmIP() {
@@ -40,7 +42,7 @@ public class VirtualMachineStartMessage extends VirtualMachineOperationMessage i
 	public int compareTo(VirtualMachineStartMessage o) {
 		return Long.compare(getVirtualMachineExecutionId(),o.getVirtualMachineExecutionId());
 	}
-	public void setExecutionTime(int executionTime) {
+	public void setExecutionTime(Time executionTime) {
 		this.executionTime = executionTime;
 	}
 	public String getHostname() {

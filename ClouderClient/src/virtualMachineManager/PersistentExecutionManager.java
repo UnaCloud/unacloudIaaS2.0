@@ -81,7 +81,7 @@ public class PersistentExecutionManager {
      * @return
      */
     public static String startUpMachine(VirtualMachineExecution execution,boolean started){
-    	execution.setShutdownTime(System.currentTimeMillis()+((long)execution.getExecutionTime()*3600000l));
+    	execution.setShutdownTime(System.currentTimeMillis()+execution.getExecutionTime().toMillis());
         try {
             if(!started)execution.getImage().startVirtualMachine();
             executionList.put(execution.getId(),execution);
@@ -105,7 +105,7 @@ public class PersistentExecutionManager {
     public static UnaCloudAbstractResponse extendsVMTime(VirtualMachineAddTimeMessage timeMessage) {
     	VirtualMachineExecution execution=executionList.get(timeMessage.getVirtualMachineExecutionId());
     	execution.setExecutionTime(timeMessage.getExecutionTime());
-    	execution.setShutdownTime(System.currentTimeMillis()+timeMessage.getExecutionTime()*3600000l);
+    	execution.setShutdownTime(System.currentTimeMillis()+timeMessage.getExecutionTime().toMillis());
     	timer.schedule(new Schedule(execution.getId()),new Date(execution.getShutdownTime()+100l));
     	saveData();
         return null;
