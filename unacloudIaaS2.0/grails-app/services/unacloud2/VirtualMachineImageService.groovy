@@ -198,10 +198,12 @@ class VirtualMachineImageService {
 	}
 	def deleteImage(Long id){
 		try {
-			VirtualMachineImage vm = getImage(id);
-			User user = (User) getUserByImage(vm);
-			Repository repo = (Repository) getRepositoryByImage(vm);
-			deleteImage(user, repo, vm);
+			VirtualMachineImage.withTransaction{
+				VirtualMachineImage vm = getImage(id);
+				User user = (User) getUserByImage(vm);
+				Repository repo = (Repository) getRepositoryByImage(vm);
+				deleteImage(user, repo, vm);
+			}			
 		} catch (Exception e) {
 			e.printStackTrace()
 		}

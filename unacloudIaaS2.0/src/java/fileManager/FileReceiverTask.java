@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.Socket;
 import java.util.TreeMap;
-import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -91,6 +90,7 @@ public class FileReceiverTask implements Runnable{
 					
 				} catch (Exception e) {		
 					System.out.println("error general");
+				     e.printStackTrace();
 					if(path.endsWith("temp")){
 						vs.deleteImage(vmId);
 						new java.io.File(path).getParentFile().delete();
@@ -98,7 +98,7 @@ public class FileReceiverTask implements Runnable{
 						vs.setPath(token,path);
 						vs.changeImageState(vmId, VirtualMachineImageEnum.AVAILABLE);
 					}
-					e.printStackTrace();
+					
 				}
 				
 			}

@@ -86,12 +86,10 @@ public class SaveImageVirtualMachineTask implements Runnable{
 			
 			System.out.println("Eliminar Imagen");
 			PersistentExecutionManager.removeExecution(machineExecution.getId(), false);
-			PersistentExecutionManager.cleanDir(machineExecution.getImage().getMainFile().getParentFile());
 			if(machineExecution.getImage().getMainFile().getParentFile().equals("base")){
 				ImageCacheManager.deleteImage(machineExecution.getId());
 			}
-			
-			for(java.io.File f:machineExecution.getImage().getMainFile().getParentFile().listFiles())f.delete();//if(f.isFile())
+			PersistentExecutionManager.cleanDir(machineExecution.getImage().getMainFile().getParentFile());
 				
 		} catch (Exception e) {
 			e.printStackTrace();
