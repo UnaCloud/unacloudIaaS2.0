@@ -55,7 +55,7 @@ grails.project.dependency.resolution = {
 		compile ":asset-pipeline:1.9.9"
 		build	':tomcat:7.0.54'
 		compile ":jaxrs:0.11"
-        
+		compile ":aws-sdk:1.7.7"
 		runtime ":database-migration:1.3.2"
 
         compile ":cache:1.1.7"

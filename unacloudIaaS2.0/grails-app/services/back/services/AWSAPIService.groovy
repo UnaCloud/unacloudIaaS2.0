@@ -18,7 +18,7 @@ import grails.transaction.Transactional
 import groovy.xml.MarkupBuilder
 
 @Transactional
-class AWSService {
+class AWSAPIService {
 	
 	ClusterService clusterService
 	DeploymentService deploymentService
