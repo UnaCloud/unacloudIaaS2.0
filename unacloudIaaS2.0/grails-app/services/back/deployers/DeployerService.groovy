@@ -1,10 +1,14 @@
+
 package back.deployers
+
+import java.util.concurrent.TimeUnit;
 
 import grails.util.Environment;
 import javassist.bytecode.stackmap.BasicBlock.Catch;
 import back.services.VariableManagerService;
 
 import com.losandes.utils.Constants;
+import com.losandes.utils.Time;
 
 import communication.messages.vmo.VirtualMachineStartMessage;
 import communication.messages.vmo.VirtualMachineStopMessage;
@@ -58,9 +62,9 @@ class DeployerService {
 		 */
 		image.virtualMachines.eachWithIndex() { vm, i ->
 			
-			println vm.name+" "+vm.message
+			
 			if(vm.message.equals("Adding instance")&&vm.status== VirtualMachineExecutionStateEnum.DEPLOYING){
-				
+				println vm.name+" "+vm.message
 				/*
 				 * creates a message in order to start the machine
 				 */
@@ -71,7 +75,7 @@ class DeployerService {
 				if(!Environment.isDevelopmentMode()){
 					try{
 
-						vmsm.setExecutionTime(vm.runningTimeInHours())
+						vmsm.setExecutionTime(new Time(vm.runningTimeInHours(), TimeUnit.HOURS))
 						vmsm.setHostname(vm.name)
 						vmsm.setVirtualMachineIP(vm.ip.ip)
 						vmsm.setVirtualMachineNetMask(vm.ip.ipPool.mask)
@@ -127,8 +131,8 @@ class DeployerService {
 					/*
 					 * creates a message in order to start the machine
 					 */
-					
-					vmsm.setExecutionTime(vm.runningTimeInHours())
+					println vm.runningTimeInHours()
+					vmsm.setExecutionTime(new Time(vm.runningTimeInHours(), TimeUnit.HOURS))
 					vmsm.setHostname(vm.name)
 					vmsm.setVirtualMachineIP(vm.ip.ip)
 					println "vmsm.setVirtualMachineIP --->"+ vm.ip.ip

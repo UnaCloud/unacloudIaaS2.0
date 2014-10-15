@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.net.ServerSocket;
+import java.util.Date;
 
 import physicalmachine.OperatingSystem;
 import hypervisorManager.HypervisorFactory;
@@ -53,7 +54,16 @@ public class Main {
             	}
         	}
         	try {
-            	PrintStream ps=new PrintStream(new FileOutputStream("log.txt"),true);
+            	PrintStream ps=new PrintStream(new FileOutputStream("log.txt",true),true){
+            		@Override
+            		public void println(String x) {
+            			super.println(new Date()+" "+x);
+            		}
+            		@Override
+            		public void println(Object x) {
+            			super.println(new Date()+" "+x);
+            		}
+            	};
     			System.setOut(ps);
     			System.setErr(ps);
     		} catch (FileNotFoundException e) {

@@ -25,13 +25,13 @@ public class StartVirtualMachineTask implements Runnable{
 	 */
 	@Override
 	public void run() {
-		System.out.println("startStart+VirtualMachine on "+new Date());
+		System.out.println("StartVirtualMachine");
 		try{
 			ImageCopy image=ImageCacheManager.getFreeImageCopy(machineExecution.getImageId());
-			System.out.println("obntuve imagen on "+new Date());
+			System.out.println("obtuve imagen");
 			machineExecution.setImage(image);
 			image.configureAndStart(machineExecution);
-			System.out.println("endStartVirtualMachine on "+new Date());
+			System.out.println("endStartVirtualMachine");
 		}catch(VirtualMachineExecutionException ex){
 			ServerMessageSender.reportVirtualMachineState(machineExecution.getId(), VirtualMachineExecutionStateEnum.FAILED,ex.getMessage());
 		}
