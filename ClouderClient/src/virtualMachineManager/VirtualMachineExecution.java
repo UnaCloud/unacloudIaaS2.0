@@ -4,6 +4,8 @@ import hypervisorManager.ImageCopy;
 
 import java.io.Serializable;
 
+import com.losandes.utils.Time;
+
 import communication.messages.vmo.VirtualMachineStartMessage;
 
 public class VirtualMachineExecution implements Serializable{
@@ -18,7 +20,7 @@ public class VirtualMachineExecution implements Serializable{
 	long id;
 	int cores;
 	int memory;
-    int executionTime;
+    Time executionTime;
     String ip,netMask;
     boolean persistent;
     String hostname;
@@ -59,10 +61,10 @@ public class VirtualMachineExecution implements Serializable{
 	public void setMemory(int memory) {
 		this.memory = memory;
 	}
-	public int getExecutionTime() {
+	public Time getExecutionTime() {
 		return executionTime;
 	}
-	public void setExecutionTime(int executionTime) {
+	public void setExecutionTime(Time executionTime) {
 		this.executionTime = executionTime;
 	}
 	public String getIp() {

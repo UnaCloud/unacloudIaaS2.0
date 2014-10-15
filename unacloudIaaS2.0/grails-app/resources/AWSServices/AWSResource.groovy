@@ -6,14 +6,14 @@ import groovy.xml.MarkupBuilder
 import javax.ws.rs.*
 import javax.ws.rs.core.*;
 
-import back.services.AWSAPIService;
+import back.services.AWSService;
 import unacloud2.User;
 import unacloud2.VirtualMachineImageService;
 
 @Path('/api/AWS')
 class AWSResource {
 	
-	AWSAPIService AWSAPIService
+	AWSService AWSService
 	VirtualMachineImageService virtualMachineImageService
 	
     @POST
@@ -24,25 +24,25 @@ class AWSResource {
 		LinkedList action= formParams.get('Action')
 		if(action==null){
 			println 'no action param received'
-			AWSAPIService.sendAWSErrorResponse("InvalidAction", "The action urn:Post is not valid for this web service.")
+			AWSService.sendAWSErrorResponse("InvalidAction", "The action urn:Post is not valid for this web service.")
 		}
 		else{
 			switch(action.getFirst()){
 				case "DescribeImages": 
-					return AWSAPIService.describeImages(formParams)
+					return AWSService.describeImages(formParams)
 				case "DescribeInstances":
-					return AWSAPIService.describeInstances(formParams)
+					return AWSService.describeInstances(formParams)
 				case "DescribeRegions":
-					return AWSAPIService.describeRegions(formParams)
+					return AWSService.describeRegions(formParams)
 				case "TerminateInstances":
-					return AWSAPIService.terminateInstances(formParams)
+					return AWSService.terminateInstances(formParams)
 				case "RebootInstances":
-					return AWSAPIService.rebootInstances(formParams)
+					return AWSService.rebootInstances(formParams)
 				case "RunInstances":
-					return AWSAPIService.runInstances(formParams)
+					return AWSService.runInstances(formParams)
 				
 				default: 
-				AWSAPIService.sendAWSErrorResponse("InvalidAction", "The action "+action+" is not valid for this web service.")
+				AWSService.sendAWSErrorResponse("InvalidAction", "The action "+action+" is not valid for this web service.")
 			}
 			
 		}	
