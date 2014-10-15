@@ -43,6 +43,7 @@ class MachineStateController {
 	
 	def physicalMachineStop(){
 		String hostname=params['hostname']
+		physicalMachineStateManagerService.stopVirtualMachines(hostname)
 		physicalMachineStateManagerService.turnOffPhysicalMachine(hostname)
 		render "succeeded"
 	}

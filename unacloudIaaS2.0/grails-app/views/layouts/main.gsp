@@ -7,6 +7,8 @@
    </g:if>
    <head>
    		<meta charset="utf-8">
+   	<asset:javascript src="application.js"/>
+   	
    	
     <title>UnaCloud 2.0</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

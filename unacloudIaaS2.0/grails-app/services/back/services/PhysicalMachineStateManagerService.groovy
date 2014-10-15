@@ -1,10 +1,14 @@
 package back.services
 
 import pmStateManager.StateManager;
+import unacloud2.DeploymentService
 import unacloud2.PhysicalMachine;
 import unacloud2.PhysicalMachineStateEnum;
+import unacloud2.VirtualMachineExecution;
 
 class PhysicalMachineStateManagerService {
+	
+	DeploymentService deploymentService
 	
 	//-----------------------------------------------------------------
 	// Methods
@@ -26,6 +30,20 @@ class PhysicalMachineStateManagerService {
 		
 	}
 	
+	/**
+	 * Stops all the virtual machines allocated on the given node 
+	 * @param hostanme physical machine hostname
+	 * @return
+	 */
+	def stopVirtualMachines(String hostname){
+		PhysicalMachine pm=PhysicalMachine.findByName(hostname)
+		if(pm!=null&&pm.state==PhysicalMachineStateEnum.ON ){
+			def vms = VirtualMachineExecution.findAllWhere(executionNode: pm)
+			for (vm in vms){
+				deploymentService.stopVirtualMachineExecution(vm)
+			}
+		}
+	}
 	/**
 	 * Changes a physical machine state to 'OFF'
 	 * @param hostname physical machine hostname

@@ -2,8 +2,11 @@ package back.allocators
 
 import back.pmallocators.AllocatorException
 import back.services.PhysicalMachineStateManagerService;
+
 import java.util.Comparator;
+
 import unacloud2.*
+import unacloudEnums.VirtualMachineExecutionStateEnum;
 
 
 class IpAllocatorService {
@@ -65,7 +68,7 @@ class IpAllocatorService {
 		
 		else{
 			for(VirtualMachineExecution vme in image.virtualMachines){
-				if(vme.message.equals("Adding instance")){
+				if(vme.message.equals("Adding instance")&& vme.status.equals(VirtualMachineExecutionStateEnum.DEPLOYING)){
 					IPPool ipPool= vme.executionNode.laboratory.virtualMachinesIPs
 					println "Using node ip "+vme.executionNode.ip.ip
 					for(ip in ipPool.ips){

@@ -2,8 +2,8 @@
 <html>
    <head>
       <meta name="layout" content="main"/>
-    
-      <r:require modules="bootstrap"/>
+      <asset:javascript src="application.js"/>
+      <g:javascript library='jquery' />
    </head>
 <body>
 <div class="hero-unit span9">

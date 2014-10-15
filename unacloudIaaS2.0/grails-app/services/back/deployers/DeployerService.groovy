@@ -62,9 +62,9 @@ class DeployerService {
 		 */
 		image.virtualMachines.eachWithIndex() { vm, i ->
 			
-			println vm.name+" "+vm.message
+			
 			if(vm.message.equals("Adding instance")&&vm.status== VirtualMachineExecutionStateEnum.DEPLOYING){
-				
+				println vm.name+" "+vm.message
 				/*
 				 * creates a message in order to start the machine
 				 */
@@ -131,8 +131,8 @@ class DeployerService {
 					/*
 					 * creates a message in order to start the machine
 					 */
-					
-					vmsm.setExecutionTime(vm.runningTimeInHours())
+					println vm.runningTimeInHours()
+					vmsm.setExecutionTime(new Time(vm.runningTimeInHours(), TimeUnit.HOURS))
 					vmsm.setHostname(vm.name)
 					vmsm.setVirtualMachineIP(vm.ip.ip)
 					println "vmsm.setVirtualMachineIP --->"+ vm.ip.ip
