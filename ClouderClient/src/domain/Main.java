@@ -18,7 +18,6 @@ import virtualMachineManager.PersistentExecutionManager;
 import com.losandes.utils.VariableManager;
 
 import communication.ClouderClientAttention;
-import fileTransfer.TreeDistributionChannelManager;
 
 /**
  * Responsible for starting the Clouder Client

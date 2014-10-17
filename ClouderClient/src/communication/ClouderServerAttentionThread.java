@@ -105,7 +105,7 @@ public class ClouderServerAttentionThread implements Runnable {
             case VirtualMachineOperationMessage.VM_TIME:
                 return PersistentExecutionManager.extendsVMTime((VirtualMachineAddTimeMessage)message);
             case VirtualMachineOperationMessage.VM_SAVE_IMG:
-            	return ImageCacheManager.returnCopyImage((VirtualMachineSaveImageMessage)message,pw);
+            	return PersistentExecutionManager.sendImageCopy((VirtualMachineSaveImageMessage)message);  
             default:
                 return new InvalidOperationResponse("Invalid virtual machine operation: "+message.getSubOp());
         }

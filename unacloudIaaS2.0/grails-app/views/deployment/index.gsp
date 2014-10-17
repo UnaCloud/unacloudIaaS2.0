@@ -5,7 +5,6 @@
       <r:require modules="bootstrap"/>
 	  <asset:javascript src="application.js"/>
       <g:javascript library='jquery' />
-	 
    </head>
 <body>
 <div class="hero-unit span9">
@@ -103,9 +102,9 @@ function reload()
 				  	    <small>None</small>	
 				    </g:if>
 			    </td>	
-			    <td>	
+			    <td>		
 			        		  
-				    <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.DEPLOYED}">				       
+				    <g:if test="${virtualMachine.status==VirtualMachineExecutionStateEnum.DEPLOYED}">
 				        <a class="dialog_button" data-imageid="${image.id}" data-vmachineid="${virtualMachine.id}" data-imagename="${image.image.name}">
 				            <i class="icon-download-alt" title="Save image"></i>							
 				        </a>    					

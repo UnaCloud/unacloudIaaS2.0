@@ -1,6 +1,8 @@
 package unacloud2
 
 import grails.transaction.Transactional;
+import com.losandes.utils.RandomUtils;
+
 import grails.util.Environment;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import webutils.ImageRequestOptions;
@@ -184,8 +186,7 @@ class DeploymentService {
 		 * Finally it sends the deployment message to the agents
 		 */
 		
-		//TODO uncomment this line
-		//if(!Environment.isDevelopmentMode())
+		if(!Environment.isDevelopmentMode())
 		runAsync{ deployerService.deploy(dep) }
 		
 		return dep
@@ -278,47 +279,5 @@ class DeploymentService {
 		runAsync{ deployerService.deployNewInstances(depImage) }
 		depImage.save(failOnError: true)
 		return depImage
-	}
-	
-	
-	def saveImage(VirtualMachineExecution vm, DeployedImage image, long virtualMachineId,String imageName){
-		print vm
-		print image.image.id
-		print imageName
-		VirtualMachineSaveImageMessage vmsim = new VirtualMachineSaveImageMessage();
-		if(vm.status!= VirtualMachineExecutionStateEnum.DEPLOYING){
-			println vm.name+" "+vm.message
-			if(Environment.isDevelopmentMode()){//TODO this must be false
-				try{
-					vmsim.setImageId(image.image.id);
-					vmsim.setVirtualMachineId(virtualMachineId);
-					String pmIp=vm.executionNode.ip.ip;
-					//String pmIp="157.253.202.50";
-					try{
-						/*
-						 * Sends the message to the physical machine agent
-						 * where the virtual machine was allocated
-						 */
-						println "Abriendo socket a "+pmIp+" "+variableManagerService.getIntValue("CLOUDER_CLIENT_PORT");
-						Socket s=new Socket(pmIp,variableManagerService.getIntValue("CLOUDER_CLIENT_PORT"));
-						s.setSoTimeout(15000);
-						ObjectOutputStream oos=new ObjectOutputStream(s.getOutputStream());
-						oos.writeObject(vmsim);
-						oos.flush();					
-						ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
-						Object c=ois.readObject();
-						println "Response "+ c
-						oos.close();
-						s.close();
-					}catch(Exception e){
-						vm.setStatus(VirtualMachineExecutionStateEnum.FAILED)
-						vm.setMessage("Connection error")
-						println e.getMessage()+" "+pmIp;
-					}
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 }

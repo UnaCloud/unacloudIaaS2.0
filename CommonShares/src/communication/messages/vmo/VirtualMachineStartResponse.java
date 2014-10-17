@@ -19,8 +19,8 @@ public class VirtualMachineStartResponse extends UnaCloudAbstractResponse{
 		this.message = message;
 	}
 	public static enum VirtualMachineState{
-		STARTING,NOT_COPY,FAILED
-	}
+		STARTING,NOT_COPY,FAILED,COPYNG,
+	} 
 	@Override
 	public String toString() {
 		return "VirtualMachineStartResponse [state=" + state + ", message=" + message + "]";
