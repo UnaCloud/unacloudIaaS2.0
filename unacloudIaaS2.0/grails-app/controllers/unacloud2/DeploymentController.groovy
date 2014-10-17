@@ -1,7 +1,9 @@
 package unacloud2
 
+import back.services.ImageUploadService;
 import back.userRestrictions.UserRestrictionProcessorService
 
+import grails.converters.JSON
 import java.util.regex.Pattern.Start;
 
 import webutils.ImageRequestOptions;
@@ -23,6 +25,11 @@ class DeploymentController {
 	 */
 	
 	DeploymentService deploymentService
+	
+	/**
+	 * Representation of image upload services
+	 */
+	ImageUploadService imageUploadService
 	
 	//-----------------------------------------------------------------
 	// Actions
@@ -55,7 +62,9 @@ class DeploymentController {
 		else if(params.viewAll=="true"){
 			List deployments= new ArrayList()
 			def deps=Deployment.findAllByStatus('ACTIVE')
+			println "Deployments:"+deps
 			for (Deployment dep in deps){
+				println "Deployment:" +dep.id
 				if(dep.isActive())
 				deployments.add(dep)
 			
@@ -77,6 +86,7 @@ class DeploymentController {
 			limitHA++
 			else
 			limit++
+
 		}
 		[id:params.id, limit:limit, limitHA:limitHA]
 	}
@@ -89,7 +99,7 @@ class DeploymentController {
 	
 	def deploy(){
 		Cluster cluster= Cluster.get(params.get('id'))
-		
+
 		int totalInstances
 			def user= User.get(session.user.id)
 			def imageNumber= cluster.images.size()
@@ -101,25 +111,34 @@ class DeploymentController {
 					totalInstances+=params.instances.getAt(i).toInteger()
 				}
 			}
+			def unavailable = cluster.images.findAll {it.state==VirtualMachineImageEnum.AVAILABLE}
+			if(unavailable.size()!=cluster.images.size()){
+				flash.message= "Some images of this cluster are not available at this moment. Please, change cluster to deploy or images in cluster."
+				redirect( controller: "cluster",action: "deployOptions",  params: [id: cluster.id])
+				return
+			}
 			
 			def temp=new ImageRequestOptions[cluster.images.size()];
 			def highAvail= new boolean[cluster.images.size()]
-			
+
+			println "params: "+params
 			if(imageNumber==1){
 				HardwareProfile hp= HardwareProfile.get(params.get('hardwareProfile'))
 				temp[0]=new ImageRequestOptions(cluster.images.first().id, hp.ram,hp.cores,params.instances.toInteger(),params.hostname);
 				highAvail[0]= (params.get('highAvailability'+cluster.images.first().id))!=null
 			}
 			else{
-				
+
 				cluster.images.eachWithIndex {it,idx->
 					HardwareProfile hp= HardwareProfile.get(params.hardwareProfile.getAt(idx))
 					highAvail[idx]=(params.get('highAvailability'+it.id))!=null
 					temp[idx]=new ImageRequestOptions(it.id, hp.ram,hp.cores,params.instances.getAt(idx).toInteger(), params.hostname.getAt(idx));
+			
+				}
 			}
-			}
+			println highAvail
 			try{
-			deploymentService.deploy(cluster, user, params.time.toLong()*60*60*1000, temp, highAvail)
+				deploymentService.deploy(cluster, user, params.time.toLong()*60*60*1000, temp, highAvail)
 			}
 			catch(Exception e){
 				if(e.getMessage()==null)
@@ -171,7 +190,7 @@ class DeploymentController {
 		def instance=params.instances.toInteger()
 		User user= User.get(session.user.id)
 		try{
-		deploymentService.addInstances(depImage, user,instance, params.time.toLong()*60*60*1000)
+			deploymentService.addInstances(depImage, user,instance, params.time.toLong()*60*60*1000)
 		}
 		catch (Exception e){
 			if(e.getMessage()==null)
@@ -182,5 +201,70 @@ class DeploymentController {
 			return
 		}
 		redirect(action: "index")
+	}
+	
+	/**
+	 * Validates if a name to create an image copy is not already in use.
+	 * @params image: image id, machine: virtual machine execution id, name: name to validate
+	 */
+	def validate(){
+		if(session.user==null){
+			render('403',"Your session has expired.")			
+			return
+		}else{
+			try {
+				def result = []
+				def user= User.get(session.user.id)
+				DeployedImage di = DeployedImage.get(params.image);
+				String nameW =  params.name;
+				print nameW
+				VirtualMachineImage vm = VirtualMachineImage.findByName(nameW);
+				boolean rep=false;
+				if(vm){
+					def query = User.where{images{vm} && id == session.user.id};
+					def owner = query.find();
+					if(owner)rep= true;
+				}					
+				result = [replace: rep, imageId:params.image,machineId:params.machine,imageName:params.name]
+				render result as JSON;
+			} catch (Exception e) {
+				e.printStackTrace()
+				render("505",e.message)
+				return
+			}
+		}
+	}
+	/**
+	 * Send a request to a physical machine agent asking it to send an image file which will be stored on the server.
+	 * @params image: image id, machine: virtual machine execution id, name: name to validate
+	 */
+	def save(){
+		if(session.user==null){
+			flash.message="Your session has expired."
+			redirect(uri:"/error",absolute:true)
+		}else{
+			def user= User.get(session.user.id)
+			try {
+				long imageId = Long.parseLong(params.image)
+				long virtualMachineId = Long.parseLong(params.machine)
+				String imageName = params.name
+				print imageName
+				VirtualMachineExecution vm = VirtualMachineExecution.get(virtualMachineId)
+				DeployedImage di = DeployedImage.get(imageId);
+				if(User.where{id == user.id && images{di.image}}.find()){
+					imageUploadService.saveImage(vm,di,virtualMachineId,imageName,user)					
+				}else{
+					flash.message="The image is not registered to your user."
+					redirect(uri:"/error",absolute:true)
+					return
+				}
+			} catch (Exception e) {
+				e.printStackTrace()
+				flash.message=e.message
+				redirect(uri:"/error",absolute:true)
+				return
+			}
+			redirect(controller:"deployment", action:"index")
+		}
 	}
 }

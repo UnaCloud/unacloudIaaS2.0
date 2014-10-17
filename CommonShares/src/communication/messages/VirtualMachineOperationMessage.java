@@ -11,6 +11,7 @@ public abstract class VirtualMachineOperationMessage extends UnaCloudAbstractMes
     public static final int VM_STATE = 4;
     public static final int VM_TIME = 5;
     public static final int VM_HOST_TABLE = 6;
+    public static final int VM_SAVE_IMG = 7;
     
     protected long virtualMachineExecutionId;
 	public VirtualMachineOperationMessage(int subOperation){
