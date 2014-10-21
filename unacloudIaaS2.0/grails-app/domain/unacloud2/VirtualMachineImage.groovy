@@ -93,5 +93,4 @@ class VirtualMachineImage {
 		return isDeployed
 	}
 	
-	
 }	

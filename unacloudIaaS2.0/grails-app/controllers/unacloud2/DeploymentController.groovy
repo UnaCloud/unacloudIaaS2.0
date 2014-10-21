@@ -1,6 +1,10 @@
+
 package unacloud2
 
+<<<<<<< HEAD
 import back.services.ExternalCloudCallerService;
+=======
+>>>>>>> 53141ad18f5976c8a4837fe76d785364ef04a50a
 import back.services.ImageUploadService;
 import back.userRestrictions.UserRestrictionProcessorService
 
@@ -34,8 +38,11 @@ class DeploymentController {
 	 */
 	ImageUploadService imageUploadService
 	
+<<<<<<< HEAD
 	ExternalCloudCallerService externalCloudCallerService
 	
+=======
+>>>>>>> 53141ad18f5976c8a4837fe76d785364ef04a50a
 	//-----------------------------------------------------------------
 	// Actions
 	//-----------------------------------------------------------------
@@ -67,7 +74,9 @@ class DeploymentController {
 		else if(params.viewAll=="true"){
 			List deployments= new ArrayList()
 			def deps=Deployment.findAllByStatus('ACTIVE')
+			println "Deployments:"+deps
 			for (Deployment dep in deps){
+				println "Deployment:" +dep.id
 				if(dep.isActive())
 				deployments.add(dep)
 			
@@ -89,8 +98,33 @@ class DeploymentController {
 			limitHA++
 			else
 			limit++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		}
 		[id:params.id, limit:limit, limitHA:limitHA]
+
+
+
+
 	}
 	
 	/**
@@ -123,6 +157,10 @@ class DeploymentController {
 			def temp=new ImageRequestOptions[cluster.images.size()];
 			def highAvail= new boolean[cluster.images.size()]
 
+<<<<<<< HEAD
+=======
+			println "params: "+params
+>>>>>>> 53141ad18f5976c8a4837fe76d785364ef04a50a
 			if(imageNumber==1){
 				HardwareProfile hp= HardwareProfile.get(params.get('hardwareProfile'))
 				temp[0]=new ImageRequestOptions(cluster.images.first().id, hp.ram,hp.cores,params.instances.toInteger(),params.hostname);
@@ -134,8 +172,15 @@ class DeploymentController {
 					HardwareProfile hp= HardwareProfile.get(params.hardwareProfile.getAt(idx))
 					highAvail[idx]=(params.get('highAvailability'+it.id))!=null
 					temp[idx]=new ImageRequestOptions(it.id, hp.ram,hp.cores,params.instances.getAt(idx).toInteger(), params.hostname.getAt(idx));
+<<<<<<< HEAD
 				}
 			}
+=======
+			
+				}
+			}
+			println highAvail
+>>>>>>> 53141ad18f5976c8a4837fe76d785364ef04a50a
 			try{
 				deploymentService.deploy(cluster, user, params.time.toLong()*60*60*1000, temp, highAvail)
 			}

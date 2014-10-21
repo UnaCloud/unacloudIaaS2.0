@@ -2,9 +2,13 @@ package unacloud2
 
 import grails.transaction.Transactional;
 import com.losandes.utils.RandomUtils;
+<<<<<<< HEAD
 import com.amazonaws.services.ec2.model.RunInstancesResult;
 
 import grails.transaction.Transactional;
+=======
+
+>>>>>>> 53141ad18f5976c8a4837fe76d785364ef04a50a
 import grails.util.Environment;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import webutils.ImageRequestOptions;
@@ -12,7 +16,10 @@ import back.deployers.DeployerService;
 import back.deploymentBuilder.DeploymentProcessorService;
 import back.services.VariableManagerService
 import communication.messages.vmo.VirtualMachineSaveImageMessage
+<<<<<<< HEAD
 import back.services.ExternalCloudCallerService;
+=======
+>>>>>>> 53141ad18f5976c8a4837fe76d785364ef04a50a
 
 @Transactional
 class DeploymentService {
@@ -33,7 +40,10 @@ class DeploymentService {
 	
 	//TODO Documentation
 	VariableManagerService variableManagerService
+<<<<<<< HEAD
 	ExternalCloudCallerService externalCloudCallerService
+=======
+>>>>>>> 53141ad18f5976c8a4837fe76d785364ef04a50a
 	//-----------------------------------------------------------------
 	// Methods
 	//-----------------------------------------------------------------
