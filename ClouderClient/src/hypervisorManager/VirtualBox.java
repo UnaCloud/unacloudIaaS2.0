@@ -7,8 +7,6 @@ import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.losandes.utils.Constants;
 
@@ -142,6 +140,17 @@ public class VirtualBox extends Hypervisor {
     @Override
     public void takeVirtualMachineSnapshot(ImageCopy image,String snapshotname){
         LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"snapshot",image.getVirtualMachineName(),"take",snapshotname);
+        sleep(20000);
+    }
+    
+    /**
+     * Delete a snapshot of the VM
+     * @param image copy of the image to delete its snapshot
+     * @param snapshotname 
+     */
+    @Override
+    public void deleteVirtualMachineSnapshot(ImageCopy image,String snapshotname){
+        LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"snapshot",image.getVirtualMachineName(),"delete",snapshotname);
         sleep(20000);
     }
     

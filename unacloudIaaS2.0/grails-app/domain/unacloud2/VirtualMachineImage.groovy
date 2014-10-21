@@ -54,8 +54,19 @@ class VirtualMachineImage {
 	 */
 	int imageVersion
 	
+	/**
+	 * token to validate image message send by client
+	 */	
+	String token
+	
+	/**
+	 *Virtual machine state (DISABLE, AVAILABLE, COPYING) 
+	 */
+	VirtualMachineImageEnum state = VirtualMachineImageEnum.AVAILABLE;
+	
 	static constraints = {
     	mainFile (nullable: true)
+		token nullable:true
 		externalId (nullable: true)
 	}
 	static mapping = {

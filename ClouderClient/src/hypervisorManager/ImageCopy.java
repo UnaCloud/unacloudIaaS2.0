@@ -117,6 +117,17 @@ public class ImageCopy implements Serializable{
 	}
 	
 	/**
+	 * Delete the snapshot of this image to save it with current state and files
+	 * @throws VirtualMachineExecutionException
+	 * @throws HypervisorOperationException 
+	 */
+	public synchronized void deleteSnapshot()throws VirtualMachineExecutionException, HypervisorOperationException{
+		Hypervisor hypervisor=HypervisorFactory.getHypervisor(this.getImage().getHypervisorId());
+		hypervisor.deleteVirtualMachineSnapshot(this,"unacloudbase");		
+	}
+
+	
+	/**
 	 * Starts copy
 	 * @throws HypervisorOperationException
 	 */
@@ -162,5 +173,19 @@ public class ImageCopy implements Serializable{
     public synchronized void stopAndUnregister(){
     	Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
     	hypervisor.stopAndUnregister(this);
+    }
+    /**
+     * Finalizes copy execution without unregistering and freeing image
+     */
+    public synchronized void stop(){
+    	Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
+    	hypervisor.stopVirtualMachine(this);
+    }
+    /**
+     * Unregistering image copy
+     */
+    public synchronized void unregister(){
+    	Hypervisor hypervisor=HypervisorFactory.getHypervisor(image.getHypervisorId());
+    	hypervisor.unregisterVirtualMachine(this);
     }
 }

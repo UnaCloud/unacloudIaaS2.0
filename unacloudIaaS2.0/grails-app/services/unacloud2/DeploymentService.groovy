@@ -1,7 +1,7 @@
 package unacloud2
 
-import java.awt.Image;
-
+import grails.transaction.Transactional;
+import com.losandes.utils.RandomUtils;
 import com.amazonaws.services.ec2.model.RunInstancesResult;
 
 import grails.transaction.Transactional;
@@ -10,6 +10,8 @@ import unacloudEnums.VirtualMachineExecutionStateEnum;
 import webutils.ImageRequestOptions;
 import back.deployers.DeployerService;
 import back.deploymentBuilder.DeploymentProcessorService;
+import back.services.VariableManagerService
+import communication.messages.vmo.VirtualMachineSaveImageMessage
 import back.services.ExternalCloudCallerService;
 
 @Transactional
@@ -29,6 +31,8 @@ class DeploymentService {
 	 */
 	DeployerService deployerService
 	
+	//TODO Documentation
+	VariableManagerService variableManagerService
 	ExternalCloudCallerService externalCloudCallerService
 	//-----------------------------------------------------------------
 	// Methods
@@ -185,6 +189,7 @@ class DeploymentService {
 		/*
 		 * Finally it sends the deployment message to the agents
 		 */
+		
 		if(!Environment.isDevelopmentMode())
 		runAsync{ deployerService.deploy(dep) }
 		

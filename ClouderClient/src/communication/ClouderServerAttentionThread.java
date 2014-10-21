@@ -24,6 +24,7 @@ import communication.messages.pmo.PhysicalMachineMonitorMessage;
 import communication.messages.pmo.PhysicalMachineTurnOnMessage;
 import communication.messages.vmo.VirtualMachineAddTimeMessage;
 import communication.messages.vmo.VirtualMachineRestartMessage;
+import communication.messages.vmo.VirtualMachineSaveImageMessage;
 import communication.messages.vmo.VirtualMachineStartMessage;
 import communication.messages.vmo.VirtualMachineStartResponse;
 import communication.messages.vmo.VirtualMachineStopMessage;
@@ -103,6 +104,8 @@ public class ClouderServerAttentionThread implements Runnable {
                 return PersistentExecutionManager.restartMachine((VirtualMachineRestartMessage)message);
             case VirtualMachineOperationMessage.VM_TIME:
                 return PersistentExecutionManager.extendsVMTime((VirtualMachineAddTimeMessage)message);
+            case VirtualMachineOperationMessage.VM_SAVE_IMG:
+            	return PersistentExecutionManager.sendImageCopy((VirtualMachineSaveImageMessage)message);  
             default:
                 return new InvalidOperationResponse("Invalid virtual machine operation: "+message.getSubOp());
         }

@@ -4,9 +4,9 @@ import java.nio.file.Path
 
 import org.apache.commons.io.FileUtils
 import org.junit.internal.runners.statements.FailOnTimeout;
+import org.springframework.transaction.annotation.Transactional;
 
-class VirtualMachineImageService {
-	
+class VirtualMachineImageService {	
 	//-----------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------
@@ -28,6 +28,7 @@ class VirtualMachineImageService {
 	public VirtualMachineImage getImage(long id){
 		return VirtualMachineImage.get(id)
 	}
+	
     
 	/**
 	 * Sets new values for the image
@@ -131,7 +132,7 @@ class VirtualMachineImageService {
 				println "borrando depImage"
 				depImage.putAt("image", null)
 			}
-		}
+		}		
 		repository.images.remove(image)
 		repository.save()
 		user.images.remove(image)
@@ -155,11 +156,11 @@ class VirtualMachineImageService {
 		def repository= Repository.findByName("Main Repository")
 		folder.listFiles().each
 		{
-		def file= new java.io.File(repository.root+"imageTemplates"+separator+publicImage.name+separator+it.getName())
-		def newFile= new java.io.File(repository.root+i.name+"_"+user.username+separator+it.getName())
-		FileUtils.copyFile(file, newFile)
-		if (it.getName().endsWith(".vmx"))
-		i.putAt("mainFile", repository.root+i.name+"_"+user.username+separator+newFile.getName())
+			def file= new java.io.File(repository.root+"imageTemplates"+separator+publicImage.name+separator+it.getName())
+			def newFile= new java.io.File(repository.root+i.name+"_"+user.username+separator+it.getName())
+			FileUtils.copyFile(file, newFile)
+			if (it.getName().endsWith(".vmx"))
+			i.putAt("mainFile", repository.root+i.name+"_"+user.username+separator+newFile.getName())
 		}
 		if(user.images==null)
 			user.images
@@ -169,5 +170,75 @@ class VirtualMachineImageService {
 			repository.images
 		repository.images.add(i)
 		repository.save()
+	}	
+	
+	/**
+	 * TODO: Documentation
+	 */
+	def User getUserByImage(VirtualMachineImage image){
+		if(image==null)return null
+		User user = User.where{
+			images{image}
+		}.find([max:1])
+		return user
+	}
+	
+	def Repository getRepositoryByImage(VirtualMachineImage image){
+		if(image==null)return null
+		Repository repo = Repository.where{
+			images{image}
+		}.find([max:1])
+		return repo
+	}
+	
+	def changeImageState(Long id, VirtualMachineImageEnum state){
+		VirtualMachineImage.withTransaction{
+			VirtualMachineImage vm2 = getImage(id);
+			if(vm2!=null){
+				vm2.setState(state);
+				vm2.save();
+			}
+		}
+	}
+	def deleteImage(Long id){
+		try {
+			VirtualMachineImage.withTransaction{
+				VirtualMachineImage vm = getImage(id);
+				User user = (User) getUserByImage(vm);
+				Repository repo = (Repository) getRepositoryByImage(vm);
+				deleteImage(user, repo, vm);
+			}			
+		} catch (Exception e) {
+			e.printStackTrace()
+		}
+	}
+	
+	def Long getByToken(token){
+		if(token==null||token.equals(''))return null
+		def vm= VirtualMachineImage.findByToken(token)
+		if(vm!=null)return vm.id
+		else null
+	}
+
+	def setPath(String token,String newPath){
+		
+		def id = getByToken(token);
+		if(id!=null){
+			VirtualMachineImage.withTransaction{
+				def image = getImage(id)
+				image.setMainFile(newPath);
+				image.setToken(null);
+				image.save(failOnError: true);
+			}
+		}
+	}
+	def boolean imageExist(Long vmId) {
+		return getImage(vmId)!=null;
+	}
+		
+	def String getPathImage(Long vmId) {
+		VirtualMachineImage vm = getImage(vmId);
+		if(vm)return vm.getMainFile();
+		return null;
 	}
 }

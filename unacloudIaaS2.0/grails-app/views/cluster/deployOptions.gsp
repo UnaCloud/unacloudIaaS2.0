@@ -29,6 +29,12 @@
 				</table>
 			</div>
 			<br>
+			<g:if test="${flash.message && flash.message!=""}">
+				<div class="alert alert-error">
+					<i class="icon-exclamation-sign"></i>&nbsp;&nbsp;&nbsp;${flash.message }
+				</div>
+			</g:if>
+			<br>
 			<g:each in="${cluster.images}" status="i" var="image">
 				<div class="control-group">
 					<h5>
@@ -88,11 +94,7 @@
 			</g:if>
 			</div>
 		</g:form>
-		<g:if test="${flash.message && flash.message!=""}">
-			<div class="alert alert-error">
-				<i class="icon-exclamation-sign"></i>&nbsp;&nbsp;&nbsp;${flash.message }
-			</div>
-		</g:if>
+		
 	</div>
 </body>
 </html>
