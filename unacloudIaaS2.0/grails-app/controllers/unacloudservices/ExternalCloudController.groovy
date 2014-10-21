@@ -44,7 +44,7 @@ class ExternalCloudController {
 	}
 	
 	def add(){
-		externalCloudProviderService.addProvider(params.name, params.endpoint)
+		externalCloudProviderService.addProvider(params.name, params.endpoint, params.type)
 		redirect(action:"index")
 	}
 	
@@ -105,7 +105,7 @@ class ExternalCloudController {
 	
 	def setValues(){
 		def p = ExternalCloudProvider.get(params.provider_id)
-		externalCloudProviderService.setValues(p,params.name,params.endpoint)
+		externalCloudProviderService.setValues(p,params.name,params.endpoint,params.type)
 		redirect(action:"index")
 	}
 	

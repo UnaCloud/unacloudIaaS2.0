@@ -1,11 +1,16 @@
 package unacloud2
 
+import java.awt.Image;
+
+import com.amazonaws.services.ec2.model.RunInstancesResult;
+
 import grails.transaction.Transactional;
 import grails.util.Environment;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import webutils.ImageRequestOptions;
 import back.deployers.DeployerService;
 import back.deploymentBuilder.DeploymentProcessorService;
+import back.services.ExternalCloudCallerService;
 
 @Transactional
 class DeploymentService {
@@ -24,6 +29,7 @@ class DeploymentService {
 	 */
 	DeployerService deployerService
 	
+	ExternalCloudCallerService externalCloudCallerService
 	//-----------------------------------------------------------------
 	// Methods
 	//-----------------------------------------------------------------
@@ -191,7 +197,22 @@ class DeploymentService {
 	 * @return vm virtual machine with the new state
 	 */
 	def stopVirtualMachineExecution(VirtualMachineExecution vm){
-		if(vm.status==VirtualMachineExecutionStateEnum.DEPLOYED||vm.status==VirtualMachineExecutionStateEnum.FAILED){
+		if (vm.stopTime==null){
+			ArrayList<String> vmidlist=new ArrayList()
+			vmidlist.add(vm.name)
+			def terminateResult=externalCloudCallerService.terminateInstances(vmidlist)
+			for(instanceState in terminateResult){
+				if(vm.name.equals(instanceState.instanceId)&& (instanceState.currentState.name.equals('shutting-down')||instanceState.currentState.name.equals('terminated'))){
+					def ip= vm.ip
+					vm.stopTime=new Date()
+					vm.status= VirtualMachineExecutionStateEnum.FINISHED
+					vm.ip = null
+					vm.save()
+					if(ip!=null)ip.delete()
+				}
+			}
+		}
+		else if(vm.status==VirtualMachineExecutionStateEnum.DEPLOYED||vm.status==VirtualMachineExecutionStateEnum.FAILED){
 		vm.stopTime=new Date()
 		vm.ip.used=false
 		vm.ip.save()
@@ -225,6 +246,35 @@ class DeploymentService {
 				it.save()
 			}
 		}
+	}
+	
+	def externalDeploy(Cluster cluster,User user, RunInstancesResult rir){
+		DeployedCluster depCluster= new DeployedCluster(cluster: cluster)
+		depCluster.images=[]
+		cluster.images.eachWithIndex(){ image,i->
+			def depImage= new DeployedImage(image:image)
+			depImage.virtualMachines= []
+			for(instance in rir.reservation.instances){
+				def hp= HardwareProfile.findByName('small')
+				if(hp==null) throw new Exception('Hardware profile whit the described ram and cores does not exist')
+				def virtualMachine = new VirtualMachineExecution( message: instance.state.name, name: instance.instanceId, hardwareProfile: hp ,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: null )
+				depImage.virtualMachines.add(virtualMachine)
+				virtualMachine.save(failOnError: true)
+				depImage.save(failOnError: true)
+			}
+			depCluster.images.add(depImage)
+		}
+		depCluster.save(failOnError: true)
+		Deployment dep= new Deployment(cluster: depCluster, startTime: new Date(),stopTime: null,status: DeploymentStateEnum.ACTIVE)
+		dep.save(failOnError: true)
+		if(user.deployments==null)
+			user.deployments=[]
+		user.deployments.add(dep)
+		user.save(failOnError: true)
+		/*
+		 * Finally it sends the deployment message to the agents
+		 */
+		return dep
 	}
 	
 	/**

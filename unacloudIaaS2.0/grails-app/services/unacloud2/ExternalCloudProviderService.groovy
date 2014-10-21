@@ -6,8 +6,9 @@ import grails.transaction.Transactional
 class ExternalCloudProviderService {
 	
 	
-    def addProvider(String name, String endpoint) {
-		return new ExternalCloudProvider(name: name, endpoint:endpoint).save(failOnError:true)
+    def addProvider(String name, String endpoint, String type) {
+		ExternalCloudTypeEnum typeEnum = ExternalCloudTypeEnum.valueOf(type)
+		return new ExternalCloudProvider(name: name, endpoint: endpoint, type: typeEnum).save(failOnError:true)
     }
 	
 	/**
@@ -27,9 +28,11 @@ class ExternalCloudProviderService {
 	 * @param configurer OS new configurer class
 	 */
 	
-	def setValues(ExternalCloudProvider p, name, endpoint){
+	def setValues(ExternalCloudProvider p, name, endpoint, String type) {
+		ExternalCloudTypeEnum typeEnum = ExternalCloudTypeEnum.valueOf(type)
 		p.putAt("name", name)
 		p.putAt("endpoint", endpoint)
+		p.putAt("type", typeEnum)
 	}
 	
 }

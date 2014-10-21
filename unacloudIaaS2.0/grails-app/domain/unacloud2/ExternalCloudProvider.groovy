@@ -6,6 +6,8 @@ class ExternalCloudProvider {
 	
 	String endpoint
 	
+	ExternalCloudTypeEnum type
+	
     static constraints = {
     }
 }

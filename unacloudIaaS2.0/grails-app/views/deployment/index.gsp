@@ -88,7 +88,7 @@ function reload()
      </g:if>
     </td>
   	<td>
-  	<small>${ virtualMachine.remainingTime()}</small>
+  	<small>${(virtualMachine.stopTime==null)? 'N/A':virtualMachine.remainingTime()}</small>
     </td>
     <td>
     <g:if test="${virtualMachine.ip!=null}">

@@ -79,6 +79,9 @@
               <li><a href="${createLink(uri: '/hypervisor/', absolute: true)}">Hypervisor Management</a></li>
               <li><a href="${createLink(uri: '/operatingSystem/', absolute: true)}">OS Management</a></li>
               <li><a href="${createLink(uri: '/laboratory/', absolute: true)}">Infrastructure Management</a></li>
+              <li><a href="${createLink(uri: '/externalCloud/', absolute: true)}">External Cloud Providers Management</a></li>
+              <li><a href="${createLink(uri: '/externalCloud/accounts', absolute: true)}">External Cloud Accounts Management</a></li>
+              
               <li><a class="nav-header" href="${createLink(uri: '/configuration', absolute: true)}">Configuration</a></li>
               <li><a href="${createLink(uri: '/configuration/serverVariables', absolute: true)}">Server Variables</a></li>
           	  <li><a href="${createLink(uri: '/configuration/agentVersion', absolute: true)}">Update Agent Version</a></li>

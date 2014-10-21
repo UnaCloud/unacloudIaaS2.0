@@ -1,5 +1,10 @@
 package unacloud2
 
+import com.amazonaws.services.ec2.model.DescribeInstancesResult;
+import com.amazonaws.services.ec2.model.Instance;
+import communication.messages.vmo.VirtualMachineStartResponse.VirtualMachineState;
+
+import back.services.ExternalCloudCallerService;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 
 class Deployment {
@@ -28,8 +33,10 @@ class Deployment {
 	DeploymentStateEnum status
 	
 	static constraints = {	
+		stopTime nullable:true 
     }
 	
+	def externalCloudCallerService
 	//-----------------------------------------------------------------
 	// Methods
 	//-----------------------------------------------------------------
@@ -54,9 +61,14 @@ class Deployment {
 	 */
 	def updateState(){
 		for(image in cluster.images) {
+			ArrayList<String> externalInstanceIds= new ArrayList<String>()
 			for(vm in image.virtualMachines){
 				if(!(vm.status ==VirtualMachineExecutionStateEnum.FINISHED)){
-				if(vm.stopTime.compareTo(new Date())<0){
+				if(vm.stopTime==null){
+					if(vm.status.equals(VirtualMachineExecutionStateEnum.DEPLOYING))
+						externalInstanceIds.add(vm.name)
+				}
+				else if(vm.stopTime.compareTo(new Date())<0){
 					vm.status= VirtualMachineExecutionStateEnum.FINISHED
 					if (vm.ip != null) vm.ip.used= false
 				}
@@ -65,6 +77,33 @@ class Deployment {
 					vm.message='Request timeout'
 				}
 				}			}
+			def instances = externalCloudCallerService.describeInstance(externalInstanceIds)
+			for (instance in instances){
+				def vm=VirtualMachineExecution.findByName(instance.instanceId)
+				if (vm!= null){
+					switch (instance.state.code){
+						case 0: 
+							vm.setStatus(VirtualMachineExecutionStateEnum.DEPLOYING)
+							vm.setMessage(instance.state.name)
+							break
+						case 16:
+							vm.setStatus(VirtualMachineExecutionStateEnum.DEPLOYED)
+							def ip= new IP(ip:instance.publicIpAddress, used:true)
+							ip.save(failOnError: true)
+							vm.setIp(ip)
+							vm.setMessage(instance.state.name)
+							break
+						case 32: case 64: case 80:
+							vm.setStatus(VirtualMachineExecutionStateEnum.FAILED)
+							vm.setMessage(instance.state.name)
+							break
+						case 48:
+							vm.setStatus(VirtualMachineExecutionStateEnum.FINISHED)
+							vm.setMessage(instance.state.name)
+							break
+					}
+				}
+			}
 		}
 	}
 	

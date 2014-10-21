@@ -30,6 +30,7 @@
     <g:link action="delete" params="${[id: image.id]}"><i class="icon-remove-sign" title="Delete Image"></i></g:link>
     <g:link action="changeVersion" params="${[id: image.id]}"><i class="icon-repeat" title="Change Version"></i></g:link>
     <g:link action="clearImageFromCache" params="${[id: image.id]}"><i class="icon-fire" title="Clear this image from cache"></i></g:link>
+    <g:link action="addExternalId" params="${[id: image.id]}"><i class="icon-fire" title="Add/Modify external account id"></i></g:link>
     </div>
     </td>
   </tr>

@@ -43,6 +43,10 @@ class VirtualMachineImageService {
 		image.putAt("password", password)
 	}
 	
+	
+	def setExternalId(VirtualMachineImage image, externalId){
+		image.putAt("externalId", externalId)
+	}
 	/**
 	 * Changes image files for the files uploaded by user
 	 * @param i image to be edited

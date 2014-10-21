@@ -81,7 +81,13 @@ class ClusterController {
 			else
 			limit++
 		}
-		[cluster: cluster,limit: limit, limitHA: limitHA, hardwareProfiles: HardwareProfile.list()]
+		ServerVariable computingAccount= ServerVariable.findByName('EXTERNAL_COMPUTING_ACCOUNT')
+		ExternalCloudAccount account
+		if(computingAccount!=null &&  !(computingAccount.variable.equals('None')))
+			account = ExternalCloudAccount.findByName(computingAccount.variable)
+		
+		[account:account,cluster: cluster,limit: limit, limitHA: limitHA, hardwareProfiles: HardwareProfile.list()]
+		
 	}
 	
 	/**

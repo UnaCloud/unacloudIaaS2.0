@@ -6,20 +6,26 @@
 <body>
 	<div class="hero-unit span9">
 		<g:form name="clusterDeploy" class="form-horizontal"
-			controller="deployment" action="deploy">
+			controller="deployment" >
 			<input type=hidden name="id" value="${cluster.id}">
 			<div id="remaining" class="alert alert-info">
 				<table>
 					<tr>
-						<td rowspan="2"><i class="icon-exclamation-sign"></i>&nbsp;&nbsp;&nbsp;
+						<td rowspan="3"><i class="icon-exclamation-sign"></i>&nbsp;&nbsp;&nbsp;
 						</td>
 						<td><label class="info">Remaining Common Instances: ${limit}</label>
 						</td>
 					</tr>
 					<tr>
-						<td><label> Remaining High Avaliability Instances: ${limitHA }</label>
+						<td><label> Remaining High Availability Instances: ${limitHA }</label>
 						</td>
 					</tr>
+					<g:if test="${limit==0 && account!= null}">
+						<tr>
+						<td><label> There are no remaining local physical machines, but you can deploy on ${account.provider.name } </label>
+						</td>
+					</tr> 
+					</g:if>
 				</table>
 			</div>
 			<br>
@@ -73,9 +79,13 @@
 					</select>
 				</div>
 			</div>
-
 			<div class="controls">
-				<g:submitButton name="deploy" class="btn" value="Deploy" />
+			<g:if test="${limit!=0 || limitHA!=0}">
+				<g:actionSubmit name="deploy" class="btn" value="Deploy" action="deploy"/>
+			</g:if>
+			<g:if test="${account!=null}">
+				<g:actionSubmit name="extdeploy" class="btn" value="External Deploy" action="externalDeploy"/>
+			</g:if>
 			</div>
 		</g:form>
 		<g:if test="${flash.message && flash.message!=""}">

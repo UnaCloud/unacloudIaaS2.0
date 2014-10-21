@@ -41,6 +41,8 @@ class VirtualMachineImage {
 	 */
 	String accessProtocol
 	
+	String externalId
+	
 	/**
 	 * Main file path (File that can be executed by hypervisor in order to
 	 * deploy the machine)
@@ -54,6 +56,7 @@ class VirtualMachineImage {
 	
 	static constraints = {
     	mainFile (nullable: true)
+		externalId (nullable: true)
 	}
 	static mapping = {
 		operatingSystem(lazy:false)

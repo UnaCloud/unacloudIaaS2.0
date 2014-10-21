@@ -1,3 +1,6 @@
+<%@page import="unacloud2.ExternalCloudTypeEnum"%>
+<%@page import="unacloud2.ExternalCloudAccount"%>
+<%@page import="unacloud2.ExternalCloudProvider"%>
 <%@page import="back.pmallocators.AllocatorEnum"%>
 <%@page import="unacloud2.ServerVariable"%>
 <html>
@@ -17,7 +20,7 @@
 							class="control-label"> ${serverVariable.name}
 						</label>
 						<div class="controls" id="data">
-							<g:if test="${!(serverVariable.name=='VM_ALLOCATOR_NAME')}">
+							<g:if test="${!(serverVariable.name=='VM_ALLOCATOR_NAME')&& !(serverVariable.name=='EXTERNAL_STORAGE_ACCOUNT')&&!(serverVariable.name=='EXTERNAL_COMPUTING_ACCOUNT')}">
 								<input name="${serverVariable.name}" id="${serverVariable.name}"
 									type="text" value="${serverVariable.variable}">
 							</g:if>
@@ -27,6 +30,30 @@
 										<option value="${var}" ${(var.toString() == serverVariable.variable)?'selected':''} >
 											${var.getName() }
 										</option>
+									</g:each>
+								</select>
+							</g:if>
+							<g:if test="${serverVariable.name=='EXTERNAL_STORAGE_ACCOUNT'}">
+								<select name="${ serverVariable.name}">
+									<option value="None">None</option>
+									<g:each in="${ExternalCloudAccount.list()}" status="j" var="var">
+										<g:if test="${var.provider.type.equals(ExternalCloudTypeEnum.STORAGE) }">
+										<option value="${var.getName()}" ${(var.getName().equals(serverVariable.variable))?'selected':''} >
+											${var.getName() }
+										</option>
+										</g:if>
+									</g:each>
+								</select>
+							</g:if>
+							<g:if test="${serverVariable.name=='EXTERNAL_COMPUTING_ACCOUNT'}">
+								<select name="${ serverVariable.name}">
+									<option value="None">None</option>	
+									<g:each in="${ExternalCloudAccount.list()}" status="j" var="var">
+										<g:if test="${var.provider.type.equals(ExternalCloudTypeEnum.COMPUTING) }">
+										<option value="${var.getName()}" ${(var.getName().equals(serverVariable.variable))?'selected':''} >
+											${var.getName() }
+										</option>
+										</g:if>
 									</g:each>
 								</select>
 							</g:if>

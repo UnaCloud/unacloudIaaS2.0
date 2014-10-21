@@ -11,5 +11,6 @@ class ExternalCloudAccount {
 	String account_key
 	
     static constraints = {
+		name unique: true
     }
 }

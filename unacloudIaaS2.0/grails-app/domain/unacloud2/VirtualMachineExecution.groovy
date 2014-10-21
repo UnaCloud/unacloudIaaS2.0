@@ -54,6 +54,7 @@ class VirtualMachineExecution {
 	static constraints = {
 		executionNode nullable: true
 		ip nullable: true
+		stopTime nullable: true 
 	}
 	
 	//-----------------------------------------------------------------

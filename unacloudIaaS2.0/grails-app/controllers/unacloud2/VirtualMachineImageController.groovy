@@ -199,6 +199,22 @@ class VirtualMachineImageController {
 		redirect(action:"index")
 	}
 	
+	def addExternalId(){
+		def i= VirtualMachineImage.get(params.id)
+		
+		if (!i) {
+			redirect(action:"index")
+		}
+		else{
+			[image: i]
+		}
+	}
+	
+	def setExternalId(){
+		def image = VirtualMachineImage.get(params.id)
+		virtualMachineImageService.setExternalId(image,params.externalId)
+		redirect(action:"index")
+	}
 	
 	/**
 	 * Verifies if the image is being used then acquires the repository when it is

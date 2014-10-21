@@ -10,6 +10,8 @@ import fileManager.DataServerSocket;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.internal.runners.statements.FailOnTimeout;
 
+import unacloud2.ExternalCloudProvider;
+import unacloud2.ExternalCloudTypeEnum;
 import unacloud2.HardwareProfile;
 import unacloud2.Hypervisor;
 import unacloud2.IP
@@ -98,7 +100,11 @@ class BootStrap {
 		if(Repository.count()==0){
 			new Repository(name: "Main Repository", capacity: 20, root: "C:\\images\\").save();
 		}
-		
+		if(ExternalCloudProvider.count()==0){
+			new ExternalCloudProvider(name:'Amazon EC2', endpoint: 'https://ec2.amazonaws.com', type: ExternalCloudTypeEnum.COMPUTING).save()
+			new ExternalCloudProvider(name:'Amazon S3', endpoint: 'https://s3.amazonaws.com', type: ExternalCloudTypeEnum.COMPUTING).save()
+			
+		}
 		if(ServerVariable.count() ==0){
 			new ServerVariable(name:'CLOUDER_SERVER_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable:'26').save()
 			new ServerVariable(name:'CLOUDER_CLIENT_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable:'81').save()
@@ -118,6 +124,11 @@ class BootStrap {
 			new ServerVariable(name:'SERVER_URL',serverVariableType: ServerVariableTypeEnum.STRING,variable: 'http://'+InetAddress.getLocalHost().getHostAddress()+'/Unacloud2').save()
 			new ServerVariable(name:'VM_ALLOCATOR_NAME',serverVariableType: ServerVariableTypeEnum.STRING,variable: AllocatorEnum.RANDOM).save()
 		}
+		if(ServerVariable.findByName('EXTERNAL_COMPUTING_ACCOUNT')==null)
+			new ServerVariable(name:'EXTERNAL_COMPUTING_ACCOUNT', serverVariableType: ServerVariableTypeEnum.STRING, variable:'None', serverOnly: true).save()
+		if(ServerVariable.findByName('EXTERNAL_STORAGE_ACCOUNT')==null)
+			new ServerVariable(name:'EXTERNAL_STORAGE_ACCOUNT', serverVariableType: ServerVariableTypeEnum.STRING, variable:'None', serverOnly: true).save()
+		
 		if(Hypervisor.count() == 0){
 			new Hypervisor(name: Constants.VIRTUAL_BOX, hypervisorVersion: "4.3.4").save()
 			new Hypervisor(name: Constants.VM_WARE_WORKSTATION, hypervisorVersion: "10").save()
