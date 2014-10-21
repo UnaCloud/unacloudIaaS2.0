@@ -8,10 +8,6 @@
    </head>
 <body>
 <div class="hero-unit span9">
-<<<<<<< HEAD
-=======
-
->>>>>>> 53141ad18f5976c8a4837fe76d785364ef04a50a
 <g:form controller="deployment">
 <script>
 var myVar=setInterval(function(){reload()},8000);
@@ -95,11 +91,7 @@ function reload()
 				    </g:if>
 				</td>
 				<td>
-<<<<<<< HEAD
 				  	<small>${(virtualMachine.stopTime==null)? 'N/A':virtualMachine.remainingTime()}</small>
-=======
-				  	<small>${ virtualMachine.remainingTime()}</small>
->>>>>>> 53141ad18f5976c8a4837fe76d785364ef04a50a
 				</td>
 				<td>
 				    <g:if test="${virtualMachine.ip!=null}">
@@ -157,11 +149,7 @@ $(function () {
 
     });
 </script>
-<<<<<<< HEAD
-</g:each>
 
-=======
 </g:each> 
->>>>>>> 53141ad18f5976c8a4837fe76d785364ef04a50a
 </body>
 
