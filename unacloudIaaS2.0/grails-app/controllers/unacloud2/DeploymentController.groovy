@@ -180,6 +180,31 @@ class DeploymentController {
 			redirect(controller:"deployment")	
 	}
 	
+	def externalDeploy(){
+		Cluster cluster= Cluster.get(params.get('id'))
+		def user= User.get(session.user.id)
+		try{
+			for(image in cluster.images){
+				if (image.externalId==null) {
+					flash.message= "Some images had not been uploaded to the external cloud account and cannot be deployed"
+					redirect( uri: "/error",absolute: true )
+				}
+				
+				RunInstancesResult rir= externalCloudCallerService.runInstances(image.externalId, Integer.parseInt(params.instances) )
+				deploymentService.externalDeploy(cluster,user,rir)
+			}
+		}
+		catch(Exception e){
+			if(e.getMessage()==null)
+			flash.message= e.getCause()
+			else
+			flash.message= e.getMessage()
+			redirect( uri: "/error",absolute: true )
+			return
+		}
+		redirect(controller:"deployment")
+	}
+	
 	/**
 	 * History action. Returns all data of every deployment
 	 * @return deployments list
