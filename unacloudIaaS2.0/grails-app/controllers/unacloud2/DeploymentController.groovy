@@ -5,8 +5,8 @@ package unacloud2
 import back.services.ExternalCloudCallerService;
 import back.services.ImageUploadService;
 import back.userRestrictions.UserRestrictionProcessorService
-
 import grails.converters.JSON
+
 import java.util.regex.Pattern.Start;
 
 import com.amazonaws.services.ec2.model.RunInstancesResult;
@@ -190,7 +190,7 @@ class DeploymentController {
 					redirect( uri: "/error",absolute: true )
 				}
 				
-				RunInstancesResult rir= externalCloudCallerService.runInstances(image.externalId, Integer.parseInt(params.instances) )
+				RunInstancesResult rir= externalCloudCallerService.runInstances(image.externalId, Integer.parseInt(params.instances), HardwareProfile.get(params.hardwareProfile).name, user)
 				deploymentService.externalDeploy(cluster,user,rir)
 			}
 		}

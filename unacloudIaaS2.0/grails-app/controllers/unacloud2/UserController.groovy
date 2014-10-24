@@ -115,6 +115,23 @@ class UserController {
 		}
 	}
 	
+	def downloadKey(){
+		def u= User.get(session.user.id)
+		if (!u) {
+			redirect(action:"index")
+		}
+		else{
+		def separator =  java.io.File.separatorChar
+		def repository= Repository.findByName("Main Repository")
+		File key= new File(repository.root+"keyPairs"+separator+"unacloud."+u.username+".pem")
+		if(key.exists()){
+			response.setContentType("application/octet-stream")
+			response.setHeader("Content-disposition", "attachment;filename=${key.getName()}")
+			
+			response.outputStream << key.newInputStream()
+		}
+		}
+	}
 	/**
 	 * Sets or changes an user restriction. Redirects to user index when finished.
 	 */

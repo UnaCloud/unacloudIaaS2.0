@@ -77,7 +77,10 @@ class Deployment {
 					vm.message='Request timeout'
 				}
 				}			}
-			def instances = externalCloudCallerService.describeInstance(externalInstanceIds)
+			
+			def instances
+			if(externalInstanceIds.size()>0 && !(ServerVariable.findByName('EXTERNAL_COMPUTING_ACCOUNT').variable.equals('None')))
+				instances = externalCloudCallerService.describeInstance(externalInstanceIds)
 			for (instance in instances){
 				def vm=VirtualMachineExecution.findByName(instance.instanceId)
 				if (vm!= null){

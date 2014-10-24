@@ -260,7 +260,7 @@ class DeploymentService {
 			def depImage= new DeployedImage(image:image)
 			depImage.virtualMachines= []
 			for(instance in rir.reservation.instances){
-				def hp= HardwareProfile.findByName('small')
+				def hp= HardwareProfile.findByName(instance.instanceType)
 				if(hp==null) throw new Exception('Hardware profile whit the described ram and cores does not exist')
 				def virtualMachine = new VirtualMachineExecution( message: instance.state.name, name: instance.instanceId, hardwareProfile: hp ,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: null )
 				depImage.virtualMachines.add(virtualMachine)

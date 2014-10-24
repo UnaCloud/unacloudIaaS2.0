@@ -40,6 +40,13 @@
 	    			<input name= "api-key" type="text" value="${user.apiKey}">
 	    		</div>
     		</div>
+    		
+    		<div class="control-group">
+    		<label class="control-label">KeyPair</label>
+	    		<div class="controls">
+	    			<g:actionSubmit class="btn" action="downloadKey" value="Download Private Key"/>
+	    		</div>
+    		</div>
     		<div class="control-group">
     			
     			<div class="controls">
