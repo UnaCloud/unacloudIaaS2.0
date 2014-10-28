@@ -94,33 +94,8 @@ class DeploymentController {
 			limitHA++
 			else
 			limit++
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
 		[id:params.id, limit:limit, limitHA:limitHA]
-
-
-
-
 	}
 	
 	/**

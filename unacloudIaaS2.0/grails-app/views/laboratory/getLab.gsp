@@ -10,8 +10,10 @@
 <table class="table table-bordered"  style="background:white" >
   <tr class="info">
   	<td class="info" colspan="12">
-  	<input type="checkbox" id="selectAll"><small>&nbsp;Select All</small>
+  	<input type="checkbox" id="selectAll"><small>&nbsp;Select All</small> 	
+  	
   	<g:link controller="laboratory" action="createMachine" params="${[id: lab.id]}" title="Create PM"><i class="icon-plus-sign pull-right"></i></g:link>
+  	<!-- <a title="Update agents" class="updateMachines"><span class="icon-refresh pull-right"></span></a>   -->	  	
   	<g:actionSubmitImage value="refresh" src="${resource(dir: 'images', file: 'empty.gif')}" action="updateMachines" title="Update agents" class="icon-refresh pull-right"/>
   	<g:actionSubmitImage value="stop" src="${resource(dir: 'images', file: 'empty.gif')}" action="stopMachines" title="Stop agents" class="icon-stop pull-right"/>
     <g:actionSubmitImage value="clearCache" src="${resource(dir: 'images', file: 'empty.gif')}" action="clearCache" title="Clear VM cache" class="icon-fire pull-right"/>
@@ -64,17 +66,8 @@
 
 </g:form>
 
-
-<script type="text/javascript">
-$(function () {
-    $('#selectAll').click(function (event) {
-
-        var selected = this.checked;
-        // Iterate each checkbox
-        $('.all:checkbox').each(function () {    this.checked = selected; });
-
-    });
- });
-</script>
+ <script src="/unacloud2/js/bootbox.js"></script>
+ <script src="/unacloud2/js/laboratory.js"></script>
+ <script>$(document).on('ready',getLab())</script>
 </body>
    

@@ -102,6 +102,7 @@ class DeployerService {
 						}catch(Exception e){
 							vm.setStatus(VirtualMachineExecutionStateEnum.FAILED)
 							vm.setMessage("Connection error")
+							println e.printStackTrace()
 							println e.getMessage()+" "+pmIp;
 						}
 					}catch(Exception e){

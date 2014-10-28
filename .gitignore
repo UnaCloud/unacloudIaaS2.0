@@ -4,3 +4,4 @@ unacloudIaaS2.0/.classpath
 unacloudIaaS2.0/target/stacktrace.log
 unacloudIaaS2.0/target/stacktrace.log
 unacloudIaaS2.0/grails-app/conf/DataSource.groovy
+unacloudIaaS2.0/web-app/agentSources/local

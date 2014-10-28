@@ -64,6 +64,7 @@ environments {
     development {
 		disable.auto.recompile=false
 		grails.gsp.enable.reload=true
+		grails.assets.bundle=true
         grails.logging.jul.usebridge = true
     }
     production {

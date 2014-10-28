@@ -27,15 +27,15 @@ environments {
 			username = "root"
 			password = "root"
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:mysql://127.0.0.1:100/iaas2dev?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
+            url = "jdbc:mysql://127.0.0.1:3306/unacloud2?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
         }
     }
     test {
         dataSource {
-			username = "iaasdev"
-			password = "2fsGR5T1vJV3mJ9QXaw4"
-            dbCreate = "create-drop"
-            url = "jdbc:mysql://157.253.204.12:100/iaas2dev?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
+			username = "iaasprod"
+			password = "6659a954f47c63b4bbd296c0efe0b73a"
+            dbCreate = "update"
+            url = "jdbc:mysql://157.253.236.160:3306/iaas2test?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
         }
     }
     production {

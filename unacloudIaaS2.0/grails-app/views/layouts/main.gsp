@@ -6,16 +6,15 @@
 	</g:javascript>
    </g:if>
    <head>
-   		<meta charset="utf-8">
-   	<asset:javascript src="application.js"/>
-   	
-   	
+    <meta charset="utf-8">
+   	<asset:javascript src="application.js"/>   	
     <title>UnaCloud 2.0</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 	<link rel="shortcut icon" href="/~unacloud/dokuwiki/lib/tpl/PlantillaLab/images/favicon.ico" />
 	<asset:stylesheet href="application.css"/>
+	
     <!-- Le styles -->
     
     <style type="text/css">
@@ -38,12 +37,10 @@
       }
     </style>
       <g:layoutTitle/>
-      
-      
-   	
+   	  <r:layoutResources/>
    </head>
    <body id="body">
-      <asset:javascript src="application.js"/>
+      
       <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">

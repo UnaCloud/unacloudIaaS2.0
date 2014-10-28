@@ -1,10 +1,7 @@
 <%@page import="unacloudEnums.*"%>
 <html>
    <head>
-      <meta name="layout" content="main"/>  
-      <r:require modules="bootstrap"/>
-	  <asset:javascript src="application.js"/>
-      <g:javascript library='jquery' />
+      <meta name="layout" content="main"/>
    </head>
 <body>
 <div class="hero-unit span9">
@@ -124,9 +121,9 @@ function reload()
 
 </g:form>
 </div>
- <script src="../js/bootbox.js"></script>
- <script src="../js/ui.js"></script>
- <script src="../js/pages.js"></script>
+ <script src="/unacloud2/js/bootbox.js"></script>
+ <script src="/unacloud2/js/ui.js"></script>
+ <script src="/unacloud2/js/pages.js"></script>
  <script>$(document).on('ready',page.deploy)</script>
 <script type="text/javascript">
 $(function () {
