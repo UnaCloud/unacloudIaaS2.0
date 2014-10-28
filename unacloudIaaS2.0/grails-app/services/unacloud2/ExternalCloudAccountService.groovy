@@ -1,12 +1,23 @@
 package unacloud2
 
+import back.services.ExternalCloudCallerService;
 import grails.transaction.Transactional
 
 @Transactional
 class ExternalCloudAccountService {
-
+	ExternalCloudCallerService externalCloudCallerService
+	
     def addAccount(name, provider, account_id, account_key) {
-		return new ExternalCloudAccount(name: name, provider: provider, account_id:account_id, account_key:account_key).save(failOnError: true)
+		println "adding account"
+		println provider.type
+		
+		if (provider.type== ExternalCloudTypeEnum.STORAGE){
+			println "adding bucket to account"
+			def account= new ExternalCloudAccount(name: name, provider: provider, account_id:account_id, account_key:account_key).save(failOnError: true)
+			return externalCloudCallerService.initializeBucket(account)
+			
+		}
+		else return new ExternalCloudAccount(name: name, provider: provider, account_id:account_id, account_key:account_key).save(failOnError: true)
     }
 	
 	def deleteAccount(ExternalCloudAccount a){

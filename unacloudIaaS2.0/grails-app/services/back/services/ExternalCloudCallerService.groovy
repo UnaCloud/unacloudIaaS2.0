@@ -2,6 +2,8 @@ package back.services
 
 import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.lang.RandomStringUtils;
+
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
@@ -37,14 +39,34 @@ class ExternalCloudCallerService {
 	
 	File f
 	
+	def initializeBucket( ExternalCloudAccount account){
+		String accountCredentials
+		try{
+			accountCredentials= "accessKey="+account.account_id+System.getProperty("line.separator")+"secretKey="+account.account_key
+			InputStream is= new ByteArrayInputStream(accountCredentials.getBytes(StandardCharsets.UTF_8));
+			credentials = new PropertiesCredentials(is)
+			storageEndpoint = new AmazonS3Client(credentials)
+		}
+		catch(Exception e){
+			throw new Exception("Invalid external computing account variable")
+		}
+		String bucketName = "unacloud-" + account.name 
+		while(storageEndpoint.doesBucketExist(bucketName)){
+			String charset = (('A'..'Z') + ('0'..'9')).join()
+			Integer length =6
+			String randomString = RandomStringUtils.random(length, charset.toCharArray())
+			bucketName = "unacloud-"+randomString
+		}
+		storageEndpoint.createBucket(new CreateBucketRequest(bucketName))
+		account.putAt("bucketName", bucketName)
+	}
+	
 	def uploadFile(File f, User u){
 		initializeStorage()		
 		try {
 			System.out.println("Uploading a new object to S3 from a file\n");
-			String bucketName= "unacloud."+u.username
-			if(!storageEndpoint.doesBucketExists(bucketName)){
-			storageEndpoint.createBucket(new CreateBucketRequest(bucketName))
-			}
+			String accountName= ServerVariable.findByName('EXTERNAL_STORAGE_ACCOUNT').getVariable()
+			def bucketName= ExternalCloudAccount.findByName(accountName).bucketName
 			storageEndpoint.putObject(new PutObjectRequest(
 									 bucketName, f.getName(), f));
 			
@@ -151,7 +173,7 @@ class ExternalCloudCallerService {
 			accountCredentials= "accessKey="+account.account_id+System.getProperty("line.separator")+"secretKey="+account.account_key
 			InputStream is= new ByteArrayInputStream(accountCredentials.getBytes(StandardCharsets.UTF_8));
 			credentials = new PropertiesCredentials(is)
-			storageEndpoint = new AmazonEC2Client(credentials)
+			storageEndpoint = new AmazonS3Client(credentials)
 		}
 		catch(Exception e){
 			throw new Exception("Invalid external computing account variable")

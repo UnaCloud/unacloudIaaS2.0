@@ -26,6 +26,11 @@ class ExternalCloudController {
 		}
 	}
 	
+	def storageIndex(){
+		
+		[]
+	}
+	
 	def index() {
 		[providers: ExternalCloudProvider.list()]
 	}
