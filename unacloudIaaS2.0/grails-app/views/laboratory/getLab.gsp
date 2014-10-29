@@ -5,8 +5,9 @@
       <r:require modules="bootstrap"/>
    </head>
 <body>
-<g:form>
+
 <div class="hero-unit span9">
+<g:form>
 <table class="table table-bordered"  style="background:white" >
   <tr class="info">
   	<td class="info" colspan="12">
@@ -62,9 +63,10 @@
        </tr>	   	
  </g:each>
 </table>
+</g:form>
 </div>
 
-</g:form>
+
 
  <script src="/unacloud2/js/bootbox.js"></script>
  <script src="/unacloud2/js/laboratory.js"></script>

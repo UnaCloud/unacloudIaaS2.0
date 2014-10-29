@@ -1,10 +1,14 @@
 package unacloudservices
 
 
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
+
 import unacloud2.ExternalCloudAccount;
 import unacloud2.ExternalCloudAccountService
 import unacloud2.ExternalCloudProvider;
 import unacloud2.ExternalCloudProviderService;
+import unacloud2.User;
 import back.services.ExternalCloudCallerService
 
 class ExternalCloudController {
@@ -25,12 +29,7 @@ class ExternalCloudController {
 			return false
 		}
 	}
-	
-	def storageIndex(){
 		
-		[]
-	}
-	
 	def index() {
 		[providers: ExternalCloudProvider.list()]
 	}
@@ -91,6 +90,33 @@ class ExternalCloudController {
 		else{
 			[provider: p]
 		}
+	}
+	
+	def storage(){
+		User u = User.get(session.user.id)
+		List<S3ObjectSummary> ol= externalCloudCallerService.listUserObjects(u)
+		
+		[content:ol]	
+	}
+	
+	def uploadObject(){
+		
+	}
+	
+	def deleteObject(){
+		User u = User.get(session.user.id)
+		externalCloudCallerService.deleteFile(u,params.objectKey)
+		redirect(action: 'storage')
+	}
+	
+	def upload(){
+		User u = User.get(session.user.id)
+		def fileMap =request.fileMap.file
+		File f= new File(fileMap.getOriginalFilename())
+		fileMap.transferTo(f)
+		externalCloudCallerService.uploadFile(f, u)
+		f.delete()
+		redirect(action: 'storage')
 	}
 	
 	def editAccount(){

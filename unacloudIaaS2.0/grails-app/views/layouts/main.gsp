@@ -69,6 +69,7 @@
               <li><a href="${createLink(uri: '/virtualMachineImage/', absolute: true)}">My Images</a></li>
               <li><a href="${createLink(uri: '/cluster/', absolute: true)}">My Clusters</a></li>
               <li><a href="${createLink(uri: '/deployment/', absolute: true)}">My Deployments</a></li>
+              <li><a href="${createLink(uri: '/externalCloud/storage', absolute: true)}">My Storage</a></li>
               <g:if test="${session.user.userType.equals("Administrator")}">
               <li><a class="nav-header" href="${createLink(uri: '/administration', absolute: true)}">Administration</a></li>
               <li><a href="${createLink(uri: '/user/', absolute: true)}">User Management</a></li>

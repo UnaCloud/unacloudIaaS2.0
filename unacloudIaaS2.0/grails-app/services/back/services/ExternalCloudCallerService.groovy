@@ -12,8 +12,7 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.*
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CreateBucketRequest;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 
 import grails.transaction.Transactional
 import unacloud2.ExternalCloudAccount;
@@ -36,9 +35,7 @@ class ExternalCloudCallerService {
 	AmazonEC2Client computingEndpoint
 	
 	AmazonS3Client storageEndpoint
-	
-	File f
-	
+		
 	def initializeBucket( ExternalCloudAccount account){
 		String accountCredentials
 		try{
@@ -61,6 +58,32 @@ class ExternalCloudCallerService {
 		account.putAt("bucketName", bucketName)
 	}
 	
+	def listUserObjects(User u){
+		initializeStorage()
+		try {
+			String accountName= ServerVariable.findByName('EXTERNAL_STORAGE_ACCOUNT').getVariable()
+			def bucketName= ExternalCloudAccount.findByName(accountName).bucketName
+			return storageEndpoint.listObjects(bucketName, u.username).getObjectSummaries()
+		}catch (AmazonServiceException ase) {
+			System.out.println("Caught an AmazonServiceException, which " +
+					"means your request made it " +
+					"to Amazon S3, but was rejected with an error response" +
+					" for some reason.");
+			System.out.println("Error Message:    " + ase.getMessage());
+			System.out.println("HTTP Status Code: " + ase.getStatusCode());
+			System.out.println("AWS Error Code:   " + ase.getErrorCode());
+			System.out.println("Error Type:       " + ase.getErrorType());
+			System.out.println("Request ID:       " + ase.getRequestId());
+		}catch (AmazonClientException ace) {
+			System.out.println("Caught an AmazonClientException, which " +
+					"means the client encountered " +
+					"an internal error while trying to " +
+					"communicate with S3, " +
+					"such as not being able to access the network.");
+			System.out.println("Error Message: " + ace.getMessage());
+		}
+	}
+	
 	def uploadFile(File f, User u){
 		initializeStorage()		
 		try {
@@ -68,8 +91,35 @@ class ExternalCloudCallerService {
 			String accountName= ServerVariable.findByName('EXTERNAL_STORAGE_ACCOUNT').getVariable()
 			def bucketName= ExternalCloudAccount.findByName(accountName).bucketName
 			storageEndpoint.putObject(new PutObjectRequest(
-									 bucketName, f.getName(), f));
+									 bucketName, u.username+'/'+f.getName(), f).withCannedAcl(CannedAccessControlList.PublicRead));
 			
+		}catch (AmazonServiceException ase) {
+			System.out.println("Caught an AmazonServiceException, which " +
+					"means your request made it " +
+					"to Amazon S3, but was rejected with an error response" +
+					" for some reason.");
+			System.out.println("Error Message:    " + ase.getMessage());
+			System.out.println("HTTP Status Code: " + ase.getStatusCode());
+			System.out.println("AWS Error Code:   " + ase.getErrorCode());
+			System.out.println("Error Type:       " + ase.getErrorType());
+			System.out.println("Request ID:       " + ase.getRequestId());
+		}catch (AmazonClientException ace) {
+			System.out.println("Caught an AmazonClientException, which " +
+					"means the client encountered " +
+					"an internal error while trying to " +
+					"communicate with S3, " +
+					"such as not being able to access the network.");
+			System.out.println("Error Message: " + ace.getMessage());
+		}
+	}
+	
+	def deleteFile(User u, String objectKey){
+		initializeStorage()
+		try {
+			System.out.println("Deleting object "+objectKey+" from S3\n");
+			String accountName= ServerVariable.findByName('EXTERNAL_STORAGE_ACCOUNT').getVariable()
+			def bucketName= ExternalCloudAccount.findByName(accountName).bucketName
+			storageEndpoint.deleteObject(new DeleteObjectRequest(bucketName, objectKey));
 		}catch (AmazonServiceException ase) {
 			System.out.println("Caught an AmazonServiceException, which " +
 					"means your request made it " +

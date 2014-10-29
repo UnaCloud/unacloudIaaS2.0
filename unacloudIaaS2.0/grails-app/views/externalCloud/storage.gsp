@@ -1,0 +1,38 @@
+<html>
+   <head>
+      <meta name="layout" content="main"/>
+      <r:require modules="bootstrap"/>
+   </head>
+<body>
+<div class="hero-unit span9">
+	<g:form>
+	<table class="table table-bordered table-condensed text-center" style="background:white">
+  <tr class="info">
+  	<td class="info" colspan="12">
+  	<!-- <a title="Update agents" class="updateMachines"><span class="icon-refresh pull-right"></span></a>   -->	  	
+  	<g:actionSubmitImage value="uploadObject" src="${resource(dir: 'images', file: 'empty.gif')}" action="uploadObject" title="Upload new file" class="icon-plus-sign"/>
+  	
+  	</td>
+  </tr>
+  <tr>
+  <th>Name</th>
+  <th>Options</th>
+  </tr>
+ 
+ <g:each in="${content}" status="i" var="object">
+	<g:if test="${!(object.getKey().endsWith('/'))}" >
+	<tr>
+	<td>${object.getKey().substring(object.getKey().lastIndexOf('/') + 1)}</td>
+	<td>
+	<div class="row-fluid text-center">
+    	<g:link action="deleteObject" params="${[objectKey:object.getKey()]}"><i class="icon-remove-sign" title="Delete File"></i></g:link>
+    </div>
+	</td>
+	</tr>
+	
+	</g:if>
+</g:each>
+</table>
+</g:form>
+</div>
+</body>
