@@ -16,6 +16,36 @@ $(function() {
 			  title: tit,
 			  message: content
 		});
-	});
-	
+	});	
 });
+
+function showAlert(message){
+	if(message)bootbox.alert(message);
+}
+function showDialog(title,message){
+	if(message && title){
+		bootbox.dialog({
+			  title: tit,
+			  message: message
+		});
+	}
+}
+function showError(tit,content){
+	if(content && tit){
+		bootbox.dialog({
+			  title: tit,
+			  message: '<div class="alert alert-error"><i class="icon-exclamation-sign"></i><small>'+content+'</small></div>'
+		});
+	}
+}
+
+function addLabel(div, message, error){
+	$(div).html('<i class="icon-exclamation-sign"></i><small>'+message+'</small>');
+	$(div).css("font-size","14px");
+	if(error)$(div).addClass('alert alert-error')
+	else $(div).addClass('alert alert-info') 	
+}
+function cleanLabel(div){
+	$(div).html('');
+	$(div).removeClass();
+}

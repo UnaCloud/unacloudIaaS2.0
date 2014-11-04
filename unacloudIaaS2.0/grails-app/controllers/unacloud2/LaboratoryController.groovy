@@ -1,6 +1,7 @@
 package unacloud2
 
 import back.services.AgentService;
+import grails.converters.JSON
 
 class LaboratoryController {
 	
@@ -123,32 +124,46 @@ class LaboratoryController {
 	 * indes when finished
 	 */
 	def updateMachines(){
+		def resp;
+		def cou = 0;		
 		params.each {
+			print it
 			if (it.key.contains("machine")){
 				if(it.value.contains("on")){
 					PhysicalMachine pm= PhysicalMachine.get((it.key - "machine") as Integer)
-					agentService.updateMachine(pm)
+					if(!agentService.updateMachine(pm)){
+						cou++
+					}
 				}
 			}
 		}
+		if(cou>0)resp = [success:false,'count':cou]
+		else resp = [success:true]	
 		println "Termine de actualizar"
-		redirect( action: "index")
-	}
+		render resp as JSON
+		
+	}//redirect( action: "index")
 	
 	/**
 	 * Stop agent in selected machines. Returns to index when finished
 	 */
 	
 	def stopMachines(){
+		def resp;
+		def cou = 0;
 		params.each {
 			if (it.key.contains("machine")){
 				if(it.value.contains("on")){
 					PhysicalMachine pm= PhysicalMachine.get((it.key - "machine") as Integer)
-					agentService.stopMachine(pm)
+					if(!agentService.stopMachine(pm)){
+						cou++
+					}
 				}
 			}
 		}
-		redirect( action: "index")
+		if(cou>0)resp = [success:false,'count':cou]
+		else resp = [success:true]
+		render resp as JSON
 	}
 	
 	/**
@@ -157,14 +172,20 @@ class LaboratoryController {
 	 */
 	def clearCache(){
 		println "clearCache"
+		def resp;
+		def cou = 0;
 		params.each {
 			if (it.key.contains("machine")){
 				if(it.value.contains("on")){
-					PhysicalMachine pm= PhysicalMachine.get((it.key - "machine") as Integer)
-					agentService.clearCache(pm)
+					PhysicalMachine pm= PhysicalMachine.get((it.key - "machine") as Integer)					
+					if(!agentService.clearCache(pm)){
+						cou++
+					}
 				}
 			}
 		}
-		redirect( action: "index")
+		if(cou>0)resp = [success:false,'count':cou]
+		else resp = [success:true]
+		render resp as JSON
 	}
 }
