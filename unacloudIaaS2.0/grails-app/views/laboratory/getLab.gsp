@@ -5,7 +5,6 @@
       <r:require modules="bootstrap"/>
    </head>
 <body>
-
 <form id="form_machines">
 	<div class="hero-unit span9">
 	<div id="label-message"></div>
@@ -65,7 +64,6 @@
 	</div>
 
 </form>
-
  <script src="/unacloud2/js/bootbox.js"></script>
  <script src="/unacloud2/js/ui.js"></script>
  <script src="/unacloud2/js/laboratory.js"></script>
