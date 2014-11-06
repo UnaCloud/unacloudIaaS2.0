@@ -1,7 +1,9 @@
 <%@page import="unacloud2.PhysicalMachineStateEnum"%>
+
 <html>
    <head>
       <meta name="layout" content="main"/>
+      
       <r:require modules="bootstrap"/>
    </head>
 <body>
@@ -64,9 +66,7 @@
 	</div>
 
 </form>
- <script src="/unacloud2/js/bootbox.js"></script>
- <script src="/unacloud2/js/ui.js"></script>
- <script src="/unacloud2/js/laboratory.js"></script>
+ <g:javascript src="laboratory.js" />
  <script>$(document).on('ready',getLab())</script>
 </body>
    

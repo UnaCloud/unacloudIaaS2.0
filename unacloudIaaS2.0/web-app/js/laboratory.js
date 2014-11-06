@@ -6,7 +6,7 @@ function getLab(){
 	$('.updateMachines').click(function (event){		
 		if(checkSelected()){			
 			 var form = $('#form_machines');
-			 $.post('/unacloud2/Laboratory/updateMachines', form.serialize(), function(data){
+			 $.post('../updateMachines', form.serialize(), function(data){
 				 showMessage(data,'All selected agents has been updated.');				
 			 }, 'json')			
 		}
@@ -14,7 +14,7 @@ function getLab(){
 	$('.clearCache').click(function (event){		
 		if(checkSelected()){			
 			 var form = $('#form_machines');
-			 $.post('/unacloud2/Laboratory/clearCache', form.serialize(), function(data){
+			 $.post('../clearCache', form.serialize(), function(data){
 				 showMessage(data,'Virtual Machine Cache from all selected agents has been cleared.');				
 			 }, 'json')			
 		}
@@ -22,7 +22,7 @@ function getLab(){
 	$('.stopMachines').click(function (event){		
 		if(checkSelected()){			
 			 var form = $('#form_machines');
-			 $.post('/unacloud2/Laboratory/stopMachines', form.serialize(), function(data){
+			 $.post('../stopMachines', form.serialize(), function(data){
 				 showMessage(data,'All selected agents has been stopped.');				
 			 }, 'json')			
 		}

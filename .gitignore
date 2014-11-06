@@ -5,3 +5,6 @@ unacloudIaaS2.0/target/stacktrace.log
 unacloudIaaS2.0/target/stacktrace.log
 unacloudIaaS2.0/grails-app/conf/DataSource.groovy
 unacloudIaaS2.0/web-app/agentSources/local
+unacloudIaaS2.0/lib/commonshares.jar
+unacloudIaaS2.0/target/stacktrace.log
+unacloudIaaS2.0/web-app/agentSources/ClouderClient.jar
