@@ -1,9 +1,6 @@
 package unacloudservices
 
 
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
-
 import unacloud2.ExternalCloudAccount;
 import unacloud2.ExternalCloudAccountService
 import unacloud2.ExternalCloudProvider;
@@ -11,6 +8,7 @@ import unacloud2.ExternalCloudProviderService;
 import unacloud2.ServerVariable
 import unacloud2.User;
 import back.services.ExternalCloudCallerService
+import com.amazonaws.services.s3.model.S3ObjectSummary
 
 class ExternalCloudController {
 	
@@ -30,7 +28,7 @@ class ExternalCloudController {
 			return false
 		}
 	}
-		
+	
 	def index() {
 		[providers: ExternalCloudProvider.list()]
 	}

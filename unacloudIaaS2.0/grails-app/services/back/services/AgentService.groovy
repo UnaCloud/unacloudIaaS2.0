@@ -34,7 +34,7 @@ class AgentService {
 	 * @param pm Physical machine to be updated 
 	 */
     def updateMachine(PhysicalMachine pm){
-		sendMessage(pm,new UpdateAgentMessage());
+		return sendMessage(pm,new UpdateAgentMessage());
 	}
 	
 	/**
@@ -43,7 +43,7 @@ class AgentService {
 	 */
     
 	def stopMachine(PhysicalMachine pm){
-		sendMessage(pm,new StopAgentMessage());
+		return sendMessage(pm,new StopAgentMessage());
 	}
 	
 	/**
@@ -64,7 +64,7 @@ class AgentService {
 	
 	def clearCache(PhysicalMachine pm){
 		println "clearCache "+pm.ip
-		sendMessage(pm,new ClearVMCacheMessage());
+		return sendMessage(pm,new ClearVMCacheMessage());
 	}
 	
 	/**
@@ -74,7 +74,7 @@ class AgentService {
 	 */
 	
 	def sendMessage(PhysicalMachine pm,UnaCloudAbstractMessage message){
-		
+		def res = true;
 		String ipAddress=pm.ip.ip;
 		try{
 			Socket s=new Socket(ipAddress,variableManagerService.getIntValue("CLOUDER_CLIENT_PORT"));
@@ -85,13 +85,15 @@ class AgentService {
 			ois.readObject();
 			s.close();
 		}catch(Exception e){
-			println "Error conectando a "+ipAddress;
+			println "Error conectando a "+ipAddress;	
+			res= false;		
 		}
 		try{
 			Thread.sleep(500);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		return res;
 	}
 	
 	/**
