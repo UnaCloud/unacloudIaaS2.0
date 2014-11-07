@@ -38,6 +38,7 @@
     <div class="row-fluid text-center">
      <g:link action="delete" params="${[id: cluster.id]}"><i title="Delete Cluster" class="icon-remove-sign"></i></g:link>
      <g:link action="deployOptions" params="${[id: cluster.id]}"><i title="Deploy Cluster" class="icon-play"></i></g:link>
+     <g:link action="externalDeployOptions" params="${[id: cluster.id]}"><i title="Deploy Cluster" class="icon-globe"></i></g:link>
     
     </div>
     </td>

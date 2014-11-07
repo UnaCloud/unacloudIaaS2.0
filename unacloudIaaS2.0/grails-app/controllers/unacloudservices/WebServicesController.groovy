@@ -38,6 +38,19 @@ class WebServicesController{
 		render webServicesService.startCluster(login,apiKey,jsonCluster) as JSON
 	}
 	
+	def uploadFile(String login, String apiKey, String file){
+			
+	}
+	
+	def deleteFile(String login, String apiKey, String file){
+		
+	}
+	
+	def listFiles(String login, String apiKey, String file){
+		
+	}
+	
+	
 	/**
 	 * Starts an heterogeneus cluster and renders a response
 	 * @param login user login

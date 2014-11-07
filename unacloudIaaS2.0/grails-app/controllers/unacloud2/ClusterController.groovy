@@ -81,15 +81,32 @@ class ClusterController {
 			else
 			limit++
 		}
-		ServerVariable computingAccount= ServerVariable.findByName('EXTERNAL_COMPUTING_ACCOUNT')
-		ExternalCloudAccount account
-		if(computingAccount!=null &&  !(computingAccount.variable.equals('None')))
-			account = ExternalCloudAccount.findByName(computingAccount.variable)
-		
-		[account:account,cluster: cluster,limit: limit, limitHA: limitHA, hardwareProfiles: HardwareProfile.list()]
+		[cluster: cluster,limit: limit, limitHA: limitHA, hardwareProfiles: HardwareProfile.list()]
 		
 	}
 	
+	def externalDeployOptions(){
+		def cluster=Cluster.get(params.id);
+		for (image in cluster.images){
+			if(image.externalId==null){
+				flash.message= "One or more images in this cluster are not uploaded on the external provider"
+				redirect( uri: "/error",absolute: true )
+			}
+		}
+		ServerVariable computingAccount= ServerVariable.findByName('EXTERNAL_COMPUTING_ACCOUNT')
+		ExternalCloudAccount account
+		if(computingAccount!=null &&  !(computingAccount.variable.equals('None'))){
+			account = ExternalCloudAccount.findByName(computingAccount.variable)
+			[account:account,cluster: cluster, hardwareProfiles: HardwareProfile.findByProvider(account.provider)]
+		
+		}
+		else{
+			flash.message= "There isn't any configured account for external deployments"
+			redirect( uri: "/error",absolute: true )
+		}
+		
+		
+	}
 	/**
 	 * Delete cluster action. Receives the cluster id in the params map and 
 	 * redirects to index after deletion  

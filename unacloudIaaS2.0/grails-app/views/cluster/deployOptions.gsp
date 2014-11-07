@@ -86,12 +86,7 @@
 				</div>
 			</div>
 			<div class="controls">
-			<g:if test="${limit!=0 || limitHA!=0}">
 				<g:actionSubmit name="deploy" class="btn" value="Deploy" action="deploy"/>
-			</g:if>
-			<g:if test="${account!=null}">
-				<g:actionSubmit name="extdeploy" class="btn" value="External Deploy" action="externalDeploy"/>
-			</g:if>
 			</div>
 		</g:form>
 		

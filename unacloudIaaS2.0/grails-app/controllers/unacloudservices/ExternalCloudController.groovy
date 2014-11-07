@@ -8,6 +8,7 @@ import unacloud2.ExternalCloudAccount;
 import unacloud2.ExternalCloudAccountService
 import unacloud2.ExternalCloudProvider;
 import unacloud2.ExternalCloudProviderService;
+import unacloud2.ServerVariable
 import unacloud2.User;
 import back.services.ExternalCloudCallerService
 
@@ -93,10 +94,21 @@ class ExternalCloudController {
 	}
 	
 	def storage(){
+		ServerVariable storageAccount= ServerVariable.findByName('EXTERNAL_STORAGE_ACCOUNT')
+		ExternalCloudAccount account
+		if(storageAccount!=null &&  !(storageAccount.variable.equals('None'))){
+			account = ExternalCloudAccount.findByName(storageAccount.variable)
+		}
+		if(account==null){
+			flash.message= "There isn't any configured account for external storage"
+			redirect( uri: "/error",absolute: true )
+		}
+		else{
 		User u = User.get(session.user.id)
 		List<S3ObjectSummary> ol= externalCloudCallerService.listUserObjects(u)
 		
-		[content:ol]	
+		[content:ol]
+		}	
 	}
 	
 	def uploadObject(){
