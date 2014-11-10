@@ -147,14 +147,15 @@ class WebServicesService {
 		
 	}
 	
-	def uploadFile(String login, String apiKey, byte[] file, String fileName){
+	def uploadFile(String login, String apiKey, InputStream file, String fileName){
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login)
 		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
 		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
 		File f= new File(fileName)
-		FileUtils.writeByteArrayToFile(f, file)
+		FileUtils.copyInputStreamToFile(f, file)
 		externalCloudCallerservice.uploadFile(f, user)
+		f.delete()
 		return "File uploaded"
 	}
 	
