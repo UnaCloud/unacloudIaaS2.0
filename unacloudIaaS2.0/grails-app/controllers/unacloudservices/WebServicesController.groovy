@@ -38,18 +38,22 @@ class WebServicesController{
 		render webServicesService.startCluster(login,apiKey,jsonCluster) as JSON
 	}
 	
-	def uploadFile(String login, String apiKey, String file){
-			
+	def uploadFile(String login, String apiKey, byte[] file, String fileName){
+		render webServicesService.uploadFile(login, apiKey,file) as JSON
 	}
 	
-	def deleteFile(String login, String apiKey, String file){
-		
+	def deleteFile(String login, String apiKey, String fileName){
+		render webServicesService.deleteFile(login, apiKey, fileName) as JSON
 	}
 	
-	def listFiles(String login, String apiKey, String file){
-		
+	def listFiles(String login, String apiKey){
+		render webServicesService.listFiles(login,apiKey) as JSON
 	}
 	
+	def externalDeploy(String login, String apiKey, String cluster){
+		JSONObject jsonCluster= new JSONObject(cluster)
+		render webServicesService.externalDeploy(login,apiKey,jsonCluster) as JSON
+	}
 	
 	/**
 	 * Starts an heterogeneus cluster and renders a response

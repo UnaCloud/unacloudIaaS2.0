@@ -1,9 +1,12 @@
 package unacloud2
 
+import org.apache.commons.io.FileUtils;
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 import back.pmallocators.AllocatorEnum;
+import back.services.ExternalCloudCallerService
+import com.amazonaws.services.ec2.model.RunInstancesResult
 import webutils.ImageRequestOptions;
 import wsEntities.WebServiceException
 
@@ -19,6 +22,7 @@ class WebServicesService {
 	 */
 	
 	DeploymentService deploymentService
+	ExternalCloudCallerService externalCloudCallerservice
 	
 	//-----------------------------------------------------------------
 	// Methods
@@ -127,7 +131,6 @@ class WebServicesService {
 	 */
 	
 	def startHeterogeneousCluster(String login,String apiKey,JSONObject cluster) throws Exception{
-		println login+":"+apiKey+":"+cluster
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login)
 		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
@@ -144,6 +147,54 @@ class WebServicesService {
 		
 	}
 	
+	def uploadFile(String login, String apiKey, byte[] file, String fileName){
+		if(login==null||apiKey==null)return new WebServiceException("invalid request")
+		User user= User.findByUsername(login)
+		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
+		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
+		File f= new File(fileName)
+		FileUtils.writeByteArrayToFile(f, file)
+		externalCloudCallerservice.uploadFile(f, user)
+		return "File uploaded"
+	}
+	
+	def deleteFile(String login, String apiKey, String fileName){
+		if(login==null||apiKey==null)return new WebServiceException("invalid request")
+		User user= User.findByUsername(login)
+		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
+		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
+		return externalCloudCallerservice.deleteFile(user, fileName)
+	}
+	
+	def listFiles(String login, String apiKey){
+		if(login==null||apiKey==null)return new WebServiceException("invalid request")
+		User user= User.findByUsername(login)
+		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
+		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
+		return externalCloudCallerservice.listUserObjects(user)
+	}
+	
+	def externalDeploy(String login,String apiKey,JSONObject cluster){
+		
+		if(login==null||apiKey==null)return new WebServiceException("invalid request")
+		User user= User.findByUsername(login)
+		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
+		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
+		JSONArray images= cluster.getJSONArray("images")
+		ImageRequestOptions[] options= new ImageRequestOptions[images.length()]
+		for(int i=0; i<images.length();i++){
+			JSONObject im=images.get(i)
+			VirtualMachineImage image = VirtualMachineImage.get(im.getLong('imageId'))
+			if (image!= null) {
+				if(image.externalId==null) return new WebServiceException( "Some images had not been uploaded to the external cloud account and cannot be deployed")
+							
+				RunInstancesResult rir= externalCloudCallerservice.runInstances(image.externalId, Integer.parseInt(params.instances), HardwareProfile.get(params.hardwareProfile).name, user)
+				return deploymentService.externalDeploy(cluster,user,rir)
+			}
+			else return new WebServiceException( "Image id '"+image.id+"' not found" )
+			}				
+	}
+	
 	/**
 	 * 
 	 * @param login request owner username
@@ -151,6 +202,7 @@ class WebServicesService {
 	 * @return cluster list with its properties
 	 * @throws Exception if the user credentials didn't match
 	 */
+	
 	
 	def getClusterList(String login,String apiKey) throws Exception{
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
