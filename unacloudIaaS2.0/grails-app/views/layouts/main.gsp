@@ -14,6 +14,7 @@
     <meta name="author" content="">
 	<link rel="shortcut icon" href="/~unacloud/dokuwiki/lib/tpl/PlantillaLab/images/favicon.ico" />
 	<asset:stylesheet href="application.css"/>
+	<link type="text/css" href="${createLinkTo(dir:'css',file:'general.css')}" />
 	<g:javascript src="ui.js" />	
 	<g:javascript src="bootbox.js" />	
     <!-- Le styles -->

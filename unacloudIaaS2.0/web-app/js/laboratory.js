@@ -2,34 +2,41 @@ function getLab(){
 	$('#selectAll').click(function (event) {		
 	        var selected = this.checked;
 	        $('.all:checkbox').each(function () {  this.checked = selected; });
-	 });
+	});
 	$('.updateMachines').click(function (event){		
 		if(checkSelected()){			
 			 var form = $('#form_machines');
+			 showLoading();
 			 $.post('../updateMachines', form.serialize(), function(data){
-				 showMessage(data,'All selected agents has been updated.');				
+				 showMessage(data,'All selected agents has been updated.');		
+				 hideLoading();
 			 }, 'json')			
 		}
 	});
 	$('.clearCache').click(function (event){		
 		if(checkSelected()){			
 			 var form = $('#form_machines');
+			 showLoading();
 			 $.post('../clearCache', form.serialize(), function(data){
-				 showMessage(data,'Virtual Machine Cache from all selected agents has been cleared.');				
+				 showMessage(data,'Virtual Machine Cache from all selected agents has been cleared.');	
+				 hideLoading();
 			 }, 'json')			
 		}
 	});
 	$('.stopMachines').click(function (event){		
 		if(checkSelected()){			
 			 var form = $('#form_machines');
+			 showLoading();
 			 $.post('../stopMachines', form.serialize(), function(data){
-				 showMessage(data,'All selected agents has been stopped.');				
+				 showMessage(data,'All selected agents has been stopped.');		
+				 hideLoading();
 			 }, 'json')			
 		}
 	});
 	function showMessage(data, message){
 		 if(data.success){
 			 addLabel('#label-message',message,false);	
+			 unselect();
 		 }else{
 			 var verb = '';
 			 if(data.count==1)verb = ' is'
@@ -50,6 +57,10 @@ function getLab(){
 			addLabel('#label-message','At least one physical machine should be selected.',true);		
 		}
 		return selected;
+	}
+	function unselect(){
+		$('#selectAll').checked=false;
+		$('.all:checkbox').each(function () {  this.checked = false; });
 	}
 }
 

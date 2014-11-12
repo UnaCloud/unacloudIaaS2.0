@@ -8,7 +8,8 @@
    </head>
    <body>
    	<div class="hero-unit span9" >
-   		<g:form class="form-horizontal" controller="virtualMachineImage" action="upload" enctype="multipart/form-data" >
+   		<div id="label-message"></div>
+   		<form id="form-new" class="form-horizontal" enctype="multipart/form-data" >
    			<div class="control-group">
    			<label class="control-label">Image Name</label>
 	    		<div class="controls">
@@ -18,7 +19,7 @@
     		<div class="control-group">
    			<label class="control-label">Image Location</label>
 	    		<div class="controls">
-	    			<input id="files" name="files" type="file" multiple>
+	    			<input id="files" name="files" type="file" Multiple>
 	    		</div>
     		</div>
     		<div class="control-group">
@@ -56,20 +57,23 @@
 	    		</div>
     		</div>
     		<div class="controls">
+    		<a id="button-submit" class="btn" style="cursor:pointer">Submit2</a>		  	
   			<g:submitButton name="createUser" class="btn" value="Submit" />
    			</div>
    			
-   		</g:form>
+   		</form>
    	</div>
-   	
-   </body>   
-   <script>
+   	<g:javascript src="images.js" />
+   <script>    
 	$(document).ready(function()
 	{
-		$("#fileuploader").uploadFile({
-			fileName:"myfile"
-			maxChunkSize: 1000000
-		});
+		newUploadImage();
+	//	$("#fileuploader").uploadFile({
+		//	fileName:"myfile"
+			//maxChunkSize: 1000000
+//		});
 	});
 	</script>
+   </body>   
+  
 </html>

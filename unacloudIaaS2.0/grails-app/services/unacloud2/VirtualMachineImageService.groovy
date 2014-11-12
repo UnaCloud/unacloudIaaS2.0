@@ -101,11 +101,11 @@ class VirtualMachineImageService {
 			newFile.mkdirs()
 			it.transferTo(newFile)
 			if(i.isPublic){
-			def templateFile= new java.io.File(repository.root+"imageTemplates"+separator+i.name+separator+it.getOriginalFilename())
-			FileUtils.copyFile(newFile, templateFile)
+				def templateFile= new java.io.File(repository.root+"imageTemplates"+separator+i.name+separator+it.getOriginalFilename())
+				FileUtils.copyFile(newFile, templateFile)
 			}
 			if (e.endsWith(".vmx")||e.endsWith(".vbox"))
-			i.putAt("mainFile", repository.root+i.name+"_"+user.username+separator+it.getOriginalFilename())
+				i.putAt("mainFile", repository.root+i.name+"_"+user.username+separator+it.getOriginalFilename())
 		
 		}
 		

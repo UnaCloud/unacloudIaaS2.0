@@ -24,7 +24,7 @@ class LaboratoryController {
 	//-----------------------------------------------------------------
 	
 	
-	/**
+	/** 
 	 * Makes session verifications before executing any other action
 	 */
 	
@@ -89,8 +89,23 @@ class LaboratoryController {
 	 * @return
 	 */
 	def addMachine(){
-		laboratoryService.addMachine(params.ip, params.name, params.cores, params.ram, params.disk, params.osId, params.mac, params.labId)
-		redirect(action:"getLab", params:[id:params.labId])
+		if(params.ip&&params.name&&params.ram&&params.cores&&params.osId&&params.mac&&params.labId){
+			if(params.ram.isInteger()&&params.cores.isInteger()){
+				laboratoryService.addMachine(params.ip, params.name, params.cores, params.ram, params.disk, params.osId, params.mac, params.labId)
+				redirect(action:"getLab", params:[id:params.labId])
+			}else{
+				flash.message="CPU Cores and RAM Memory must be a number."
+				redirect(action:"createMachine", params:[id:params.labId])			
+			}			
+		}else{
+			if(params.labId){				
+				flash.message="All fields are required."
+				redirect(action:"createMachine", params:[id:params.labId])
+			}else{
+				flash.message="Error in fields to create machine."
+				redirect(uri:"/error", absolute:true)
+			}
+		}		
 	}
 	
 	/**
@@ -115,8 +130,24 @@ class LaboratoryController {
 	 */
 	def setValues(){
 		def machine = PhysicalMachine.get(params.id)
-		laboratoryService.setValues(machine, params.name, params.ip, params.osId, params.cores, params.mac, params.ram, params.disk)
-		redirect(action:"getLab", params:[id: params.labId])
+		if(params.ip&&params.name&&params.ram&&params.cores&&params.osId&&params.mac&&machine){
+			if(params.ram.isInteger()&&params.cores.isInteger()){				
+				laboratoryService.setValues(machine, params.name, params.ip, params.osId, params.cores, params.mac, params.ram, params.disk)
+				redirect(action:"getLab", params:[id: params.labId])		
+			}else{
+				flash.message="CPU Cores and RAM Memory must be a number."
+				redirect(action:"editMachine", params:[id:params.id,labId:params.labId])
+			}
+		}else{
+			if(params.id&&params.labId){
+				flash.message="All fields are required."
+				redirect(action:"editMachine", params:[id:params.id,labId:params.labId])
+			}else{
+				flash.message="Error in fields to update machine."
+				redirect(uri:"/error", absolute:true)
+			}
+		}
+		
 	}
 	
 	/**

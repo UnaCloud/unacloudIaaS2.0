@@ -3,8 +3,11 @@
       <meta name="layout" content="main"/>
       <r:require modules="bootstrap"/>
    </head>
-   <body>
+   <body>   
    	<div class="hero-unit span9" >
+   		<g:if test="${flash.message && flash.message!=""}">
+	   		<div class="alert alert-error" ><i class="icon-exclamation-sign"></i><span style="font-size:14px">&nbsp;&nbsp;&nbsp;${flash.message }</span></div>
+	   	</g:if>
    		<g:form name="machineCreate" class="form-horizontal" controller="laboratory" action="addMachine" >
    			<div class="control-group">
    			<label class="control-label">Physical Machine Name</label>
@@ -31,7 +34,7 @@
 	    		</div>
     		</div>
     		<div class="control-group">
-   			<label class="control-label">RAM Memory (Kb)</label>
+   			<label class="control-label">RAM Memory (KB)</label>
 	    		<div class="controls">
 	    			<input name="ram" type="text">
 	    		</div>

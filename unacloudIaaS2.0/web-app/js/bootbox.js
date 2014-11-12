@@ -297,6 +297,31 @@
 
     return options;
   }
+  
+  exports.noClose = function() {
+	    var options;
+
+	    options = mergeDialogOptions("alert", ["ok"], ["message", "callback"], arguments);
+
+	    if (options.callback && !$.isFunction(options.callback)) {
+	      throw new Error("alert requires callback property to be a function when provided");
+	    }
+
+	    /**
+	     * overrides
+	     */
+	    options.buttons.ok.callback = options.onEscape = function() {
+	      if ($.isFunction(options.callback)) {
+	        return options.callback();
+	      }
+	      return true;
+	    };
+	    //TODO
+	    options.buttons=[];
+	    options.closeButton=null;
+
+	    return exports.dialog(options);
+	  };
 
   exports.alert = function() {
     var options;
