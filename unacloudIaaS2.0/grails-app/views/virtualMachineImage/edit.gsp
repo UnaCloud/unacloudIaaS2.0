@@ -8,7 +8,8 @@
    </head>
    <body>
    	<div class="hero-unit span9" >
-   		<g:form class="form-horizontal" controller="virtualMachineImage" action="setValues" enctype="multipart/form-data" >
+   		<div id="label-message"></div>
+   		<form id="form-edit" class="form-horizontal"  action="../../virtualMachineImage/setValues" enctype="multipart/form-data" >
    			<div class="control-group">
    			<label class="control-label">Image Name</label>
 	    		<div class="controls">
@@ -30,20 +31,22 @@
     		</div>
     		
     		<div class="controls">
-  			<g:submitButton name="createUser" class="btn" value="Submit" />
+  			<a id="button-submit" class="btn" style="cursor:pointer">Submit</a>		
    			</div>
    			
-   		</g:form>
+   		</form>
    	</div>
-   	
+   <g:javascript src="images.js" />
+   <script>$(document).ready(function(){editImage();});</script>
    </body>   
+   <g:javascript src="images.js" />
    <script>
 	$(document).ready(function()
 	{
-		$("#fileuploader").uploadFile({
-			fileName:"myfile"
-			maxChunkSize: 1000000
-		});
+		//$("#fileuploader").uploadFile({
+		//	fileName:"myfile"
+		//	maxChunkSize: 1000000
+		//});
 	});
 	</script>
 </html>

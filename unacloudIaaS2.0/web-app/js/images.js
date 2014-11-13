@@ -36,3 +36,26 @@ function uploadForm(form){
 	xhr.open("POST", "../virtualMachineImage/upload")	
     xhr.send(formData);
 }
+function editImage(){
+	$('#button-submit').click(function (event){		
+		cleanLabel('#label-message');
+		var form = document.getElementById("form-edit");
+		if(form["name"].value&&form["name"].value.length > 0&&
+			form["user"].value&&form["user"].value.length > 0&&
+				form["password"].value&&form["password"].value.length > 0){	
+			form.submit();
+		}else addLabel('#label-message', 'All fields are required', true);
+	});
+}
+function loadImages(){
+	$('.deleteImages').click(function (event){	
+		var data = $(this).data("id");
+		showConfirm('Confirm','This Image will be deleted from server. Are you sure?', function(){
+			 $.get('delete', {id:data}, function(data){
+				if(data.success)window.location.href = data.redirect;
+				else if(data.message) showError('Error!',data.message); 
+				else showError('Error!','Delete process failed, check server logs for more information'); 
+			 }, 'json')		
+		});
+	});
+}

@@ -57,10 +57,8 @@
 	    		</div>
     		</div>
     		<div class="controls">
-    		<a id="button-submit" class="btn" style="cursor:pointer">Submit2</a>		  	
-  			<g:submitButton name="createUser" class="btn" value="Submit" />
-   			</div>
-   			
+    		<a id="button-submit" class="btn" style="cursor:pointer">Submit</a>	  			
+   			</div>   			
    		</form>
    	</div>
    	<g:javascript src="images.js" />

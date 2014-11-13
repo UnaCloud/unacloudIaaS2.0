@@ -27,8 +27,8 @@
     <td >
     <div class="row-fluid text-center">
     <g:link action="edit" params="${[id: image.id]}"><i class="icon-pencil" title="Edit Image"></i></g:link>
-    <g:link action="delete" params="${[id: image.id]}"><i class="icon-remove-sign" title="Delete Image"></i></g:link>
-    <g:link action="changeVersion" params="${[id: image.id]}"><i class="icon-repeat" title="Change Version"></i></g:link>
+    <a title="Delete Image" class="deleteImages" data-id="${image.id}" style="cursor:pointer"><span class="icon-remove-sign"></span></a>  		  	
+	<g:link action="changeVersion" params="${[id: image.id]}"><i class="icon-repeat" title="Change Version"></i></g:link>
     <g:link action="clearImageFromCache" params="${[id: image.id]}"><i class="icon-fire" title="Clear this image from cache"></i></g:link>
     <g:link action="addExternalId" params="${[id: image.id]}"><i class="icon-fire" title="Add/Modify external account id"></i></g:link>
     </div>
@@ -37,4 +37,6 @@
 </g:each>
 </table>
 </div>
+<g:javascript src="images.js" />
+<script>$(document).ready(function(){loadImages();});</script>
 </body>

@@ -242,9 +242,12 @@ class VirtualMachineImageController {
 	 */
 	
 	def delete(){
+		def resp;
 		def image = VirtualMachineImage.get(params.id)
+		print image
 		if (!image) {
-			redirect(action:"index")
+			resp = [success:false];
+			//redirect(action:"index")
 		}
 		else {
 			def isUsed=false
@@ -267,14 +270,16 @@ class VirtualMachineImageController {
 						break
 				}
 				virtualMachineImageService.deleteImage(user,repository, image);
-				redirect(action:"index")
+				resp = [success:true,'redirect':'index'];
+				//redirect(action:"index")
 			}
 			else{
-				flash.message="The image is being used"
-				redirect(action:"index")
+				resp = [success:true,'message':'The image is being used'];
+				//flash.message="The image is being used"
+				//redirect(action:"index")
 			}
 			
 		}
-		
+		render resp as JSON;
 	}
 }
