@@ -9,7 +9,7 @@
    <body>
    	<div class="hero-unit span9" >
    		<div id="label-message"></div>
-   		<form id="form-new" class="form-horizontal" enctype="multipart/form-data" >
+   		<form id="form-new" class="form-horizontal" action="../virtualMachineImage/upload" enctype="multipart/form-data" >
    			<div class="control-group">
    			<label class="control-label">Image Name</label>
 	    		<div class="controls">

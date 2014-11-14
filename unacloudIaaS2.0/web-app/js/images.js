@@ -14,6 +14,16 @@ function newUploadImage(){
 		}else addLabel('#label-message', 'All fields are required', true);
 	});
 }
+function changeUploadImage(){
+	$('#button-submit').click(function (event){		
+		cleanLabel('#label-message');
+		var form = document.getElementById("form-change");		
+		if(form["files"].value&&form["files"].value.length > 0){
+			 uploadForm(form);		
+		}
+		else addLabel('#label-message', 'File(s) to upload is/are missing.', true);		
+	});
+}
 function uploadForm(form){	
 	var formData = new FormData(form);
 	var xhr = new XMLHttpRequest();
@@ -33,7 +43,7 @@ function uploadForm(form){
     	showError('Error!','Upload failed. Can not connect to server.')
     };
     showLoadingUploading();
-	xhr.open("POST", "../virtualMachineImage/upload")	
+	xhr.open("POST", form.action)	
     xhr.send(formData);
 }
 function editImage(){

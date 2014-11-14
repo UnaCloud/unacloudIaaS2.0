@@ -120,7 +120,7 @@ class VirtualMachineImageService {
     }
 	
 	/**
-	 * Deletes the virtual machine image
+	 * Deletes the virtual machine image and virtaul machine files and directory
 	 * @param user owner user
 	 * @param repository image repository 
 	 * @param image image to be removed
@@ -133,11 +133,17 @@ class VirtualMachineImageService {
 				depImage.putAt("image", null)
 			}
 		}		
+		try{
+			new java.io.File(image.mainFile).getParentFile().deleteDir()
+		}catch(Exception e){
+		    e.printStackTrace();
+		}		
 		repository.images.remove(image)
 		repository.save()
 		user.images.remove(image)
 		user.save()
 		image.delete()
+		
 	}
 	
 	/**

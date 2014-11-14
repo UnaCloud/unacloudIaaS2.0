@@ -170,26 +170,39 @@ class VirtualMachineImageController {
 	 */
 	
 	def updateFiles(){
-		VirtualMachineImage i= VirtualMachineImage.get(params.id)
-		def files = request.multiFileMap.files
-		def user= User.get(session.user.id)
-		if (i!= null){
-			files.each {
-			if(it.isEmpty()){
-				flash.message = 'file cannot be empty'
-				render(view: 'newUploadImage')
-			}
-			else{
-				def e=it.getOriginalFilename()
-					if(!(e.endsWith("vmx")|| e.endsWith("vmdk")||e.endsWith("vbox")|| e.endsWith("vdi"))){
-						flash.message = 'invalid file type'
-						render(view: 'newUploadImage')
+		def resp
+		if(request.multiFileMap&&request.multiFileMap.files&&request.multiFileMap.files.size()>0){
+			VirtualMachineImage i= VirtualMachineImage.get(params.id)
+			def files = request.multiFileMap.files					
+			if (i!= null){
+				boolean validate=true
+				def user= User.get(session.user.id)
+				files.each {
+				if(it.isEmpty()){
+					resp =[success:false,'message':'File cannot be empty'];
+					validate = false;
+				}
+				else{
+					def e=it.getOriginalFilename()
+						if(!(e.endsWith("vmx")|| e.endsWith("vmdk")||e.endsWith("vbox")|| e.endsWith("vdi"))){
+							resp = [success:false,'message':'Invalid file type.']
+							validate= false;
+						}
 					}
 				}
-			}			
-			virtualMachineImageService.updateFiles(i,files,user)
-			redirect(action: "index")
-		}
+				if(validate){
+					try{
+						virtualMachineImageService.updateFiles(i,files,user)
+						resp = [success:true,'redirect':'../index']
+					}
+					catch(Exception e) {
+						resp = [success:false,'message':e.message]
+					}
+				}				
+			}else resp = [success:false,'message':'Error! image does not exist.'];	
+		}else resp = [success:false,'message':'File(s) to upload is/are missing.'];		
+		print resp	
+		render resp as JSON
 	}
 	
 	/**
@@ -198,8 +211,7 @@ class VirtualMachineImageController {
 	 */
 	
 	def edit(){
-		def i= VirtualMachineImage.get(params.id)
-		
+		def i= VirtualMachineImage.get(params.id)		
 		if (!i) {
 			redirect(action:"index")
 		}
