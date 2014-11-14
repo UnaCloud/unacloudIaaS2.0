@@ -64,8 +64,16 @@ class VirtualMachineImageController {
 	 */
 	
 	def clearImageFromCache(){
-		agentService.clearImageFromCache(VirtualMachineImage.get(params.id))
-		redirect(action: 'index')
+		//TODO improve this function
+		def resp;
+		try{
+			agentService.clearImageFromCache(VirtualMachineImage.get(params.id))
+			resp = [success:true]
+		}catch(Exception e){
+			e.printStackTrace();
+			resp = [success:false,'message':e.message]
+		}
+		render resp as JSON		
 	}
 	
 	/**
@@ -225,14 +233,17 @@ class VirtualMachineImageController {
 	 */
 	
 	def setValues(){
+		def resp;
 		def image = VirtualMachineImage.get(params.id)
-		virtualMachineImageService.setValues(image,params.name,params.user,params.password)
-		redirect(action:"index")
+		if(image){
+			virtualMachineImageService.setValues(image,params.name,params.user,params.password)
+			resp = [success:true,'redirect':'../index'];
+		}else resp = [success:false,'message':'Image is not available'];
+		render resp as JSON;
 	}
 	
 	def addExternalId(){
-		def i= VirtualMachineImage.get(params.id)
-		
+		def i= VirtualMachineImage.get(params.id)		
 		if (!i) {
 			redirect(action:"index")
 		}
@@ -242,9 +253,13 @@ class VirtualMachineImageController {
 	}
 	
 	def setExternalId(){
+		def resp;
 		def image = VirtualMachineImage.get(params.id)
-		virtualMachineImageService.setExternalId(image,params.externalId)
-		redirect(action:"index")
+		if(image){
+			virtualMachineImageService.setExternalId(image,params.externalId)
+			resp = [success:true,'redirect':'../index'];
+		}else resp = [success:false,'message':'Image is not available'];	
+		render resp as JSON;
 	}
 	
 	/**
@@ -283,12 +298,9 @@ class VirtualMachineImageController {
 				}
 				virtualMachineImageService.deleteImage(user,repository, image);
 				resp = [success:true,'redirect':'index'];
-				//redirect(action:"index")
 			}
 			else{
 				resp = [success:true,'message':'The image is being used'];
-				//flash.message="The image is being used"
-				//redirect(action:"index")
 			}
 			
 		}

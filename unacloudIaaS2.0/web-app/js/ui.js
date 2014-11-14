@@ -56,6 +56,20 @@ function showConfirm(tit,message,call){
 		});
 }
 
+function showClose(tit,message,call){
+	bootbox.dialog({
+		  message: message,
+		  title: tit,
+		  buttons: {
+		    success: {
+		      label: "Confirm",
+		      className: "btn-primary",
+		      callback: call
+		    }
+		  }
+		});
+}
+
 function addLabel(div, message, error){
 	$(div).html('<i class="icon-exclamation-sign"></i><small>'+message+'</small>');
 	$(div).css("font-size","14px");

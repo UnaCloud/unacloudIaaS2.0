@@ -8,7 +8,8 @@
    </head>
    <body>
    	<div class="hero-unit span9" >
-   		<g:form class="form-horizontal" controller="virtualMachineImage" action="setExternalId" enctype="multipart/form-data" >
+   		<div id="label-message"></div>
+   		<form id="form-external"  action="../../virtualMachineImage/setExternalId" class="form-horizontal" enctype="multipart/form-data" >
    			
     		<div class="control-group">
    			<label class="control-label">External Image Id</label>
@@ -18,12 +19,13 @@
 	    		</div>
     		</div>
     		<div class="controls">
-  			<g:submitButton name="createUser" class="btn" value="Submit" />
+  			<a id="button-submit" class="btn" style="cursor:pointer">Submit</a>	
    			</div>
    			
-   		</g:form>
+   		</form>
    	</div>
-   	
+   <g:javascript src="images.js" />
+   <script>$(document).ready(function()	{externalImage("${image.externalId}");});</script>
    </body>   
    <script>
 	$(document).ready(function()
