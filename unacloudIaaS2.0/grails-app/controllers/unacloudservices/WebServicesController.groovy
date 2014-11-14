@@ -38,7 +38,8 @@ class WebServicesController{
 		render webServicesService.startCluster(login,apiKey,jsonCluster) as JSON
 	}
 	
-	def uploadFile(String login, String apiKey, InputStream file, String fileName){
+	def uploadFile(String login, String apiKey, String fileName){
+		InputStream file = params.file
 		render webServicesService.uploadFile(login, apiKey,file) as JSON
 	}
 	

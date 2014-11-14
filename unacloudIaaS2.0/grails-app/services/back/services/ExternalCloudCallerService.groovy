@@ -49,7 +49,7 @@ class ExternalCloudCallerService {
 		}
 		String bucketName = "unacloud-" + account.name 
 		while(storageEndpoint.doesBucketExist(bucketName)){
-			String charset = (('A'..'Z') + ('0'..'9')).join()
+			String charset = (('a'..'z') + ('0'..'9')).join()
 			Integer length =6
 			String randomString = RandomStringUtils.random(length, charset.toCharArray())
 			bucketName = "unacloud-"+randomString
@@ -63,6 +63,10 @@ class ExternalCloudCallerService {
 		try {
 			String accountName= ServerVariable.findByName('EXTERNAL_STORAGE_ACCOUNT').getVariable()
 			def bucketName= ExternalCloudAccount.findByName(accountName).bucketName
+			if (bucketName==null || bucketName.equals('')){
+				initializeBucket( ExternalCloudAccount.findByName(accountName))
+				bucketName= ExternalCloudAccount.findByName(accountName).bucketName
+			}
 			return storageEndpoint.listObjects(bucketName, u.username).getObjectSummaries()
 		}catch (AmazonServiceException ase) {
 			System.out.println("Caught an AmazonServiceException, which " +
@@ -90,6 +94,10 @@ class ExternalCloudCallerService {
 			System.out.println("Uploading a new object to S3 from a file\n");
 			String accountName= ServerVariable.findByName('EXTERNAL_STORAGE_ACCOUNT').getVariable()
 			def bucketName= ExternalCloudAccount.findByName(accountName).bucketName
+			if (bucketName==null || bucketName.equals('')){
+				initializeBucket( ExternalCloudAccount.findByName(accountName))
+				bucketName= ExternalCloudAccount.findByName(accountName).bucketName
+			}
 			storageEndpoint.putObject(new PutObjectRequest(
 									 bucketName, u.username+'/'+f.getName(), f).withCannedAcl(CannedAccessControlList.PublicRead));
 			

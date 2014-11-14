@@ -54,7 +54,7 @@ class BootStrap {
 			new OperatingSystem(name:'Debian 8',configurer:'Debian').save();
 			new OperatingSystem(name:'Ubuntu 10',configurer:'Ubuntu').save();
 			new OperatingSystem(name:'Ubuntu 11',configurer:'Ubuntu').save();
-			new OperatingSystem(name:'Scientific Linux',configurer:'Linux').save();
+			new OperatingSystem(name:'Scientific Linux',configurer:'ScientificLinux').save();
 		}
 //		if(Laboratory.count() ==0){
 //			println OperatingSystem.count()+" os encontrados"

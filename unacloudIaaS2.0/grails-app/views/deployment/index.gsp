@@ -65,7 +65,12 @@ function reload()
 	   	<br>
 	   	<g:link action="addInstancesOptions" controller="deployment" params="${ [id:image.id] }"><i class="icon-plus-sign" title="Add Instances"></i></g:link></td>
 	    <td rowspan="${image.numberOfActiveMachines() }">
-	    <small>${(deployment.stopTime==null)? image.image.accessProtocol +' <a href="http://157.253.236.84:8080/unacloud2/user/downloadKey"> (KeyPair)</a>':image.image.accessProtocol}</small>
+	    <small>
+	    ${image.image.accessProtocol }
+	    <g:if test= "${(deployment.stopTime==null)}">
+			<g:link action="downloadKey" controller="user">(KeyPair)</g:link> 
+		</g:if>
+	    </small>
 	    </td> 
 	    <g:each in="${image.getOrderedVMs() }" status="k" var="virtualMachine">  
 		   	<g:if test="${ virtualMachine.status!= VirtualMachineExecutionStateEnum.FINISHED}">

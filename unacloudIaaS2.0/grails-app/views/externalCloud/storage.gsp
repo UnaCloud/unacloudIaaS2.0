@@ -22,7 +22,7 @@
  <g:each in="${content}" status="i" var="object">
 	<g:if test="${!(object.getKey().endsWith('/'))}" >
 	<tr>
-	<td>${object.getKey().substring(object.getKey().lastIndexOf('/') + 1)}</td>
+	<td><g:link url="${endpoint+'/'+object.getBucketName()+'/'+ object.getKey()}"> ${object.getKey().substring(object.getKey().lastIndexOf('/') + 1)}</g:link></td>
 	<td>
 	<div class="row-fluid text-center">
     	<g:link action="deleteObject" params="${[objectKey:object.getKey()]}"><i class="icon-remove-sign" title="Delete File"></i></g:link>

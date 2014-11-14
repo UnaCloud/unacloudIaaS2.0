@@ -105,7 +105,7 @@ class ExternalCloudController {
 		User u = User.get(session.user.id)
 		List<S3ObjectSummary> ol= externalCloudCallerService.listUserObjects(u)
 		
-		[content:ol]
+		[content:ol, endpoint:account.provider.endpoint]
 		}	
 	}
 	
