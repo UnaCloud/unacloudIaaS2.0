@@ -18,12 +18,11 @@ $(function() {
 		});
 	});	
 });
-
 function showAlert(message){
 	if(message)bootbox.alert(message);
 }
-function showDialog(title,message){
-	if(message && title){
+function showDialog(tit,message){
+	if(message && tit){
 		bootbox.dialog({
 			  title: tit,
 			  message: message
@@ -39,6 +38,24 @@ function showError(tit,content){
 	}
 }
 
+function showConfirm(tit,message,call){
+	bootbox.dialog({
+		  message: message,
+		  title: tit,
+		  buttons: {
+		    success: {
+		      label: "Confirm",
+		      className: "btn-primary",
+		      callback: call
+		    },
+		    main: {
+		      label: "Cancel",
+		      className: "btn-default"		      
+		    }
+		  }
+		});
+}
+
 function addLabel(div, message, error){
 	$(div).html('<i class="icon-exclamation-sign"></i><small>'+message+'</small>');
 	$(div).css("font-size","14px");
@@ -48,4 +65,28 @@ function addLabel(div, message, error){
 function cleanLabel(div){
 	$(div).html('');
 	$(div).removeClass();
+}
+
+function getUrl(){
+	var url = window.location.protocol+ "//" + window.location.host + "/"
+	var pathArray = window.location.pathname.split( '/' );
+	var secondLevelLocation = pathArray[1];
+	return url + secondLevelLocation+ "/";
+}
+function showLoading(){
+	bootbox.noClose('<div style="text-align:center;height:50%" ><img style="height:30%"src="'+getUrl()+'images/cloud_loading.gif"><h4>This can take a few minutes</h4></div>')
+	
+}
+function showLoadingUploading(){
+	bootbox.noClose('<div style="text-align:center;height:50%" ><img style="height:30%"src="'+getUrl()+'images/cloud_loading.gif"><h4>This can take a few minutes</h4><h4 id="upload-count">0%</h4></div>')
+}
+function updateUploading(e){
+	 var progressCount = $("#upload-count");
+	 if(progressCount){
+		 var percentComplete = (e.loaded / e.total) * 100;		 
+		 progressCount.text(parseInt(percentComplete)+'%');
+	 }	 
+}
+function hideLoading(){
+	bootbox.hideAll();
 }

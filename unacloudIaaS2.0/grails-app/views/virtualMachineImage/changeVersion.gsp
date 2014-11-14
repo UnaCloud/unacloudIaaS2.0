@@ -8,7 +8,8 @@
    </head>
    <body>
    	<div class="hero-unit span9" >
-   		<g:form class="form-horizontal" controller="virtualMachineImage" action="updateFiles" enctype="multipart/form-data" >
+   	<div id="label-message"></div>
+   		<form id="form-change" class="form-horizontal" action="../updateFiles" enctype="multipart/form-data" >
    			<div class="control-group">
    			<label class="control-label">New Image Files</label>
 	    		<div class="controls">
@@ -16,13 +17,14 @@
 	    			<input id="id" name="id" type="hidden" value="${id}">
 	    		</div>
     		</div>
-    		<div class="controls">
-  			<g:submitButton name="submit" class="btn" value="Submit" />
+    		<div class="controls">  		
+  			<a id="button-submit" class="btn" style="cursor:pointer">Submit</a>	 
    			</div>
    			
-   		</g:form>
+   		</form>
    	</div>
-   	
+   <g:javascript src="images.js" />
+   <script>$(document).ready(function()	{changeUploadImage();});</script>
    </body>   
    <script>
 	$(document).ready(function()

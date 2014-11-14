@@ -1,6 +1,8 @@
 package unacloud2
 
+import org.junit.After;
 import back.services.AgentService
+import grails.converters.JSON
 
 class VirtualMachineImageController {
 
@@ -120,27 +122,45 @@ class VirtualMachineImageController {
 	 * Validates file parameters are correct and save new uploaded image. Redirects 
 	 * to index when finished or renders an error message if uploaded 
 	 * files are not valid. 
+	 * 
+	 * REST
 	 */
 	
 	def upload(){
-		
-		def files = request.multiFileMap.files
-		def user= User.get(session.user.id)
-		files.each {
-			if(it.isEmpty()){
-				flash.message = 'file cannot be empty'
-				render(view: 'newUploadImage')
-			}
-			else{ 
-			def e=it.getOriginalFilename()
-			if(!(e.endsWith("vmx")|| e.endsWith("vmdk")||e.endsWith("vbox")|| e.endsWith("vdi"))){
-				flash.message = 'invalid file type'
-				render(view: 'newUploadImage')
-			}
-			}	
-		}
-		virtualMachineImageService.uploadImage(files, 0, params.name, (params.isPublic!=null), params.accessProtocol, params.osId, params.user, params.password,user)	
-		redirect(action: 'index')
+		def resp
+		if( params.name&&!params.name.empty&&params.accessProtocol&&!params.accessProtocol.empty&&
+			params.user&&!params.user.empty&&params.password&&!params.password.empty){			
+			if(request.multiFileMap&&request.multiFileMap.files&&request.multiFileMap.files.size()>0){
+				
+				def files = request.multiFileMap.files
+				def user= User.get(session.user.id)
+				boolean validate=true
+				files.each {
+					if(it.isEmpty()){
+						resp = [success:false,'message':'File cannot be empty.'];
+						validate= false;				
+					}
+					else{
+						def e=it.getOriginalFilename()
+						print e;
+						if(!(e.endsWith("vmx")|| e.endsWith("vmdk")||e.endsWith("vbox")|| e.endsWith("vdi"))){
+							resp = [success:false,'message':'Invalid file type.']
+							validate= false;
+						}
+					}
+				}
+				if(validate){
+					try{
+						virtualMachineImageService.uploadImage(files, 0, params.name, (params.isPublic!=null), params.accessProtocol, params.osId, params.user, params.password,user)
+						resp = [success:true,'redirect':'index']
+					}
+					catch(Exception e) {
+						resp = [success:false,'message':e.message]
+					}					
+				}		
+			}else resp = [success:false,'message':'File(s) to upload is/are missing.'];	
+		}else resp = [success:false,'message':'All fields are required'];	    
+	    render resp as JSON		
 	}
 	
 	/**
@@ -150,27 +170,39 @@ class VirtualMachineImageController {
 	 */
 	
 	def updateFiles(){
-		VirtualMachineImage i= VirtualMachineImage.get(params.id)
-		def files = request.multiFileMap.files
-		def user= User.get(session.user.id)
-		if (i!= null){
-			files.each {
-			if(it.isEmpty()){
-				flash.message = 'file cannot be empty'
-				render(view: 'newUploadImage')
-			}
-			else{
-			def e=it.getOriginalFilename()
-			if(!(e.endsWith("vmx")|| e.endsWith("vmdk")||e.endsWith("vbox")|| e.endsWith("vdi"))){
-				flash.message = 'invalid file type'
-				render(view: 'newUploadImage')
-			}
-			}
-			}
-			
-			virtualMachineImageService.updateFiles(i,files,user)
-			redirect(action: "index")
-		}
+		def resp
+		if(request.multiFileMap&&request.multiFileMap.files&&request.multiFileMap.files.size()>0){
+			VirtualMachineImage i= VirtualMachineImage.get(params.id)
+			def files = request.multiFileMap.files					
+			if (i!= null){
+				boolean validate=true
+				def user= User.get(session.user.id)
+				files.each {
+				if(it.isEmpty()){
+					resp =[success:false,'message':'File cannot be empty'];
+					validate = false;
+				}
+				else{
+					def e=it.getOriginalFilename()
+						if(!(e.endsWith("vmx")|| e.endsWith("vmdk")||e.endsWith("vbox")|| e.endsWith("vdi"))){
+							resp = [success:false,'message':'Invalid file type.']
+							validate= false;
+						}
+					}
+				}
+				if(validate){
+					try{
+						virtualMachineImageService.updateFiles(i,files,user)
+						resp = [success:true,'redirect':'../index']
+					}
+					catch(Exception e) {
+						resp = [success:false,'message':e.message]
+					}
+				}				
+			}else resp = [success:false,'message':'Error! image does not exist.'];	
+		}else resp = [success:false,'message':'File(s) to upload is/are missing.'];		
+		print resp	
+		render resp as JSON
 	}
 	
 	/**
@@ -179,8 +211,7 @@ class VirtualMachineImageController {
 	 */
 	
 	def edit(){
-		def i= VirtualMachineImage.get(params.id)
-		
+		def i= VirtualMachineImage.get(params.id)		
 		if (!i) {
 			redirect(action:"index")
 		}
@@ -223,9 +254,12 @@ class VirtualMachineImageController {
 	 */
 	
 	def delete(){
+		def resp;
 		def image = VirtualMachineImage.get(params.id)
+		print image
 		if (!image) {
-		redirect(action:"index")
+			resp = [success:false];
+			//redirect(action:"index")
 		}
 		else {
 			def isUsed=false
@@ -247,15 +281,17 @@ class VirtualMachineImageController {
 					if (repository.equals(repo))
 						break
 				}
-				virtualMachineImageService.deleteImage(user,repository, image)
-				redirect(action:"index")
+				virtualMachineImageService.deleteImage(user,repository, image);
+				resp = [success:true,'redirect':'index'];
+				//redirect(action:"index")
 			}
 			else{
-				flash.message="The image is being used"
-				redirect(action:"index")
+				resp = [success:true,'message':'The image is being used'];
+				//flash.message="The image is being used"
+				//redirect(action:"index")
 			}
 			
 		}
-		
+		render resp as JSON;
 	}
 }

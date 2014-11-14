@@ -7,8 +7,9 @@
       <r:require modules="bootstrap"/>
    </head>
 <body>
-<form id="form_machines">
-	<div class="hero-unit span9">
+
+<div class="hero-unit span9">
+	<form id="form_machines">
 	<div id="label-message"></div>
 	<table class="table table-bordered"  style="background:white" >
 	  <tr class="info">
@@ -63,9 +64,8 @@
 	       </tr>	   	
 	 </g:each>
 	</table>
-	</div>
-
-</form>
+	</form>
+</div>
  <g:javascript src="laboratory.js" />
  <script>$(document).on('ready',getLab())</script>
 </body>
