@@ -1,6 +1,7 @@
 package unacloud2
 
 import java.nio.file.Path
+import java.nio.file.Files
 
 import org.apache.commons.io.FileUtils
 import org.junit.internal.runners.statements.FailOnTimeout;
@@ -38,10 +39,11 @@ class VirtualMachineImageService {
 	 * @param password new image password
 	 */
 	
-	def setValues(VirtualMachineImage image, name, user, password){
+	def setValues(VirtualMachineImage image, name, user, password, isPublic){
 		image.putAt("name", name)
 		image.putAt("user", user)
 		image.putAt("password", password)
+		image.putAt("isPublic", isPublic)
 	}
 	
 	
@@ -64,8 +66,8 @@ class VirtualMachineImageService {
 			newFile.mkdirs()
 			it.transferTo(newFile)
 			if(i.isPublic){
-			def templateFile= new java.io.File(repository.root+"imageTemplates"+separator+i.name+separator+it.getOriginalFilename())
-			FileUtils.copyFile(newFile, templateFile)
+				def templateFile= new java.io.File(repository.root+"imageTemplates"+separator+i.name+separator+it.getOriginalFilename())
+				FileUtils.copyFile(newFile, templateFile)
 			}
 			if (e.endsWith(".vmx")||e.endsWith(".vbox"))
 			i.putAt("mainFile", repository.root+i.name+"_"+user.username+separator+it.getOriginalFilename())
@@ -88,9 +90,16 @@ class VirtualMachineImageService {
 	 */
 	
 	def uploadImage(files, diskSize, name, isPublic, accessProtocol, operatingSystemId, username, password,User user) {
-		
-		//TODO define repository assignment schema
+		def copy = null;
 		def repository= Repository.findByName("Main Repository")
+		if(isPublic){	
+			File f = new File(repository.root+"imageTemplates"+separator+name);
+			if (f.exists()){
+				isPublic=false;
+				copy = false;
+			}else copy = true
+		}		
+		//TODO define repository assignment schema		
 		def i= new VirtualMachineImage( fixedDiskSize: diskSize, name: name , avaliable: true,
 			isPublic: isPublic, imageVersion: 0,accessProtocol: accessProtocol , operatingSystem: OperatingSystem.get(operatingSystemId),
 			user: username, password: password)
@@ -103,12 +112,12 @@ class VirtualMachineImageService {
 			if(i.isPublic){
 				def templateFile= new java.io.File(repository.root+"imageTemplates"+separator+i.name+separator+it.getOriginalFilename())
 				FileUtils.copyFile(newFile, templateFile)
+				
 			}
 			if (e.endsWith(".vmx")||e.endsWith(".vbox"))
 				i.putAt("mainFile", repository.root+i.name+"_"+user.username+separator+it.getOriginalFilename())
 		
-		}
-		
+		}		
 		if(user.images==null)
 			user.images
 		user.images.add(i)
@@ -117,6 +126,8 @@ class VirtualMachineImageService {
 			repository.images
 		repository.images.add(i)
 		repository.save()
+		
+		return copy;
     }
 	
 	/**
@@ -133,17 +144,24 @@ class VirtualMachineImageService {
 				depImage.putAt("image", null)
 			}
 		}		
-		try{
-			new java.io.File(image.mainFile).getParentFile().deleteDir()
+		try{//delete files
+			File f = new java.io.File(image.mainFile);
+			f.getParentFile().deleteDir();
 		}catch(Exception e){
 		    e.printStackTrace();
-		}		
+		}	
+		if(image.isPublic){//Delete public copy
+			try{
+				deletePublicImage(image);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}				
 		repository.images.remove(image)
 		repository.save()
 		user.images.remove(image)
 		user.save()
-		image.delete()
-		
+		image.delete()		
 	}
 	
 	/**
@@ -154,9 +172,10 @@ class VirtualMachineImageService {
 	 */
 	
 	def newPublic(name, VirtualMachineImage publicImage, User user){
-		def i= new VirtualMachineImage( fixedDiskSize: 0, imageVersion: 0,name: name, isPublic: false, accessProtocol: publicImage.accessProtocol ,operatingSystem: publicImage.operatingSystem, user: publicImage.user, password: publicImage.password)
+		
+		def i= new VirtualMachineImage(fixedDiskSize: 0, imageVersion: 0,name: name, isPublic: false, accessProtocol: publicImage.accessProtocol ,operatingSystem: publicImage.operatingSystem, user: publicImage.user, password: publicImage.password)
 		i.save(onFailError:true)
-		java.io.File folder= new java.io.File(publicImage.mainFile.substring(0, publicImage.mainFile.lastIndexOf(separator)))
+		java.io.File folder= new java.io.File(publicImage.mainFile.substring(0, publicImage.mainFile.lastIndexOf(separator.toString())))
 		println folder.toString()
 		//TODO define repository assignment schema
 		def repository= Repository.findByName("Main Repository")
@@ -165,8 +184,8 @@ class VirtualMachineImageService {
 			def file= new java.io.File(repository.root+"imageTemplates"+separator+publicImage.name+separator+it.getName())
 			def newFile= new java.io.File(repository.root+i.name+"_"+user.username+separator+it.getName())
 			FileUtils.copyFile(file, newFile)
-			if (it.getName().endsWith(".vmx"))
-			i.putAt("mainFile", repository.root+i.name+"_"+user.username+separator+newFile.getName())
+			if (it.getName().endsWith(".vmx")||it.getName().endsWith(".vbox"))
+				i.putAt("mainFile", repository.root+i.name+"_"+user.username+separator+newFile.getName())
 		}
 		if(user.images==null)
 			user.images
@@ -178,8 +197,47 @@ class VirtualMachineImageService {
 		repository.save()
 	}	
 	
+	def deletePublicImage(VirtualMachineImage publicImage){
+		def repository= Repository.findByName("Main Repository")
+		File f = new java.io.File(repository.root+"imageTemplates"+separator+publicImage.name+separator);
+		f.deleteDir();
+	}
 	/**
-	 * TODO: Documentation
+	 * Alter image privacy, from public to private (delete public file in imageTemplates folder) 
+	 * or private to public (create public file in imageTemplates folder). 
+	 * @param toPublic
+	 * @param image
+	 * @param user
+	 * @return success (true) if process finish successfully, 
+	 * failed (false) if currently exists a public image with the same name
+	 */
+	def alterImagePrivacy(toPublic, VirtualMachineImage image, User user){		
+		boolean success = false;
+		if(!toPublic && image.isPublic){//Delete public image
+			deletePublicImage(image);
+			success = true;
+		}else if(toPublic && !image.isPublic){//Create public image
+			def repository= Repository.findByName("Main Repository")
+			File f = new File(repository.root+"imageTemplates"+separator+image.name);
+			if (!f.exists()){			
+				java.io.File folder= new java.io.File(image.mainFile.substring(0, image.mainFile.lastIndexOf(separator.toString())))
+				println folder.toString()				
+				//TODO define repository assignment schema				
+				folder.listFiles().each
+				{
+					def file= new java.io.File(repository.root+image.name+"_"+user.username+separator+it.getName())
+					def newFile= new java.io.File(repository.root+"imageTemplates"+separator+image.name+separator+it.getName())					
+					FileUtils.copyFile(file, newFile)
+				}
+				success = true;
+			}			
+		}		
+		return success;
+	}
+	/**
+	 * Return image owner 
+	 * @param image
+	 * @return
 	 */
 	def User getUserByImage(VirtualMachineImage image){
 		if(image==null)return null
@@ -189,6 +247,9 @@ class VirtualMachineImageService {
 		return user
 	}
 	
+	/**
+	 * TODO: Documentation
+	 */
 	def Repository getRepositoryByImage(VirtualMachineImage image){
 		if(image==null)return null
 		Repository repo = Repository.where{

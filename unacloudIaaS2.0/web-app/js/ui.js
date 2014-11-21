@@ -88,17 +88,21 @@ function getUrl(){
 	return url + secondLevelLocation+ "/";
 }
 function showLoading(){
-	bootbox.noClose('<div style="text-align:center;height:50%" ><img style="height:30%"src="'+getUrl()+'images/cloud_loading.gif"><h4>This can take a few minutes</h4></div>')
+	bootbox.noClose('<div style="text-align:center;height:180px" ><img style="height:60%"src="'+getUrl()+'images/cloud_loading.gif"><h4>This can take a few minutes</h4></div>')
 	
 }
 function showLoadingUploading(){
-	bootbox.noClose('<div style="text-align:center;height:50%" ><img style="height:30%"src="'+getUrl()+'images/cloud_loading.gif"><h4>This can take a few minutes</h4><h4 id="upload-count">0%</h4></div>')
+	bootbox.noClose('<div style="text-align:center;height:180px" ><img style="height:60%"src="'+getUrl()+'images/cloud_loading.gif"><h4>This can take a few minutes</h4><h4 id="upload-count">0%</h4></div>')
 }
 function updateUploading(e){
 	 var progressCount = $("#upload-count");
 	 if(progressCount){
-		 var percentComplete = (e.loaded / e.total) * 100;		 
-		 progressCount.text(parseInt(percentComplete)+'%');
+		 var percentComplete = (e.loaded / e.total) * 100;	
+		 if(parseInt(percentComplete)>=100){
+			 progressCount.text('Saving file in server...');
+			 progressCount.css('font-size','14px');
+			 progressCount.css('font-weight','600');
+		 }else progressCount.text(parseInt(percentComplete)+'%');
 	 }	 
 }
 function hideLoading(){

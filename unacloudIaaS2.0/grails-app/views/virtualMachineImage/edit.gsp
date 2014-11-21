@@ -29,7 +29,12 @@
 	    			<input name="id" type="hidden" value="${image.id}"/>
 	    		</div>
     		</div>
-    		
+    			<div class="control-group">
+   			<label class="control-label">Public</label>
+	    		<div class="controls">
+	    			<g:checkBox name="isPublic" value="${image.isPublic?true:false}"/>
+	    		</div>
+    		</div>
     		<div class="controls">
   			<a id="button-submit" class="btn" style="cursor:pointer">Submit</a>		
    			</div>

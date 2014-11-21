@@ -99,7 +99,7 @@ class VirtualMachineImageController {
 	 */
 	
 	def newPublicImage(){
-		[ pImages:VirtualMachineImage.findWhere(isPublic: true) ]
+		[ pImages:VirtualMachineImage.findAllWhere(isPublic: true) ]
 	}
 	
 	/**
@@ -120,10 +120,20 @@ class VirtualMachineImageController {
 	 */
 	
 	def newPublic(){
+		def resp
 		def publicImage = VirtualMachineImage.get(params.pImage)
-		def user = User.get(session.user.id) 
-		virtualMachineImageService.newPublic(params.name, publicImage, user)
-		redirect(action: 'index')
+		if(publicImage){
+			def user = User.get(session.user.id)			
+			try {
+				virtualMachineImageService.newPublic(params.name, publicImage, user)
+				resp = [success:true,'redirect':'index'];
+			} catch (Exception e) {
+				e.printStackTrace()
+				resp = [success:false];
+			}
+		}
+		else resp = [success:false];
+		render resp as JSON
 	}
 	
 	/**
@@ -159,8 +169,10 @@ class VirtualMachineImageController {
 				}
 				if(validate){
 					try{
-						virtualMachineImageService.uploadImage(files, 0, params.name, (params.isPublic!=null), params.accessProtocol, params.osId, params.user, params.password,user)
-						resp = [success:true,'redirect':'index']
+						def createPublic = virtualMachineImageService.uploadImage(files, 0, params.name, (params.isPublic!=null), params.accessProtocol, params.osId, params.user, params.password,user)
+						if(createPublic!=null){
+							resp = [success:true,'redirect':'index','cPublic':createPublic];
+						}else resp = [success:true,'redirect':'index'];						
 					}
 					catch(Exception e) {
 						resp = [success:false,'message':e.message]
@@ -236,8 +248,16 @@ class VirtualMachineImageController {
 		def resp;
 		def image = VirtualMachineImage.get(params.id)
 		if(image){
-			virtualMachineImageService.setValues(image,params.name,params.user,params.password)
-			resp = [success:true,'redirect':'../index'];
+			boolean toPublic = params.isPublic!=null;
+			def res = null;
+			if((image.isPublic&&!toPublic)||(!image.isPublic&&toPublic)){
+				def user= User.get(session.user.id)
+				res = virtualMachineImageService.alterImagePrivacy(toPublic,image,user)
+			}
+			virtualMachineImageService.setValues(image,params.name,params.user,params.password,(params.isPublic!=null))
+			if(res!=null)resp = [success:true,'redirect':'../index','toPublic':res];			
+			else resp = [success:true,'redirect':'../index'];
+			
 		}else resp = [success:false,'message':'Image is not available'];
 		render resp as JSON;
 	}

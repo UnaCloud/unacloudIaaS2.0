@@ -29,7 +29,7 @@
     <g:link action="edit" params="${[id: image.id]}"><i class="icon-pencil" title="Edit Image"></i></g:link>
     <a title="Delete Image" class="deleteImages" data-id="${image.id}" style="cursor:pointer"><span class="icon-remove-sign"></span></a>  		  	
 	<g:link action="changeVersion" params="${[id: image.id]}"><i class="icon-repeat" title="Change Version"></i></g:link>
-    <a title="Clear this image from cache new" class="clearImageFromCache" data-id="${image.id}" style="cursor:pointer"><span class="icon-fire"></span></a>  		  	
+    <a title="Clear this image from cache" class="clearImageFromCache" data-id="${image.id}" style="cursor:pointer"><span class="icon-fire"></span></a>  		  	
 	<g:link action="addExternalId" params="${[id: image.id]}"><i class="icon-globe" title="Add/Modify external account id"></i></g:link>
     </div>
     </td>

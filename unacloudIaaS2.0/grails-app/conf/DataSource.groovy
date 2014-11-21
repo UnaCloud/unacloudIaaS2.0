@@ -27,7 +27,7 @@ environments {
 			username = "root"
 			password = "root"
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:mysql://127.0.0.1:100/iaas2dev?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
+            url = "jdbc:mysql://127.0.0.1:3306/unacloud2?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
         }
     }
     test {
