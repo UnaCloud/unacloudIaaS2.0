@@ -320,7 +320,7 @@ class VirtualMachineImageController {
 				resp = [success:true,'redirect':'index'];
 			}
 			else{
-				resp = [success:true,'message':'The image is being used'];
+				resp = [success:false,'message':'The image is being used'];
 			}
 			
 		}
