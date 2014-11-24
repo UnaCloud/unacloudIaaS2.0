@@ -8,6 +8,8 @@
    </head>
    <body>
    	<div class="hero-unit span9" >
+   		<g:link controller="virtualMachineImage" action="index" style="display: -webkit-box;"><i class="icon-chevron-left" title="Back"></i><h5 style="margin: 3px;">Back to Image list</h5></g:link><br>
+   	
    		<div id="label-message"></div>
    		<form id="form-new" class="form-horizontal" action="../virtualMachineImage/upload" enctype="multipart/form-data" >
    			<div class="control-group">

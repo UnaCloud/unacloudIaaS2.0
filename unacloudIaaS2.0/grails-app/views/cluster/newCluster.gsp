@@ -5,7 +5,8 @@
    </head>
    <body>
    	<div class="hero-unit span9" >
-   		<g:form name="clusterCreate" class="form-horizontal" controller="cluster" action="save" >
+   	    <div id="label-message"></div>
+   		<form id="form-new" class="form-horizontal" action="save" >
    			<div class="control-group">
    			<label class="control-label">Cluster Name</label>
 	    		<div class="controls">
@@ -22,11 +23,12 @@
 	  				</select>
 	    		</div>
     		</div>
-    		<div class="controls">
-  			<g:submitButton name="createHyp" class="btn" value="Create" />
-   			</div>
-   			
-   		</g:form>
+    		<div class="controls">  			
+  			<a id="button-create" class="btn" style="cursor:pointer">Create</a>	  		
+   			</div>   			
+   		</form>
    	</div>
+   <g:javascript src="cluster.js" />
+   <script>$(document).ready(function()	{createCluster();});</script>
    </body>
 </html>

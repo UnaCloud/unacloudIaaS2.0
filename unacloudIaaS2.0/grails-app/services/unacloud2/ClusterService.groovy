@@ -16,12 +16,12 @@ class ClusterService {
     def saveCluster(images, Cluster cluster, User user) {
 		cluster.images=[]
 		if(images.getClass().equals(String)){
-		cluster.images.add(VirtualMachineImage.get(images))
+			cluster.images.add(VirtualMachineImage.get(images))
 		}
 		else{
-		for(image in images){
-			cluster.images.add(VirtualMachineImage.get(image))
-		}
+			for(image in images){
+				cluster.images.add(VirtualMachineImage.get(image))
+			}
 		}
 		cluster.save(failOnError: true)
 		if(user.userClusters==null)

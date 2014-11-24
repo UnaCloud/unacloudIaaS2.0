@@ -6,7 +6,8 @@
 <body>
 
 <div class="hero-unit span9">
-
+<g:link controller="cluster" action="index" style="display: -webkit-box;"><i class="icon-chevron-left" title="Back"></i><h5 style="margin: 3px;">Back to cluster list</h5></g:link>
+    
 <table class="table table-bordered table-condensed text-center" style="background:white">
   <g:if test="${session.user.userType == 'Administrator'}">
   <tr class="info">

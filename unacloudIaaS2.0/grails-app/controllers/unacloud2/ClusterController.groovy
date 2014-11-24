@@ -58,6 +58,7 @@ class ClusterController {
 	 * Save action of a new cluster. It redirects to index after saving  
 	 */
 	def save(){
+		
 		def cluster = new Cluster( name: params.name)
 		def user = User.get(session.user.id)
 		clusterService.saveCluster(params.images, cluster, user)
