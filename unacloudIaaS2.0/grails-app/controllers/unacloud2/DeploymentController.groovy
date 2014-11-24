@@ -129,7 +129,7 @@ class DeploymentController {
 			def highAvail= new boolean[cluster.images.size()]
 			if(imageNumber==1){
 				HardwareProfile hp= HardwareProfile.get(params.get('hardwareProfile'))
-				temp[0]=new ImageRequestOptions(cluster.images.first().id, hp.ram,hp.cores,params.instances.toInteger(),params.hostname);
+				temp[0]=new ImageRequestOptions(cluster.images.first().id, hp,params.instances.toInteger(),params.hostname);
 				highAvail[0]= (params.get('highAvailability'+cluster.images.first().id))!=null
 			}
 			else{
@@ -137,7 +137,7 @@ class DeploymentController {
 				cluster.images.eachWithIndex {it,idx->
 					HardwareProfile hp= HardwareProfile.get(params.hardwareProfile.getAt(idx))
 					highAvail[idx]=(params.get('highAvailability'+it.id))!=null
-					temp[idx]=new ImageRequestOptions(it.id, hp.ram,hp.cores,params.instances.getAt(idx).toInteger(), params.hostname.getAt(idx));
+					temp[idx]=new ImageRequestOptions(it.id, hp,params.instances.getAt(idx).toInteger(), params.hostname.getAt(idx));
 
 				}
 			}
@@ -166,6 +166,7 @@ class DeploymentController {
 				}
 				
 				RunInstancesResult rir= externalCloudCallerService.runInstances(image.externalId, Integer.parseInt(params.instances), HardwareProfile.get(params.hardwareProfile).name, user)
+				println rir
 				deploymentService.externalDeploy(cluster,user,rir)
 			}
 		}

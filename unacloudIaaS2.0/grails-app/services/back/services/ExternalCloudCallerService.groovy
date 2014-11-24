@@ -150,16 +150,41 @@ class ExternalCloudCallerService {
 	
 	def runInstances(String imageId, int numberOfInstances, instanceType, User u){
 		initializeComputing()
+		println 'computing service initialized'
 		def separator =  java.io.File.separatorChar
 		Repository repository= Repository.findByName("Main Repository")
 		String keyPairName= "unacloud."+u.username
-		List keys=computingEndpoint.describeKeyPairs().getKeyPairs()
-		
+		println keyPairName
+		List keys
+		try{
+		keys=computingEndpoint.describeKeyPairs().getKeyPairs()
+		}
+		catch (AmazonServiceException ase) {
+			System.out.println("Caught an AmazonServiceException, which " +
+					"means your request made it " +
+					"to Amazon S3, but was rejected with an error response" +
+					" for some reason.");
+			System.out.println("Error Message:    " + ase.getMessage());
+			System.out.println("HTTP Status Code: " + ase.getStatusCode());
+			System.out.println("AWS Error Code:   " + ase.getErrorCode());
+			System.out.println("Error Type:       " + ase.getErrorType());
+			System.out.println("Request ID:       " + ase.getRequestId());
+		}catch (AmazonClientException ace) {
+			System.out.println("Caught an AmazonClientException, which " +
+					"means the client encountered " +
+					"an internal error while trying to " +
+					"communicate with S3, " +
+					"such as not being able to access the network.");
+			System.out.println("Error Message: " + ace.getMessage());
+		}
+		println 'describekeypairs'
 		File keyFile
 		try{
 		for(key in keys){
 			if (key.getKeyName().equals(keyPairName)){
+				println 'key found: ' +key.getKeyName() 
 				keyFile= new File(repository.root+"keyPairs"+separator+keyPairName+".pem")
+				
 				if(!(keyFile.exists())){
 					computingEndpoint.deleteKeyPair(new DeleteKeyPairRequest(keyPairName))
 				}
@@ -167,6 +192,7 @@ class ExternalCloudCallerService {
 			}
 		}
 		if(keyFile==null){
+			println 'key not found'
 			CreateKeyPairResult cpr = computingEndpoint.createKeyPair(new CreateKeyPairRequest(keyPairName))
 			keyFile=new File(repository.root+"keyPairs"+separator+keyPairName+".pem")
 			if(!(keyFile.getParentFile().exists()))
@@ -180,8 +206,23 @@ class ExternalCloudCallerService {
 		runInstancesRequest.withKeyName(keyPairName)
 		return computingEndpoint.runInstances(runInstancesRequest)
 		}
-		catch(Exception e){
-			e.printStackTrace()
+		catch (AmazonServiceException ase) {
+			System.out.println("Caught an AmazonServiceException, which " +
+					"means your request made it " +
+					"to Amazon S3, but was rejected with an error response" +
+					" for some reason.");
+			System.out.println("Error Message:    " + ase.getMessage());
+			System.out.println("HTTP Status Code: " + ase.getStatusCode());
+			System.out.println("AWS Error Code:   " + ase.getErrorCode());
+			System.out.println("Error Type:       " + ase.getErrorType());
+			System.out.println("Request ID:       " + ase.getRequestId());
+		}catch (AmazonClientException ace) {
+			System.out.println("Caught an AmazonClientException, which " +
+					"means the client encountered " +
+					"an internal error while trying to " +
+					"communicate with S3, " +
+					"such as not being able to access the network.");
+			System.out.println("Error Message: " + ace.getMessage());
 		}
 		
 	}
@@ -216,6 +257,7 @@ class ExternalCloudCallerService {
 			InputStream is= new ByteArrayInputStream(accountCredentials.getBytes(StandardCharsets.UTF_8));
 			credentials = new PropertiesCredentials(is)
 			computingEndpoint = new AmazonEC2Client(credentials)
+			computingEndpoint.setEndpoint(account.provider.endpoint)
 		}
 		catch(Exception e){
 			throw new Exception("Invalid external computing account variable")
@@ -232,6 +274,7 @@ class ExternalCloudCallerService {
 			InputStream is= new ByteArrayInputStream(accountCredentials.getBytes(StandardCharsets.UTF_8));
 			credentials = new PropertiesCredentials(is)
 			storageEndpoint = new AmazonS3Client(credentials)
+			storageEndpoint.setEndpoint(account.provider.endpoint)
 		}
 		catch(Exception e){
 			throw new Exception("Invalid external computing account variable")

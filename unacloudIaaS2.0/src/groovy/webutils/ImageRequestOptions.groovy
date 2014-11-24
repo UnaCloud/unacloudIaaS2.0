@@ -1,16 +1,16 @@
 package webutils
 
+import unacloud2.HardwareProfile;
+
 class ImageRequestOptions {
 
-	int ram
-	int cores	int instances 
+	HardwareProfile hp	int instances 
 	long imageId
 	String hostname
 	
-	public ImageRequestOptions(long imageId,int ram,int cores, int instances, String hostname) {
-		this.imageId = imageId;
-		this.ram = ram
-		this.cores= cores
+	public ImageRequestOptions(long imageId,HardwareProfile hp, int instances, String hostname) {
+		this.imageId = imageId
+		this.hp = hp
 		this.instances = instances
 		this.hostname = hostname
 	}
@@ -19,7 +19,7 @@ class ImageRequestOptions {
 	}
 	@Override
 	public String toString() {
-		return "ImageRequestOptions [ram=" + ram + ", cores=" + cores
+		return "ImageRequestOptions [ram=" + hp.ram + ", cores=" + hp.cores
 				+ ", instances=" + instances + "]";
 	}
 	

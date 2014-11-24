@@ -13,36 +13,36 @@ import unacloud2.VirtualMachineImageService;
 @Path('/api/AWS')
 class AWSResource {
 	
-	AWSService AWSService
+	AWSAPIService AWSAPIService
 	VirtualMachineImageService virtualMachineImageService
 	
     @POST
 	@Consumes('application/x-www-form-urlencoded')
 	@Produces('application/xml')
     String getAWSRepresentation(MultivaluedMap<String, String> formParams, @FormParam("unused") String unused) {
-		
+		println formParams
 		LinkedList action= formParams.get('Action')
 		if(action==null){
 			println 'no action param received'
-			AWSService.sendAWSErrorResponse("InvalidAction", "The action urn:Post is not valid for this web service.")
+			AWSAPIService.sendAWSErrorResponse("InvalidAction", "The action urn:Post is not valid for this web service.")
 		}
 		else{
 			switch(action.getFirst()){
 				case "DescribeImages": 
-					return AWSService.describeImages(formParams)
+					return AWSAPIService.describeImages(formParams)
 				case "DescribeInstances":
-					return AWSService.describeInstances(formParams)
+					return AWSAPIService.describeInstances(formParams)
 				case "DescribeRegions":
-					return AWSService.describeRegions(formParams)
+					return AWSAPIService.describeRegions(formParams)
 				case "TerminateInstances":
-					return AWSService.terminateInstances(formParams)
+					return AWSAPIService.terminateInstances(formParams)
 				case "RebootInstances":
-					return AWSService.rebootInstances(formParams)
+					return AWSAPIService.rebootInstances(formParams)
 				case "RunInstances":
-					return AWSService.runInstances(formParams)
+					return AWSAPIService.runInstances(formParams)
 				
 				default: 
-				AWSService.sendAWSErrorResponse("InvalidAction", "The action "+action+" is not valid for this web service.")
+				AWSAPIService.sendAWSErrorResponse("InvalidAction", "The action "+action+" is not valid for this web service.")
 			}
 			
 		}	

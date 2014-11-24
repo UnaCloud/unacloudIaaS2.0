@@ -369,7 +369,7 @@ class AWSAPIService {
 			ImageRequestOptions[] imageRequestOptions= new ImageRequestOptions[1]
 			boolean[] highAvail = new boolean [1]
 			highAvail[0]= false
-			imageRequestOptions[0]= new ImageRequestOptions(i.getId(),hp.getRam(),hp.getCores(), instances, "aws-"+i.name)
+			imageRequestOptions[0]= new ImageRequestOptions(i.getId(),hp, instances, "aws-"+i.name)
 			Deployment d
 			long time
 			
