@@ -35,7 +35,7 @@ class BootStrap {
 			new HardwareProfile(name:'small', cores:1, ram:1024).save()
 			new HardwareProfile(name:'medium', cores:2, ram:2048).save()
 			new HardwareProfile(name:'large', cores:4, ram:4096).save()
-			new HardwareProfile(name:'xlarge',cores:4, ram:8192).save()
+			new HardwareProfile(name:'mlarge',cores:4, ram:8192).save()
 			
 		}
 		if(User.count() ==0){
@@ -102,7 +102,7 @@ class BootStrap {
 		}
 		if(ExternalCloudProvider.count()==0){
 			new ExternalCloudProvider(name:'Amazon EC2', endpoint: 'https://ec2.amazonaws.com', type: ExternalCloudTypeEnum.COMPUTING).save()
-			new ExternalCloudProvider(name:'Amazon S3', endpoint: 'https://s3.amazonaws.com', type: ExternalCloudTypeEnum.COMPUTING).save()
+			new ExternalCloudProvider(name:'Amazon S3', endpoint: 'https://s3.amazonaws.com', type: ExternalCloudTypeEnum.STORAGE).save()
 			
 		}
 		if(ServerVariable.count() ==0){
