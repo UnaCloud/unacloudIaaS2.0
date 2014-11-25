@@ -157,7 +157,7 @@ class DeploymentService {
 				def stopTime= new Date(stopTimeMillis +time)
 				println "Stop date"+stopTime
 				def iName=image.name
-				def hp= image.hp
+				def hp= options[option].hp
 				if(hp==null) throw new Exception('Hardware profile whit the described ram and cores does not exist')
 				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: options[option].hostname, hardwareProfile: hp,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 				depImage.virtualMachines.add(virtualMachine)

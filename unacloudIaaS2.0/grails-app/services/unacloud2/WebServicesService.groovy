@@ -159,6 +159,14 @@ class WebServicesService {
 		return "File uploaded"
 	}
 	
+	def getFileDownloadLink(String login, String apiKey, String objectName){
+		if(login==null||apiKey==null)return new WebServiceException("invalid request")
+		User user= User.findByUsername(login)
+		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
+		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
+		externalCloudCallerservice.listUserObjects(user)
+	}
+	
 	def deleteFile(String login, String apiKey, String fileName){
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login)
