@@ -127,7 +127,6 @@ function reload()
 
 </g:form>
 </div>
-<script>$(document).on('ready',page.deploy)</script>
 <script type="text/javascript">
 $(function () {
     $('#selectAll').click(function (event) {

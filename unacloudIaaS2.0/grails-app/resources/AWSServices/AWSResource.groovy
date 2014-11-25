@@ -6,7 +6,6 @@ import groovy.xml.MarkupBuilder
 import javax.ws.rs.*
 import javax.ws.rs.core.*;
 
-import back.services.AWSService;
 import unacloud2.User;
 import unacloud2.VirtualMachineImageService;
 import back.services.AWSAPIService;
