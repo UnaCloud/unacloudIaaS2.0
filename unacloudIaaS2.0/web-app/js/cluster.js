@@ -9,3 +9,17 @@ function createCluster(){
 		}else addLabel('#label-message', 'The name for your new cluster is required', true);
 	});
 }
+function loadCluster(){
+	$('.deleteCluster').click(function (event){	
+		var data = $(this).data("id");
+		showConfirm('Confirm','This Cluster will be deleted. Are you sure you want to delete it?', function(){
+			showLoading();
+			 $.get('delete', {id:data}, function(data){
+				hideLoading();
+				if(data.success)window.location.href = data.redirect;
+				else if(data.message) showError('Error!',data.message); 
+				else showError('Error!','Delete process failed, check server logs for more information'); 
+			 }, 'json')		
+		});
+	});	
+}

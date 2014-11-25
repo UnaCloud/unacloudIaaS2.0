@@ -36,7 +36,7 @@
     
     <td >
     <div class="row-fluid text-center">
-     <g:link action="delete" params="${[id: cluster.id]}"><i title="Delete Cluster" class="icon-remove-sign"></i></g:link>
+      <a title="Delete Cluster" class="deleteCluster" data-id="${cluster.id}" style="cursor:pointer"><span class="icon-remove-sign"></span></a>  	
      <g:link action="deployOptions" params="${[id: cluster.id]}"><i title="Deploy Cluster" class="icon-play"></i></g:link>
      <g:link action="externalDeployOptions" params="${[id: cluster.id]}"><i title="Deploy Cluster" class="icon-globe"></i></g:link>
     
@@ -47,4 +47,6 @@
 </g:each>
 </table>
 </div>
+<g:javascript src="cluster.js" />
+<script>$(document).ready(function(){loadCluster();});</script>
 </body>

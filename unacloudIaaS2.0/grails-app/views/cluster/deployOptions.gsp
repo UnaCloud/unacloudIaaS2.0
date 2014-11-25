@@ -27,14 +27,15 @@
 					</tr> 
 					</g:if>
 				</table>
-			</div>
-			<br>
+			</div>			
 			<g:if test="${flash.message && flash.message!=""}">
+			    <br>
 				<div class="alert alert-error">
 					<i class="icon-exclamation-sign"></i>&nbsp;&nbsp;&nbsp;${flash.message }
 				</div>
+				<br>
 			</g:if>
-			<br>
+			
 			<g:each in="${cluster.images}" status="i" var="image">
 				<div class="control-group">
 					<h5>
@@ -44,12 +45,11 @@
 				<table border="0" cellpadding="10"">
 					<tr>
 						<td><label>Instances to deploy</label></td>
-						<td><label>Hardware Profile</label></td>
-						
+						<td><input name="instances" class="input-small" type="text">
+						</td>					
 					</tr>
 					<tr>
-						<td><input name="instances" class="input-small" type="text">
-						</td>
+						<td><label>Hardware Profile</label></td>
 						<td><select name="hardwareProfile" class="input-small">
 								<g:each in="${hardwareProfiles}" status="j" var="hp">
 								<option value="${hp.id}">

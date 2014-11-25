@@ -1,6 +1,7 @@
 package unacloud2
 
 import webutils.ImageRequestOptions;
+import grails.converters.JSON
 
 class ClusterController {
 	
@@ -110,22 +111,27 @@ class ClusterController {
 	}
 	/**
 	 * Delete cluster action. Receives the cluster id in the params map and 
-	 * redirects to index after deletion  
+	 * responses success and redirect to index after deletion  
 	 * @return
 	 */
 	def delete(){
+		def resp;
 		def cluster = Cluster.get(params.id)
 		if (!cluster) {
-		redirect(action:"index")
+			resp = [success:false];
+			//redirect(action:"index")
 		}
 		else if (cluster.isDeployed()) {
-		redirect(action:"index")
+			resp = [success:false, message:'The cluster is currently deployed'];
+			//redirect(action:"index")
 		}
 		else{
 			def user= User.get(session.user.id)
 			clusterService.deleteCluster(cluster, user)
-			redirect(action:"index")
+			resp = [success:true,'redirect':'index'];
+			//redirect(action:"index")
 		}
+		render resp as JSON;
 	}
 		
 }
