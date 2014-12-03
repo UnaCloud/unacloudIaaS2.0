@@ -4,7 +4,6 @@ import grails.transaction.Transactional;
 import com.losandes.utils.RandomUtils;
 import com.amazonaws.services.ec2.model.RunInstancesResult;
 
-import grails.transaction.Transactional;
 import grails.util.Environment;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import webutils.ImageRequestOptions;
@@ -72,7 +71,7 @@ class DeploymentService {
 				def stopTime= new Date(stopTimeMillis +time)
 				def iName=depImage.image.name
 				def hp= image.hp
-				if(hp==null) throw new Exception('Hardware profile whit the described ram and cores does not exist')
+				if(hp==null) throw new Exception('Hardware profile with the described ram and cores does not exist')
 				def virtualMachine = new VirtualMachineExecution(message: "Initializing", name: image.hostname, hardwareProfile: hp ,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING,startTime: new Date(),stopTime: stopTime )
 				depImage.virtualMachines.add(virtualMachine)
 				virtualMachine.save(failOnError: true)
@@ -87,8 +86,8 @@ class DeploymentService {
 		/*
 		 * Makes allocation and user restriction validations for each image
 		 */
-		for(image in depCluster.images)
-		deploymentProcessorService.doDeployment(image,user,false)
+		
+		deploymentProcessorService.doHeterogeneousDeployment(depCluster,user,false)
 		/*
 		 * Creates deployment entity and links it to the user
 		 */
@@ -104,7 +103,8 @@ class DeploymentService {
 		 * Finally it sends the deployment message to the agents
 		 */
 		if(!Environment.isDevelopmentMode())
-		runAsync{ deployerService.deploy(dep) }
+			runAsync{ deployerService.deploy(dep)}
+		
 		return dep
 	}
 	
@@ -291,41 +291,62 @@ class DeploymentService {
 	 * @return depImage deployed image with the new changes
 	 * @throws Exception if any of the deployment processes fails
 	 */
-	def addInstances(DeployedImage depImage,User user, int instance, long time) throws Exception{
+
+	def addInstances(Long depImageId,User user, int instance, long time) throws Exception{
 		
 		/*
 		 * Gets the new virtual machine properties 
 		 */
+		def depImage=DeployedImage.get(depImageId)
+		
 		def iName=depImage.getDeployedHostname()
 		def iRAM=depImage.getDeployedRAM()
 		def iCores= depImage.getDeployedCores()
 		def index=depImage.virtualMachines.size()
 		
+		println 'Gets the new virtual machine properties '+depImage.virtualMachines.size()
+		
 		/*
 		 * Creates new nodes
 		 */
-		
+		ArrayList<VirtualMachineExecution> executions= new ArrayList<VirtualMachineExecution>()
 		for(int i=index;i<instance+index;i++){
 			long stopTimeMillis= new Date().getTime()
 			def stopTime= new Date(stopTimeMillis +time)
 			def hp= HardwareProfile.findWhere(ram:iRAM,cores: iCores)
 			def virtualMachine = new VirtualMachineExecution(message: "Adding instance",name: iName,hardwareProfile: hp,disk:0,status: VirtualMachineExecutionStateEnum.DEPLOYING, startTime: new Date(), stopTime: stopTime )
-			virtualMachine.save(failOnError: true)
+			virtualMachine.save(failOnError: true, insert: true)
 			depImage.virtualMachines.add(virtualMachine)
+			executions.add(virtualMachine)
 		}
+		
+		println 'Creates new nodes '+depImage.virtualMachines.size()
 		
 		/*
 		 * Makes allocation and user restriction validations for new nodes
 		 */
+		depImage.save()
 		
 		deploymentProcessorService.doDeployment(depImage,user,true)
+		
+		println 'Makes allocation and user restriction validations for new nodes'		
+		
+		depImage.save(flush:true)
+		
+		for(vm in executions)vm.save(flush:true)
+		
 		
 		/*
 		 * Finally it sends the deployment message to the agents
 		 */
+		println 'Finally it sends the deployment message to the agents'
+		runAsync{
+			deployerService.deployNewInstances(executions, depImage.image.id)
+		}
+		return depImage.id
+	}
+	
+	def initializeInstances(Long depImageId){
 		
-		runAsync{ deployerService.deployNewInstances(depImage) }
-		depImage.save(failOnError: true)
-		return depImage
 	}
 }

@@ -71,7 +71,8 @@ class DeploymentProcessorService {
 			def virtualMachines= new ArrayList<>()
 			for(VirtualMachineExecution vm:image.virtualMachines)
 			if(vm.message.equals("Adding instance")){
-				virtualMachines.add(vm)}
+				virtualMachines.add(vm)
+			}
 			vms.addAll(virtualMachines)
 		}
 		
@@ -79,10 +80,7 @@ class DeploymentProcessorService {
 		 * selects the physical machine list and applies user restrictions
 		 */
 		List<PhysicalMachine> pms
-		if(image.highAvaliavility)
-		pms=PhysicalMachine.findAllWhere(state:PhysicalMachineStateEnum.ON,highAvailability: true);
-		else
-		pms=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON);
+		pms=PhysicalMachine.findAllWhere(state:PhysicalMachineStateEnum.ON,highAvailability: image.highAvaliavility);
 		println "tamaño en doDeployment:"+pms.size()
 		userRestrictionProcessorService.applyUserPermissions(user,vms,pms)
 		println "tamaño después de userRestriction:"+pms.size()
@@ -91,7 +89,49 @@ class DeploymentProcessorService {
 		 * Allocates a physical machine and an IP to every selected virtual machine
 		 */
 		if(pms.size()==0) throw new AllocatorException('No physical machines available') 
+		
 		physicalMachineAllocatorService.allocatePhysicalMachines(vms,pms,addInstancesDeployment)
+		ipAllocatorService.allocateIPAddresses(image, addInstancesDeployment)
+	}
+	
+	def doHeterogeneousDeployment(DeployedCluster cluster,User user,boolean addInstancesDeployment) throws UserRestrictionException, AllocatorException{
+		
+		/*
+		 * Selects the machines to be allocated and validated depending on
+		 * addInstancesDeployment parameter
+		 */
+		
+		ArrayList<VirtualMachineExecution> vms=new ArrayList<>();
+		for(image in cluster.images){
+			if(!addInstancesDeployment)
+			 vms.addAll(image.virtualMachines);
+			
+			else{
+				println "adding only new instances for allocation"
+				def virtualMachines= new ArrayList<>()
+				for(VirtualMachineExecution vm:image.virtualMachines)
+				if(vm.message.equals("Adding instance")){
+					virtualMachines.add(vm)
+				}
+				vms.addAll(virtualMachines)
+			}
+		}
+		/*
+		 * selects the physical machine list and applies user restrictions
+		 */
+		List<PhysicalMachine> pms
+		pms=PhysicalMachine.findAllWhere(state:PhysicalMachineStateEnum.ON,highAvailability: false);
+		println "tamaño en doDeployment:"+pms.size()
+		userRestrictionProcessorService.applyUserPermissions(user,vms,pms)
+		println "tamaño después de userRestriction:"+pms.size()
+		
+		/*
+		 * Allocates a physical machine and an IP to every selected virtual machine
+		 */
+		if(pms.size()==0) throw new AllocatorException('No physical machines available')
+		
+		physicalMachineAllocatorService.allocatePhysicalMachines(vms,pms,addInstancesDeployment)
+		for(image in cluster.images)
 		ipAllocatorService.allocateIPAddresses(image, addInstancesDeployment)
 	}
 }

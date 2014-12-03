@@ -160,11 +160,15 @@ class LaboratoryController {
 		params.each {
 			print it
 			if (it.key.contains("machine")){
-				if(it.value.contains("on")){
+				if(it.value.contains("on")){					
 					PhysicalMachine pm= PhysicalMachine.get((it.key - "machine") as Integer)
-					if(!agentService.updateMachine(pm)){
-						cou++
-					}
+					if(pm.state==PhysicalMachineStateEnum.ON){
+						if(!agentService.updateMachine(pm)){
+							pm.state=PhysicalMachineStateEnum.OFF;
+							pm.save();
+							cou++
+						}
+					}else cou++
 				}
 			}
 		}
@@ -184,11 +188,15 @@ class LaboratoryController {
 		def cou = 0;
 		params.each {
 			if (it.key.contains("machine")){
-				if(it.value.contains("on")){
+				if(it.value.contains("on")){					
 					PhysicalMachine pm= PhysicalMachine.get((it.key - "machine") as Integer)
-					if(!agentService.stopMachine(pm)){
-						cou++
-					}
+					if(pm.state==PhysicalMachineStateEnum.ON){
+						if(!agentService.stopMachine(pm)){
+							pm.state=PhysicalMachineStateEnum.OFF;
+							pm.save();
+							cou++
+						}
+					}else cou++
 				}
 			}
 		}
@@ -208,10 +216,14 @@ class LaboratoryController {
 		params.each {
 			if (it.key.contains("machine")){
 				if(it.value.contains("on")){
-					PhysicalMachine pm= PhysicalMachine.get((it.key - "machine") as Integer)					
-					if(!agentService.clearCache(pm)){
-						cou++
-					}
+					PhysicalMachine pm= PhysicalMachine.get((it.key - "machine") as Integer)	
+					if(pm.state==PhysicalMachineStateEnum.ON){
+						if(!agentService.clearCache(pm)){
+							pm.state=PhysicalMachineStateEnum.OFF;
+							pm.save();
+							cou++
+						}
+					}else cou++
 				}
 			}
 		}

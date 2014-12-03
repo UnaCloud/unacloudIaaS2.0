@@ -151,7 +151,7 @@ class WebServicesController{
 	 * @param time execution time of the new instances in minutes
 	 * @return service logic response as JSON
 	 */
-	def addInstances(String login,String apiKey, String imageId,int instances,int time){
-		render webServicesService.addInstances(login,apiKey,imageId,instances,time)
+	def addInstances(String login,String apiKey, String imageId,int instances,int time){		
+		render webServicesService.addInstances(login,apiKey,imageId,instances,time) as JSON
 	}
 }

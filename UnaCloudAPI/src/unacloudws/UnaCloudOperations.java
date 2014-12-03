@@ -213,7 +213,7 @@ public class UnaCloudOperations {
     private WebResource prepareRequest(String serviceName){
     	DefaultClientConfig clientConfig = new DefaultClientConfig();
 		Client client = Client.create(clientConfig);
-		WebResource resource = client.resource("http://157.253.236.160/Unacloud2/WebServices");
+		WebResource resource = client.resource("http://157.253.236.164:8080/Unacloud2/WebServices");
 		return resource.path(serviceName).queryParam("login",username).queryParam("apiKey",apiKey);
     }
 }

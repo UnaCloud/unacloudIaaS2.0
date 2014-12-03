@@ -267,6 +267,7 @@ class VirtualMachineImageService {
 			}
 		}
 	}
+	
 	def deleteImage(Long id){
 		try {
 			VirtualMachineImage.withTransaction{

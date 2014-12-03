@@ -40,10 +40,10 @@ class IpAllocatorService {
 					println "Verifying IP "+ ip.ip+" used: "+ip.used
 					if(ip.used==false){
 						println "Using vm ip "+ip.ip
-						vme.ip= ip
+						vme.putAt("ip", ip)
 						ip.used=true
 						String[] subname= ip.ip.split("\\.")
-						vme.name= vme.name+subname[2]+subname[3]
+						vme.putAt("name", vme.name+subname[2]+subname[3])
 						break
 					}
 				}
@@ -73,10 +73,10 @@ class IpAllocatorService {
 					println "Using node ip "+vme.executionNode.ip.ip
 					for(ip in ipPool.ips){
 						if(ip.used==false){
-							vme.ip= ip
+							vme.putAt("ip", ip)
 							ip.used=true
 							String[] subname= ip.ip.split("\\.")
-							vme.name= vme.name+subname[2]+subname[3]
+							vme.putAt("name", vme.name+subname[2]+subname[3]) 
 							break
 						}
 					}

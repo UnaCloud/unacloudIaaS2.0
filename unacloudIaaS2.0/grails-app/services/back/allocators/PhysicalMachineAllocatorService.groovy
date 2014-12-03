@@ -78,9 +78,14 @@ class PhysicalMachineAllocatorService {
 	def getPhysicalMachineUsage(){
 		def sql = new Sql(dataSource)
 		Map<Long,PhysicalMachineAllocationDescription> pmDescriptions=new TreeMap<>();
+		
 		sql.eachRow('select execution_node_id,count(*) as vms,sum(ram) as ram,sum(cores) as cores from virtual_machine_execution join hardware_profile on virtual_machine_execution.hardware_profile_id= hardware_profile.id where status != \''+VirtualMachineExecutionStateEnum.FINISHED+'\' group by execution_node_id'){ row ->
 			if(row.execution_node_id!=null)pmDescriptions.put(row.execution_node_id, new PhysicalMachineAllocationDescription(row.execution_node_id,row.cores.toInteger(),row.ram.toInteger(),row.vms.toInteger()));
 		}
+		println 'Load Map with used machines '+pmDescriptions.entrySet().size()
+		for (Map.Entry<Long,PhysicalMachineAllocationDescription> entry : pmDescriptions.entrySet()) {
+			println("Key: " + entry.getKey() + ". Value: " + entry.getValue());
+	    }
 		return pmDescriptions;
 	}
 }

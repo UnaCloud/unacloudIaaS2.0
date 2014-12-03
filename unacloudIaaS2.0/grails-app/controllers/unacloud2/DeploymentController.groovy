@@ -74,8 +74,7 @@ class DeploymentController {
 			for (Deployment dep in deps){
 				println "Deployment:" +dep.id
 				if(dep.isActive())
-				deployments.add(dep)
-			
+				deployments.add(dep)			
 			}
 			[deployments: deployments,checkViewAll: true]
 		}
@@ -216,17 +215,20 @@ class DeploymentController {
 	 */
 
 	def addInstances(){
-		def depImage=DeployedImage.get(params.id)
+		//def depImage=DeployedImage.get(params.id)
 		def instance=params.instances.toInteger()
 		User user= User.get(session.user.id)
 		try{
-			deploymentService.addInstances(depImage, user,instance, params.time.toLong()*60*60*1000)
+			deploymentService.addInstances(params.id.toLong(), user,instance, params.time.toLong()*60*60*1000)		   
 		}
 		catch (Exception e){
+			println 'Error in addInstances'
+			e.printStackTrace();
 			if(e.getMessage()==null)
 			flash.message= e.getCause()
 			else
 			flash.message= e.getMessage()
+			
 			redirect(uri:"/error", absolute:true)
 			return
 		}

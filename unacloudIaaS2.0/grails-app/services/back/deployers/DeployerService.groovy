@@ -3,8 +3,11 @@ package back.deployers
 
 import java.util.concurrent.TimeUnit;
 
+import javax.transaction.Transactional;
+
 import grails.util.Environment;
 import javassist.bytecode.stackmap.BasicBlock.Catch;
+import back.pmallocators.VirtualMachineAllocator;
 import back.services.VariableManagerService;
 
 import com.losandes.utils.Constants;
@@ -27,6 +30,7 @@ class DeployerService {
 	 */
 	
 	VariableManagerService variableManagerService
+	
 	
 	static transactional = false
 	
@@ -52,25 +56,25 @@ class DeployerService {
 	 * @param image Image with the new instances 
 	 */
 	
-	def	deployNewInstances(DeployedImage image){
-		
+	def	deployNewInstances(ArrayList<VirtualMachineExecution> virtualMachines, Long imageId){
+	  			
 		VirtualMachineStartMessage vmsm=new VirtualMachineStartMessage();
-		println "Deploying Image ----->" +image.image.name+" "+image.virtualMachines.size()
+		println "Deploying Image -----> size: "+virtualMachines.size()
 		/*
 		 * Iterates all VMs in the image selecting only those which 
 		 * are not deployed. This is verified thanks to the VM message
 		 */
-		image.virtualMachines.eachWithIndex() { vm, i ->
-			
+		virtualMachines.eachWithIndex() { vm, i ->			
 			
 			if(vm.message.equals("Adding instance")&&vm.status== VirtualMachineExecutionStateEnum.DEPLOYING){
 				println vm.name+" "+vm.message
+				println vm
 				/*
 				 * creates a message in order to start the machine
-				 */
-				
-				vm.setMessage("Initializing")
-				vm.save()
+				 */			
+				//vm.setMessage("Initializing")
+				//vm.save(failOnError: true)
+				changeImageMessageAndState(vm.id,null,"Initializing")
 				println vm.name+" "+vm.message
 				if(!Environment.isDevelopmentMode()){
 					try{
@@ -82,15 +86,18 @@ class DeployerService {
 						vmsm.setVmCores(vm.hardwareProfile.cores)
 						vmsm.setVmMemory(vm.hardwareProfile.ram)
 						vmsm.setVirtualMachineExecutionId(vm.id)
-						vmsm.setVirtualMachineImageId(image.image.id)
+						vmsm.setVirtualMachineImageId(imageId)
 						String pmIp=vm.executionNode.ip.ip;
+						println "mensaje creado:"+vmsm +" "+ pmIp
 						try{
 						/*
 						 * Sends the message to the physical machine agent
 						 * where the virtual machine was allocated
 						 */
-							println "Abriendo socket a "+pmIp+" "+variableManagerService.getIntValue("CLOUDER_CLIENT_PORT");
-							Socket s=new Socket(pmIp,variableManagerService.getIntValue("CLOUDER_CLIENT_PORT"));
+							
+							int var = variableManagerService.getIntValue("CLOUDER_CLIENT_PORT")
+							println "Abriendo socket a "+pmIp+" "+var;
+							Socket s=new Socket(pmIp,var);
 							s.setSoTimeout(15000);
 							ObjectOutputStream oos=new ObjectOutputStream(s.getOutputStream());
 							oos.writeObject(vmsm);
@@ -99,13 +106,19 @@ class DeployerService {
 							Object c=ois.readObject();
 							oos.close();
 							s.close();
+							println 'Envio de mensaje terminado'
+							
 						}catch(Exception e){
-							vm.setStatus(VirtualMachineExecutionStateEnum.FAILED)
-							vm.setMessage("Connection error")
+						    println "Error: Connection"
+//							vm.setStatus(VirtualMachineExecutionStateEnum.FAILED)
+//							vm.setMessage("Connection error")
+//							vm.save(failOnError: true)
+							changeImageMessageAndState(vm.id,VirtualMachineExecutionStateEnum.FAILED,"Connection error")
 							println e.printStackTrace()
 							println e.getMessage()+" "+pmIp;
 						}
 					}catch(Exception e){
+					    println "Error: Creating Message"
 						e.printStackTrace();
 					}
 				}
@@ -162,6 +175,7 @@ class DeployerService {
 						s.close();
 					}catch(Exception e){
 						vm.setMessage("Connection error")
+						vm.save()
 						println e.getMessage()+" "+pmIp;
 					}
 				}catch(Exception e){
@@ -193,6 +207,17 @@ class DeployerService {
 			s.close();
 		}catch(Exception e){
 			println e.getMessage()+" "+pmIp;
+		}
+	}
+	
+	def changeImageMessageAndState(Long id, VirtualMachineExecutionStateEnum state, String message){
+		VirtualMachineExecution.withTransaction{
+			VirtualMachineExecution vm2 = VirtualMachineExecution.get(id);
+			if(vm2!=null){
+				if(state)vm2.setStatus(state);
+				if(message)vm2.setMessage(message);
+				vm2.save();
+			}
 		}
 	}
 }

@@ -359,7 +359,7 @@ class WebServicesService {
 				}
 			}
 		}
-		if(!belongsToUser)return new WebServiceException("This image wasn't deployed by the given user")
-		return deploymentService.addInstances(image, instances, time.toLong()*60*1000)
+		if(!belongsToUser)return new WebServiceException("This image wasn't deployed by the given user")	
+		return deploymentService.addInstances(image.id, instances, time.toLong()*60*1000)
 	}
 }
