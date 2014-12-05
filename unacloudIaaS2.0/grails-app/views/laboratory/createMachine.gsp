@@ -34,7 +34,7 @@
 	    		</div>
     		</div>
     		<div class="control-group">
-   			<label class="control-label">RAM Memory (KB)</label>
+   			<label class="control-label">RAM Memory (MB)</label>
 	    		<div class="controls">
 	    			<input name="ram" type="text">
 	    		</div>
