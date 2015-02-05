@@ -131,6 +131,7 @@ class WebServicesService {
 	 */
 	
 	def startHeterogeneousCluster(String login,String apiKey,JSONObject cluster) throws Exception{
+		println 'StartDeployment Heterogeneous'
 		if(login==null||apiKey==null)return new WebServiceException("invalid request")
 		User user= User.findByUsername(login)
 		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")

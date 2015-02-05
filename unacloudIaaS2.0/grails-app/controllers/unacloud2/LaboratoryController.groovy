@@ -56,7 +56,7 @@ class LaboratoryController {
 	def getLab() {
 		def lab = Laboratory.get(params.id)
 		def machineSet= lab.getOrderedMachines()
-		[lab: Laboratory.get(params.id), machineSet:machineSet]
+		[lab: lab, machineSet:machineSet]
 	}
 	
 	/**
