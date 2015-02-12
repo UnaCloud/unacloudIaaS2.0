@@ -44,8 +44,8 @@ public class Main {
         }
         if(mainCase==LOGIN_DB) PhysicalMachineState.reportPhyisicalMachineUserLogin();
         else if(mainCase==TURN_ON_DB){
-        	//TODO quitar esto
         	{
+        		//Validate if the user that is executing agent is system user
         		String user=OperatingSystem.getWhoAmI();
             	if(user!=null&&!user.toLowerCase().contains("system")){
             		System.out.println("No se puede ejecutar el agente como "+user);
@@ -53,6 +53,7 @@ public class Main {
             	}
         	}
         	try {
+        		//Create agent log file
             	PrintStream ps=new PrintStream(new FileOutputStream("log.txt",true),true){
             		@Override
             		public void println(String x) {
@@ -69,7 +70,7 @@ public class Main {
     			e.printStackTrace();
     		}
         	PhysicalMachineState.reportPhyisicalMachineStart();
-        	PhysicalMachineMonitor.restart();
+        	//PhysicalMachineMonitor.restart();//TODO nothing
             //DataServerSocket.init();
             PhysicalMachineStateReporter.getInstance().start();
             PersistentExecutionManager.loadData();
