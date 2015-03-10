@@ -6,7 +6,7 @@
 <body>
 	<div class="hero-unit span9">
 	<g:link controller="cluster" action="index" style="display: -webkit-box;"><i class="icon-chevron-left" title="Back"></i><h5 style="margin: 3px;">Back to Cluster list</h5></g:link><br>
-   	
+<h2>Maximum Availability for Your New Cluster</h2>   	
 		<g:form name="clusterDeploy" class="form-horizontal"
 			controller="deployment" >
 			<input type=hidden name="id" value="${cluster.id}">
@@ -62,11 +62,14 @@
 						</td>
 						
 					</tr>
+					<!-- CEGM feb 23-2015 -->
+					<!-- Si el número de instancias de alta disponibilidad de 0, no mostrar el checkbox-->
+					<g:if test="${limitHA!=0}">
 					<tr>
 						<td><label>High Availability</label></td>
 						<td><input type="checkbox" name="highAvailability${image.id.toString()}"></td>
 					</tr>
-					
+					</g:if>
 					<tr>
 						<td><label>Hostname</label></td>
 						<td colspan="2"><input type="text" name="hostname" value="${image.name}"></td>

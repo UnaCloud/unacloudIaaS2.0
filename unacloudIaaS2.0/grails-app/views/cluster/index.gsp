@@ -6,7 +6,7 @@
 <body>
 
 <div class="hero-unit span9">
-
+<h2>Clusters</h2>
 <table class="table table-bordered table-condensed text-center" style="background:white">
   <tr class="info">
   	<td class="info" colspan="6">
@@ -38,7 +38,10 @@
     <div class="row-fluid text-center">
       <a title="Delete Cluster" class="deleteCluster" data-id="${cluster.id}" style="cursor:pointer"><span class="icon-remove-sign"></span></a>  	
      <g:link action="deployOptions" params="${[id: cluster.id]}"><i title="Deploy Cluster" class="icon-play"></i></g:link>
-     <g:link action="externalDeployOptions" params="${[id: cluster.id]}"><i title="Deploy Cluster" class="icon-globe"></i></g:link>
+     
+     <!-- CEGM feb 23-2015 -->
+     <!--
+     <g:link action="externalDeployOptions" params="${[id: cluster.id]}"><i title="Deploy Cluster" class="icon-globe"></i></g:link> -->
     
     </div>
     </td>

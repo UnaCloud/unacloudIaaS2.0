@@ -6,6 +6,7 @@
    </head>
 <body>
 <div class="hero-unit span9">
+<h2>Cluster Deployment</h2>
 <g:form controller="deployment">
 <script>
 var myVar=setInterval(function(){reload()},8000);
@@ -28,8 +29,10 @@ function reload()
   	<td class="info" colspan="8" >
   		<input type="checkbox" id="selectAll"><small>&nbsp;Select All</small>
   	          <g:actionSubmitImage value="stop" src="${resource(dir: 'images', file: 'empty.gif')}" action="stop" class="icon-off pull-right" title="Stop Selected Instances"/>
-              
-              <g:actionSubmitImage value="reset" src="${resource(dir: 'images', file: 'empty.gif')}" action="reset" class="icon-refresh pull-right" title="Reset Selected Instances"/>
+  
+			  <!-- CEGM feb 23-2015 -->            
+              <!-- class="icon-refresh pull-right" -->
+              <g:actionSubmitImage value="reset" src="${resource(dir: 'images', file: 'empty.gif')}" action="reset" class="icon-repeat" title="Reset Selected Instances"/>
               
     </td>
   </tr>	

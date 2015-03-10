@@ -7,6 +7,8 @@
 
 <div class="hero-unit span9">
 
+<h2>Virtual Machine Images</h2>
+
 <table class="table table-bordered table-condensed text-center" style="background:white">
   <tr class="info">
   	<td class="info" colspan="6">
