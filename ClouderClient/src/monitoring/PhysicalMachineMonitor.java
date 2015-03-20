@@ -16,7 +16,7 @@ public class PhysicalMachineMonitor{
 	/**
 	 * Monitor agent bind
 	 */
-	private static MonitorAgent monitor;
+	private static MonitorCPUAgent monitor;
 
 	/**
 	 * Restarts this physical machine monitor

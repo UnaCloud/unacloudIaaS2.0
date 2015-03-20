@@ -1,6 +1,9 @@
 package communication.messages.monitoring;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MonitorReport{
 
@@ -26,7 +29,8 @@ public class MonitorReport{
 	long txErrors;
 	long rxPackets;
 	long txPackets;
-        String processes;
+    String processes;
+    
 	public MonitorReport(String uUID, Timestamp timest, int contadorRegistros, String userName, double uptime, double mflops, double timeinSecs, double idle, double d, double cPuser, double sys, double nice, double wait, double combined, long user, long sys0, long nice0, long wait0, long idle0, float rAMMemoryFree, float rAMMemoryUsed, double freePercent, double usedPercent, float swapMemoryFree, float swapMemoryPageIn, float swapMemoryPageOut, float swapMemoryUsed, long hardDiskFreeSpace, long hardDiskUsedSpace, String networkIPAddress, String networkInterface, String networkNetmask, String networkGateway, long rxBytes, long txBytes, long speed, long rxErrors, long txErrors, long rxPackets, long txPackets,String processes){
 		super();
 		UUID = uUID;
@@ -69,7 +73,62 @@ public class MonitorReport{
 		this.txErrors = txErrors;
 		this.rxPackets = rxPackets;
 		this.txPackets = txPackets;
-                this.processes=processes;
+        this.processes=processes;
+	}
+	
+	public MonitorReport(String line) throws ParseException {		
+			
+		line = line.replace("MonitorReport [", "").replace("]", "");
+		processes = line.substring(line.indexOf("{")+1, line.indexOf("}"));
+		line = line.substring(0,line.indexOf(", processes"));
+    	String [] elements = line.split(",");
+    	for (String elem : elements) {
+    		System.out.println(elem);
+			String [] components = elem.split("=");			
+			if(components[0].trim().startsWith("ContadorRegistros"))ContadorRegistros = Integer.parseInt(components[1]);
+			else if(components[0].trim().startsWith("timest")){
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+			    Date parsedDate = dateFormat.parse(components[1]);
+			    timest = new java.sql.Timestamp(parsedDate.getTime());
+			}
+			else if(components[0].trim().startsWith("UserName")) UserName = components[1];
+			else if(components[0].trim().startsWith("uptime")) uptime = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("mflops")) mflops = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("timeinSecs")) timeinSecs = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("idle")) idle = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("d")) d = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("CPuser")) CPuser = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("sys")) sys = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("nice")) nice = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("wait")) wait = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("combined")) combined = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("user")) user = Long.parseLong(components[1]);
+			else if(components[0].trim().startsWith("sys0")) sys0 = Long.parseLong(components[1]);
+			else if(components[0].trim().startsWith("nice0")) nice0 = Long.parseLong(components[1]);
+			else if(components[0].trim().startsWith("wait0")) wait0 = Long.parseLong(components[1]);
+			else if(components[0].trim().startsWith("idle0")) idle0 = Long.parseLong(components[1]);
+			else if(components[0].trim().startsWith("rAMMemoryFree")) rAMMemoryFree = Float.parseFloat(components[1]);
+			else if(components[0].trim().startsWith("rAMMemoryUsed")) rAMMemoryUsed = Float.parseFloat(components[1]);
+			else if(components[0].trim().startsWith("freePercent")) freePercent = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("usedPercent")) usedPercent = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("swapMemoryFree")) swapMemoryFree = Float.parseFloat(components[1]);
+			else if(components[0].trim().startsWith("swapMemoryPageIn")) swapMemoryPageIn = Float.parseFloat(components[1]);
+			else if(components[0].trim().startsWith("swapMemoryPageOut")) swapMemoryPageOut = Float.parseFloat(components[1]);
+			else if(components[0].trim().startsWith("swapMemoryUsed")) swapMemoryUsed = Float.parseFloat(components[1]);
+			else if(components[0].trim().startsWith("hardDiskFreeSpace")) hardDiskFreeSpace = Long.parseLong(components[1]);
+			else if(components[0].trim().startsWith("hardDiskUsedSpace")) hardDiskUsedSpace = Long.parseLong(components[1]);
+			else if(components[0].trim().startsWith("networkIPAddress")) networkIPAddress = components[1];
+			else if(components[0].trim().startsWith("networkInterface")) networkInterface = components[1];
+			else if(components[0].trim().startsWith("networkNetmask")) networkNetmask = components[1];
+			else if(components[0].trim().startsWith("networkGateway")) networkGateway = components[1];
+			else if(components[0].trim().startsWith("rxBytes")) rxBytes = Long.parseLong(components[1]);
+			else if(components[0].trim().startsWith("txBytes")) txBytes = Long.parseLong(components[1]);
+			else if(components[0].trim().startsWith("speed")) speed = Long.parseLong(components[1]);
+			else if(components[0].trim().startsWith("rxErrors")) rxErrors = Long.parseLong(components[1]);
+			else if(components[0].trim().startsWith("txErrors")) txErrors = Long.parseLong(components[1]);
+			else if(components[0].trim().startsWith("rxPackets")) rxPackets = Long.parseLong(components[1]);
+			else if(components[0].trim().startsWith("txPackets")) txPackets = Long.parseLong(components[1]);
+		}
 	}
 
 	public String getUUID() {
@@ -395,5 +454,32 @@ public class MonitorReport{
     public String getProcesses() {
         return processes;
     }
+
+	@Override
+	public String toString() {
+		return "MonitorReport [ContadorRegistros=" + ContadorRegistros + ", timest=" + timest
+				+ ", UserName="
+				+ UserName + ", uptime=" + uptime + ", mflops=" + mflops
+				+ ", timeinSecs=" + timeinSecs + ", idle=" + idle + ", d=" + d
+				+ ", CPuser=" + CPuser + ", sys=" + sys + ", nice=" + nice
+				+ ", wait=" + wait + ", combined=" + combined + ", user="
+				+ user + ", sys0=" + sys0 + ", nice0=" + nice0 + ", wait0="
+				+ wait0 + ", idle0=" + idle0 + ", rAMMemoryFree="
+				+ rAMMemoryFree + ", rAMMemoryUsed=" + rAMMemoryUsed
+				+ ", freePercent=" + freePercent + ", usedPercent="
+				+ usedPercent + ", swapMemoryFree=" + swapMemoryFree
+				+ ", swapMemoryPageIn=" + swapMemoryPageIn
+				+ ", swapMemoryPageOut=" + swapMemoryPageOut
+				+ ", swapMemoryUsed=" + swapMemoryUsed + ", hardDiskFreeSpace="
+				+ hardDiskFreeSpace + ", hardDiskUsedSpace="
+				+ hardDiskUsedSpace + ", networkIPAddress=" + networkIPAddress
+				+ ", networkInterface=" + networkInterface
+				+ ", networkNetmask=" + networkNetmask + ", networkGateway="
+				+ networkGateway + ", rxBytes=" + rxBytes + ", txBytes="
+				+ txBytes + ", speed=" + speed + ", rxErrors=" + rxErrors
+				+ ", txErrors=" + txErrors + ", rxPackets=" + rxPackets
+				+ ", txPackets=" + txPackets + ", processes={" + processes + "}]";
+	}
+    
         
 }

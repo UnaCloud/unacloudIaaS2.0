@@ -145,6 +145,7 @@ class VirtualMachineImageController {
 	 */
 	
 	def upload(){
+		println 'inside upload'
 		def resp
 		if( params.name&&!params.name.empty&&params.accessProtocol&&!params.accessProtocol.empty&&
 			params.user&&!params.user.empty&&params.password&&!params.password.empty){			

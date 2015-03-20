@@ -23,6 +23,7 @@ public class LocalProcessExecutor {
         try {
             Runtime.getRuntime().exec(command).waitFor();
         } catch (Exception ex) {
+        	ex.printStackTrace();
             return false;
         }
         return true;

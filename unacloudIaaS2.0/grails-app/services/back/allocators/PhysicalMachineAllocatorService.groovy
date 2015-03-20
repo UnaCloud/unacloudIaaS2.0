@@ -36,7 +36,7 @@ class PhysicalMachineAllocatorService {
 		 * Finds the allocation method set in server variables
 		 */
 		Map<Long,PhysicalMachineAllocationDescription> pmDescriptions = getPhysicalMachineUsage()
-		println vms
+		//println vms
 		ServerVariable allocatorName=ServerVariable.findByName("VM_ALLOCATOR_NAME");
 		AllocatorEnum allocator=AllocatorEnum.ROUND_ROBIN;
 		try{

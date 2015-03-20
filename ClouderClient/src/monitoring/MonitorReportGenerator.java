@@ -15,7 +15,6 @@ import org.hyperic.sigar.cmd.SigarCommandBase;
 import physicalmachine.Network;
 import physicalmachine.OperatingSystem;
 import physicalmachine.PhysicalMachine;
-
 import communication.messages.monitoring.MonitorInitialReport;
 import communication.messages.monitoring.MonitorReport;
 
@@ -23,9 +22,12 @@ public class MonitorReportGenerator extends SigarCommandBase {
 	
 	private static MonitorReportGenerator instance = new MonitorReportGenerator();
     private static String UUID = java.util.UUID.randomUUID().toString();
-    ;
+    
 	private static int contadorRegistros;
 	
+	public MonitorReportGenerator() {
+		//System.out.println( System.getProperty("java.library.path"));
+	}
 	/**
 	 * Generates initial monitoring report info
 	 * @return initial report
@@ -115,8 +117,8 @@ public class MonitorReportGenerator extends SigarCommandBase {
             long[] pids = instance.sigar.getProcList();
             for (long id : pids) {
                 try {
-                    String[] processName = instance.sigar.getProcExe(id).getName().split("\\\\");
-                    processes += processName[processName.length - 1] + ",";
+                	 String[] processName = instance.sigar.getProcExe(id).getName().split("\\\\");
+                    processes += "(name:"+processName[processName.length - 1] + "; virtualMemorySize:"+instance.sigar.getProcMem(id).getSize()+"; residentMemorySize:"+instance.sigar.getProcMem(id).getResident()+"; cpuPercentage:"+instance.sigar.getProcCpu(id).getPercent()+")"+(id==pids[pids.length-1]?"":",");
                 } catch (Exception ex) {
                 }
             }

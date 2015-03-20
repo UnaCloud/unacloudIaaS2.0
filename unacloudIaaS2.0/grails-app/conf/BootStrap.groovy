@@ -135,7 +135,7 @@ class BootStrap {
 			new Hypervisor(name: Constants.VM_WARE_WORKSTATION, hypervisorVersion: "10").save()
 			new Hypervisor(name: Constants.VM_WARE_PLAYER, hypervisorVersion: "10").save()
 		}
-		databaseService.initDatabase()
+		//databaseService.initDatabase()
 		DataServerSocket.startServices(variableManagerService.getIntValue("DATA_SOCKET"));
 		//String applicationPath = request.getSession().getServletContext().getRealPath("")
 	}

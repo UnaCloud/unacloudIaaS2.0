@@ -21,7 +21,7 @@
     		<div class="control-group">
    			<label class="control-label">Image Location</label>
 	    		<div class="controls">
-	    			<input id="files" name="files" type="file" Multiple>
+	    			<input id="files" name="files" type="file" multiple>
 	    		</div>
     		</div>
     		<div class="control-group">

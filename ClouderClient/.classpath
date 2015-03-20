@@ -12,10 +12,10 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lib/sigar-bin/lib/log4j.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/sigar-bin/lib/sigar.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/nsclient4j.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/mysql-connector-java-5.1.18-bin.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/sigar-bin"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CommonShares"/>
+	<classpathentry kind="lib" path="lib/sigar-bin/lib/sigar.jar"/>
+	<classpathentry kind="lib" path="lib/mongo-java-driver-2.13.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

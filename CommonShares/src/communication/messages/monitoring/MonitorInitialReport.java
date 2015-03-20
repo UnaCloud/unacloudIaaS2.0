@@ -1,19 +1,21 @@
 package communication.messages.monitoring;
 
-import communication.UnaCloudAbstractMessage;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * This class provides the attributes to encapsulate the result of a monitor
- * test. Among others, it includes cpu ussage, memory ussage and other
+ * test. Among others, it includes cpu usage, memory usage and other
  * statistics
  *
- * @author GSot
+ * @author GSot ans Cesar
  *
  */
-public class MonitorInitialReport extends UnaCloudAbstractMessage implements Serializable{
+public class MonitorInitialReport implements Serializable{
 
 	private static final long serialVersionUID = -2738566841932331498L;
 	private String UUID;
@@ -35,7 +37,7 @@ public class MonitorInitialReport extends UnaCloudAbstractMessage implements Ser
     private String networkMACAddress;
 
     public MonitorInitialReport(String uUID, Timestamp timest, String hostname, String operatingSystemName, String operatingSystemVersion, String operatingSystemArchitect, String cPUModel, String cPUVendor, int cPUCores, int totalSockets, String cPUMhz, int coresPerSocket, float rAMMemorySize, float swapMemorySize, long hardDiskSpace, String hardDiskFileSystem, String networkMACAddress) {
-        super(REGISTRATION_OPERATION,0);
+       // super(REGISTRATION_OPERATION,0);
         UUID = uUID;
         this.timest = timest;
         this.hostname = hostname;
@@ -54,8 +56,38 @@ public class MonitorInitialReport extends UnaCloudAbstractMessage implements Ser
         this.hardDiskFileSystem = hardDiskFileSystem;
         this.networkMACAddress = networkMACAddress;
     }
+    
+    public MonitorInitialReport(String line) throws ParseException{
+    	
+    	line = line.replace("MonitorInitialReport [", "").replace("]", "");
+    	String [] elements = line.split(",");
+    	for (String elem : elements) {
+			String [] components = elem.split("=");
+			if(components[0].contains("timest")){
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+			    Date parsedDate = dateFormat.parse(components[1]);
+			    timest = new java.sql.Timestamp(parsedDate.getTime());
+			}
+			else if(components[0].contains("hostname")) hostname = components[1];
+			else if(components[0].contains("operatingSystemName")) operatingSystemName = components[1];
+			else if(components[0].contains("operatingSystemVersion")) operatingSystemVersion = components[1];
+			else if(components[0].contains("operatingSystemArchitect")) operatingSystemArchitect = components[1];
+			else if(components[0].contains("cPUModel")) cPUModel = components[1];
+			else if(components[0].contains("cPUVendor")) cPUVendor = components[1];
+			else if(components[0].contains("cPUCores")) cPUCores = Integer.parseInt(components[1]);
+			else if(components[0].contains("cPUMhz")) cPUMhz = components[1];
+			else if(components[0].contains("coresPerSocket")) coresPerSocket = Integer.parseInt(components[1]);
+			else if(components[0].contains("totalSockets")) totalSockets = Integer.parseInt(components[1]);
+			else if(components[0].contains("rAMMemorySize")) rAMMemorySize = Float.parseFloat(components[1]);
+			else if(components[0].contains("swapMemorySize")) swapMemorySize = Float.parseFloat(components[1]);
+			else if(components[0].contains("hardDiskSpace")) hardDiskSpace = Long.parseLong(components[1]);
+			else if(components[0].contains("hardDiskFileSystem")) hardDiskFileSystem = components[1];
+			else if(components[0].contains("networkMACAddress")) networkMACAddress = components[1];
+		}
+    }
 
-    public String getUUID() {
+
+	public String getUUID() {
         return UUID;
     }
 
@@ -191,10 +223,20 @@ public class MonitorInitialReport extends UnaCloudAbstractMessage implements Ser
         this.networkMACAddress = networkMACAddress;
     }
 
-    
-    @Override
-    public String toString() {
-        return "MonitorInitialReport{" + "UUID=" + UUID + ", timest=" + timest + ", hostname=" + hostname + ", operatingSystemName=" + operatingSystemName + ", operatingSystemVersion=" + operatingSystemVersion + ", operatingSystemArchitect=" + operatingSystemArchitect + ", cPUModel=" + cPUModel + ", cPUVendor=" + cPUVendor + ", cPUCores=" + cPUCores + ", totalSockets=" + totalSockets + ", cPUMhz=" + cPUMhz + ", coresPerSocket=" + coresPerSocket + ", rAMMemorySize=" + rAMMemorySize + ", swapMemorySize=" + swapMemorySize + ", hardDiskSpace=" + hardDiskSpace + ", hardDiskFileSystem=" + hardDiskFileSystem + ", networkMACAddress=" + networkMACAddress + '}';
-    }
+	@Override
+	public String toString() {
+		return "MonitorInitialReport [timest=" + timest
+				+ ", hostname=" + hostname + ", operatingSystemName="
+				+ operatingSystemName + ", operatingSystemVersion="
+				+ operatingSystemVersion + ", operatingSystemArchitect="
+				+ operatingSystemArchitect + ", cPUModel=" + cPUModel
+				+ ", cPUVendor=" + cPUVendor + ", cPUCores=" + cPUCores
+				+ ", totalSockets=" + totalSockets + ", cPUMhz=" + cPUMhz
+				+ ", coresPerSocket=" + coresPerSocket + ", rAMMemorySize="
+				+ rAMMemorySize + ", swapMemorySize=" + swapMemorySize
+				+ ", hardDiskSpace=" + hardDiskSpace + ", hardDiskFileSystem="
+				+ hardDiskFileSystem + ", networkMACAddress="
+				+ networkMACAddress + "]";
+	}  
 
 }
