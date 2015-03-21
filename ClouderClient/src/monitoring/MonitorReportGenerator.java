@@ -131,7 +131,8 @@ public class MonitorReportGenerator extends SigarCommandBase {
             Mem MEM = instance.sigar.getMem();
             NetInterfaceStat NET = instance.sigar
                     .getNetInterfaceStat(monitor.network.getNetworkInterface());
-            return new MonitorReport(UUID, timest, contadorRegistros, OperatingSystem.getUserName(),
+            return new MonitorReport(UUID, timest, contadorRegistros, 
+            		OperatingSystem.getUserName(),Network.getHostname(),
                     UPTIME.getUptime(), CPUMflops.getMflops(),
                     CPUMflops.getTimeinSecs(), CPU2.getIdle() * 100,
                     (100 - (CPU2.getIdle() * 100)), CPU2.getUser() * 100,

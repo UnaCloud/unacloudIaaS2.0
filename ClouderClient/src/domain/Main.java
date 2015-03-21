@@ -10,7 +10,7 @@ import java.util.Date;
 
 import physicalmachine.OperatingSystem;
 import hypervisorManager.HypervisorFactory;
-import monitoring.MonitoringProcessor;
+import monitoring.PhysicalMachineMonitor;
 import monitoring.PhysicalMachineMonitor;
 import monitoring.PhysicalMachineState;
 import monitoring.PhysicalMachineStateReporter;
@@ -34,9 +34,8 @@ public class Main {
      * Responsible for sorting and starting the Clouder Client
      * @param args[0] = {0 = TURN_OFF_DB, 1 = TURN_ON_DB , 2 = LOGIN_DB, 3 = LOGOUT_DB}
      */
-    public static void main(String[] args){
+    public static void main(String[] args){    	
     	
-    	new MonitoringProcessor().initProcessor();
 //    	HypervisorFactory.registerHypervisors();
 //        int mainCase = 1;
 //        if (args != null && args.length>0 && !args[0].matches("[0-9]+"))mainCase = Integer.parseInt(args[0]);
@@ -73,7 +72,7 @@ public class Main {
 //    			e.printStackTrace();
 //    		}
 //        	PhysicalMachineState.reportPhyisicalMachineStart();
-//        	PhysicalMachineMonitor.restart();//TODO nothing
+    	    PhysicalMachineMonitor.getInstance().initService();
 //            //DataServerSocket.init();
 //            PhysicalMachineStateReporter.getInstance().start();
 //            PersistentExecutionManager.loadData();

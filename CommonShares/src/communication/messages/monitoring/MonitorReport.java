@@ -5,12 +5,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
 public class MonitorReport{
 
 	String UUID;
 	Timestamp timest;
 	int ContadorRegistros;
-	String UserName;
+	String UserName, hostName;
 	double uptime,mflops,timeinSecs,idle,d,CPuser,sys,nice,wait,combined;
 	long user,sys0,nice0,wait0,idle0;
 	float rAMMemoryFree,rAMMemoryUsed;
@@ -31,12 +32,13 @@ public class MonitorReport{
 	long txPackets;
     String processes;
     
-	public MonitorReport(String uUID, Timestamp timest, int contadorRegistros, String userName, double uptime, double mflops, double timeinSecs, double idle, double d, double cPuser, double sys, double nice, double wait, double combined, long user, long sys0, long nice0, long wait0, long idle0, float rAMMemoryFree, float rAMMemoryUsed, double freePercent, double usedPercent, float swapMemoryFree, float swapMemoryPageIn, float swapMemoryPageOut, float swapMemoryUsed, long hardDiskFreeSpace, long hardDiskUsedSpace, String networkIPAddress, String networkInterface, String networkNetmask, String networkGateway, long rxBytes, long txBytes, long speed, long rxErrors, long txErrors, long rxPackets, long txPackets,String processes){
+	public MonitorReport(String uUID, Timestamp timest, int contadorRegistros, String userName, String host , double uptime, double mflops, double timeinSecs, double idle, double d, double cPuser, double sys, double nice, double wait, double combined, long user, long sys0, long nice0, long wait0, long idle0, float rAMMemoryFree, float rAMMemoryUsed, double freePercent, double usedPercent, float swapMemoryFree, float swapMemoryPageIn, float swapMemoryPageOut, float swapMemoryUsed, long hardDiskFreeSpace, long hardDiskUsedSpace, String networkIPAddress, String networkInterface, String networkNetmask, String networkGateway, long rxBytes, long txBytes, long speed, long rxErrors, long txErrors, long rxPackets, long txPackets,String processes){
 		super();
 		UUID = uUID;
 		this.timest = timest;
 		ContadorRegistros = contadorRegistros;
 		UserName = userName;
+		hostName = host;
 		this.uptime = uptime;
 		this.mflops = mflops;
 		this.timeinSecs = timeinSecs;
@@ -92,6 +94,7 @@ public class MonitorReport{
 			    timest = new java.sql.Timestamp(parsedDate.getTime());
 			}
 			else if(components[0].trim().startsWith("UserName")) UserName = components[1];
+			else if(components[0].trim().startsWith("hostName")) hostName = components[1];
 			else if(components[0].trim().startsWith("uptime")) uptime = Double.parseDouble(components[1]);
 			else if(components[0].trim().startsWith("mflops")) mflops = Double.parseDouble(components[1]);
 			else if(components[0].trim().startsWith("timeinSecs")) timeinSecs = Double.parseDouble(components[1]);
@@ -454,12 +457,20 @@ public class MonitorReport{
     public String getProcesses() {
         return processes;
     }
+    
+    public String getHostName() {
+		return hostName;
+	}
+    
+    public void setHostName(String hostName) {
+		this.hostName = hostName;
+	}
 
 	@Override
 	public String toString() {
 		return "MonitorReport [ContadorRegistros=" + ContadorRegistros + ", timest=" + timest
 				+ ", UserName="
-				+ UserName + ", uptime=" + uptime + ", mflops=" + mflops
+				+ UserName + ", hostName="+ hostName+", uptime=" + uptime + ", mflops=" + mflops
 				+ ", timeinSecs=" + timeinSecs + ", idle=" + idle + ", d=" + d
 				+ ", CPuser=" + CPuser + ", sys=" + sys + ", nice=" + nice
 				+ ", wait=" + wait + ", combined=" + combined + ", user="

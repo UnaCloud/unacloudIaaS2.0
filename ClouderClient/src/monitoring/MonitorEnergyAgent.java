@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import physicalmachine.Network;
+
 import com.mongodb.BasicDBObject;
 
 import virtualMachineManager.LocalProcessExecutor;
@@ -45,6 +47,7 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 	@Override
 	protected void doMonitoring() throws Exception {	
 		//C:\\Program Files\\Intel\\Power Gadget 3.0\\PowerLog3.0.exe
+		if(reduce>windowSizeTime)reduce= 0;
 		LocalProcessExecutor.executeCommand(powerlogPath+" -resolution "+(frecuency*1000)+" -duration "+(windowSizeTime-reduce)+" -file "+recordPath);
 		if(reduce>0)reduce=0;
 	}
@@ -54,7 +57,7 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 		recordData();
 		cleanFile(new File(recordPath));
 	}
-	private void recordData() throws Exception{		
+	private void recordData() throws Exception{	
 		BufferedReader bf = new BufferedReader(new FileReader(new File(recordPath)));
 		String line = null;
 		ArrayList<MonitorEnergy> reports = new ArrayList<MonitorEnergy>();
@@ -80,17 +83,18 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 		}
 		bf.close();
 		if(reports.size()>0){
-			Connection con = MonitorDatabaseConnection.generateConnection();	 
+			MongoConnection con = MonitorDatabaseConnection.generateConnection();	 
 			saveReports(reports, con);
 			con.close();
 		}	  	
 	}
 	
 	
-	private void saveReports(ArrayList<MonitorEnergy> reports, Connection db) {
+	private void saveReports(ArrayList<MonitorEnergy> reports, MongoConnection db) {
 		List<BasicDBObject> listReports = new ArrayList<BasicDBObject>();
+		String hostname = Network.getHostname();
 		 for (MonitorEnergy statusReport : reports)if(statusReport!=null){			
-			BasicDBObject doc = new BasicDBObject("ID","")
+			BasicDBObject doc = new BasicDBObject("Hostname",hostname)
 			.append("Timestamp", statusReport.Time)
 			.append("RDTSC", statusReport.RDTSC)
 			.append("elapsedTime", statusReport.elapsedTime)
@@ -126,9 +130,11 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 	}
 	
 	private void cleanFile(File f) throws FileNotFoundException{
+		if(f.exists()){
 			PrintWriter writer = new PrintWriter(f);
 			writer.print("");
-			writer.close();
+			writer.close();			
+		}
     }
 	
 	private class MonitorEnergy{

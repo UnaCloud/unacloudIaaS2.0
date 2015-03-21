@@ -85,17 +85,16 @@ public class MonitorCPUAgent extends AbstractMonitor {
 		}
 		bf.close();
 		if(initial!=null&&reports.size()>0){
-			Connection con = MonitorDatabaseConnection.generateConnection();	    	 	
+			MongoConnection con = MonitorDatabaseConnection.generateConnection();	    	 	
 			saveInitialReport(initial, con);
 			saveReports(reports, con);
 			con.close();
 		}	  	
 	}
 	
-	 private void saveInitialReport(MonitorInitialReport initialReport, Connection db) throws UnknownHostException { 
-			BasicDBObject doc = new BasicDBObject("ID","")
+	 private void saveInitialReport(MonitorInitialReport initialReport, MongoConnection db) throws UnknownHostException { 
+			BasicDBObject doc = new BasicDBObject("Hostname",initialReport.getHostname())
 			.append("Timestamp",initialReport.getTimest())
-			.append("Hostname", initialReport.getHostname())
 			.append("OSName", initialReport.getOperatingSystemName())
 			.append("OSVersion", initialReport.getOperatingSystemVersion())
 			.append("OSArquitecture", initialReport.getOperatingSystemArchitect())
@@ -113,7 +112,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
 			System.out.println(db.infrastructureCollection().insert(doc));
 	 }
 	 
-	 private void saveReports(ArrayList<MonitorReport>reports, Connection db){
+	 private void saveReports(ArrayList<MonitorReport>reports, MongoConnection db){
 		 List<BasicDBObject> listReports = new ArrayList<BasicDBObject>();
 		 for (MonitorReport statusReport : reports)if(statusReport!=null){
 			String[] pros = statusReport.getProcesses().split(",");
@@ -130,7 +129,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
 					listProcesses.add(doc);
 				}				
 			}
-			BasicDBObject doc = new BasicDBObject("ID","")
+			BasicDBObject doc = new BasicDBObject("Hostname",statusReport.getHostName())
 			.append("Timestamp", statusReport.getTimest())
 			.append("Username", statusReport.getUserName())
 			.append("UpTime", statusReport.getUptime())

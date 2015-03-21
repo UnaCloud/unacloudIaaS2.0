@@ -1,85 +1,94 @@
 package monitoring;
 
-import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- * Class responsible for manage the physical machine monitor process
- * 
- * @author Clouder
- */
-public class PhysicalMachineMonitor{
+import java.util.ArrayList;
 
-	private PhysicalMachineMonitor(){}
+import com.losandes.utils.VariableManager;
 
-	/**
-	 * Monitor agent bind
-	 */
-	private static MonitorCPUAgent monitor;
-
-	/**
-	 * Restarts this physical machine monitor
-	 */
-	public static void restart() {
-		/*try {
-			boolean monitorear = Boolean.parseBoolean(VariableManager.getStringValue("MONITORING_ENABLE"));
-			try {
-				if (monitorear) {
-					int monitorFrecuency = VariableManager.getIntValue("MONITOR_FREQUENCY");
-					int windowSize = VariableManager.getIntValue("MONITOR_REGISTER_FREQUENCY");
-					start(monitorFrecuency, windowSize);
-				}
-			} catch (Exception e) {
-				monitorear = false;
-			}
-		} catch (Throwable t) {
-		}*/
+public class PhysicalMachineMonitor extends Thread {
+	
+	public static boolean status;
+		
+	private static PhysicalMachineMonitor instance;
+	public static synchronized PhysicalMachineMonitor getInstance(){
+		if(instance==null)instance=new PhysicalMachineMonitor();
+		return instance;
 	}
-
-	/**
-	 * Starts this monitor with the given monitor and register frequency
-	 * @param frecuency time in seconds between each physical machine
-	 *        measure
-	 * @param windowSize time in secconds between each data comit
-	 */
-	public static void start(final int frecuency, final int windowSize) {
-		//TODO, do something to start the monitor. It is enough to uncomment this code.
-		/*if (monitor == null) {
-			monitor = new MonitorAgent();
-			try {
-				monitor.doInitialLoad();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			new Thread(){
-				@Override
-				public void run() {
-					try {
-						while (monitor != null)
-							monitor.startMonitoring(frecuency,windowSize);
-					} catch (Throwable ex) {
-						ex.printStackTrace();
-					}
-				}
-			}.start();
-		}*/
-	}
-
-	/**
-	 * Stops the monitor process
-	 */
-	public static void stop() {
-		try {
-			monitor = null;
-		} catch (Throwable ex) {
-			Logger.getLogger(PhysicalMachineMonitor.class.getName()).log(Level.SEVERE, null, ex);
+	private static final ArrayList<AbstractMonitor> services = new ArrayList<AbstractMonitor>();
+    //"C:\\Agentes\\UnaCloud\\logCPU.txt"
+	//"C:\\Agentes\\UnaCloud\\report.txt"
+	
+	public PhysicalMachineMonitor() {}	
+	
+	public void initService(){	
+		if(services.size()>0&&status){
+			System.out.println("There are monitoring services running");
 		}
-		try {
-			PrintWriter pw = new PrintWriter("monitoreo.txt");
-			pw.println("NO");
-			pw.close();
-		} catch (Exception e) {
+		if(VariableManager.local.getBooleanValue("MONITORING_ENABLE")){
+			services.clear();
+			int frE = VariableManager.global.getIntValue("FRECUENCY_ENERGY");
+			int frC = VariableManager.global.getIntValue("FRECUENCY_CPU");
+			String path = VariableManager.local.getStringValue("PATH_POWERLOG");
+			int time  = (int)(Math.random()*60*60);					
+			if(frC>0){
+				MonitorCPUAgent m = new MonitorCPUAgent(VariableManager.local.getStringValue("LOG_CPU_PATH"));
+				m.setFrecuency(frC); 
+				m.setWindowSizeTime(VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU"));
+				m.setReduce(time);
+				services.add(m);
+			}					
+			if(path!=null&&frE>0){
+				MonitorEnergyAgent me = new MonitorEnergyAgent(VariableManager.local.getStringValue("LOG_ENERGY_PATH"));
+				me.setPowerlogPath(path);
+				me.setFrecuency(frE);			
+				me.setWindowSizeTime(VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY"));
+				me.setReduce(time);
+				services.add(me);
+			}
+			for (AbstractMonitor abstractMonitor : services) abstractMonitor.run();
+			status = true;
+		}			
+	}	
+	
+	public void stopService(){		
+		for (AbstractMonitor abstractMonitor : services) abstractMonitor.stopExecution();
+		status=false;
+		VariableManager.local.setBooleanValue("MONITORING_ENABLE", false);
+	}
+	
+	public void enabledService(){
+		VariableManager.local.setBooleanValue("MONITORING_ENABLE", true);
+		initService();
+	}
+	
+	public void updateService(){
+		int frE = VariableManager.global.getIntValue("FRECUENCY_ENERGY");
+		int frC = VariableManager.global.getIntValue("FRECUENCY_CPU");
+		String path = VariableManager.local.getStringValue("PATH_POWERLOG");
+		String logCpu = VariableManager.local.getStringValue("LOG_CPU_PATH");
+		String logEnergy = VariableManager.local.getStringValue("LOG_ENERGY_PATH");
+		int wsCpu = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU");
+		int wsEnergy = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY");
+		int time  = (int)(Math.random()*60*60);		
+		for (AbstractMonitor abstractMonitor : services) {
+			if(abstractMonitor instanceof MonitorEnergyAgent){
+				abstractMonitor.setFrecuency(frE);
+				abstractMonitor.setWindowSizeTime(wsEnergy);
+				abstractMonitor.setRecordPath(logEnergy);				
+				((MonitorEnergyAgent) abstractMonitor).setPowerlogPath(path);
+			}else if(abstractMonitor instanceof MonitorCPUAgent){
+				abstractMonitor.setFrecuency(frC);
+				abstractMonitor.setWindowSizeTime(wsCpu);
+				abstractMonitor.setRecordPath(logCpu);
+			}
+			abstractMonitor.setReduce(time);
 		}
 	}
+	//To testing
+	
+	//MonitorCPUAgent m = new MonitorCPUAgent("logCPU.txt");
+	//private static int LIMIT_TIME = 60;
+	//	int frE = 10;
+	//	int frC = 10;
+	//	String path = "C:\\Program Files\\Intel\\Power Gadget 3.0\\PowerLog3.0.exe";
 }

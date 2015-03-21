@@ -5,7 +5,6 @@
 package monitoring;
 
 import com.losandes.utils.VariableManager;
-import com.mongodb.DB;
 import com.mongodb.MongoClient;
 
 import java.net.UnknownHostException;
@@ -27,15 +26,15 @@ public class MonitorDatabaseConnection {
      * @return connection done
      * @throws UnknownHostException if connection was not possible
      */
-    public static Connection generateConnection() throws UnknownHostException {
+    public static MongoConnection generateConnection() throws UnknownHostException {
     	MongoClient conexion ;
         String ip = VariableManager.global.getStringValue("MONITORING_SERVER_IP");
-        String port = VariableManager.global.getStringValue("MONITORING_SERVER_PORT");
+        int port = VariableManager.global.getIntValue("MONITORING_SERVER_PORT");
         String name = VariableManager.global.getStringValue("MONITORING_DATABASE_NAME");
         String user = VariableManager.global.getStringValue("MONITORING_DATABASE_USER");
         String password = VariableManager.global.getStringValue("MONITORING_DATABASE_PASSWORD");
-        conexion = new MongoClient( "localhost" , 27017 );
-        Connection con = new Connection(conexion,"local");
+        conexion = new MongoClient( ip , port );//27017
+        MongoConnection con = new MongoConnection(conexion,name);
         return con;
     }
 //    

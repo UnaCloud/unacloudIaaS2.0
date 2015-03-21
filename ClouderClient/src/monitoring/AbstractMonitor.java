@@ -27,10 +27,14 @@ public abstract class AbstractMonitor extends Thread{
 	 */
 	protected long reduce;
 	
+	private boolean running;
+	
 	@Override
 	public void run() {
+		running = true;
 		try {
- 			while(true){
+			if(recordPath!=null)
+ 			while(running){
 				doInitial();
 				doMonitoring();
 				doFinal();
@@ -39,6 +43,10 @@ public abstract class AbstractMonitor extends Thread{
 			e.printStackTrace();
 			sendError(e);
 		}
+	}
+	
+	public void stopExecution(){
+		running= false;
 	}
 	/**
      * Do initial task to control monitoring
@@ -88,5 +96,11 @@ public abstract class AbstractMonitor extends Thread{
 	}
 	public void setReduce(long reduce) {
 		this.reduce = reduce;
+	}
+	public String getRecordPath() {
+		return recordPath;
+	}
+	public void setRecordPath(String recordPath) {
+		this.recordPath = recordPath;
 	}
 }
