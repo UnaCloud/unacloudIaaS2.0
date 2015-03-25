@@ -27,26 +27,19 @@ public abstract class AbstractMonitor extends Thread{
 	 */
 	protected long reduce;
 	
-	private boolean running;
 	
 	@Override
 	public void run() {
-		running = true;
 		try {
-			if(recordPath!=null)
- 			while(running){
+			if(recordPath!=null){
 				doInitial();
 				doMonitoring();
 				doFinal();
-			}	
+			}		
 		} catch (Exception e) {
 			e.printStackTrace();
 			sendError(e);
 		}
-	}
-	
-	public void stopExecution(){
-		running= false;
 	}
 	/**
      * Do initial task to control monitoring

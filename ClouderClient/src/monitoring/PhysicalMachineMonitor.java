@@ -1,14 +1,15 @@
 package monitoring;
 
-
 import java.util.ArrayList;
+
+import unacloudEnums.MonitoringStatus;
 
 import com.losandes.utils.VariableManager;
 
 public class PhysicalMachineMonitor extends Thread {
 	
-	public static boolean status;
-		
+	
+	public static MonitoringStatus status = MonitoringStatus.OFF;
 	private static PhysicalMachineMonitor instance;
 	public static synchronized PhysicalMachineMonitor getInstance(){
 		if(instance==null)instance=new PhysicalMachineMonitor();
@@ -20,69 +21,95 @@ public class PhysicalMachineMonitor extends Thread {
 	
 	public PhysicalMachineMonitor() {}	
 	
-	public void initService(){	
-		if(services.size()>0&&status){
-			System.out.println("There are monitoring services running");
+	@Override
+	public void run() {	
+		while(status == MonitoringStatus.RUNNING){
+			try {
+				for (AbstractMonitor abstractMonitor : services) abstractMonitor.run();
+				for (AbstractMonitor abstractMonitor : services) abstractMonitor.join();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}			
 		}
-		if(VariableManager.local.getBooleanValue("MONITORING_ENABLE")){
-			services.clear();
-			int frE = VariableManager.global.getIntValue("FRECUENCY_ENERGY");
-			int frC = VariableManager.global.getIntValue("FRECUENCY_CPU");
-			String path = VariableManager.local.getStringValue("PATH_POWERLOG");
-			int time  = (int)(Math.random()*60*60);					
-			if(frC>0){
-				MonitorCPUAgent m = new MonitorCPUAgent(VariableManager.local.getStringValue("LOG_CPU_PATH"));
-				m.setFrecuency(frC); 
-				m.setWindowSizeTime(VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU"));
-				m.setReduce(time);
-				services.add(m);
-			}					
-			if(path!=null&&frE>0){
-				MonitorEnergyAgent me = new MonitorEnergyAgent(VariableManager.local.getStringValue("LOG_ENERGY_PATH"));
-				me.setPowerlogPath(path);
-				me.setFrecuency(frE);			
-				me.setWindowSizeTime(VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY"));
-				me.setReduce(time);
-				services.add(me);
-			}
-			for (AbstractMonitor abstractMonitor : services) abstractMonitor.run();
-			status = true;
-		}			
-	}	
+		status=MonitoringStatus.RESUME;
+	}
 	
+	public void initService(){	
+		if(VariableManager.local.getBooleanValue("MONITORING_ENABLE")){			
+			if(status == MonitoringStatus.OFF){
+				services.clear();
+				int frE = VariableManager.global.getIntValue("FRECUENCY_ENERGY");
+				int frC = VariableManager.global.getIntValue("FRECUENCY_CPU");
+				int wsCpu = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU");
+				int wsEnergy = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY");
+				if(frE>0&&frC>0&&wsCpu>0&&wsEnergy>0&&frE<wsEnergy&&frC<wsCpu){
+					String path = VariableManager.local.getStringValue("PATH_POWERLOG");
+					int time  = (int)(Math.random()*60*60);					
+					if(frC>0){
+						MonitorCPUAgent m = new MonitorCPUAgent(VariableManager.local.getStringValue("LOG_CPU_PATH"));
+						m.setFrecuency(frC); 
+						m.setWindowSizeTime(wsCpu);
+						m.setReduce(time);
+						services.add(m);
+					}					
+					if(path!=null&&frE>0){
+						MonitorEnergyAgent me = new MonitorEnergyAgent(VariableManager.local.getStringValue("LOG_ENERGY_PATH"));
+						me.setPowerlogPath(path);
+						me.setFrecuency(frE);			
+						me.setWindowSizeTime(wsEnergy);
+						me.setReduce(time);
+						services.add(me);
+					}
+					if(services.size()>0){
+						status = MonitoringStatus.RUNNING;
+						this.run();									
+					}		
+				}					
+			}
+			else if(status == MonitoringStatus.RESUME){
+				if(services.size()>0){
+					status = MonitoringStatus.RUNNING;
+					this.run();									
+				}else status = MonitoringStatus.OFF;
+			}
+		}		
+	}	
 	public void stopService(){		
-		for (AbstractMonitor abstractMonitor : services) abstractMonitor.stopExecution();
-		status=false;
 		VariableManager.local.setBooleanValue("MONITORING_ENABLE", false);
+		status = MonitoringStatus.STOPPED;
 	}
 	
 	public void enabledService(){
 		VariableManager.local.setBooleanValue("MONITORING_ENABLE", true);
-		initService();
 	}
 	
-	public void updateService(){
-		int frE = VariableManager.global.getIntValue("FRECUENCY_ENERGY");
-		int frC = VariableManager.global.getIntValue("FRECUENCY_CPU");
-		String path = VariableManager.local.getStringValue("PATH_POWERLOG");
-		String logCpu = VariableManager.local.getStringValue("LOG_CPU_PATH");
-		String logEnergy = VariableManager.local.getStringValue("LOG_ENERGY_PATH");
-		int wsCpu = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU");
-		int wsEnergy = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY");
-		int time  = (int)(Math.random()*60*60);		
-		for (AbstractMonitor abstractMonitor : services) {
-			if(abstractMonitor instanceof MonitorEnergyAgent){
-				abstractMonitor.setFrecuency(frE);
-				abstractMonitor.setWindowSizeTime(wsEnergy);
-				abstractMonitor.setRecordPath(logEnergy);				
-				((MonitorEnergyAgent) abstractMonitor).setPowerlogPath(path);
-			}else if(abstractMonitor instanceof MonitorCPUAgent){
-				abstractMonitor.setFrecuency(frC);
-				abstractMonitor.setWindowSizeTime(wsCpu);
-				abstractMonitor.setRecordPath(logCpu);
+	public void updateService(int frE, int frC, int wsCpu, int wsEnergy){
+		
+		if(frE>0&&frC>0&&wsCpu>0&&wsEnergy>0&&frE<wsEnergy&&frC<wsCpu){
+			VariableManager.global.setIntValue("FRECUENCY_ENERGY",frE);
+			VariableManager.global.setIntValue("FRECUENCY_CPU",frC);
+			VariableManager.global.setIntValue("MONITOR_REGISTER_FREQUENCY_CPU",wsCpu);
+			VariableManager.global.setIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY",wsEnergy);
+			String path = VariableManager.local.getStringValue("PATH_POWERLOG");
+			String logCpu = VariableManager.local.getStringValue("LOG_CPU_PATH");
+			String logEnergy = VariableManager.local.getStringValue("LOG_ENERGY_PATH");
+			
+			int time  = (int)(Math.random()*60*60);		
+			for (AbstractMonitor abstractMonitor : services) {
+				if(abstractMonitor instanceof MonitorEnergyAgent){
+					abstractMonitor.setFrecuency(frE);
+					abstractMonitor.setWindowSizeTime(wsEnergy);
+					abstractMonitor.setRecordPath(logEnergy);				
+					((MonitorEnergyAgent) abstractMonitor).setPowerlogPath(path);
+				}else if(abstractMonitor instanceof MonitorCPUAgent){
+					abstractMonitor.setFrecuency(frC);
+					abstractMonitor.setWindowSizeTime(wsCpu);
+					abstractMonitor.setRecordPath(logCpu);
+				}
+				abstractMonitor.setReduce(time);
 			}
-			abstractMonitor.setReduce(time);
 		}
+		
 	}
 	//To testing
 	

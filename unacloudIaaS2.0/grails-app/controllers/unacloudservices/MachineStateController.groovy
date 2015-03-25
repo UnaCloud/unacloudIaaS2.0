@@ -7,6 +7,7 @@ import unacloud2.IP;
 import unacloud2.OperatingSystem;
 import unacloud2.PhysicalMachineStateEnum;
 
+import com.amazonaws.services.ec2.model.MonitoringState;
 import com.losandes.utils.VirtualMachineCPUStates;
 
 import back.services.PhysicalMachineStateManagerService;
@@ -71,8 +72,9 @@ class MachineStateController {
 	def reportPhysicalMachineLogin(){
 		String hostname=params['hostname']
 		String hostuser=params['hostuser']
+		String status = params['monitorStatus']
 		try{
-			physicalMachineStateManagerService.reportPhysicalMachine(hostname,hostuser,request.getRemoteAddr())
+			physicalMachineStateManagerService.reportPhysicalMachine(hostname,hostuser,request.getRemoteAddr(),status)
 		}catch(Exception ex){
 			println "  Error on reportPhysicalMachineLogin "+ hostname+" "+hostuser+" "+ex.getMessage();
 		}
