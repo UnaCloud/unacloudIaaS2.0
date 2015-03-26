@@ -1,4 +1,4 @@
-package communication.messages.monitoring;
+package monitoring;
 
 
 import java.io.Serializable;

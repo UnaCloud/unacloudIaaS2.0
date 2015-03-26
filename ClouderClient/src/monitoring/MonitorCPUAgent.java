@@ -13,9 +13,6 @@ import java.util.List;
 
 import com.mongodb.BasicDBObject;
 
-import communication.messages.monitoring.MonitorInitialReport;
-import communication.messages.monitoring.MonitorReport;
-
 
 /** 
  * @author Cesar

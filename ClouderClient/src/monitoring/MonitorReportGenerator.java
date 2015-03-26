@@ -15,8 +15,6 @@ import org.hyperic.sigar.cmd.SigarCommandBase;
 import physicalmachine.Network;
 import physicalmachine.OperatingSystem;
 import physicalmachine.PhysicalMachine;
-import communication.messages.monitoring.MonitorInitialReport;
-import communication.messages.monitoring.MonitorReport;
 
 public class MonitorReportGenerator extends SigarCommandBase {
 	

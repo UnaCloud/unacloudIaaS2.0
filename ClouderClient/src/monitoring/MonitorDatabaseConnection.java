@@ -4,10 +4,12 @@
  */
 package monitoring;
 
-import com.losandes.utils.VariableManager;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 /**
  *
@@ -28,12 +30,19 @@ public class MonitorDatabaseConnection {
      */
     public static MongoConnection generateConnection() throws UnknownHostException {
     	MongoClient conexion ;
-        String ip = VariableManager.global.getStringValue("MONITORING_SERVER_IP");
-        int port = VariableManager.global.getIntValue("MONITORING_SERVER_PORT");
-        String name = VariableManager.global.getStringValue("MONITORING_DATABASE_NAME");
-        String user = VariableManager.global.getStringValue("MONITORING_DATABASE_USER");
-        String password = VariableManager.global.getStringValue("MONITORING_DATABASE_PASSWORD");
-        conexion = new MongoClient( ip , port );//27017
+//        String ip = VariableManager.global.getStringValue("MONITORING_SERVER_IP");
+//        int port = VariableManager.global.getIntValue("MONITORING_SERVER_PORT");
+//        String name = VariableManager.global.getStringValue("MONITORING_DATABASE_NAME");
+//        String user = VariableManager.global.getStringValue("MONITORING_DATABASE_USER");
+//        String password = VariableManager.global.getStringValue("MONITORING_DATABASE_PASSWORD");
+    	  String ip = "localhost";
+          int port = 27017;
+          String name = "UnacloudTest";
+          String user = "cloud";
+          String password = "pass";
+        MongoCredential credential = MongoCredential.createCredential(user, name, password.toCharArray());
+        ServerAddress address = new ServerAddress(ip, port);
+        conexion = new MongoClient(address, Arrays.asList(credential));
         MongoConnection con = new MongoConnection(conexion,name);
         return con;
     }

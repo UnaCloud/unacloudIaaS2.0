@@ -1,3 +1,4 @@
+<%@page import="unacloudEnums.MonitoringStatus"%>
 <%@page import="unacloud2.PhysicalMachineStateEnum"%>
 
 <html>
@@ -26,7 +27,8 @@
 	  <th>Name</th>
 	  <th>IP</th>
 	  <th>State</th>
-	  <th>Being used</th>
+	  <th>User</th>
+	  <th>Monitoring</th>
 	  <th>Options</th>
 	  </tr>
 	 
@@ -56,6 +58,23 @@
 	   		</g:if>
 	   		<g:if test="${!machine.withUser }">
 	   			<small>No</small>
+	   		</g:if>
+	   		</td>
+	   		<td>
+	   		<g:if test="${machine.monitorStatus.equals(MonitoringStatus.RUNNING) }">
+	   			<g:img file="green.png" title="${machine.monitorStatus.getTitle()}"/>
+	   		</g:if>
+	   		<g:if test="${machine.monitorStatus.equals(MonitoringStatus.OFF) }">
+	   			<g:img file="red.png" title="${machine.monitorStatus.getTitle()}"/>
+	   		</g:if>
+	   		<g:if test="${machine.monitorStatus.equals(MonitoringStatus.DISABLE) }">
+	   			<g:img file="red.png" title="${machine.monitorStatus.getTitle()}"/>
+	   		</g:if>
+	   		<g:if test="${machine.monitorStatus.equals(MonitoringStatus.STOPPED) }">
+	   			<g:img file="amber.png" title="${machine.monitorStatus.getTitle()}"/>
+	   		</g:if>
+	   		<g:if test="${machine.monitorStatus.equals(MonitoringStatus.RESUME) }">
+	   			<g:img file="blue.png" title="${machine.monitorStatus.getTitle()}"/>
 	   		</g:if>
 	   		</td>
 	   		<td>

@@ -35,25 +35,30 @@ public class PhysicalMachineMonitor extends Thread {
 	}
 	
 	public void initService(){	
-		if(VariableManager.local.getBooleanValue("MONITORING_ENABLE")){			
+		//if(VariableManager.local.getBooleanValue("MONITORING_ENABLE")){			
 			if(status == MonitoringStatus.OFF){
 				services.clear();
-				int frE = VariableManager.global.getIntValue("FRECUENCY_ENERGY");
-				int frC = VariableManager.global.getIntValue("FRECUENCY_CPU");
-				int wsCpu = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU");
-				int wsEnergy = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY");
+//				int frE = VariableManager.global.getIntValue("FRECUENCY_ENERGY");
+//				int frC = VariableManager.global.getIntValue("FRECUENCY_CPU");
+//				int wsCpu = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU");
+//				int wsEnergy = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY");
+				int frE = 10;
+				int frC = 10;
+				int wsCpu = 60;
+				int wsEnergy =60;
 				if(frE>0&&frC>0&&wsCpu>0&&wsEnergy>0&&frE<wsEnergy&&frC<wsCpu){
-					String path = VariableManager.local.getStringValue("PATH_POWERLOG");
+					String path = null;//VariableManager.local.getStringValue("PATH_POWERLOG");
 					int time  = (int)(Math.random()*60*60);					
 					if(frC>0){
-						MonitorCPUAgent m = new MonitorCPUAgent(VariableManager.local.getStringValue("LOG_CPU_PATH"));
+						//MonitorCPUAgent m = new MonitorCPUAgent(VariableManager.local.getStringValue("LOG_CPU_PATH"));
+						MonitorCPUAgent m = new MonitorCPUAgent("logCPU.txt");
 						m.setFrecuency(frC); 
 						m.setWindowSizeTime(wsCpu);
 						m.setReduce(time);
 						services.add(m);
 					}					
 					if(path!=null&&frE>0){
-						MonitorEnergyAgent me = new MonitorEnergyAgent(VariableManager.local.getStringValue("LOG_ENERGY_PATH"));
+						MonitorEnergyAgent me = new MonitorEnergyAgent("LogEnergy.txt");
 						me.setPowerlogPath(path);
 						me.setFrecuency(frE);			
 						me.setWindowSizeTime(wsEnergy);
@@ -72,24 +77,24 @@ public class PhysicalMachineMonitor extends Thread {
 					this.run();									
 				}else status = MonitoringStatus.OFF;
 			}
-		}		
+		//}		
 	}	
 	public void stopService(){		
-		VariableManager.local.setBooleanValue("MONITORING_ENABLE", false);
+		//VariableManager.local.setBooleanValue("MONITORING_ENABLE", false);
 		status = MonitoringStatus.STOPPED;
 	}
 	
 	public void enabledService(){
-		VariableManager.local.setBooleanValue("MONITORING_ENABLE", true);
+	//	VariableManager.local.setBooleanValue("MONITORING_ENABLE", true);
 	}
 	
 	public void updateService(int frE, int frC, int wsCpu, int wsEnergy){
 		
 		if(frE>0&&frC>0&&wsCpu>0&&wsEnergy>0&&frE<wsEnergy&&frC<wsCpu){
-			VariableManager.global.setIntValue("FRECUENCY_ENERGY",frE);
-			VariableManager.global.setIntValue("FRECUENCY_CPU",frC);
-			VariableManager.global.setIntValue("MONITOR_REGISTER_FREQUENCY_CPU",wsCpu);
-			VariableManager.global.setIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY",wsEnergy);
+//			VariableManager.global.setIntValue("FRECUENCY_ENERGY",frE);
+//			VariableManager.global.setIntValue("FRECUENCY_CPU",frC);
+//			VariableManager.global.setIntValue("MONITOR_REGISTER_FREQUENCY_CPU",wsCpu);
+//			VariableManager.global.setIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY",wsEnergy);
 			String path = VariableManager.local.getStringValue("PATH_POWERLOG");
 			String logCpu = VariableManager.local.getStringValue("LOG_CPU_PATH");
 			String logEnergy = VariableManager.local.getStringValue("LOG_ENERGY_PATH");

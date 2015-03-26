@@ -1,7 +1,7 @@
 package unacloudEnums;
 
 public enum MonitoringStatus {
-	RUNNING("Running"), STOPPED("Stopped"), OFF("Off"), RESUME("Resume"), DISABLE("Disable");
+	RUNNING("Running"), STOPPED("Stopping"), OFF("Off"), RESUME("Resume"), DISABLE("Disable");
 	
 	private String title;
 	

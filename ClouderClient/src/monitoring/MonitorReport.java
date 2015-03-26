@@ -1,4 +1,4 @@
-package communication.messages.monitoring;
+package monitoring;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -85,7 +85,6 @@ public class MonitorReport{
 		line = line.substring(0,line.indexOf(", processes"));
     	String [] elements = line.split(",");
     	for (String elem : elements) {
-    		System.out.println(elem);
 			String [] components = elem.split("=");			
 			if(components[0].trim().startsWith("ContadorRegistros"))ContadorRegistros = Integer.parseInt(components[1]);
 			else if(components[0].trim().startsWith("timest")){
