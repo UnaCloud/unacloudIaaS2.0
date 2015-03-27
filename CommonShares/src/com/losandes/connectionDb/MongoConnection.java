@@ -1,4 +1,4 @@
-package monitoring;
+package com.losandes.connectionDb;
 
 import com.mongodb.DB;
 import com.mongodb.DBCollection;

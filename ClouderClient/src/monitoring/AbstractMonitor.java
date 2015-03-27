@@ -27,12 +27,15 @@ public abstract class AbstractMonitor extends Thread{
 	 */
 	protected long reduce;
 	
+	public AbstractMonitor(String record) throws Exception {
+		if(record==null)throw new Exception("");
+		recordPath=record;
+	}
 	
 	@Override
 	public void run() {
 		try {
 			if(recordPath!=null){
-				doInitial();
 				doMonitoring();
 				doFinal();
 			}		

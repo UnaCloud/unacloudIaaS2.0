@@ -6,11 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 
 import physicalmachine.Network;
 
+import com.losandes.connectionDb.MongoConnection;
 import com.mongodb.BasicDBObject;
+import com.mongodb.BulkWriteOperation;
 
 import virtualMachineManager.LocalProcessExecutor;
 
@@ -26,27 +27,19 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 	
 	private String powerlogPath;
 	
-	public MonitorEnergyAgent(String path) {
-		recordPath = path;
+	public MonitorEnergyAgent(String path) throws Exception {
+		super(path);
 	}
 
 	@Override
 	protected void doInitial() throws Exception {
-		// Checking if process is running and stop it	
 		LocalProcessExecutor.executeCommand("taskkill /IMF PowerLog3.0.exe");
-		//checking if there are files 
-		File f = new File(recordPath);
-		if(f.exists()){
-			if(f.length()>0){
-				recordData();
-				cleanFile(f);
-			}
-		}		
 	}
 
 	@Override
 	protected void doMonitoring() throws Exception {	
 		//C:\\Program Files\\Intel\\Power Gadget 3.0\\PowerLog3.0.exe
+		checkFile();
 		if(reduce>windowSizeTime)reduce= 0;
 		LocalProcessExecutor.executeCommand(powerlogPath+" -resolution "+(frecuency*1000)+" -duration "+(windowSizeTime-reduce)+" -file "+recordPath);
 		if(reduce>0)reduce=0;
@@ -56,6 +49,16 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 	protected void doFinal() throws Exception{
 		recordData();
 		cleanFile(new File(recordPath));
+	}
+	
+	private void checkFile() throws Exception{
+		File f = new File(recordPath);
+		if(f.exists()){
+			if(f.length()>0){
+				recordData();
+				cleanFile(f);
+			}
+		}		
 	}
 	private void recordData() throws Exception{	
 		BufferedReader bf = new BufferedReader(new FileReader(new File(recordPath)));
@@ -91,7 +94,7 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 	
 	
 	private void saveReports(ArrayList<MonitorEnergy> reports, MongoConnection db) {
-		List<BasicDBObject> listReports = new ArrayList<BasicDBObject>();
+		BulkWriteOperation builder = db.energyCollection().initializeOrderedBulkOperation();		
 		String hostname = Network.getHostname();
 		 for (MonitorEnergy statusReport : reports)if(statusReport!=null){			
 			BasicDBObject doc = new BasicDBObject("Hostname",hostname)
@@ -108,11 +111,11 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 			.append("packageTemperature", statusReport.packageTemperature)
 			.append("packageHot", statusReport.packageHot)
 			.append("packagePowerLimit",statusReport.packagePowerLimit);
-			listReports.add(doc);
+			builder.insert(doc);
        }				
-		BasicDBObject[] array = new BasicDBObject[listReports.size()];
-		for (int i = 0; i < array.length; i++) array[i] = listReports.get(i);
-		System.out.println(db.energyCollection().insert(array));
+//		BasicDBObject[] array = new BasicDBObject[listReports.size()];
+//		for (int i = 0; i < array.length; i++) array[i] = listReports.get(i);
+		System.out.println("Insert energy: "+builder.execute().getInsertedCount());
 	}
 
 	public String getPowerlogPath() {

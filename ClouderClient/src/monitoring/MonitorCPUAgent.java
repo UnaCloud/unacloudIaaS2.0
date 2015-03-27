@@ -11,11 +11,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.losandes.connectionDb.MongoConnection;
 import com.mongodb.BasicDBObject;
+import com.mongodb.BulkWriteOperation;
 
 
 /** 
  * @author Cesar
+ * 
  * This class represent a process to monitoring CPU. To monitoring cpu, it uses the library Sigar by Hyperic, and has three process;
  * Do initial: to validate if there are files to record in database and delete those files, Do Monitoring: to sense cpu and record in a file, and Do final: to record en db
  * This class only work in Windows
@@ -24,30 +27,26 @@ import com.mongodb.BasicDBObject;
 public class MonitorCPUAgent extends AbstractMonitor {
 	
 	private File f;
-	public MonitorCPUAgent(String path) {
-		recordPath = path;
+	public MonitorCPUAgent(String path) throws Exception {
+		super(path);
 		f = new File(recordPath);
 	}
 	    
 	@Override
 	protected void doInitial() throws Exception{
-		if(!f.exists())f.createNewFile();
-		else{
-			if(f.length()>0){
-				recordData();
-				cleanFile();
-			}
-		}
+		 PrintWriter pw = new PrintWriter(new FileOutputStream(f,true),true);
+	     pw.println(MonitorReportGenerator.generateInitialReport());
+	     pw.close();
 	}
 	
 	@Override
 	protected void doMonitoring() throws Exception {
+		 checkFile();
 	     int localFrecuency = 1000*frecuency;  
 	     Date d = new Date();
 	     if(reduce>windowSizeTime)reduce= 0;
 	     d.setTime(d.getTime()+(windowSizeTime*1000)-(reduce*1000));	     
 	     PrintWriter pw = new PrintWriter(new FileOutputStream(f,true),true);
-	     pw.println(MonitorReportGenerator.generateInitialReport());
 	     while(d.after(new Date())){  
 	    	pw.println(MonitorReportGenerator.generateStateReport());
 	        Thread.sleep(localFrecuency);
@@ -68,6 +67,16 @@ public class MonitorCPUAgent extends AbstractMonitor {
 		
 	}	
 	
+	private void checkFile() throws Exception{
+		if(!f.exists())f.createNewFile();
+		else{
+			if(f.length()>0){
+				recordData();
+				cleanFile();
+			}
+		}
+	}
+	
 	private void recordData() throws Exception{		
 		BufferedReader bf = new BufferedReader(new FileReader(f));
 		String line = null;
@@ -81,36 +90,40 @@ public class MonitorCPUAgent extends AbstractMonitor {
 			}
 		}
 		bf.close();
-		if(initial!=null&&reports.size()>0){
-			MongoConnection con = MonitorDatabaseConnection.generateConnection();	    	 	
-			saveInitialReport(initial, con);
+		if(reports.size()>0){
+			MongoConnection con = MonitorDatabaseConnection.generateConnection();
+			if(initial!=null)saveInitialReport(initial, con);
 			saveReports(reports, con);
 			con.close();
 		}	  	
 	}
 	
 	 private void saveInitialReport(MonitorInitialReport initialReport, MongoConnection db) throws UnknownHostException { 
-			BasicDBObject doc = new BasicDBObject("Hostname",initialReport.getHostname())
-			.append("Timestamp",initialReport.getTimest())
-			.append("OSName", initialReport.getOperatingSystemName())
-			.append("OSVersion", initialReport.getOperatingSystemVersion())
-			.append("OSArquitecture", initialReport.getOperatingSystemArchitect())
-			.append("CPUModel", initialReport.getcPUModel())
-			.append("CPUVendor", initialReport.getcPUVendor())
-			.append("CPUCores", initialReport.getcPUCores())
-			.append("CPUSockets", initialReport.getTotalSockets())
-			.append("CpuMhz", initialReport.getcPUMhz())
-			.append("CoresXSocket", initialReport.getCoresPerSocket())
-			.append("RAMMemorySize", initialReport.getrAMMemorySize())
-			.append("SwapMemorySize", initialReport.getSwapMemorySize())
-			.append("HDSpace", initialReport.getHardDiskSpace())
-			.append("HDFileSystem", initialReport.getHardDiskFileSystem())
-			.append("MACAddress", initialReport.getNetworkMACAddress());    		
-			System.out.println(db.infrastructureCollection().insert(doc));
+		    BasicDBObject doc = (BasicDBObject) db.infrastructureCollection().findOne(new BasicDBObject("Hostname",initialReport.getHostname()));	
+		    if(doc!=null&&compareInitialReport(initialReport, doc))doc = null; 		  
+		    if(doc == null){
+		    	doc = new BasicDBObject("Hostname",initialReport.getHostname())
+				.append("Timestamp",initialReport.getTimest())
+				.append("OSName", initialReport.getOperatingSystemName())
+				.append("OSVersion", initialReport.getOperatingSystemVersion())
+				.append("OSArquitecture", initialReport.getOperatingSystemArchitect())
+				.append("CPUModel", initialReport.getcPUModel())
+				.append("CPUVendor", initialReport.getcPUVendor())
+				.append("CPUCores", initialReport.getcPUCores())
+				.append("CPUSockets", initialReport.getTotalSockets())
+				.append("CpuMhz", initialReport.getcPUMhz())
+				.append("CoresXSocket", initialReport.getCoresPerSocket())
+				.append("RAMMemorySize", initialReport.getrAMMemorySize())
+				.append("SwapMemorySize", initialReport.getSwapMemorySize())
+				.append("HDSpace", initialReport.getHardDiskSpace())
+				.append("HDFileSystem", initialReport.getHardDiskFileSystem())
+				.append("MACAddress", initialReport.getNetworkMACAddress());       
+			    System.out.println(db.infrastructureCollection().insert(doc).getN());
+		    }				
 	 }
 	 
 	 private void saveReports(ArrayList<MonitorReport>reports, MongoConnection db){
-		 List<BasicDBObject> listReports = new ArrayList<BasicDBObject>();
+		 BulkWriteOperation builder = db.cpuCollection().initializeOrderedBulkOperation();
 		 for (MonitorReport statusReport : reports)if(statusReport!=null){
 			String[] pros = statusReport.getProcesses().split(",");
 			List<BasicDBObject> listProcesses = new ArrayList<BasicDBObject>();
@@ -165,13 +178,13 @@ public class MonitorCPUAgent extends AbstractMonitor {
 			.append("NetTxErrors", statusReport.getTxErrors())
 			.append("NetRxPackets", statusReport.getRxPackets())
             .append("NetTxPackets", statusReport.getTxPackets())
-            .append("Processes",listProcesses);			
-			listReports.add(doc);
+            .append("Processes",listProcesses);		
+			builder.insert(doc);
         }		
 		
-		BasicDBObject[] array = new BasicDBObject[listReports.size()];
-		for (int i = 0; i < array.length; i++) array[i] = listReports.get(i);
-		System.out.println(db.cpuCollection().insert(array));
+//		BasicDBObject[] array = new BasicDBObject[listReports.size()];
+//		for (int i = 0; i < array.length; i++) array[i] = listReports.get(i);
+		System.out.println("Insert: "+builder.execute().getInsertedCount());
 	 }
 	 
 	 private void cleanFile() throws FileNotFoundException{
@@ -179,48 +192,27 @@ public class MonitorCPUAgent extends AbstractMonitor {
 		writer.print("");
 		writer.close();
 	 }
-//	 private void recordData() throws Exception{
-//		  	MongoClient con = MonitorDatabaseConnection.generateConnection();
-//	    	DB db = con.getDB( "local" );
-//	    	MonitorExecutionCPU mc = readLocalData();
-//	    	if(mc==null)throw new Exception("The file is not in path");
-//			saveInitialReport(mc.getInitial(), db);
-//			saveReports(mc.getReports(), db);
-//			con.close();
-//		}
-	 
-//		@Override
-//		protected void doMonitoring() throws Exception {
-//			//TODO refactor time delay
-//		     int localFrecuency = 1000*frecuency;  
-//		     Date d = new Date();
-//		     d.setTime(d.getTime()+(windowSizeTime*1000));
-//		     MonitorExecutionCPU mc = new MonitorExecutionCPU();
-//		     mc.setInitial(MonitorReportGenerator.generateInitialReport());
-//		     recordLocalData(mc);
-//		     while(d.after(new Date())){  
-//		    	MonitorExecutionCPU mcR = readLocalData();
-//		    	mcR.getReports().add(MonitorReportGenerator.generateStateReport());
-//		    	recordLocalData(mcR);
-//		        Thread.sleep(localFrecuency);
-//		     }
-//		}
-//
-//	private static void recordLocalData(MonitorExecutionCPU monitor){		
-//		try(ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(f))){
-//			oos.writeObject(monitor);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-//		
-//	private static MonitorExecutionCPU readLocalData(){
-//		MonitorExecutionCPU mc = null;
-//		try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream(f))){
-//			mc=(MonitorExecutionCPU)ois.readObject();			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return mc;
-//	}
+	 /**
+	  * Method to compare the current machine infrastructure with the information in db
+	  * @param m1 current machine infrastructure
+	  * @param object last machine infrastructure 
+	  * @return
+	  */
+	 private boolean compareInitialReport(MonitorInitialReport m1, BasicDBObject object){		
+		 if(!object.get("OSName").equals(m1.getOperatingSystemName()))return true;
+		 else if(!object.get("OSVersion").equals(m1.getOperatingSystemVersion()))return true;
+		 else if(!object.get("OSArquitecture").equals(m1.getOperatingSystemArchitect()))return true;
+		 else if(!object.get("CPUModel").equals(m1.getcPUModel()))return true;
+		 else if(!object.get("CPUVendor").equals(m1.getcPUVendor()))return true;
+		 else if(!object.get("CPUCores").equals(m1.getcPUCores()))return true;
+		 else if(!object.get("CPUSockets").equals(m1.getTotalSockets()))return true;
+		 else if(!object.get("CpuMhz").equals(m1.getcPUMhz()))return true;
+		 else if(!object.get("CoresXSocket").equals(m1.getCoresPerSocket()))return true;
+		 else if(!object.get("RAMMemorySize").equals(m1.getrAMMemorySize()))return true;
+		 else if(!object.get("SwapMemorySize").equals(m1.getSwapMemorySize()))return true;
+		 else if(!object.get("HDSpace").equals(m1.getHardDiskSpace()))return true;
+		 else if(!object.get("HDFileSystem").equals(m1.getHardDiskFileSystem()))return true;
+		 else if(!object.get("MACAddress").equals(m1.getNetworkMACAddress()))return true;
+		 return false;
+	 }
 }
