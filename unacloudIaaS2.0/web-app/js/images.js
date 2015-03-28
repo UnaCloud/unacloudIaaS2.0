@@ -128,11 +128,11 @@ function loadImages(){
 	});
 	$('.clearImageFromCache').click(function (event){	
 		var data = $(this).data("id");
-		showConfirm('Confirm','This image will be removed from all physical machines currently connected. Are you sure you want to remove it?', function(){
+		showConfirm('Confirm','This image will be removed from all currently connected physical machines. Are you sure you want to remove it?', function(){
 			showLoading();
 			$.get('clearImageFromCache', {id:data}, function(data){
 				hideLoading();
-				if(data.success)showDialog("Success!","Image has been removed from all physical machines currently connected");
+				if(data.success)showDialog("Success!","Image has been removed from all currently connected physical machines");
 				else if(data.message) showError('Error!',data.message); 
 				else showError('Error!','Delete process failed, check server logs for more information'); 
 			 }, 'json')		

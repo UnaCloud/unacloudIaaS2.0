@@ -18,6 +18,7 @@
 	  	<input type="checkbox" id="selectAll"><small>&nbsp;Select All</small> 	
 	  	
 	  	<g:link controller="laboratory" action="createMachine" params="${[id: lab.id]}" title="Create PM"><i class="icon-plus-sign pull-right"></i></g:link>  	
+	  	<a title="Configurate Monitoring" class="monitorConfig" style="cursor:pointer"><span class="icon-time pull-right"></span></a>
 	  	<a title="Update agents" class="updateMachines" style="cursor:pointer"><span class="icon-refresh pull-right"></span></a>	
 	  	<a title="Clear VM cache" class="clearCache" style="cursor:pointer"><span class="icon-fire pull-right"></span></a>  
 	  	<a title="Stop agents" class="stopMachines" style="cursor:pointer"><span class="icon-stop pull-right"></span></a>  		  	

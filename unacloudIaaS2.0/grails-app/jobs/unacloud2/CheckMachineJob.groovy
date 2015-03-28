@@ -10,7 +10,6 @@ class CheckMachineJob {
     }
 
     def execute() {
-		println new Date()
-       PhysicalMachine.executeUpdate('update PhysicalMachine pm set pm.state = \'OFF\', pm.withUser = 0 , monitorStatus = \'OFF\', where pm.lastReport < current_date -4.minutes');
+       PhysicalMachine.executeUpdate('update PhysicalMachine pm set pm.state = \'OFF\', pm.withUser = 0 , pm.monitorStatus = \'OFF\' where pm.lastReport < current_date -4.minutes');
     }
 }

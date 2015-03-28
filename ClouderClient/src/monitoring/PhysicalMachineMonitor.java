@@ -9,7 +9,7 @@ import com.losandes.utils.VariableManager;
 public class PhysicalMachineMonitor extends Thread {
 	
 	
-	public static MonitoringStatus status = MonitoringStatus.OFF;
+	public static MonitoringStatus status = MonitoringStatus.DISABLE;
 	private static PhysicalMachineMonitor instance;
 	public static synchronized PhysicalMachineMonitor getInstance(){
 		if(instance==null)instance=new PhysicalMachineMonitor();
@@ -86,13 +86,25 @@ public class PhysicalMachineMonitor extends Thread {
 		}
 			
 	}	
-	public void stopService(){		
-		VariableManager.local.setBooleanValue("MONITORING_ENABLE", false);
-		status = MonitoringStatus.STOPPED;
+	public void stopService(){	
+		if(status==MonitoringStatus.RUNNING){
+			status = MonitoringStatus.STOPPED;
+		}		
 	}
 	
 	public void enabledService(){
-		VariableManager.local.setBooleanValue("MONITORING_ENABLE", true);
+		if(status==MonitoringStatus.DISABLE){
+			VariableManager.local.setBooleanValue("MONITORING_ENABLE", true);
+			status = MonitoringStatus.OFF;
+		}		
+	}
+	
+	public void disableService(){
+		if(status==MonitoringStatus.OFF||status==MonitoringStatus.RESUME){
+			VariableManager.local.setBooleanValue("MONITORING_ENABLE", false);
+			status = MonitoringStatus.DISABLE;
+			services.clear();
+		}		
 	}
 	
 	public void updateService(int frE, int frC, int wsCpu, int wsEnergy){

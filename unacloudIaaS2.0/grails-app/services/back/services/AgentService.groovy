@@ -9,10 +9,13 @@ import java.util.zip.ZipOutputStream;
 
 import communication.UnaCloudAbstractMessage;
 import communication.messages.ao.*;
+import communication.messages.pmo.PhysicalMachineMonitorMessage
 import javassist.bytecode.stackmap.BasicBlock.Catch;
 import unacloud2.PhysicalMachine;
 import unacloud2.ServerVariable;
 import unacloud2.VirtualMachineImage;
+
+import unacloudEnums.MonitoringStatus;
 
 class AgentService {
 	
@@ -65,6 +68,24 @@ class AgentService {
 	def clearCache(PhysicalMachine pm){
 		println "clearCache "+pm.ip
 		return sendMessage(pm,new ClearVMCacheMessage());
+	}
+	
+	def updateMonitoring(PhysicalMachine pm, String option){
+		PhysicalMachineMonitorMessage pmm = new PhysicalMachineMonitorMessage();
+		if(option.equals("start")&&pm.monitorStatus==MonitoringStatus.OFF||pm.monitorStatus==MonitoringStatus.RESUME){
+		    pmm.operation = PhysicalMachineMonitorMessage.M_START;
+		}else if(option.equals("stop")&&pm.monitorStatus==MonitoringStatus.RUNNING){
+		    pmm.operation = PhysicalMachineMonitorMessage.M_STOP;
+		}else if(option.equals("update")){
+		    pmm.operation = PhysicalMachineMonitorMessage.M_UPDATE;
+			pmm.monitorFrecuencyEnergy = variableManagerService.getIntValue("MONITOR_FREQUENCY_ENERGY")
+			pmm.registerFrecuencyEnergy = variableManagerService.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY")
+			pmm.monitorFrequency = variableManagerService.getIntValue("MONITOR_FREQUENCY_CPU")
+			pmm.registerFrequency = variableManagerService.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU")			
+		}else if(option.equals("enable")&&pm.monitorStatus==MonitoringStatus.DISABLE){
+			pmm.operation = PhysicalMachineMonitorMessage.M_ENABLE;
+		}else return false;		
+		return sendMessage(pm,pmm);
 	}
 	
 	/**

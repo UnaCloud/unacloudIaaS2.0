@@ -231,4 +231,29 @@ class LaboratoryController {
 		else resp = [success:true]
 		render resp as JSON
 	}
+	
+	def updateMonitoring(){
+		def resp;
+		def cou = 0;
+		String option =  params.get("option");
+		if(option.equals("start")||option.equals("stop")||option.equals("update")||option.equals("enable")){
+			params.each {
+				if (it.key.contains("machine")){
+					if(it.value.contains("on")){
+						PhysicalMachine pm= PhysicalMachine.get((it.key - "machine") as Integer)
+						if(pm.state==PhysicalMachineStateEnum.ON){							
+							 if(!agentService.stopMachine(pm)){
+								pm.state=PhysicalMachineStateEnum.OFF;
+								pm.save();
+								cou++
+							}
+						}else cou++
+					}
+				}
+			}
+			if(cou>0)resp = [success:false,'count':cou]
+			else resp = [success:true]
+		}else resp = [success:false,'count':-1]
+		render resp as JSON
+	}
 }

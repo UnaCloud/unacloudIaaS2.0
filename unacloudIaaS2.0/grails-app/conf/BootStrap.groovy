@@ -47,7 +47,6 @@ class BootStrap {
 		if(OperatingSystem.count() == 0){
 			new OperatingSystem(name:'Windows 7',configurer:'Windows').save();
 			new OperatingSystem(name:'Windows 8',configurer:'Windows').save()
-
 			new OperatingSystem(name:'Windows XP',configurer:'Windows').save()
 			new OperatingSystem(name:'Debian 6',configurer:'Debian').save();
 			new OperatingSystem(name:'Debian 7',configurer:'Debian').save();
@@ -116,7 +115,7 @@ class BootStrap {
 			new ServerVariable(name:'CLOUDER_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable:'157.253.236.164').save()
 			new ServerVariable(name:'MONITOR_FREQUENCY_CPU',serverVariableType: ServerVariableTypeEnum.INT,variable:'60').save()
 			new ServerVariable(name:'MONITOR_REGISTER_FREQUENCY_CPU',serverVariableType: ServerVariableTypeEnum.INT,variable:'10800').save()
-			new ServerVariable(name:'MONITORING_DATABASE_NAME',serverVariableType: ServerVariableTypeEnum.STRING,variable:'cloudMongo').save()
+			new ServerVariable(name:'MONITORING_DATABASE_NAME',serverVariableType: ServerVariableTypeEnum.STRING,variable:'cloudTest').save()
 			new ServerVariable(name:'MONITORING_DATABASE_PASSWORD',serverVariableType: ServerVariableTypeEnum.STRING,variable:'cloudmonitoreo$#').save()
 			new ServerVariable(name:'MONITORING_DATABASE_USER',serverVariableType: ServerVariableTypeEnum.STRING,variable:'cloudmonitoreo').save()
 			new ServerVariable(name:'MONITORING_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable: '172.24.98.119').save()

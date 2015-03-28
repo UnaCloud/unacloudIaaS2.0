@@ -56,6 +56,39 @@ public class Main {
         		local.setStringValue("VM_REPO_PATH", input);
         	}
     	}
+    	String path_power=local.getStringValue("PATH_POWERLOG");
+    	System.out.println("Variable PATH_POWERLOG: "+ path_power);
+    	System.out.println("Do you wanna change this value? (Y/N)");
+    	input = br.readLine();
+    	if (input.equalsIgnoreCase("y")){
+    		System.out.println("Enter new value for PATH_POWERLOG:");
+        	input = br.readLine();
+        	if(!(input.isEmpty())){
+        		local.setStringValue("PATH_POWERLOG", input);
+        	}
+    	}
+    	String cpu_Path=local.getStringValue("LOG_CPU_PATH");
+    	System.out.println("Variable LOG_CPU_PATH: "+ cpu_Path);
+    	System.out.println("Do you wanna change this value? (Y/N)");
+    	input = br.readLine();
+    	if (input.equalsIgnoreCase("y")){
+    		System.out.println("Enter new value for LOG_CPU_PATH:");
+        	input = br.readLine();
+        	if(!(input.isEmpty())){
+        		local.setStringValue("LOG_CPU_PATH", input);
+        	}
+    	}
+    	String energy_Path=local.getStringValue("LOG_ENERGY_PATH");
+    	System.out.println("Variable LOG_ENERGY_PATH: "+ energy_Path);
+    	System.out.println("Do you wanna change this value? (Y/N)");
+    	input = br.readLine();
+    	if (input.equalsIgnoreCase("y")){
+    		System.out.println("Enter new value for LOG_ENERGY_PATH:");
+        	input = br.readLine();
+        	if(!(input.isEmpty())){
+        		local.setStringValue("LOG_ENERGY_PATH", input);
+        	}
+    	}
     	br.close();
     }
 	
