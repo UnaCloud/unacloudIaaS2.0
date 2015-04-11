@@ -17,5 +17,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/CommonShares"/>
 	<classpathentry kind="lib" path="lib/sigar-bin/lib/sigar.jar"/>
 	<classpathentry kind="lib" path="lib/mongo-java-driver-2.13.0.jar"/>
+	<classpathentry kind="lib" path="lib/sigar-bin"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

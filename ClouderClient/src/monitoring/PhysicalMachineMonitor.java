@@ -19,7 +19,10 @@ public class PhysicalMachineMonitor extends Thread {
     //"C:\\Agentes\\UnaCloud\\logCPU.txt"
 	//"C:\\Agentes\\UnaCloud\\report.txt"
 	
-	public PhysicalMachineMonitor() {}	
+	public PhysicalMachineMonitor() {
+		
+	//	System.setProperty("java.library.path", System.getProperty("java.library.path")+File.pathSeparator+"");
+	}	
 	
 	@Override
 	public void run() {	
@@ -38,21 +41,27 @@ public class PhysicalMachineMonitor extends Thread {
 	
 	public void initService() {	
 		try {
+			System.out.println("init");
+			 status = MonitoringStatus.OFF;
 			if(VariableManager.local.getBooleanValue("MONITORING_ENABLE")){			
 				if(status == MonitoringStatus.OFF){
+					System.out.println("Off");
 					services.clear();
-					int frE = VariableManager.global.getIntValue("FRECUENCY_ENERGY");
-					int frC = VariableManager.global.getIntValue("FRECUENCY_CPU");
+					int frE = VariableManager.global.getIntValue("MONITOR_FREQUENCY_ENERGY");
+					int frC = VariableManager.global.getIntValue("MONITOR_FREQUENCY_CPU");
 					int wsCpu = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU");
 					int wsEnergy = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY");
+					System.out.println(frC+" "+frE+" "+wsCpu+" "+wsEnergy);
 //					int frE = 10;
 //					int frC = 10;
 //					int wsCpu = 60;
 //					int wsEnergy =60;
 					if(frE>0&&frC>0&&wsCpu>0&&wsEnergy>0&&frE<wsEnergy&&frC<wsCpu){
+						System.out.println("Inside");
 						String path = VariableManager.local.getStringValue("PATH_POWERLOG");
 						int time  = (int)(Math.random()*60*60);					
 						if(frC>0){
+							System.out.println("Cpu");
 							MonitorCPUAgent m = new MonitorCPUAgent(VariableManager.local.getStringValue("LOG_CPU_PATH"));						
 							m.setFrecuency(frC); 
 							m.setWindowSizeTime(wsCpu);
@@ -60,6 +69,7 @@ public class PhysicalMachineMonitor extends Thread {
 							services.add(m);
 						}					
 						if(path!=null&&frE>0){
+							System.out.println("energy");
 							MonitorEnergyAgent me = new MonitorEnergyAgent(VariableManager.local.getStringValue("LOG_ENERGY_PATH"));
 							me.setPowerlogPath(path);
 							me.setFrecuency(frE);			
