@@ -22,11 +22,11 @@ class PhysicalMachineStateManagerService {
 	 * @param hostUser physical machine logged in user
 	 * @param requestAddress physical machine address
 	 */
-    def reportPhysicalMachine(String hostname,String hostUser,String requestAddress, String monitorStatus){
+    def reportPhysicalMachine(String hostname,String hostUser,String requestAddress, String monitorStatus, String monitorStatusEnergy){
 		boolean update=StateManager.registerPhysicalMachineReport(hostname, hostUser);
 		if(update){
-			PhysicalMachine.executeUpdate("update PhysicalMachine m set m.monitorStatus=:monitorStatus,m.state=:newState, m.withUser=:newWithUser,m.lastReport=:time where m.name=:pmname",
-				[time: new Date(), monitorStatus: MonitoringStatus.getEnum(monitorStatus),newState: PhysicalMachineStateEnum.ON, newWithUser: (hostUser!=null&&!hostUser.isEmpty()&&!(hostUser.replace(">","").replace(" ","")).equals("null")), pmname:hostname])
+			PhysicalMachine.executeUpdate("update PhysicalMachine m set m.monitorStatus=:monitorStatus,m.monitorStatusEnergy=:monitorStatusenergy, m.state=:newState, m.withUser=:newWithUser,m.lastReport=:time where m.name=:pmname",
+				[time: new Date(), monitorStatus: MonitoringStatus.getEnum(monitorStatus), monitorStatusEnergy: MonitoringStatus.getEnum(monitorStatusEnergy),newState: PhysicalMachineStateEnum.ON, newWithUser: (hostUser!=null&&!hostUser.isEmpty()&&!(hostUser.replace(">","").replace(" ","")).equals("null")), pmname:hostname])
 		}
 		
 	}

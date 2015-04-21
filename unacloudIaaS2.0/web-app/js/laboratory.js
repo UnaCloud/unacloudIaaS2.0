@@ -41,40 +41,71 @@ function getLab(){
 			var form = $('#form_machines');
 			bootbox.dialog({//disable to block option
 				title: "Monitoring Service",
-			    message: "<div class=\"monitor_modal\" style= \"margin:auto\">"+
+			    message: "<div class=\"monitor_modal col-sm-6\" style= \"margin:auto\">"+
 						  "<p>The list below contains four options to control monitoring in physical machines.</p>"+
-						  "<form id=\"form_modal\" role=\"form\">"+
-						    "<div class=\"radio input-group\">"+
-						      "<label><input id='startM' type=\"radio\" name=\"optradio\" value=\"start\">Start Monitoring</label>"+
-						    "</div>"+
-						    "<div class=\"radio\">"+
-						     "<label><input id='stoptM' type=\"radio\" name=\"optradio\" value=\"stop\">Stop Monitoring</label>"+
-						    "</div>"+
-						    "<div class=\"radio disabled\">"+
-						      "<label><input id='updateC' type=\"radio\" name=\"optradio\" value=\"update\">Update Configuration</label>"+
-						    "</div>"+
-						    "<div class=\"radio disabled\">"+
-						      "<label><input id='enableM' type=\"radio\" name=\"optradio\" value=\"enable\">Enable Monitoring</label>"+
-						    "</div>"+
-						  "</form>"+
-						  "<div class=\"monitor_label_error\"></div>"+
-						"</div>",	
+							  "<table class='table table-monitor' ><thead>" +							  
+								  "<tr>" +								 
+									  "<td></td>" +
+									  "<td><label>Energy Metrics</label></td>" +
+									  "<td><label>CPU Metrics</label></td>" +
+									  "<td></td>" +								 
+								  "</tr></thead>" +
+								  "<tr>" +								  	 
+								  	  "<td><label>Start Monitoring</label></td>" +
+									  "<td><input id='start-energy' type=\"checkbox\" value=\"start\"></td>" +
+									  "<td><input id='start-cpu' type=\"checkbox\"  value=\"start\"></td>" +
+									  "<td><button id='start-monitoring' type='button' class='btn btn-primary'>Submit</button></td>"+								
+								  "</tr>" +
+								  "<tr>" +
+									  "<td><label>Stop Monitoring</label></td>" +
+									  "<td><input id='stop-energy' type=\"checkbox\" value=\"stop\"></td>" +
+									  "<td><input id='stop-cpu' type=\"checkbox\"  value=\"stop\"></td>" +
+									  "<td><button id='stop-monitoring'  type='button' class='btn btn-primary'>Submit</button></td>"+
+								  "</tr>" +
+								  "<tr>" +
+									  "<td><label>Update Configuration</label></td>" +
+									  "<td><input id='update-energy' type=\"checkbox\" value=\"update\"></td>" +
+									  "<td><input id='update-cpu' type=\"checkbox\" value=\"update\"></td>" +
+									  "<td><button id='update-monitoring' type='button' class='btn btn-primary'>Submit</button></td>"+
+								  "</tr>" +
+								  "<tr>" +
+									  "<td><label>Enable Monitoring</label></td>" +
+									  "<td><input id='enable-energy' type=\"checkbox\" value=\"enable\"></td>" +
+									  "<td><input id='enable-cpu' type=\"checkbox\" value=\"enable\"></td>" +
+									  "<td><button id='enable-monitoring' type='button' class='btn btn-primary'>Submit</button></td>"+
+								  "</tr>" +							 
+							  "</table>"+
+							  "<div class=\"monitor_label_error\"></div>"+
+						"</div>",
+						
 				buttons: {
-					success: {
-						label: "Send Request",
-						className: "btn-success",
-						callback: function () {
-							var option = $('input[name="optradio"]:checked', '#form_modal').val(); 
-							if(option){
-								configMonitoring(option, form);
-							}
-							else showMonitorModal(true);
-						}
+					main: {
+						label: "Cancel",
+						className: "btn-danger",
 					}
 				}			
 			});
+			addMonitoringClicks(form);
 			if(recursive)addLabel(".monitor_label_error", "You must select at least one option", true);
 		}
+	}
+	function addMonitoringClicks(form){
+		$('#start-monitoring').click(function (event){		
+			if($("#start-energy").is(':checked')||$("#start-cpu").is(':checked'))
+				configMonitoring('start',form,$("#start-energy").is(':checked'),$("#start-cpu").is(':checked'))
+		});
+		$('#stop-monitoring').click(function (event){		
+			if($("#stop-energy").is(':checked')||$("#stop-cpu").is(':checked'))
+				configMonitoring('stop',form,$("#stop-energy").is(':checked'),$("#stop-cpu").is(':checked'))
+		});
+		$('#update-monitoring').click(function (event){		
+			if($("#update-energy").is(':checked')||$("#update-cpu").is(':checked'))
+				configMonitoring('update',form,$("#update-energy").is(':checked'),$("#update-cpu").is(':checked'))
+		});
+		$('#enable-monitoring').click(function (event){		
+			if($("#enable-energy").is(':checked')||$("#enable-cpu").is(':checked'))
+				configMonitoring('enable',form,$("#enable-energy").is(':checked'),$("#enable-cpu").is(':checked'))
+		});
 	}
 	function showMessage(data, message){
 		 if(data.success){
@@ -105,16 +136,20 @@ function getLab(){
 		$('#selectAll').checked=false;
 		$('.all:checkbox').each(function () {  this.checked = false; });
 	}
-	function configMonitoring(option, form){
-		var input = $("<input>")
-        .attr("type", "hidden")
-        .attr("name", "option").val(option);
-         form.append($(input));
-		 showLoading();
-		 $.post('../updateMonitoring', form.serialize(), function(data){
-			 showMessage(data,'All selected agents has been request to <b>'+option+'</b> monitoring processes.');		
-			 hideLoading();
-		 }, 'json');		
+	function configMonitoring(option, form, energy, cpu){
+		var formSend = form.clone()
+		var input = $("<input>").attr("type", "hidden").attr("name", "option").val(option);
+		var input2 = $("<input>").attr("type", "hidden").attr("name", "checkEnergy").val(energy);
+		var input3 = $("<input>").attr("type", "hidden").attr("name", "checkCPU").val(cpu);
+		formSend.append($(input));
+		formSend.append($(input2));
+		formSend.append($(input3));
+		hideLoading(); 
+		showLoading();
+		$.post('../updateMonitoring', formSend.serialize(), function(data){
+		  showMessage(data,'All selected agents has been request to <b>'+option+'</b> monitoring processes.');		
+		  hideLoading();
+		}, 'json');		
 	}
 }
 

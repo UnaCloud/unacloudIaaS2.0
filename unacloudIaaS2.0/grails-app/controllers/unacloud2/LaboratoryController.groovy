@@ -236,13 +236,15 @@ class LaboratoryController {
 		def resp;
 		def cou = 0;
 		String option =  params.get("option");
-		if(option.equals("start")||option.equals("stop")||option.equals("update")||option.equals("enable")){
+		Boolean energy = params.get("checkEnergy").equals("false")?false:true;
+		Boolean cpu = params.get("checkCPU").equals("false")?false:true;
+		if((energy||cpu)&&(option.equals("start")||option.equals("stop")||option.equals("update")||option.equals("enable"))){
 			params.each {
 				if (it.key.contains("machine")){
 					if(it.value.contains("on")){
 						PhysicalMachine pm= PhysicalMachine.get((it.key - "machine") as Integer)
 						if(pm.state==PhysicalMachineStateEnum.ON){							
-							 if(!agentService.stopMachine(pm)){
+							 if(!agentService.updateMonitoring(pm, option, energy, cpu)){
 								pm.state=PhysicalMachineStateEnum.OFF;
 								pm.save();
 								cou++

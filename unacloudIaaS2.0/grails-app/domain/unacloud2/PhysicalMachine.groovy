@@ -66,9 +66,14 @@ class PhysicalMachine {
 	 */
 	Laboratory laboratory;
 	/**
-	 * Status of monitoring process in agent
+	 * Status of monitoring cpu process in agent
 	 */
 	MonitoringStatus monitorStatus;
+	
+	/**
+	 * Status of monitoring energy process in agent
+	 */
+	MonitoringStatus monitorStatusEnergy;
 	
 	//-----------------------------------------------------------------
 	// Methods

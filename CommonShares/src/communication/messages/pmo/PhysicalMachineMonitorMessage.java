@@ -14,6 +14,8 @@ public class PhysicalMachineMonitorMessage extends PhysicalMachineOperationMessa
     int registerFrequency;
     int monitorFrecuencyEnergy;
     int registerFrecuencyEnergy;
+    private boolean energy;
+    private boolean cpu;
     
 	public PhysicalMachineMonitorMessage() {
 		super(PM_MONITOR);
@@ -32,5 +34,17 @@ public class PhysicalMachineMonitorMessage extends PhysicalMachineOperationMessa
 	}
 	public int getRegisterFrecuencyEnergy() {
 		return registerFrecuencyEnergy;
+	}
+	public boolean isCpu() {
+		return cpu;
+	}
+	public void setCpu(boolean cpu) {
+		this.cpu = cpu;
+	}
+	public boolean isEnergy() {
+		return energy;
+	}
+	public void setEnergy(boolean energy) {
+		this.energy = energy;
 	}
 }

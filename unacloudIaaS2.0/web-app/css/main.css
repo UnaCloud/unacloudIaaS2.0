@@ -594,3 +594,7 @@ a.skip {
 	position: absolute;
 	left: -9999px;
 }
+
+.table-monitor td{
+	text-align: center !important;
+}

@@ -70,7 +70,8 @@ class AgentService {
 		return sendMessage(pm,new ClearVMCacheMessage());
 	}
 	
-	def updateMonitoring(PhysicalMachine pm, String option){
+	def updateMonitoring(PhysicalMachine pm, String option, boolean energy, boolean cpu){
+		println option;
 		PhysicalMachineMonitorMessage pmm = new PhysicalMachineMonitorMessage();
 		if(option.equals("start")&&pm.monitorStatus==MonitoringStatus.OFF||pm.monitorStatus==MonitoringStatus.RESUME){
 		    pmm.operation = PhysicalMachineMonitorMessage.M_START;
@@ -85,7 +86,11 @@ class AgentService {
 		}else if(option.equals("enable")&&pm.monitorStatus==MonitoringStatus.DISABLE){
 			pmm.operation = PhysicalMachineMonitorMessage.M_ENABLE;
 		}else return false;		
-		return sendMessage(pm,pmm);
+	    pmm.energy=energy;
+		pmm.cpu=cpu
+	
+		//sendMessage(pm,pmm);
+		return true;
 	}
 	
 	/**

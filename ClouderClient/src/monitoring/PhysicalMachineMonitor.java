@@ -9,13 +9,13 @@ import com.losandes.utils.VariableManager;
 public class PhysicalMachineMonitor extends Thread {
 	
 	
-	public static MonitoringStatus status = MonitoringStatus.DISABLE;
+	public static MonitoringStatus status = MonitoringStatus.OFF;
 	private static PhysicalMachineMonitor instance;
 	public static synchronized PhysicalMachineMonitor getInstance(){
 		if(instance==null)instance=new PhysicalMachineMonitor();
 		return instance;
 	}
-	private static final ArrayList<AbstractMonitor> services = new ArrayList<AbstractMonitor>();
+	private static ArrayList<AbstractMonitor> services;
     //"C:\\Agentes\\UnaCloud\\logCPU.txt"
 	//"C:\\Agentes\\UnaCloud\\report.txt"
 	
@@ -39,13 +39,13 @@ public class PhysicalMachineMonitor extends Thread {
 		status=MonitoringStatus.RESUME;
 	}
 	
-	public void initService() {	
+	public void initService() {			
+		services = new ArrayList<AbstractMonitor>();
+	}	
+	public void startService(boolean energy, boolean cpu){
 		try {
-			System.out.println("init");
-			 status = MonitoringStatus.OFF;
 			if(VariableManager.local.getBooleanValue("MONITORING_ENABLE")){			
 				if(status == MonitoringStatus.OFF){
-					System.out.println("Off");
 					services.clear();
 					int frE = VariableManager.global.getIntValue("MONITOR_FREQUENCY_ENERGY");
 					int frC = VariableManager.global.getIntValue("MONITOR_FREQUENCY_CPU");
@@ -83,7 +83,7 @@ public class PhysicalMachineMonitor extends Thread {
 						}		
 					}					
 				}
-				else if(status == MonitoringStatus.RESUME){
+				else if(status == MonitoringStatus.RESUME){//TOCA HAcer verificacion de primera carga
 					if(services.size()>0){
 						status = MonitoringStatus.RUNNING;
 						this.run();									
@@ -94,22 +94,21 @@ public class PhysicalMachineMonitor extends Thread {
 			e.printStackTrace();
 			status = MonitoringStatus.OFF;
 		}
-			
-	}	
-	public void stopService(){	
+	}
+	public void stopService(boolean energy, boolean cpu){	
 		if(status==MonitoringStatus.RUNNING){
 			status = MonitoringStatus.STOPPED;
 		}		
 	}
 	
-	public void enabledService(){
+	public void enabledService(boolean energy, boolean cpu){
 		if(status==MonitoringStatus.DISABLE){
 			VariableManager.local.setBooleanValue("MONITORING_ENABLE", true);
 			status = MonitoringStatus.OFF;
 		}		
 	}
 	
-	public void disableService(){
+	public void disableService(boolean energy, boolean cpu){
 		if(status==MonitoringStatus.OFF||status==MonitoringStatus.RESUME){
 			VariableManager.local.setBooleanValue("MONITORING_ENABLE", false);
 			status = MonitoringStatus.DISABLE;
@@ -117,7 +116,7 @@ public class PhysicalMachineMonitor extends Thread {
 		}		
 	}
 	
-	public void updateService(int frE, int frC, int wsCpu, int wsEnergy){
+	public void updateService(int frE, int frC, int wsCpu, int wsEnergy, boolean energy, boolean cpu){
 		
 		if(frE>0&&frC>0&&wsCpu>0&&wsEnergy>0&&frE<wsEnergy&&frC<wsCpu){
 			VariableManager.global.setIntValue("FRECUENCY_ENERGY",frE);

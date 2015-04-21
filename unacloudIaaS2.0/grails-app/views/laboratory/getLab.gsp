@@ -29,7 +29,8 @@
 	  <th>IP</th>
 	  <th>State</th>
 	  <th>User</th>
-	  <th>Monitoring</th>
+	  <th>Monitor<br> CPU</th>
+	  <th>Monitor<br> Energy</th>	  
 	  <th>Options</th>
 	  </tr>
 	 
@@ -75,6 +76,23 @@
 	   			<g:img file="amber.png" title="${machine.monitorStatus.getTitle()}"/>
 	   		</g:if>
 	   		<g:if test="${machine.monitorStatus.equals(MonitoringStatus.RESUME) }">
+	   			<g:img file="blue.png" title="${machine.monitorStatus.getTitle()}"/>
+	   		</g:if>
+	   		</td>
+	   		<td>
+	   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.RUNNING) }">
+	   			<g:img file="green.png" title="${machine.monitorStatus.getTitle()}"/>
+	   		</g:if>
+	   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.OFF) }">
+	   			<g:img file="red.png" title="${machine.monitorStatus.getTitle()}"/>
+	   		</g:if>
+	   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.DISABLE) }">
+	   			<g:img file="red.png" title="${machine.monitorStatus.getTitle()}"/>
+	   		</g:if>
+	   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.STOPPED) }">
+	   			<g:img file="amber.png" title="${machine.monitorStatus.getTitle()}"/>
+	   		</g:if>
+	   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.RESUME) }">
 	   			<g:img file="blue.png" title="${machine.monitorStatus.getTitle()}"/>
 	   		</g:if>
 	   		</td>
