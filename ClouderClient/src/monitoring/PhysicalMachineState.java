@@ -31,7 +31,7 @@ public class PhysicalMachineState {
 	 * reports a log in event
 	 */
 	public static void reportPhyisicalMachineUserLogin(){
-		AbstractGrailsCommunicator.pushInfo("machineState/reportPhysicalMachineLogin","hostname",Network.getHostname(),"hostuser",OperatingSystem.getUserName(),"monitorStatus",PhysicalMachineMonitor.status.getTitle(),"monitorStatusEnergy",PhysicalMachineMonitor.status.getTitle());
+		AbstractGrailsCommunicator.pushInfo("machineState/reportPhysicalMachineLogin","hostname",Network.getHostname(),"hostuser",OperatingSystem.getUserName(),"monitorStatus",PhysicalMachineMonitor.getInstance().getStatusCpu().getTitle(),"monitorStatusEnergy",PhysicalMachineMonitor.getInstance().getStatusEnergy().getTitle());
 	}
 	/**
 	 * sends a registration request with machine info

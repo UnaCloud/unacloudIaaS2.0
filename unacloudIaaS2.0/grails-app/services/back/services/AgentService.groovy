@@ -73,7 +73,7 @@ class AgentService {
 	def updateMonitoring(PhysicalMachine pm, String option, boolean energy, boolean cpu){
 		println option;
 		PhysicalMachineMonitorMessage pmm = new PhysicalMachineMonitorMessage();
-		if(option.equals("start")&&pm.monitorStatus==MonitoringStatus.OFF||pm.monitorStatus==MonitoringStatus.RESUME){
+		if(option.equals("start")&&pm.monitorStatus==MonitoringStatus.OFF){
 		    pmm.operation = PhysicalMachineMonitorMessage.M_START;
 		}else if(option.equals("stop")&&pm.monitorStatus==MonitoringStatus.RUNNING){
 		    pmm.operation = PhysicalMachineMonitorMessage.M_STOP;
@@ -89,8 +89,7 @@ class AgentService {
 	    pmm.energy=energy;
 		pmm.cpu=cpu
 	
-		//sendMessage(pm,pmm);
-		return true;
+		return sendMessage(pm,pmm);
 	}
 	
 	/**
@@ -132,6 +131,8 @@ class AgentService {
 		ZipOutputStream zos=new ZipOutputStream(outputStream);
 		copyFile(zos,"ClientUpdater.jar",new File(appDir,"agentSources/ClientUpdater.jar"),true);
 		copyFile(zos,"ClouderClient.jar",new File(appDir,"agentSources/ClouderClient.jar"),true);
+		copyFile(zos,"sigar-amd64-winnt.dll",new File(appDir,"agentSources/sigar-amd64-winnt.dll"),true);
+		copyFile(zos,"sigar-x86-winnt.dll",new File(appDir,"agentSources/sigar-x86-winnt.dll"),true);
 		copyFile(zos,"local",new File(appDir,"agentSources/local"),true);
 		zos.putNextEntry(new ZipEntry("vars"));
 		PrintWriter pw=new PrintWriter(zos);

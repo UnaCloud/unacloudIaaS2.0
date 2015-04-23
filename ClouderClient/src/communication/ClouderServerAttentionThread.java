@@ -181,6 +181,7 @@ public class ClouderServerAttentionThread implements Runnable {
                 return "Successful operation";
             case PhysicalMachineOperationMessage.PM_MONITOR:
                     PhysicalMachineMonitorMessage monitor=(PhysicalMachineMonitorMessage)message;
+                    System.out.println(monitor);
                     switch (monitor.getOperation()) {
 	                    case PhysicalMachineMonitorMessage.M_STOP:
                             PhysicalMachineMonitor.getInstance().stopService(monitor.isEnergy(), monitor.isCpu());

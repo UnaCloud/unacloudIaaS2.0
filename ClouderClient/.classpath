@@ -15,11 +15,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/mysql-connector-java-5.1.18-bin.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CommonShares"/>
 	<classpathentry kind="lib" path="lib/mongo-java-driver-2.13.0.jar"/>
-	<classpathentry kind="lib" path="lib/sigar.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="ClouderClient/lib"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="lib/sigar.jar"/>
 	<classpathentry kind="lib" path="lib/log4j.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

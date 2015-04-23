@@ -69,10 +69,8 @@ public class Main {
     		} catch (FileNotFoundException e) {
     			e.printStackTrace();
     		}
-        	PhysicalMachineState.reportPhyisicalMachineStart();
-    	
-//    	 System.load(new File(System.getProperty("java.library.path"), System.mapLibraryName("sigar")).getAbsolutePath());
-//    	    PhysicalMachineMonitor.getInstance().initService();
+        	PhysicalMachineState.reportPhyisicalMachineStart();    	
+     	    PhysicalMachineMonitor.getInstance().initService();
             //DataServerSocket.init();
             PhysicalMachineStateReporter.getInstance().start();
             PersistentExecutionManager.loadData();

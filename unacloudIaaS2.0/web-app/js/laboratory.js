@@ -104,7 +104,7 @@ function getLab(){
 		});
 		$('#enable-monitoring').click(function (event){		
 			if($("#enable-energy").is(':checked')||$("#enable-cpu").is(':checked'))
-				configMonitoring('enable',form,$("#enable-energy").is(':checked'),$("#enable-cpu").is(':checked'))
+				configMonitoring('enable',form,true,true)
 		});
 	}
 	function showMessage(data, message){
@@ -147,8 +147,8 @@ function getLab(){
 		hideLoading(); 
 		showLoading();
 		$.post('../updateMonitoring', formSend.serialize(), function(data){
-		  showMessage(data,'All selected agents has been request to <b>'+option+'</b> monitoring processes.');		
-		  hideLoading();
+			  showMessage(data,'All selected agents has been request to <b>'+option+'</b> monitoring processes.');		
+			  hideLoading();
 		}, 'json');		
 	}
 }

@@ -1,148 +1,150 @@
 package monitoring;
 
-import java.util.ArrayList;
 
 import unacloudEnums.MonitoringStatus;
 
 import com.losandes.utils.VariableManager;
 
-public class PhysicalMachineMonitor extends Thread {
-	
-	
-	public static MonitoringStatus status = MonitoringStatus.OFF;
+public class PhysicalMachineMonitor extends Thread {	
+
 	private static PhysicalMachineMonitor instance;
 	public static synchronized PhysicalMachineMonitor getInstance(){
 		if(instance==null)instance=new PhysicalMachineMonitor();
 		return instance;
 	}
-	private static ArrayList<AbstractMonitor> services;
-    //"C:\\Agentes\\UnaCloud\\logCPU.txt"
-	//"C:\\Agentes\\UnaCloud\\report.txt"
+	//private static ArrayList<AbstractMonitor> services;
+	//ArrayList<AbstractMonitor> services = new ArrayList<AbstractMonitor>();
+	private MonitorCPUAgent mc;
+	private MonitorEnergyAgent me;
+	private boolean isRunning = false;
 	
-	public PhysicalMachineMonitor() {
-		
-	//	System.setProperty("java.library.path", System.getProperty("java.library.path")+File.pathSeparator+"");
-	}	
 	
+	private void monitorError() {
+		VariableManager.local.setBooleanValue("MONITORING_ENABLE_CPU", false);
+		VariableManager.local.setBooleanValue("MONITORING_ENABLE_ENERGY", false);
+	}
+
 	@Override
-	public void run() {	
-		try { for (AbstractMonitor abstractMonitor : services) abstractMonitor.doInitial();
-		} catch (Exception e) {e.printStackTrace();}	   
-		while(status == MonitoringStatus.RUNNING){
+	public void run() {				
+		while(me.isRunning()||mc.isRunning()){
+			try { 
+				mc.doInitial();
+				me.doInitial();
+			} catch (Exception e) {e.printStackTrace();}	
 			try {
-				for (AbstractMonitor abstractMonitor : services) abstractMonitor.run();
-				for (AbstractMonitor abstractMonitor : services) abstractMonitor.join();
+				if(mc.isRunning())mc.run();
+				if(me.isRunning())me.run();
+				if(me.isRunning()&&mc.isRunning()){mc.join();me.join();}			
 			} catch (Exception e) {
 				e.printStackTrace();
 			}			
-		}
-		status=MonitoringStatus.RESUME;
+			if(mc.isStopped())mc.turnOff();
+			if(me.isStopped())mc.turnOff();
+		}	
 	}
 	
 	public void initService() {			
-		services = new ArrayList<AbstractMonitor>();
+		try {
+			mc = new MonitorCPUAgent(VariableManager.local.getStringValue("LOG_CPU_PATH"));	
+			me  = new MonitorEnergyAgent(VariableManager.local.getStringValue("LOG_ENERGY_PATH"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			monitorError();
+		}
 	}	
 	public void startService(boolean energy, boolean cpu){
 		try {
-			if(VariableManager.local.getBooleanValue("MONITORING_ENABLE")){			
-				if(status == MonitoringStatus.OFF){
-					services.clear();
-					int frE = VariableManager.global.getIntValue("MONITOR_FREQUENCY_ENERGY");
-					int frC = VariableManager.global.getIntValue("MONITOR_FREQUENCY_CPU");
+			int time  = (int)(Math.random()*60*60);	
+			if(cpu)
+				if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_CPU")
+					&&mc.getStatus()==MonitoringStatus.OFF){	
 					int wsCpu = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU");
-					int wsEnergy = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY");
-					System.out.println(frC+" "+frE+" "+wsCpu+" "+wsEnergy);
-//					int frE = 10;
-//					int frC = 10;
-//					int wsCpu = 60;
-//					int wsEnergy =60;
-					if(frE>0&&frC>0&&wsCpu>0&&wsEnergy>0&&frE<wsEnergy&&frC<wsCpu){
-						System.out.println("Inside");
-						String path = VariableManager.local.getStringValue("PATH_POWERLOG");
-						int time  = (int)(Math.random()*60*60);					
-						if(frC>0){
-							System.out.println("Cpu");
-							MonitorCPUAgent m = new MonitorCPUAgent(VariableManager.local.getStringValue("LOG_CPU_PATH"));						
-							m.setFrecuency(frC); 
-							m.setWindowSizeTime(wsCpu);
-							m.setReduce(time);
-							services.add(m);
-						}					
-						if(path!=null&&frE>0){
-							System.out.println("energy");
-							MonitorEnergyAgent me = new MonitorEnergyAgent(VariableManager.local.getStringValue("LOG_ENERGY_PATH"));
-							me.setPowerlogPath(path);
+					int frC = VariableManager.global.getIntValue("MONITOR_FREQUENCY_CPU");
+					if(frC>0&&wsCpu>0&&frC<wsCpu){	
+						mc.setFrecuency(frC); 
+						mc.setWindowSizeTime(wsCpu);
+						mc.setReduce(time);
+						mc.setStatus(MonitoringStatus.INIT);	
+					}						
+			}
+		    if(energy)
+		    	if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_ENERGY")
+					&&me.getStatus()==MonitoringStatus.OFF){	
+		    		int wsEnergy = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY");
+		    		int frE = VariableManager.global.getIntValue("MONITOR_FREQUENCY_ENERGY");
+		    		if(frE>0&&wsEnergy>0&&frE<wsEnergy){
+		    			String path = VariableManager.local.getStringValue("PATH_POWERLOG");		    													
+		    			if(path!=null&&frE>0){
+		    				me.setPowerlogPath(path);
 							me.setFrecuency(frE);			
 							me.setWindowSizeTime(wsEnergy);
-							me.setReduce(time);
-							services.add(me);
-						}
-						if(services.size()>0){
-							status = MonitoringStatus.RUNNING;
-							this.run();									
-						}		
-					}					
+							me.setReduce(time);		
+							me.setStatus(MonitoringStatus.INIT);
+						}						
+					}	
 				}
-				else if(status == MonitoringStatus.RESUME){//TOCA HAcer verificacion de primera carga
-					if(services.size()>0){
-						status = MonitoringStatus.RUNNING;
-						this.run();									
-					}else status = MonitoringStatus.OFF;
-				}
-			}	
+			if(!isRunning){isRunning = true;	this.run();}
 		} catch (Exception e) {
 			e.printStackTrace();
-			status = MonitoringStatus.OFF;
+			monitorError();
 		}
 	}
-	public void stopService(boolean energy, boolean cpu){	
-		if(status==MonitoringStatus.RUNNING){
-			status = MonitoringStatus.STOPPED;
-		}		
+
+	public void stopService(boolean energy, boolean cpu){
+		if(energy)me.stopMonitor();
+		if(cpu)me.stopMonitor();				
 	}
 	
 	public void enabledService(boolean energy, boolean cpu){
-		if(status==MonitoringStatus.DISABLE){
-			VariableManager.local.setBooleanValue("MONITORING_ENABLE", true);
-			status = MonitoringStatus.OFF;
+		if(cpu&&mc.isDisable()){
+			VariableManager.local.setBooleanValue("MONITORING_ENABLE_CPU", true);
+			mc.setStatus(MonitoringStatus.OFF);
+		}if(energy&&me.isDisable()){
+			VariableManager.local.setBooleanValue("MONITORING_ENABLE_ENERGY", true);
+			me.setStatus(MonitoringStatus.OFF);
 		}		
 	}
 	
 	public void disableService(boolean energy, boolean cpu){
-		if(status==MonitoringStatus.OFF||status==MonitoringStatus.RESUME){
-			VariableManager.local.setBooleanValue("MONITORING_ENABLE", false);
-			status = MonitoringStatus.DISABLE;
-			services.clear();
-		}		
+		if(cpu)if(mc.getStatus()==MonitoringStatus.OFF){
+			VariableManager.local.setBooleanValue("MONITORING_ENABLE_CPU", false);
+			mc.setStatus(MonitoringStatus.DISABLE);
+		}if(energy)if(me.getStatus()==MonitoringStatus.OFF){
+			VariableManager.local.setBooleanValue("MONITORING_ENABLE_ENERGY", false);
+			me.setStatus(MonitoringStatus.DISABLE);
+		}	
 	}
 	
 	public void updateService(int frE, int frC, int wsCpu, int wsEnergy, boolean energy, boolean cpu){
-		
+		int time  = (int)(Math.random()*60*60);	
 		if(frE>0&&frC>0&&wsCpu>0&&wsEnergy>0&&frE<wsEnergy&&frC<wsCpu){
-			VariableManager.global.setIntValue("FRECUENCY_ENERGY",frE);
-			VariableManager.global.setIntValue("FRECUENCY_CPU",frC);
-			VariableManager.global.setIntValue("MONITOR_REGISTER_FREQUENCY_CPU",wsCpu);
-			VariableManager.global.setIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY",wsEnergy);
-			String path = VariableManager.local.getStringValue("PATH_POWERLOG");
-			String logCpu = VariableManager.local.getStringValue("LOG_CPU_PATH");
-			String logEnergy = VariableManager.local.getStringValue("LOG_ENERGY_PATH");
-			
-			int time  = (int)(Math.random()*60*60);		
-			for (AbstractMonitor abstractMonitor : services) {
-				if(abstractMonitor instanceof MonitorEnergyAgent){
-					abstractMonitor.setFrecuency(frE);
-					abstractMonitor.setWindowSizeTime(wsEnergy);
-					abstractMonitor.setRecordPath(logEnergy);				
-					((MonitorEnergyAgent) abstractMonitor).setPowerlogPath(path);
-				}else if(abstractMonitor instanceof MonitorCPUAgent){
-					abstractMonitor.setFrecuency(frC);
-					abstractMonitor.setWindowSizeTime(wsCpu);
-					abstractMonitor.setRecordPath(logCpu);
-				}
-				abstractMonitor.setReduce(time);
+			if(energy){
+				VariableManager.global.setIntValue("FRECUENCY_ENERGY",frE);
+				VariableManager.global.setIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY",wsEnergy);
+				String logEnergy = VariableManager.local.getStringValue("LOG_ENERGY_PATH");
+				String path = VariableManager.local.getStringValue("PATH_POWERLOG");
+				me.setFrecuency(frE);
+				me.setWindowSizeTime(wsEnergy);
+				me.setRecordPath(logEnergy);				
+				me.setPowerlogPath(path);
+				me.setReduce(time);
 			}
-		}
-		
+			if(cpu){
+				VariableManager.global.setIntValue("FRECUENCY_CPU",frC);
+				VariableManager.global.setIntValue("MONITOR_REGISTER_FREQUENCY_CPU",wsCpu);				
+				String logCpu = VariableManager.local.getStringValue("LOG_CPU_PATH");
+				mc.setFrecuency(frC);
+				mc.setWindowSizeTime(wsCpu);
+				mc.setRecordPath(logCpu);
+				mc.setReduce(time);
+			}
+		}		
+	}
+	public MonitoringStatus getStatusEnergy(){
+		return me==null?MonitoringStatus.DISABLE:me.getStatus();
+	}
+	public MonitoringStatus getStatusCpu(){
+		return mc==null?MonitoringStatus.DISABLE:mc.getStatus();
 	}
 	//To testing
 	

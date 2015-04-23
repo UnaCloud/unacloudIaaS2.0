@@ -47,4 +47,14 @@ public class PhysicalMachineMonitorMessage extends PhysicalMachineOperationMessa
 	public void setEnergy(boolean energy) {
 		this.energy = energy;
 	}
+	@Override
+	public String toString() {
+		return "PhysicalMachineMonitorMessage [operation=" + operation
+				+ ", monitorFrequency=" + monitorFrequency
+				+ ", registerFrequency=" + registerFrequency
+				+ ", monitorFrecuencyEnergy=" + monitorFrecuencyEnergy
+				+ ", registerFrecuencyEnergy=" + registerFrecuencyEnergy
+				+ ", energy=" + energy + ", cpu=" + cpu + "]";
+	}
+	
 }

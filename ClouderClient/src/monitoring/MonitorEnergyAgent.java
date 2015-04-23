@@ -13,6 +13,7 @@ import com.losandes.connectionDb.MongoConnection;
 import com.mongodb.BasicDBObject;
 import com.mongodb.BulkWriteOperation;
 
+import unacloudEnums.MonitoringStatus;
 import virtualMachineManager.LocalProcessExecutor;
 
 
@@ -33,11 +34,15 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 
 	@Override
 	protected void doInitial() throws Exception {
-		LocalProcessExecutor.executeCommand("taskkill /IMF PowerLog3.0.exe");
+		if(status==MonitoringStatus.INIT){
+			LocalProcessExecutor.executeCommand("taskkill /IMF PowerLog3.0.exe");
+			status = MonitoringStatus.RUNNING;
+		}		
 	}
 
 	@Override
-	protected void doMonitoring() throws Exception {	
+	protected void doMonitoring() throws Exception {
+		if(status!=MonitoringStatus.RUNNING)return;
 		//C:\\Program Files\\Intel\\Power Gadget 3.0\\PowerLog3.0.exe
 		checkFile();
 		if(reduce>windowSizeTime)reduce= 0;
@@ -47,6 +52,7 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 
 	@Override
 	protected void doFinal() throws Exception{
+		if(status!=MonitoringStatus.RUNNING)return;
 		recordData();
 		cleanFile(new File(recordPath));
 	}

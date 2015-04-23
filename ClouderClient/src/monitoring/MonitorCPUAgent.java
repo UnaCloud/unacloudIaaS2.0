@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import unacloudEnums.MonitoringStatus;
+
 import com.losandes.connectionDb.MongoConnection;
 import com.mongodb.BasicDBObject;
 import com.mongodb.BulkWriteOperation;
@@ -34,13 +36,17 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	    
 	@Override
 	protected void doInitial() throws Exception{
-		 PrintWriter pw = new PrintWriter(new FileOutputStream(f,true),true);
-	     pw.println(MonitorReportGenerator.generateInitialReport());
-	     pw.close();
+		if(status==MonitoringStatus.INIT){
+			 PrintWriter pw = new PrintWriter(new FileOutputStream(f,true),true);
+		     pw.println(MonitorReportGenerator.generateInitialReport());
+		     pw.close();
+		     status = MonitoringStatus.RUNNING;
+		}	     
 	}
 	
 	@Override
 	protected void doMonitoring() throws Exception {
+		 if(status!=MonitoringStatus.RUNNING)return;
 		 checkFile();
 	     int localFrecuency = 1000*frecuency;  
 	     Date d = new Date();
@@ -57,6 +63,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	
 	@Override
 	protected void doFinal() throws Exception{
+		if(status!=MonitoringStatus.RUNNING)return;
 		recordData();
 		cleanFile();
 	}

@@ -1,5 +1,7 @@
 package monitoring;
 
+import unacloudEnums.MonitoringStatus;
+
 /** 
  * @author Cesar
  * This class is the template for monitoring classes. There are three main task for all monitoring process; initial, monitoring, final
@@ -27,9 +29,12 @@ public abstract class AbstractMonitor extends Thread{
 	 */
 	protected long reduce;
 	
+	protected MonitoringStatus status;
+	
 	public AbstractMonitor(String record) throws Exception {
 		if(record==null)throw new Exception("");
 		recordPath=record;
+		status = MonitoringStatus.DISABLE;
 	}
 	
 	@Override
@@ -43,6 +48,12 @@ public abstract class AbstractMonitor extends Thread{
 			e.printStackTrace();
 			sendError(e);
 		}
+	}
+	public void stopMonitor(){
+		if(status==MonitoringStatus.RUNNING)status = MonitoringStatus.STOPPED;
+	}
+	public void turnOff(){
+		if(status!=MonitoringStatus.DISABLE)status=MonitoringStatus.OFF;
 	}
 	/**
      * Do initial task to control monitoring
@@ -98,5 +109,20 @@ public abstract class AbstractMonitor extends Thread{
 	}
 	public void setRecordPath(String recordPath) {
 		this.recordPath = recordPath;
+	}
+	public MonitoringStatus getStatus() {
+		return status;
+	}
+	public void setStatus(MonitoringStatus status) {
+		this.status = status;
+	}
+	public boolean isRunning(){
+		return status==MonitoringStatus.RUNNING||status==MonitoringStatus.INIT;
+	}
+	public boolean isStopped(){
+		return status==MonitoringStatus.STOPPED;
+	}
+	public boolean isDisable(){
+		return status==MonitoringStatus.DISABLE||status==MonitoringStatus.NONE;
 	}
 }
