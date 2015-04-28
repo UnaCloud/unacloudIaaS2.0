@@ -38,15 +38,13 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	protected void doInitial() throws Exception{
 		if(status==MonitoringStatus.INIT){
 			 PrintWriter pw = new PrintWriter(new FileOutputStream(f,true),true);
-		     pw.println(MonitorReportGenerator.generateInitialReport());
+		     pw.println(MonitorReportGenerator.getInstance().generateInitialReport());
 		     pw.close();
-		     status = MonitoringStatus.RUNNING;
 		}	     
 	}
 	
 	@Override
 	protected void doMonitoring() throws Exception {
-		 if(status!=MonitoringStatus.RUNNING)return;
 		 checkFile();
 	     int localFrecuency = 1000*frecuency;  
 	     Date d = new Date();
@@ -54,7 +52,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	     d.setTime(d.getTime()+(windowSizeTime*1000)-(reduce*1000));	     
 	     PrintWriter pw = new PrintWriter(new FileOutputStream(f,true),true);
 	     while(d.after(new Date())){  
-	    	pw.println(MonitorReportGenerator.generateStateReport());
+	    	pw.println(MonitorReportGenerator.getInstance().generateStateReport());
 	        Thread.sleep(localFrecuency);
 	     }
 	     if(reduce>0)reduce = 0;
@@ -63,9 +61,9 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	
 	@Override
 	protected void doFinal() throws Exception{
-		if(status!=MonitoringStatus.RUNNING)return;
 		recordData();
 		cleanFile();
+		System.out.println(new Date()+"Termine cpu");
 	}
 
 	@Override
@@ -111,6 +109,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
 		    if(doc == null){
 		    	doc = new BasicDBObject("Hostname",initialReport.getHostname())
 				.append("Timestamp",initialReport.getTimest())
+				.append("TimeMilli",initialReport.getTimeLong())
 				.append("OSName", initialReport.getOperatingSystemName())
 				.append("OSVersion", initialReport.getOperatingSystemVersion())
 				.append("OSArquitecture", initialReport.getOperatingSystemArchitect())
@@ -148,10 +147,11 @@ public class MonitorCPUAgent extends AbstractMonitor {
 			}
 			BasicDBObject doc = new BasicDBObject("Hostname",statusReport.getHostName())
 			.append("Timestamp", statusReport.getTimest())
+			.append("TimeMilli",statusReport.getTimeLong())
 			.append("Username", statusReport.getUserName())
 			.append("UpTime", statusReport.getUptime())
 			.append("MFlops", statusReport.getMflops())
-			.append("TimeInSeconds", statusReport.getTimeinSecs())
+			.append("CPUTimeInSeconds", statusReport.getTimeinSecs())
 			.append("CPUIdle", statusReport.getIdle())
 			.append("NoCPUIdle ", statusReport.getD())
 			.append("CPUuser", statusReport.getCPuser())

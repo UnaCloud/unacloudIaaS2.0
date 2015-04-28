@@ -1,5 +1,7 @@
 package physicalmachine;
 
+import java.io.File;
+
 import org.hyperic.sigar.Cpu;
 import org.hyperic.sigar.CpuInfo;
 import org.hyperic.sigar.CpuPerc;
@@ -132,6 +134,14 @@ public class CPU extends SigarWrapper {
         getCPUCores();
         return cpu.getTotal();
     }
-
+    
+    public static long getSpaceDirVMS(){
+        try {
+			long space = new File("E:\\").getFreeSpace();
+			return space;
+		} catch (Exception e) {
+			return -1;
+		}
+    }
 }//end of CPU
 

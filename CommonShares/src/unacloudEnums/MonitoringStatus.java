@@ -18,6 +18,7 @@ public enum MonitoringStatus {
 		else if(STOPPED.getTitle().equals(title))return STOPPED;
 		else if(INIT.getTitle().equals(title))return INIT;
 		else if(DISABLE.getTitle().equals(title))return DISABLE;
+		else if(OFF.getTitle().equals(title))return OFF;
 		else return NONE;
 	}
 }

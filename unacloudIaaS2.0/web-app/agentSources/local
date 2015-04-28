@@ -3,5 +3,5 @@ String.VBOX_PATH=C:\Program Files\Oracle\VirtualBox\VBoxManage.exe
 String.VMRUN_PATH=C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe
 String.VM_REPO_PATH=E:\GRID\
 String.PATH_POWERLOG=C:\Program Files\Intel\Power Gadget 3.0\PowerLog3.0.exe
-String.LOG_CPU_PATH=logCPU.txt
-String.LOG_ENERGY_PATH=report.txt
+String.LOG_CPU_PATH=E:\logCPU.txt
+String.LOG_ENERGY_PATH=E:\report.txt

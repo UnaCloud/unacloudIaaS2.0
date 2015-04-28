@@ -20,6 +20,7 @@ public class MonitorInitialReport implements Serializable{
 	private static final long serialVersionUID = -2738566841932331498L;
 	private String UUID;
     private Timestamp timest;
+    private long timeLong;
     private String hostname;
     private String operatingSystemName;
     private String operatingSystemVersion;
@@ -36,10 +37,11 @@ public class MonitorInitialReport implements Serializable{
     private String hardDiskFileSystem;
     private String networkMACAddress;
 
-    public MonitorInitialReport(String uUID, Timestamp timest, String hostname, String operatingSystemName, String operatingSystemVersion, String operatingSystemArchitect, String cPUModel, String cPUVendor, int cPUCores, int totalSockets, String cPUMhz, int coresPerSocket, float rAMMemorySize, float swapMemorySize, long hardDiskSpace, String hardDiskFileSystem, String networkMACAddress) {
+    public MonitorInitialReport(String uUID, Timestamp timest, Long time, String hostname, String operatingSystemName, String operatingSystemVersion, String operatingSystemArchitect, String cPUModel, String cPUVendor, int cPUCores, int totalSockets, String cPUMhz, int coresPerSocket, float rAMMemorySize, float swapMemorySize, long hardDiskSpace, String hardDiskFileSystem, String networkMACAddress) {
        // super(REGISTRATION_OPERATION,0);
         UUID = uUID;
         this.timest = timest;
+        this.timeLong = time;
         this.hostname = hostname;
         this.operatingSystemName = operatingSystemName;
         this.operatingSystemVersion = operatingSystemVersion;
@@ -68,6 +70,7 @@ public class MonitorInitialReport implements Serializable{
 			    Date parsedDate = dateFormat.parse(components[1]);
 			    timest = new java.sql.Timestamp(parsedDate.getTime());
 			}
+			else if(components[0].contains("timeLong")) timeLong = Long.parseLong(components[1]);
 			else if(components[0].contains("hostname")) hostname = components[1];
 			else if(components[0].contains("operatingSystemName")) operatingSystemName = components[1];
 			else if(components[0].contains("operatingSystemVersion")) operatingSystemVersion = components[1];
@@ -222,10 +225,18 @@ public class MonitorInitialReport implements Serializable{
     public void setNetworkMACAddress(String networkMACAddress) {
         this.networkMACAddress = networkMACAddress;
     }
+    
+    public long getTimeLong() {
+		return timeLong;
+	}
+    
+    public void setTimeLong(long timeLong) {
+		this.timeLong = timeLong;
+	}
 
 	@Override
 	public String toString() {
-		return "MonitorInitialReport [timest=" + timest
+		return "MonitorInitialReport [timest=" + timest+ ", timeLong=" + timeLong
 				+ ", hostname=" + hostname + ", operatingSystemName="
 				+ operatingSystemName + ", operatingSystemVersion="
 				+ operatingSystemVersion + ", operatingSystemArchitect="

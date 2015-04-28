@@ -18,7 +18,12 @@ import physicalmachine.PhysicalMachine;
 
 public class MonitorReportGenerator extends SigarCommandBase {
 	
-	private static MonitorReportGenerator instance = new MonitorReportGenerator();
+	private static MonitorReportGenerator instance;
+	public static synchronized MonitorReportGenerator getInstance(){
+		if(instance==null)instance=new MonitorReportGenerator();
+		return instance;
+	}
+	
     private static String UUID = java.util.UUID.randomUUID().toString();
     
 	private static int contadorRegistros;
@@ -30,7 +35,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
 	 * Generates initial monitoring report info
 	 * @return initial report
 	 */
-    public static MonitorInitialReport generateInitialReport() {
+    public MonitorInitialReport generateInitialReport() {
         PhysicalMachine monitor = new PhysicalMachine();
         java.util.Date date;
         date = new Date();
@@ -40,7 +45,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
         // Evalua una sola CPU
         CpuInfo[] infos;
         try {
-            infos = instance.sigar.getCpuInfoList();
+            infos = this.sigar.getCpuInfoList();
             RepetitionCounter cpuModel = new RepetitionCounter();
             RepetitionCounter cpuVendor = new RepetitionCounter();
             RepetitionCounter cpuMhz = new RepetitionCounter();
@@ -52,7 +57,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
 
             }
             org.hyperic.sigar.CpuInfo CPU1 = infos[0];
-            return new MonitorInitialReport(UUID, timest,
+            return new MonitorInitialReport(UUID, timest,date.getTime(),
                     Network.getHostname(),
                     monitor.operatingSystem.getOperatingSystemName(),
                     monitor.operatingSystem.getOperatingSystemVersion(),
@@ -71,7 +76,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
         return null;
     }
     
-    private static class RepetitionCounter extends HashMap<String, Integer> {
+    private  class RepetitionCounter extends HashMap<String, Integer> {
     	
     	
 		private static final long serialVersionUID = -5259022218756213835L;
@@ -103,11 +108,12 @@ public class MonitorReportGenerator extends SigarCommandBase {
      * generates a physical machine state report
      * @return report collected
      */
-    public static MonitorReport generateStateReport() {
+    public  MonitorReport generateStateReport() {
         LinpackJava.Linpack CPUMflops = new LinpackJava.Linpack();
         CPUMflops.run_benchmark();
         PhysicalMachine monitor = new PhysicalMachine();
-        java.sql.Timestamp timest = new java.sql.Timestamp(new Date().getTime());
+        Date date = new Date();
+        java.sql.Timestamp timest = new java.sql.Timestamp(date.getTime());
         contadorRegistros++;
 
         String processes = "";
@@ -129,7 +135,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
             Mem MEM = instance.sigar.getMem();
             NetInterfaceStat NET = instance.sigar
                     .getNetInterfaceStat(monitor.network.getNetworkInterface());
-            return new MonitorReport(UUID, timest, contadorRegistros, 
+            return new MonitorReport(UUID, timest,date.getTime(), contadorRegistros, 
             		OperatingSystem.getUserName(),Network.getHostname(),
                     UPTIME.getUptime(), CPUMflops.getMflops(),
                     CPUMflops.getTimeinSecs(), CPU2.getIdle() * 100,

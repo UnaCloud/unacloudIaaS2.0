@@ -65,13 +65,13 @@ public class ClouderServerAttentionThread implements Runnable {
     public void run() {
         try(Socket s=communication;ObjectInputStream ois=new ObjectInputStream(communication.getInputStream());ObjectOutputStream oos=new ObjectOutputStream(communication.getOutputStream())){
         	UnaCloudAbstractMessage clouderServerRequest=(UnaCloudAbstractMessage)ois.readObject();
-            System.out.println(clouderServerRequest);
+            System.out.println("message: "+clouderServerRequest);
             switch (clouderServerRequest.getMainOp()) {
 		        case UnaCloudAbstractMessage.VIRTUAL_MACHINE_OPERATION:
 		            oos.writeObject(attendVirtualMachineOperation(clouderServerRequest,ois,oos));
 		            break;
 		        case UnaCloudAbstractMessage.PHYSICAL_MACHINE_OPERATION:
-		            attendPhysicalMachineOperation(clouderServerRequest);
+		        	oos.writeObject(attendPhysicalMachineOperation(clouderServerRequest));
 		            break;
 		        case UnaCloudAbstractMessage.AGENT_OPERATION:
 		            oos.writeObject(attendAgentOperation(clouderServerRequest));
@@ -181,7 +181,6 @@ public class ClouderServerAttentionThread implements Runnable {
                 return "Successful operation";
             case PhysicalMachineOperationMessage.PM_MONITOR:
                     PhysicalMachineMonitorMessage monitor=(PhysicalMachineMonitorMessage)message;
-                    System.out.println(monitor);
                     switch (monitor.getOperation()) {
 	                    case PhysicalMachineMonitorMessage.M_STOP:
                             PhysicalMachineMonitor.getInstance().stopService(monitor.isEnergy(), monitor.isCpu());
@@ -196,7 +195,7 @@ public class ClouderServerAttentionThread implements Runnable {
                             PhysicalMachineMonitor.getInstance().enabledService(monitor.isEnergy(), monitor.isCpu());                           
                             break;
                     }
-                    return "Successful operation";
+                    return PhysicalMachineMonitor.getInstance().getStatusCpu().getTitle()+"-"+PhysicalMachineMonitor.getInstance().getStatusEnergy().getTitle();
                 //TODO do something
             /*case PM_RETRIEVE_FOLDER:
                 clouderClientOperationResult = "MACHINE_RESTORE";

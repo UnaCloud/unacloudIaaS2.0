@@ -8,7 +8,7 @@ import unacloudEnums.MonitoringStatus;
  * @param frecuency check frequency in seconds
  * @param windowSizeTime window check time size in milliseconds
  */
-public abstract class AbstractMonitor extends Thread{
+public abstract class AbstractMonitor implements Runnable{
 
 	/**
 	 * check frequency in seconds
@@ -32,22 +32,25 @@ public abstract class AbstractMonitor extends Thread{
 	protected MonitoringStatus status;
 	
 	public AbstractMonitor(String record) throws Exception {
-		if(record==null)throw new Exception("");
+		if(record==null)throw new Exception("record path is missing");
 		recordPath=record;
 		status = MonitoringStatus.DISABLE;
 	}
 	
 	@Override
 	public void run() {
+		if(status==MonitoringStatus.INIT)
 		try {
 			if(recordPath!=null){
+				status = MonitoringStatus.RUNNING;
 				doMonitoring();
 				doFinal();
+				if(status==MonitoringStatus.RUNNING)status=MonitoringStatus.INIT;
 			}		
 		} catch (Exception e) {
 			e.printStackTrace();
 			sendError(e);
-		}
+		}		
 	}
 	public void stopMonitor(){
 		if(status==MonitoringStatus.RUNNING)status = MonitoringStatus.STOPPED;
@@ -117,12 +120,15 @@ public abstract class AbstractMonitor extends Thread{
 		this.status = status;
 	}
 	public boolean isRunning(){
-		return status==MonitoringStatus.RUNNING||status==MonitoringStatus.INIT;
+		return status==MonitoringStatus.RUNNING;
 	}
 	public boolean isStopped(){
 		return status==MonitoringStatus.STOPPED;
 	}
 	public boolean isDisable(){
 		return status==MonitoringStatus.DISABLE||status==MonitoringStatus.NONE;
+	}
+	public boolean isReady(){
+		return status==MonitoringStatus.INIT;
 	}
 }

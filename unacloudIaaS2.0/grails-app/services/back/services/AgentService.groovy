@@ -71,7 +71,7 @@ class AgentService {
 	}
 	
 	def updateMonitoring(PhysicalMachine pm, String option, boolean energy, boolean cpu){
-		println option;
+		
 		PhysicalMachineMonitorMessage pmm = new PhysicalMachineMonitorMessage();
 		if(option.equals("start")&&pm.monitorStatus==MonitoringStatus.OFF){
 		    pmm.operation = PhysicalMachineMonitorMessage.M_START;
@@ -88,7 +88,6 @@ class AgentService {
 		}else return false;		
 	    pmm.energy=energy;
 		pmm.cpu=cpu
-	
 		return sendMessage(pm,pmm);
 	}
 	
@@ -107,9 +106,10 @@ class AgentService {
 			ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
 			oos.writeObject(message);
 			oos.flush();
-			ois.readObject();
+			println ois.readObject();
 			s.close();
 		}catch(Exception e){
+			e.printStackTrace();
 			println "Error conectando a "+ipAddress;	
 			res= false;		
 		}

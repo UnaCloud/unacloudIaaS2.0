@@ -13,7 +13,7 @@ public class PhysicalMachineState {
 	 * reports a start operation
 	 */
 	public static void reportPhyisicalMachineStart(){
-		AbstractGrailsCommunicator.pushInfo("machineState/physicalMachineStart","hostname",Network.getHostname());
+		AbstractGrailsCommunicator.pushInfo("machineState/physicalMachineStart","hostname",Network.getHostname(),"monitorStatus",PhysicalMachineMonitor.getInstance().getStatusCpu().getTitle(),"monitorStatusEnergy",PhysicalMachineMonitor.getInstance().getStatusEnergy().getTitle());
 	}
 	/**
 	 * reports a stop operation
@@ -25,7 +25,7 @@ public class PhysicalMachineState {
 	 * reports a log off event
 	 */
 	public static void reportPhyisicalMachineUserLogoff(){
-		AbstractGrailsCommunicator.pushInfo("machineState/physicalMachineLogoff","hostname",Network.getHostname());
+		AbstractGrailsCommunicator.pushInfo("machineState/physicalMachineLogoff","hostname",Network.getHostname(),"monitorStatus",PhysicalMachineMonitor.getInstance().getStatusCpu().getTitle(),"monitorStatusEnergy",PhysicalMachineMonitor.getInstance().getStatusEnergy().getTitle());
 	}
 	/**
 	 * reports a log in event

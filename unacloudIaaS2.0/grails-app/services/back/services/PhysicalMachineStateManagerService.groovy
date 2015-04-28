@@ -24,7 +24,7 @@ class PhysicalMachineStateManagerService {
 	 */
     def reportPhysicalMachine(String hostname,String hostUser,String requestAddress, String monitorStatus, String monitorStatusEnergy){
 		boolean update=StateManager.registerPhysicalMachineReport(hostname, hostUser);
-		if(update){
+		if(update){			
 			PhysicalMachine.executeUpdate("update PhysicalMachine m set m.monitorStatus=:monitorStatus,m.monitorStatusEnergy=:monitorStatusEnergy, m.state=:newState, m.withUser=:newWithUser,m.lastReport=:time where m.name=:pmname",
 				[time: new Date(), monitorStatus: MonitoringStatus.getEnum(monitorStatus), monitorStatusEnergy: MonitoringStatus.getEnum(monitorStatusEnergy),newState: PhysicalMachineStateEnum.ON, newWithUser: (hostUser!=null&&!hostUser.isEmpty()&&!(hostUser.replace(">","").replace(" ","")).equals("null")), pmname:hostname])
 		}

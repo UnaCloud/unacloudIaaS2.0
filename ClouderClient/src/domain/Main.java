@@ -53,8 +53,9 @@ public class Main {
             	}
         	}
         	try {
+        		//TODO
         		//Create agent log file
-            	PrintStream ps=new PrintStream(new FileOutputStream("log.txt",true),true){
+            	PrintStream ps=new PrintStream(new FileOutputStream("E:\\log.txt",true),true){
             		@Override
             		public void println(String x) {
             			super.println(new Date()+" "+x);
