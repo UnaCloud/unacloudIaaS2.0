@@ -73,7 +73,7 @@
 	   			<g:img file="red.png" title="${machine.monitorStatus.getTitle()}"/>
 	   		</g:if>
 	   		<g:if test="${machine.monitorStatus.equals(MonitoringStatus.DISABLE)}">
-	   			<g:img file="red.png" title="${machine.monitorStatus.getTitle()}"/>
+	   			<g:img file="gray.png" title="${machine.monitorStatus.getTitle()}"/>
 	   		</g:if>
 	   		<g:if test="${machine.monitorStatus.equals(MonitoringStatus.STOPPED) }">
 	   			<g:img file="amber.png" title="${machine.monitorStatus.getTitle()}"/>
@@ -84,22 +84,22 @@
 	   		</td>
 	   		<td>
 	   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.RUNNING) }">
-	   			<g:img file="green.png" title="${machine.monitorStatus.getTitle()}"/>
+	   			<g:img file="green.png" title="${machine.monitorStatusEnergy.getTitle()}"/>
 	   		</g:if>
 	   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.OFF)}">
-	   			<g:img file="red.png" title="${machine.monitorStatus.getTitle()}"/>
+	   			<g:img file="red.png" title="${machine.monitorStatusEnergy.getTitle()}"/>
 	   		</g:if>
 	   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.NONE) }">
-	   			<g:img file="red.png" title="${machine.monitorStatus.getTitle()}"/>
+	   			<g:img file="red.png" title="${machine.monitorStatusEnergy.getTitle()}"/>
 	   		</g:if>
 	   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.DISABLE) }">
-	   			<g:img file="red.png" title="${machine.monitorStatus.getTitle()}"/>
+	   			<g:img file="gray.png" title="${machine.monitorStatusEnergy.getTitle()}"/>
 	   		</g:if>
 	   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.STOPPED) }">
-	   			<g:img file="amber.png" title="${machine.monitorStatus.getTitle()}"/>
+	   			<g:img file="amber.png" title="${machine.monitorStatusEnergy.getTitle()}"/>
 	   		</g:if>
 	   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.INIT) }">
-	   			<g:img file="blue.png" title="${machine.monitorStatus.getTitle()}"/>
+	   			<g:img file="blue.png" title="${machine.monitorStatusEnergy.getTitle()}"/>
 	   		</g:if>
 	   		</td>
 	   		<td>

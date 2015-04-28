@@ -25,6 +25,8 @@ public class PhysicalMachineMonitor {
 	private void monitorError() {
 		VariableManager.local.setBooleanValue("MONITORING_ENABLE_CPU", false);
 		VariableManager.local.setBooleanValue("MONITORING_ENABLE_ENERGY", false);
+		mc.setStatus(MonitoringStatus.DISABLE);
+		me.setStatus(MonitoringStatus.DISABLE);
 	}
 	
 	public void initService() {			
