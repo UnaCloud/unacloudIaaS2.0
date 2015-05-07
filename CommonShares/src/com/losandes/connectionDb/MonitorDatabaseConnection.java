@@ -2,10 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package monitoring;
+package com.losandes.connectionDb;
 
-import com.losandes.connectionDb.MongoConnection;
-import com.losandes.utils.VariableManager;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
@@ -17,26 +15,32 @@ import java.util.Arrays;
  *
  * @author cesar
  */
-public class MonitorDatabaseConnection {	
+public abstract class MonitorDatabaseConnection {	
 	
-	/**
+	 protected String ip;
+	 protected int port;
+	 protected String name;
+	 protected String user;
+	 protected String password;
+	 
+	 /**
 	 * Class Constructor
 	 */
-    private MonitorDatabaseConnection() {
+    public MonitorDatabaseConnection() {
+    	callVariables();    	
     }
-    
     /**
+     * This method should be implemented in each factor to colaborate  
+     */
+    public abstract void callVariables();
+
+	/**
      * Connects to monitoring database
      * @return connection done
      * @throws UnknownHostException if connection was not possible
      */
-    public static MongoConnection generateConnection() throws UnknownHostException {
-    	MongoClient conexion ;
-        String ip = VariableManager.global.getStringValue("MONITORING_SERVER_IP");
-        int port = VariableManager.global.getIntValue("MONITORING_SERVER_PORT");
-        String name = VariableManager.global.getStringValue("MONITORING_DATABASE_NAME");
-        String user = VariableManager.global.getStringValue("MONITORING_DATABASE_USER");
-        String password = VariableManager.global.getStringValue("MONITORING_DATABASE_PASSWORD");
+    public MongoConnection generateConnection() throws UnknownHostException {
+    	MongoClient conexion ;      
         MongoCredential credential = MongoCredential.createCredential(user, name, password.toCharArray());
         ServerAddress address = new ServerAddress(ip, port);
         conexion = new MongoClient(address, Arrays.asList(credential));

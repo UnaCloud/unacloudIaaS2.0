@@ -12,6 +12,9 @@ import org.hyperic.sigar.SigarException;
 import org.hyperic.sigar.Uptime;
 import org.hyperic.sigar.cmd.SigarCommandBase;
 
+import com.losandes.connectionDb.MonitorInitialReport;
+import com.losandes.connectionDb.MonitorReport;
+
 import physicalmachine.Network;
 import physicalmachine.OperatingSystem;
 import physicalmachine.PhysicalMachine;

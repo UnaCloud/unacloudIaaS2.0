@@ -14,6 +14,9 @@ import java.util.List;
 import unacloudEnums.MonitoringStatus;
 
 import com.losandes.connectionDb.MongoConnection;
+import com.losandes.connectionDb.MonitorInitialReport;
+import com.losandes.connectionDb.MonitorReport;
+import com.losandes.connectionDb.enums.ItemCPUMetrics;
 import com.mongodb.BasicDBObject;
 import com.mongodb.BulkWriteOperation;
 
@@ -29,6 +32,7 @@ import com.mongodb.BulkWriteOperation;
 public class MonitorCPUAgent extends AbstractMonitor {
 	
 	private File f;
+	
 	public MonitorCPUAgent(String path) throws Exception {
 		super(path);
 		f = new File(recordPath);
@@ -96,7 +100,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
 		}
 		bf.close();
 		if(reports.size()>0){
-			MongoConnection con = MonitorDatabaseConnection.generateConnection();
+			MongoConnection con = connection.generateConnection();
 			if(initial!=null)saveInitialReport(initial, con);
 			saveReports(reports, con);
 			con.close();
@@ -104,26 +108,26 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	}
 	
 	 private void saveInitialReport(MonitorInitialReport initialReport, MongoConnection db) throws UnknownHostException { 
-		    BasicDBObject doc = (BasicDBObject) db.infrastructureCollection().findOne(new BasicDBObject("Hostname",initialReport.getHostname()));	
+		    BasicDBObject doc = (BasicDBObject) db.infrastructureCollection().findOne(new BasicDBObject(ItemCPUMetrics.HOSTNAME.title,initialReport.getHostname()));	
 		    if(doc!=null&&compareInitialReport(initialReport, doc))doc = null; 		  
 		    if(doc == null){
-		    	doc = new BasicDBObject("Hostname",initialReport.getHostname())
-				.append("Timestamp",initialReport.getTimest())
-				.append("TimeMilli",initialReport.getTimeLong())
-				.append("OSName", initialReport.getOperatingSystemName())
-				.append("OSVersion", initialReport.getOperatingSystemVersion())
-				.append("OSArquitecture", initialReport.getOperatingSystemArchitect())
-				.append("CPUModel", initialReport.getcPUModel())
-				.append("CPUVendor", initialReport.getcPUVendor())
-				.append("CPUCores", initialReport.getcPUCores())
-				.append("CPUSockets", initialReport.getTotalSockets())
-				.append("CpuMhz", initialReport.getcPUMhz())
-				.append("CoresXSocket", initialReport.getCoresPerSocket())
-				.append("RAMMemorySize", initialReport.getrAMMemorySize())
-				.append("SwapMemorySize", initialReport.getSwapMemorySize())
-				.append("HDSpace", initialReport.getHardDiskSpace())
-				.append("HDFileSystem", initialReport.getHardDiskFileSystem())
-				.append("MACAddress", initialReport.getNetworkMACAddress());       
+		    	doc = new BasicDBObject(ItemCPUMetrics.HOSTNAME.title,initialReport.getHostname())
+				.append(ItemCPUMetrics.TIME.title,initialReport.getTimest())
+				.append(ItemCPUMetrics.TIME_MILLI.title,initialReport.getTimeLong())
+				.append(ItemCPUMetrics.OS_NAME.title, initialReport.getOperatingSystemName())
+				.append(ItemCPUMetrics.OS_VERSION.title, initialReport.getOperatingSystemVersion())
+				.append(ItemCPUMetrics.OS_ARQUITECTURE.title, initialReport.getOperatingSystemArchitect())
+				.append(ItemCPUMetrics.CPU_MODEL.title, initialReport.getcPUModel())
+				.append(ItemCPUMetrics.CPU_VENDOR.title, initialReport.getcPUVendor())
+				.append(ItemCPUMetrics.CPU_CORES.title, initialReport.getcPUCores())
+				.append(ItemCPUMetrics.CPU_SOCKETS.title, initialReport.getTotalSockets())
+				.append(ItemCPUMetrics.CPU_MHZ.title, initialReport.getcPUMhz())
+				.append(ItemCPUMetrics.CORES_X_SOCKETS.title, initialReport.getCoresPerSocket())
+				.append(ItemCPUMetrics.RAM_SIZE.title, initialReport.getrAMMemorySize())
+				.append(ItemCPUMetrics.SWAP_SIZE.title, initialReport.getSwapMemorySize())
+				.append(ItemCPUMetrics.HD_SPACE.title, initialReport.getHardDiskSpace())
+				.append(ItemCPUMetrics.HD_FILESYSTEM.title, initialReport.getHardDiskFileSystem())
+				.append(ItemCPUMetrics.MAC.title, initialReport.getNetworkMACAddress());       
 			    System.out.println(db.infrastructureCollection().insert(doc).getN());
 		    }				
 	 }

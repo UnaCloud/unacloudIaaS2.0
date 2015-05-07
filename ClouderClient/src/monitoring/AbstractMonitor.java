@@ -28,13 +28,20 @@ public abstract class AbstractMonitor implements Runnable{
 	 * Time to reduces the first execution
 	 */
 	protected long reduce;
-	
+	/**
+	 * Status of monitoring process; Check MonitoringStatus Enum to more info
+	 */
 	protected MonitoringStatus status;
+	/**
+	 * Connection to DB from Agent
+	 */
+	protected MonitorDBAgentConnection connection;
 	
 	public AbstractMonitor(String record) throws Exception {
 		if(record==null)throw new Exception("record path is missing");
 		recordPath=record;
 		status = MonitoringStatus.DISABLE;
+		connection = new MonitorDBAgentConnection();
 	}
 	
 	@Override

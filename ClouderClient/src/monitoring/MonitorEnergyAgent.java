@@ -11,6 +11,8 @@ import java.util.Date;
 import physicalmachine.Network;
 
 import com.losandes.connectionDb.MongoConnection;
+import com.losandes.connectionDb.MonitorEnergyReport;
+import com.losandes.connectionDb.enums.ItemEnergyReport;
 import com.mongodb.BasicDBObject;
 import com.mongodb.BulkWriteOperation;
 
@@ -68,58 +70,48 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 	private void recordData() throws Exception{	
 		BufferedReader bf = new BufferedReader(new FileReader(new File(recordPath)));
 		String line = null;
-		ArrayList<MonitorEnergy> reports = new ArrayList<MonitorEnergy>();
+		ArrayList<MonitorEnergyReport> reports = new ArrayList<MonitorEnergyReport>();
+		Date registerDate = new Date();
+		String hostname = Network.getHostname();
 		while((line=bf.readLine())!=null&&!line.isEmpty()){
 			if(!line.startsWith("System")){
-				String[] data = line.split(",");
-				MonitorEnergy m = new MonitorEnergy();
-				m.Time = data[0];
-				m.RDTSC = data[1];
-				m.elapsedTime = data[2];
-				m.CPUFrequency = data[3];
-				m.processorPower = data[4];
-				m.cumulativeProcessorEnergyJoules = data[5];
-				m.cumulativeProcessorEnergyMhz = data[6];
-				m.IAPower = data[7];
-				m.cumulativeIAEnergy = data[8];
-				m.cumulativeIA = data[9];
-				m.packageTemperature = data[10];
-				m.packageHot = data[11];
-				m.packagePowerLimit = data[12];
+				MonitorEnergyReport m = new MonitorEnergyReport(line);
+				m.setRegisterDate(registerDate);
+				m.setHostName(hostname);
 				reports.add(m);
 			}
 		}
 		bf.close();
 		if(reports.size()>0){
-			MongoConnection con = MonitorDatabaseConnection.generateConnection();	 
+			MongoConnection con = connection.generateConnection();	 
 			saveReports(reports, con);
 			con.close();
 		}	  	
 	}
 	
 	
-	private void saveReports(ArrayList<MonitorEnergy> reports, MongoConnection db) {
+	private void saveReports(ArrayList<MonitorEnergyReport> reports, MongoConnection db) {
 		BulkWriteOperation builder = db.energyCollection().initializeOrderedBulkOperation();		
-		String hostname = Network.getHostname();
-		 for (MonitorEnergy statusReport : reports)if(statusReport!=null){			
-			BasicDBObject doc = new BasicDBObject("Hostname",hostname)
-			.append("Timestamp", statusReport.Time)
-			.append("RDTSC", statusReport.RDTSC)
-			.append("elapsedTime", statusReport.elapsedTime)
-			.append("CPUFrequency", statusReport.CPUFrequency)
-			.append("processorPower", statusReport.processorPower)
-			.append("cumulativeProcessorEnergyJoules", statusReport.cumulativeProcessorEnergyJoules)
-			.append("cumulativeProcessorEnergyMhz ", statusReport.cumulativeProcessorEnergyMhz)
-			.append("IAPower", statusReport.IAPower)
-			.append("cumulativeIAEnergy", statusReport.cumulativeIAEnergy)
-			.append("cumulativeIA", statusReport.cumulativeIA)
-			.append("packageTemperature", statusReport.packageTemperature)
-			.append("packageHot", statusReport.packageHot)
-			.append("packagePowerLimit",statusReport.packagePowerLimit);
+		
+		
+		 for (MonitorEnergyReport statusReport : reports)if(statusReport!=null){			
+			BasicDBObject doc = new BasicDBObject(ItemEnergyReport.HOSTNAME.title,statusReport.getHostName())
+			.append(ItemEnergyReport.TIME.title, statusReport.getTime())
+			.append(ItemEnergyReport.REGISTER_DATE.title, statusReport.getRegisterDate().getTime())
+			.append(ItemEnergyReport.RDTSC.title, statusReport.getRDTSC())
+			.append(ItemEnergyReport.ELAPSED_TIME.title, statusReport.getElapsedTime())
+			.append(ItemEnergyReport.CPU_FRECUENCY.title, statusReport.getCPUFrequency())
+			.append(ItemEnergyReport.PROCESSOR_POWER.title, statusReport.getProcessorPower())
+			.append(ItemEnergyReport.ENERGY_JOULES.title, statusReport.getCumulativeProcessorEnergyJoules())
+			.append(ItemEnergyReport.ENERGY_MHZ.title, statusReport.getCumulativeProcessorEnergyMhz())
+			.append(ItemEnergyReport.IA_POWER.title, statusReport.getIAPower())
+			.append(ItemEnergyReport.IA_ENERGY.title, statusReport.getCumulativeIAEnergy())
+			.append(ItemEnergyReport.IA.title, statusReport.getCumulativeIA())
+			.append(ItemEnergyReport.PACK_TEMP.title, statusReport.getPackageTemperature())
+			.append(ItemEnergyReport.PACK_HOT.title, statusReport.getPackageHot())
+			.append(ItemEnergyReport.PACK_POWER.title,statusReport.getPackagePowerLimit());
 			builder.insert(doc);
        }				
-//		BasicDBObject[] array = new BasicDBObject[listReports.size()];
-//		for (int i = 0; i < array.length; i++) array[i] = listReports.get(i);
 		System.out.println("Insert energy: "+builder.execute().getInsertedCount());
 	}
 
@@ -144,12 +136,5 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 			writer.close();			
 		}
     }
-	
-	private class MonitorEnergy{
-		String Time,RDTSC,elapsedTime,CPUFrequency,processorPower,
-		cumulativeProcessorEnergyJoules,cumulativeProcessorEnergyMhz,
-		IAPower,cumulativeIAEnergy,cumulativeIA,packageTemperature,
-		packageHot,packagePowerLimit;		
-	}
 
 }

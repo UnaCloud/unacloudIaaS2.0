@@ -1,4 +1,4 @@
-package monitoring;
+package com.losandes.connectionDb;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
