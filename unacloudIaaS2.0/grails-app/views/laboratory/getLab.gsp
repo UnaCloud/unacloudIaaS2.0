@@ -103,6 +103,7 @@
 	   		</g:if>
 	   		</td>
 	   		<td>
+	   		    <g:link action="machine" params="${[id: machine.id, labId: lab.id] }" ><i class="icon-eye-open" title="Show Monitoring"></i></g:link>
 	   			<g:link action="editMachine" params="${[id: machine.id, labId: lab.id] }" ><i class="icon-pencil" title="Edit Machine"></i></g:link>
 	   		</td>
 	       </tr>	   	

@@ -11,7 +11,7 @@ class CheckMachineJob {
 
     def execute() {
 		try {
-			//println new Date().toString()+' check processes'
+			println new Date().toString()+' check processes'
 			Date current = new Date();
 			long time = current.getTime()-60000*4;
 			PhysicalMachine.executeUpdate('update PhysicalMachine pm set pm.state = \'OFF\', pm.withUser = 0 , pm.monitorStatus = \'DISABLE\', pm.monitorStatusEnergy = \'DISABLE\' where :date1 > pm.lastReport',[date1:new Date(time)]);

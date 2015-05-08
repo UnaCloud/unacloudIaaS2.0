@@ -19,6 +19,11 @@ class LaboratoryController {
 	 */
 	AgentService agentService
 	
+	/**
+	 * Representation of monitoring services
+	 */
+	MonitoringService monitoringService
+	
 	//-----------------------------------------------------------------
 	// Actions
 	//-----------------------------------------------------------------
@@ -231,6 +236,11 @@ class LaboratoryController {
 		else resp = [success:true]
 		render resp as JSON
 	}
+	/**
+	 * Service to configurate monitoring in physical machines.
+	 * Receive the list of machines, the kind of monitoring config (start, stop, update, enable) and the kind of monitoring (energy or cpu)
+	 * @return
+	 */
 	
 	def updateMonitoring(){
 		def resp;
@@ -257,5 +267,13 @@ class LaboratoryController {
 			else resp = [success:true]
 		}else resp = [success:false,'count':-1]
 		render resp as JSON
+	}
+	
+	def machine(){
+		def pm = PhysicalMachine.get(params.id);
+		println params.labId;
+		def monitor = monitoringService.getMetricsCPU(pm.getName())
+		//def machineSet= lab.getOrderedMachines()
+		[machine: pm, components:monitor, lab:params.labId]
 	}
 }

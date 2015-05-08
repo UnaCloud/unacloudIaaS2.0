@@ -109,26 +109,26 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	}
 	
 	 private void saveInitialReport(MonitorInitialReport initialReport, MongoConnection db) throws UnknownHostException { 
-		    BasicDBObject doc = (BasicDBObject) db.infrastructureCollection().findOne(new BasicDBObject(ItemCPUMetrics.HOSTNAME.title,initialReport.getHostname()));	
+		    BasicDBObject doc = (BasicDBObject) db.infrastructureCollection().findOne(new BasicDBObject(ItemCPUMetrics.HOSTNAME.title(),initialReport.getHostname()));
 		    if(doc!=null&&compareInitialReport(initialReport, doc))doc = null; 		  
 		    if(doc == null){
-		    	doc = new BasicDBObject(ItemCPUMetrics.HOSTNAME.title,initialReport.getHostname())
-				.append(ItemCPUMetrics.TIME.title,initialReport.getTimest())
-				.append(ItemCPUMetrics.TIME_MILLI.title,initialReport.getTimeLong())
-				.append(ItemCPUMetrics.OS_NAME.title, initialReport.getOperatingSystemName())
-				.append(ItemCPUMetrics.OS_VERSION.title, initialReport.getOperatingSystemVersion())
-				.append(ItemCPUMetrics.OS_ARQUITECTURE.title, initialReport.getOperatingSystemArchitect())
-				.append(ItemCPUMetrics.CPU_MODEL.title, initialReport.getcPUModel())
-				.append(ItemCPUMetrics.CPU_VENDOR.title, initialReport.getcPUVendor())
-				.append(ItemCPUMetrics.CPU_CORES.title, initialReport.getcPUCores())
-				.append(ItemCPUMetrics.CPU_SOCKETS.title, initialReport.getTotalSockets())
-				.append(ItemCPUMetrics.CPU_MHZ.title, initialReport.getcPUMhz())
-				.append(ItemCPUMetrics.CORES_X_SOCKETS.title, initialReport.getCoresPerSocket())
-				.append(ItemCPUMetrics.RAM_SIZE.title, initialReport.getrAMMemorySize())
-				.append(ItemCPUMetrics.SWAP_SIZE.title, initialReport.getSwapMemorySize())
-				.append(ItemCPUMetrics.HD_SPACE.title, initialReport.getHardDiskSpace())
-				.append(ItemCPUMetrics.HD_FILESYSTEM.title, initialReport.getHardDiskFileSystem())
-				.append(ItemCPUMetrics.MAC.title, initialReport.getNetworkMACAddress());       
+		    	doc = new BasicDBObject(ItemCPUMetrics.HOSTNAME.title(),initialReport.getHostname())
+				.append(ItemCPUMetrics.TIME.title(),initialReport.getTimest())
+				.append(ItemCPUMetrics.TIME_MILLI.title(),initialReport.getTimeLong())
+				.append(ItemCPUMetrics.OS_NAME.title(), initialReport.getOperatingSystemName())
+				.append(ItemCPUMetrics.OS_VERSION.title(), initialReport.getOperatingSystemVersion())
+				.append(ItemCPUMetrics.OS_ARQUITECTURE.title(), initialReport.getOperatingSystemArchitect())
+				.append(ItemCPUMetrics.CPU_MODEL.title(), initialReport.getcPUModel())
+				.append(ItemCPUMetrics.CPU_VENDOR.title(), initialReport.getcPUVendor())
+				.append(ItemCPUMetrics.CPU_CORES.title(), initialReport.getcPUCores())
+				.append(ItemCPUMetrics.CPU_SOCKETS.title(), initialReport.getTotalSockets())
+				.append(ItemCPUMetrics.CPU_MHZ.title(), initialReport.getcPUMhz())
+				.append(ItemCPUMetrics.CORES_X_SOCKETS.title(), initialReport.getCoresPerSocket())
+				.append(ItemCPUMetrics.RAM_SIZE.title(), initialReport.getrAMMemorySize())
+				.append(ItemCPUMetrics.SWAP_SIZE.title(), initialReport.getSwapMemorySize())
+				.append(ItemCPUMetrics.HD_SPACE.title(), initialReport.getHardDiskSpace())
+				.append(ItemCPUMetrics.HD_FILESYSTEM.title(), initialReport.getHardDiskFileSystem())
+				.append(ItemCPUMetrics.MAC.title(), initialReport.getNetworkMACAddress());       
 			    System.out.println(db.infrastructureCollection().insert(doc).getN());
 		    }				
 	 }
@@ -211,20 +211,20 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	  * @return
 	  */
 	 private boolean compareInitialReport(MonitorInitialReport m1, BasicDBObject object){		
-		 if(!object.get(ItemCPUMetrics.OS_NAME.title).equals(m1.getOperatingSystemName()))return true;
-		 else if(!object.get(ItemCPUMetrics.OS_VERSION.title).equals(m1.getOperatingSystemVersion()))return true;
-		 else if(!object.get(ItemCPUMetrics.OS_ARQUITECTURE.title).equals(m1.getOperatingSystemArchitect()))return true;
-		 else if(!object.get(ItemCPUMetrics.CPU_MODEL.title).equals(m1.getcPUModel()))return true;
-		 else if(!object.get(ItemCPUMetrics.CPU_VENDOR.title).equals(m1.getcPUVendor()))return true;
-		 else if(!object.get(ItemCPUMetrics.CPU_CORES.title).equals(m1.getcPUCores()))return true;
-		 else if(!object.get(ItemCPUMetrics.CPU_SOCKETS.title).equals(m1.getTotalSockets()))return true;
-		 else if(!object.get(ItemCPUMetrics.CPU_MHZ.title).equals(m1.getcPUMhz()))return true;
-		 else if(!object.get(ItemCPUMetrics.CORES_X_SOCKETS.title).equals(m1.getCoresPerSocket()))return true;
-		 else if(!object.get(ItemCPUMetrics.RAM_SIZE.title).equals(m1.getrAMMemorySize()))return true;
-		 else if(!object.get(ItemCPUMetrics.SWAP_SIZE.title).equals(m1.getSwapMemorySize()))return true;
-		 else if(!object.get(ItemCPUMetrics.HD_SPACE.title).equals(m1.getHardDiskSpace()))return true;
-		 else if(!object.get(ItemCPUMetrics.HD_FILESYSTEM.title).equals(m1.getHardDiskFileSystem()))return true;
-		 else if(!object.get(ItemCPUMetrics.MAC.title).equals(m1.getNetworkMACAddress()))return true;
+		 if(!object.get(ItemCPUMetrics.OS_NAME.title()).equals(m1.getOperatingSystemName()))return true;
+		 else if(!object.get(ItemCPUMetrics.OS_VERSION.title()).equals(m1.getOperatingSystemVersion()))return true;
+		 else if(!object.get(ItemCPUMetrics.OS_ARQUITECTURE.title()).equals(m1.getOperatingSystemArchitect()))return true;
+		 else if(!object.get(ItemCPUMetrics.CPU_MODEL.title()).equals(m1.getcPUModel()))return true;
+		 else if(!object.get(ItemCPUMetrics.CPU_VENDOR.title()).equals(m1.getcPUVendor()))return true;
+		 else if(!object.get(ItemCPUMetrics.CPU_CORES.title()).equals(m1.getcPUCores()))return true;
+		 else if(!object.get(ItemCPUMetrics.CPU_SOCKETS.title()).equals(m1.getTotalSockets()))return true;
+		 else if(!object.get(ItemCPUMetrics.CPU_MHZ.title()).equals(m1.getcPUMhz()))return true;
+		 else if(!object.get(ItemCPUMetrics.CORES_X_SOCKETS.title()).equals(m1.getCoresPerSocket()))return true;
+		 else if(!object.get(ItemCPUMetrics.RAM_SIZE.title()).equals(m1.getrAMMemorySize()))return true;
+		 else if(!object.get(ItemCPUMetrics.SWAP_SIZE.title()).equals(m1.getSwapMemorySize()))return true;
+		 else if(!object.get(ItemCPUMetrics.HD_SPACE.title()).equals(m1.getHardDiskSpace()))return true;
+		 else if(!object.get(ItemCPUMetrics.HD_FILESYSTEM.title()).equals(m1.getHardDiskFileSystem()))return true;
+		 else if(!object.get(ItemCPUMetrics.MAC.title()).equals(m1.getNetworkMACAddress()))return true;
 		 return false;
 	 }
 }

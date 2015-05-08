@@ -17,9 +17,11 @@ public enum ItemEnergyReport {
 	PACK_HOT("packageHot"),
 	PACK_POWER("packagePowerLimit");
 	
-	public String title;
+	private String title;
 	
 	private ItemEnergyReport(String t) {
 		title = t;
 	}
+	
+	public String title(){return title;}
 }

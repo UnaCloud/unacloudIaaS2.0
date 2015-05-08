@@ -20,8 +20,9 @@ public enum ItemCPUMetrics {
 	HD_FILESYSTEM("HDFileSystem"),
 	MAC("MACAddress");
 	
-	public String title;	
+	private String title;	
 	private ItemCPUMetrics(String t) {
 		title = t;
 	}
+	public String title(){return title;}
 }

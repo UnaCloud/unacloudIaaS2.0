@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * This class provides the attributes to encapsulate the result of a monitor
@@ -36,6 +37,9 @@ public class MonitorInitialReport implements Serializable{
     private long hardDiskSpace;
     private String hardDiskFileSystem;
     private String networkMACAddress;
+    
+    public MonitorInitialReport() {
+	}
 
     public MonitorInitialReport(String uUID, Timestamp timest, Long time, String hostname, String operatingSystemName, String operatingSystemVersion, String operatingSystemArchitect, String cPUModel, String cPUVendor, int cPUCores, int totalSockets, String cPUMhz, int coresPerSocket, float rAMMemorySize, float swapMemorySize, long hardDiskSpace, String hardDiskFileSystem, String networkMACAddress) {
        // super(REGISTRATION_OPERATION,0);
@@ -224,6 +228,18 @@ public class MonitorInitialReport implements Serializable{
 
     public void setNetworkMACAddress(String networkMACAddress) {
         this.networkMACAddress = networkMACAddress;
+    }
+    
+    public void setTimestString(String l){
+    	SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+	    Date parsedDate;
+		try {
+			parsedDate = dateFormat.parse(l);
+			timest = new java.sql.Timestamp(parsedDate.getTime());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	    
     }
     
     public long getTimeLong() {

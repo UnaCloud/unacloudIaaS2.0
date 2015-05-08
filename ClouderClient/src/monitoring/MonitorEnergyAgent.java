@@ -95,21 +95,21 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 		
 		
 		 for (MonitorEnergyReport statusReport : reports)if(statusReport!=null){			
-			BasicDBObject doc = new BasicDBObject(ItemEnergyReport.HOSTNAME.title,statusReport.getHostName())
-			.append(ItemEnergyReport.TIME.title, statusReport.getTime())
-			.append(ItemEnergyReport.REGISTER_DATE.title, statusReport.getRegisterDate().getTime())
-			.append(ItemEnergyReport.RDTSC.title, statusReport.getRDTSC())
-			.append(ItemEnergyReport.ELAPSED_TIME.title, statusReport.getElapsedTime())
-			.append(ItemEnergyReport.CPU_FRECUENCY.title, statusReport.getCPUFrequency())
-			.append(ItemEnergyReport.PROCESSOR_POWER.title, statusReport.getProcessorPower())
-			.append(ItemEnergyReport.ENERGY_JOULES.title, statusReport.getCumulativeProcessorEnergyJoules())
-			.append(ItemEnergyReport.ENERGY_MHZ.title, statusReport.getCumulativeProcessorEnergyMhz())
-			.append(ItemEnergyReport.IA_POWER.title, statusReport.getIAPower())
-			.append(ItemEnergyReport.IA_ENERGY.title, statusReport.getCumulativeIAEnergy())
-			.append(ItemEnergyReport.IA.title, statusReport.getCumulativeIA())
-			.append(ItemEnergyReport.PACK_TEMP.title, statusReport.getPackageTemperature())
-			.append(ItemEnergyReport.PACK_HOT.title, statusReport.getPackageHot())
-			.append(ItemEnergyReport.PACK_POWER.title,statusReport.getPackagePowerLimit());
+			BasicDBObject doc = new BasicDBObject(ItemEnergyReport.HOSTNAME.title(),statusReport.getHostName())
+			.append(ItemEnergyReport.TIME.title(), statusReport.getTime())
+			.append(ItemEnergyReport.REGISTER_DATE.title(), statusReport.getRegisterDate().getTime())
+			.append(ItemEnergyReport.RDTSC.title(), statusReport.getRDTSC())
+			.append(ItemEnergyReport.ELAPSED_TIME.title(), statusReport.getElapsedTime())
+			.append(ItemEnergyReport.CPU_FRECUENCY.title(), statusReport.getCPUFrequency())
+			.append(ItemEnergyReport.PROCESSOR_POWER.title(), statusReport.getProcessorPower())
+			.append(ItemEnergyReport.ENERGY_JOULES.title(), statusReport.getCumulativeProcessorEnergyJoules())
+			.append(ItemEnergyReport.ENERGY_MHZ.title(), statusReport.getCumulativeProcessorEnergyMhz())
+			.append(ItemEnergyReport.IA_POWER.title(), statusReport.getIAPower())
+			.append(ItemEnergyReport.IA_ENERGY.title(), statusReport.getCumulativeIAEnergy())
+			.append(ItemEnergyReport.IA.title(), statusReport.getCumulativeIA())
+			.append(ItemEnergyReport.PACK_TEMP.title(), statusReport.getPackageTemperature())
+			.append(ItemEnergyReport.PACK_HOT.title(), statusReport.getPackageHot())
+			.append(ItemEnergyReport.PACK_POWER.title(),statusReport.getPackagePowerLimit());
 			builder.insert(doc);
        }				
 		System.out.println("Insert energy: "+builder.execute().getInsertedCount());

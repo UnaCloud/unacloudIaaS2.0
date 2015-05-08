@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class MonitorReport{
@@ -33,8 +34,11 @@ public class MonitorReport{
 	long txPackets;
     String processes;
     
+    public MonitorReport() {
+	}
+    
 	public MonitorReport(String uUID, Timestamp timest, long timeLong, int contadorRegistros, String userName, String host , double uptime, double mflops, double timeinSecs, double idle, double d, double cPuser, double sys, double nice, double wait, double combined, long user, long sys0, long nice0, long wait0, long idle0, float rAMMemoryFree, float rAMMemoryUsed, double freePercent, double usedPercent, float swapMemoryFree, float swapMemoryPageIn, float swapMemoryPageOut, float swapMemoryUsed, long hardDiskFreeSpace, long hardDiskUsedSpace, String networkIPAddress, String networkInterface, String networkNetmask, String networkGateway, long rxBytes, long txBytes, long speed, long rxErrors, long txErrors, long rxPackets, long txPackets,String processes){
-		super();
+		
 		UUID = uUID;
 		this.timest = timest;
 		this.timeLong = timeLong;
@@ -150,6 +154,19 @@ public class MonitorReport{
 
 	public void setTimest(Timestamp timest) {
 		this.timest = timest;
+	}
+	
+	public void setTimestString(String t){
+		SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);	  
+	    Date parsedDate;
+		try {
+			parsedDate = dateFormat.parse(t);
+			timest = new java.sql.Timestamp(parsedDate.getTime());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
 	}
 
 	public int getContadorRegistros() {
@@ -474,6 +491,11 @@ public class MonitorReport{
     
     public void setTimeLong(long timeLong) {
 		this.timeLong = timeLong;
+	}
+    
+
+	public void setProcesses(String processes) {
+		this.processes = processes;
 	}
 
 	@Override
