@@ -17,6 +17,7 @@ import com.losandes.connectionDb.MongoConnection;
 import com.losandes.connectionDb.MonitorInitialReport;
 import com.losandes.connectionDb.MonitorReport;
 import com.losandes.connectionDb.enums.ItemCPUMetrics;
+import com.losandes.connectionDb.enums.ItemCPUReport;
 import com.mongodb.BasicDBObject;
 import com.mongodb.BulkWriteOperation;
 
@@ -149,47 +150,47 @@ public class MonitorCPUAgent extends AbstractMonitor {
 					listProcesses.add(doc);
 				}				
 			}
-			BasicDBObject doc = new BasicDBObject("Hostname",statusReport.getHostName())
-			.append("Timestamp", statusReport.getTimest())
-			.append("TimeMilli",statusReport.getTimeLong())
-			.append("Username", statusReport.getUserName())
-			.append("UpTime", statusReport.getUptime())
-			.append("MFlops", statusReport.getMflops())
-			.append("CPUTimeInSeconds", statusReport.getTimeinSecs())
-			.append("CPUIdle", statusReport.getIdle())
-			.append("NoCPUIdle ", statusReport.getD())
-			.append("CPUuser", statusReport.getCPuser())
-			.append("CPUsys", statusReport.getSys())
-			.append("CPUNice", statusReport.getNice())
-			.append("CPUWait", statusReport.getWait())
-			.append("CPUCombined", statusReport.getCombined())
-			.append("TotalUserTime",statusReport.getUser())
-			.append("TotalSysTime", statusReport.getSys0())
-			.append("TotalNiceTime", statusReport.getNice0())
-			.append("TotalWaitTime", statusReport.getWait0())
-			.append("TotalIdleTime", statusReport.getIdle0())
-			.append("RamFree", statusReport.getrAMMemoryFree())
-			.append("RamUsed", statusReport.getrAMMemoryUsed())
-			.append("MemFreePercent", statusReport.getFreePercent())
-			.append("MemUsedPercent", statusReport.getUsedPercent())
-			.append("SwapMemoryFree", statusReport.getSwapMemoryFree())
-			.append("SwapMemoryPageIn", statusReport.getSwapMemoryPageIn())
-			.append("SwapMemoryPageOut", statusReport.getSwapMemoryPageOut())
-			.append("SwapMemoryUsed", statusReport.getSwapMemoryUsed())
-			.append("HDFreeSpace", statusReport.getHardDiskFreeSpace())
-			.append("HDUsedSpace", statusReport.getHardDiskUsedSpace())
-			.append("NetworkIpAddress", statusReport.getNetworkIPAddress())
-			.append("NetworkInterface", statusReport.getNetworkInterface())
-			.append("NetworkNetMask", statusReport.getNetworkNetmask())
-			.append("NetworkGateway", statusReport.getNetworkGateway())
-			.append("NetRXBytes",statusReport.getRxBytes())
-			.append("NetTxBytes", statusReport.getTxBytes())
-			.append("NetSpeed", statusReport.getSpeed())
-			.append("NetRXErrors", statusReport.getRxErrors())
-			.append("NetTxErrors", statusReport.getTxErrors())
-			.append("NetRxPackets", statusReport.getRxPackets())
-            .append("NetTxPackets", statusReport.getTxPackets())
-            .append("Processes",listProcesses);		
+			BasicDBObject doc = new BasicDBObject(ItemCPUReport.HOSTNAME.title(),statusReport.getHostName())
+			.append(ItemCPUReport.TIME.title(), statusReport.getTimest())
+			.append(ItemCPUReport.TIME_MILLI.title(),statusReport.getTimeLong())
+			.append(ItemCPUReport.USERNAME.title(), statusReport.getUserName())
+			.append(ItemCPUReport.UP_TIME.title(), statusReport.getUptime())
+			.append(ItemCPUReport.MFLOPS.title(), statusReport.getMflops())
+			.append(ItemCPUReport.CPU_SECONDS.title(), statusReport.getTimeinSecs())
+			.append(ItemCPUReport.CPU_IDLE.title(), statusReport.getIdle())
+			.append(ItemCPUReport.NO_CPU_IDLE.title(), statusReport.getD())
+			.append(ItemCPUReport.CPU_USER.title(), statusReport.getCPuser())
+			.append(ItemCPUReport.CPU_SYS.title(), statusReport.getSys())
+			.append(ItemCPUReport.CPU_NICE.title(), statusReport.getNice())
+			.append(ItemCPUReport.CPU_WAIT.title(), statusReport.getWait())
+			.append(ItemCPUReport.CPU_COMBINED.title(), statusReport.getCombined())
+			.append(ItemCPUReport.TOTAL_USER.title(),statusReport.getUser())
+			.append(ItemCPUReport.TOTAL_SYS.title(), statusReport.getSys0())
+			.append(ItemCPUReport.TOTAL_NICE.title(), statusReport.getNice0())
+			.append(ItemCPUReport.TOTAL_WAIT.title(), statusReport.getWait0())
+			.append(ItemCPUReport.TOTAL_IDLE.title(), statusReport.getIdle0())
+			.append(ItemCPUReport.RAM_FREE.title(), statusReport.getrAMMemoryFree())
+			.append(ItemCPUReport.RAM_USED.title(), statusReport.getrAMMemoryUsed())
+			.append(ItemCPUReport.MEM_FREE.title(), statusReport.getFreePercent())
+			.append(ItemCPUReport.MEM_USED.title(), statusReport.getUsedPercent())
+			.append(ItemCPUReport.SWAP_FREE.title(), statusReport.getSwapMemoryFree())
+			.append(ItemCPUReport.SWAP_PAGE_IN.title(), statusReport.getSwapMemoryPageIn())
+			.append(ItemCPUReport.SWAP_PAGE_OUT.title(), statusReport.getSwapMemoryPageOut())
+			.append(ItemCPUReport.SWAP_USED.title(), statusReport.getSwapMemoryUsed())
+			.append(ItemCPUReport.HD_FREE.title(), statusReport.getHardDiskFreeSpace())
+			.append(ItemCPUReport.HD_USED.title(), statusReport.getHardDiskUsedSpace())
+			.append(ItemCPUReport.NET_IP.title(), statusReport.getNetworkIPAddress())
+			.append(ItemCPUReport.NET_INTERFACE.title(), statusReport.getNetworkInterface())
+			.append(ItemCPUReport.NET_MASK.title(), statusReport.getNetworkNetmask())
+			.append(ItemCPUReport.NET_GATEWAY.title(), statusReport.getNetworkGateway())
+			.append(ItemCPUReport.NET_RX_BYTES.title(),statusReport.getRxBytes())
+			.append(ItemCPUReport.NET_TX_BYTES.title(), statusReport.getTxBytes())
+			.append(ItemCPUReport.NET_SPEED.title(), statusReport.getSpeed())
+			.append(ItemCPUReport.NET_RX_ERRORS.title(), statusReport.getRxErrors())
+			.append(ItemCPUReport.NET_TX_ERRORS.title(), statusReport.getTxErrors())
+			.append(ItemCPUReport.NET_RX_PACKETS.title(), statusReport.getRxPackets())
+            .append(ItemCPUReport.NET_TX_PACKETS.title(), statusReport.getTxPackets())
+            .append(ItemCPUReport.PROCESSES.title(),listProcesses);		
 			builder.insert(doc);
         }		
 		
@@ -210,20 +211,20 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	  * @return
 	  */
 	 private boolean compareInitialReport(MonitorInitialReport m1, BasicDBObject object){		
-		 if(!object.get("OSName").equals(m1.getOperatingSystemName()))return true;
-		 else if(!object.get("OSVersion").equals(m1.getOperatingSystemVersion()))return true;
-		 else if(!object.get("OSArquitecture").equals(m1.getOperatingSystemArchitect()))return true;
-		 else if(!object.get("CPUModel").equals(m1.getcPUModel()))return true;
-		 else if(!object.get("CPUVendor").equals(m1.getcPUVendor()))return true;
-		 else if(!object.get("CPUCores").equals(m1.getcPUCores()))return true;
-		 else if(!object.get("CPUSockets").equals(m1.getTotalSockets()))return true;
-		 else if(!object.get("CpuMhz").equals(m1.getcPUMhz()))return true;
-		 else if(!object.get("CoresXSocket").equals(m1.getCoresPerSocket()))return true;
-		 else if(!object.get("RAMMemorySize").equals(m1.getrAMMemorySize()))return true;
-		 else if(!object.get("SwapMemorySize").equals(m1.getSwapMemorySize()))return true;
-		 else if(!object.get("HDSpace").equals(m1.getHardDiskSpace()))return true;
-		 else if(!object.get("HDFileSystem").equals(m1.getHardDiskFileSystem()))return true;
-		 else if(!object.get("MACAddress").equals(m1.getNetworkMACAddress()))return true;
+		 if(!object.get(ItemCPUMetrics.OS_NAME.title).equals(m1.getOperatingSystemName()))return true;
+		 else if(!object.get(ItemCPUMetrics.OS_VERSION.title).equals(m1.getOperatingSystemVersion()))return true;
+		 else if(!object.get(ItemCPUMetrics.OS_ARQUITECTURE.title).equals(m1.getOperatingSystemArchitect()))return true;
+		 else if(!object.get(ItemCPUMetrics.CPU_MODEL.title).equals(m1.getcPUModel()))return true;
+		 else if(!object.get(ItemCPUMetrics.CPU_VENDOR.title).equals(m1.getcPUVendor()))return true;
+		 else if(!object.get(ItemCPUMetrics.CPU_CORES.title).equals(m1.getcPUCores()))return true;
+		 else if(!object.get(ItemCPUMetrics.CPU_SOCKETS.title).equals(m1.getTotalSockets()))return true;
+		 else if(!object.get(ItemCPUMetrics.CPU_MHZ.title).equals(m1.getcPUMhz()))return true;
+		 else if(!object.get(ItemCPUMetrics.CORES_X_SOCKETS.title).equals(m1.getCoresPerSocket()))return true;
+		 else if(!object.get(ItemCPUMetrics.RAM_SIZE.title).equals(m1.getrAMMemorySize()))return true;
+		 else if(!object.get(ItemCPUMetrics.SWAP_SIZE.title).equals(m1.getSwapMemorySize()))return true;
+		 else if(!object.get(ItemCPUMetrics.HD_SPACE.title).equals(m1.getHardDiskSpace()))return true;
+		 else if(!object.get(ItemCPUMetrics.HD_FILESYSTEM.title).equals(m1.getHardDiskFileSystem()))return true;
+		 else if(!object.get(ItemCPUMetrics.MAC.title).equals(m1.getNetworkMACAddress()))return true;
 		 return false;
 	 }
 }
