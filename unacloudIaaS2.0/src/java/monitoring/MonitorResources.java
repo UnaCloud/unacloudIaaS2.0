@@ -1,7 +1,10 @@
 package monitoring;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
@@ -18,27 +21,6 @@ public class MonitorResources {
 	public MonitorResources() throws UnknownHostException {
 		connection = new MonitoringDBServerConnection();
 	}
-	
-//	public static void main(String[] args) {
-//		
-//		try {
-//			MonitorResources query = new MonitorResources();
-//			query.start();
-//		} catch (UnknownHostException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
-//	public void start() throws UnknownHostException{
-//		MonitorQuery query = new MonitorQuery(connection);
-//		System.out.println(query.getCPUMetrics("ISC301"));
-//		Date d = new Date();
-//		d.setTime(d.getTime()-1000*60*60*24);
-//		List<MonitorReport> monitors = query.getCpuReportsByDate(d, new Date(), "ISC301");
-//		for (MonitorReport monitorReport : monitors) {
-//			System.out.println(monitorReport);
-//		}
-//	}
 	public MonitorInitialReport getCPUMetrics(String host){
 		MonitorQuery query = new MonitorQuery(connection);
 		return query.getCPUMetrics(host);
@@ -56,16 +38,17 @@ public class MonitorResources {
 		Date d = new Date();
 		try
 		{
-			File temp = File.createTempFile("EnergyReport_"+host+"_"+d.toString(), ".csv");
-		    FileWriter writer = new FileWriter(temp);
+			File temp = File.createTempFile("EnergyReport_"+host+'_'+(d.getYear()+1900)+"-"+(d.getMonth()+1)+"-"+d.getDate()+'_'+d.getHours()+"-"+d.getMinutes()+"-", ".csv");
+			temp.deleteOnExit();
+			PrintWriter pw = new PrintWriter(new FileOutputStream(temp,true),true);			
 		    List<MonitorEnergyReport> reports = getListEnergyReports(start, end, host);
+		    pw.println(MonitorEnergyReport.getHead());
 		    for (MonitorEnergyReport report : reports) {
-				
+		    	pw.println(report.getLine());
 			} 
-		    //generate whatever data you want
-	 
-		    writer.flush();
-		    writer.close();
+		    //generate whatever data you want	 
+		    pw.flush();
+		    pw.close();
 		    return temp;
 		}
 		catch(Exception e)
@@ -74,18 +57,31 @@ public class MonitorResources {
 		     return null;
 		} 
 	}
-//	MongoConnection m = connection.generateConnection();
-//	BasicDBObject query = new BasicDBObject("Hostname", "ISC208");
-//	DBCursor cursor = m.energyCollection().find(query);
-//	try {
-//		while(cursor.hasNext()) {
-//		BasicDBObject db = (BasicDBObject) cursor.next();
-//		System.out.println(db);
-//			   System.out.println(db.getString("_id"));
-//			   System.out.println(db.getObjectId("_id").getTimestamp()+" --- "+new Date(db.getObjectId("_id").getTime()));
-//		   }
-//	} finally {
-//		 cursor.close();
-//	}
+	public File createReportCPU(String host, Date start, Date end){
+		Date d = new Date();
+		try
+		{
+			File temp = File.createTempFile("CPUReport_"+host+'_'+(d.getYear()+1900)+""+(d.getMonth()+1)+""+d.getDate()+'_'+d.getHours()+"-"+d.getMinutes()+"-", ".csv");
+			temp.deleteOnExit();
+			BufferedWriter bw = new BufferedWriter(new FileWriter(temp), 8192*4);
+			//PrintWriter pw = new PrintWriter(new FileOutputStream(temp,true),true);			
+		    List<MonitorReport> reports = getListCPUReports(start, end, host);
+		    bw.append(MonitorReport.getHead());
+		    bw.flush();
+		    for (MonitorReport report : reports) {
+		    	bw.newLine();
+		    	bw.append(report.getLine());
+		    	bw.flush();
+			} 	 
+		    bw.close();
+		    return temp;
+		}
+		catch(Exception e)
+		{
+		     e.printStackTrace();
+		     return null;
+		} 
+	}
+
 
 }

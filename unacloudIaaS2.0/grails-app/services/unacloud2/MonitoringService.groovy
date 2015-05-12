@@ -11,8 +11,8 @@ class MonitoringService {
     def getMetricsCPU(String host){
 		return monitor.getCPUMetrics(host);
 	}
-	
-	def generateEnergyReport(String host, Date start, Date finish){
-		
+	def generateReport(String host, Date start, Date finish, boolean energy){
+		if(energy)return monitor.createReportEnergy(host, start, finish);
+		else return monitor.createReportCPU(host, start, finish);
 	}
 }

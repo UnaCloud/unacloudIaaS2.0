@@ -598,3 +598,9 @@ a.skip {
 .table-monitor td{
 	text-align: center !important;
 }
+
+/* LABORATORY */
+
+.tab-monitor{
+	background: white;
+}

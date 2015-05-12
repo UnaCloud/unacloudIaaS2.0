@@ -13,12 +13,7 @@ public class MonitoringDBServerConnection extends MonitorDatabaseConnection{
 	    port = variableManagerService.getIntValue("MONITORING_SERVER_PORT");
 	    name = variableManagerService.getStringValue("MONITORING_DATABASE_NAME");
 	    user = variableManagerService.getStringValue("MONITORING_DATABASE_USER");
-	    password = variableManagerService.getStringValue("MONITORING_DATABASE_PASSWORD");		
-//		ip = "172.24.98.119";
-//	    port = 27017;
-//	    name = "cloudMongo";
-//	    user = "cloudmonitoreo";
-//	    password = "cloudmonitoreo$#";	
+	    password = variableManagerService.getStringValue("MONITORING_DATABASE_PASSWORD");
 	}
 
 }

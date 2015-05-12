@@ -2,6 +2,8 @@ package com.losandes.connectionDb;
 
 import java.util.Date;
 
+import com.losandes.connectionDb.enums.ItemEnergyReport;
+
 public class MonitorEnergyReport {
 	
 	
@@ -122,4 +124,43 @@ public class MonitorEnergyReport {
 	public void setRegisterDate(Date registerDate) {
 		this.registerDate = registerDate;
 	}
+
+	@Override
+	public String toString() {
+		return "MonitorEnergyReport [time=" + time + ", RDTSC=" + RDTSC
+				+ ", elapsedTime=" + elapsedTime + ", CPUFrequency="
+				+ CPUFrequency + ", processorPower=" + processorPower
+				+ ", cumulativeProcessorEnergyJoules="
+				+ cumulativeProcessorEnergyJoules
+				+ ", cumulativeProcessorEnergyMhz="
+				+ cumulativeProcessorEnergyMhz + ", IAPower=" + IAPower
+				+ ", cumulativeIAEnergy=" + cumulativeIAEnergy
+				+ ", cumulativeIA=" + cumulativeIA + ", packageTemperature="
+				+ packageTemperature + ", packageHot=" + packageHot
+				+ ", packagePowerLimit=" + packagePowerLimit + ", hostName="
+				+ hostName + ", registerDate=" + registerDate + "]";
+	}
+
+	public static String getHead() {
+		return ItemEnergyReport.TIME.title() + "," + ItemEnergyReport.RDTSC.title()+ "," 
+				+ ItemEnergyReport.ELAPSED_TIME.title() + ","+ ItemEnergyReport.CPU_FRECUENCY.title()+ "," 
+				+ ItemEnergyReport.PROCESSOR_POWER.title()+ ","+ ItemEnergyReport.ENERGY_JOULES.title()+","
+				+ ItemEnergyReport.ENERGY_MHZ.title()+ "," + ItemEnergyReport.IA_POWER.title()+ "," 
+				+ ItemEnergyReport.IA_ENERGY.title()+ "," + ItemEnergyReport.IA.title()+ ","
+				+ ItemEnergyReport.PACK_TEMP.title() + "," + ItemEnergyReport.PACK_HOT.title()	+ "," 
+				+ ItemEnergyReport.PACK_POWER.title() + ","+ ItemEnergyReport.HOSTNAME.title()+ "," 
+				+ ItemEnergyReport.REGISTER_DATE.title() ;
+	}
+	public String getLine() {
+		return   time + "," + RDTSC	+ "," 
+				+ elapsedTime + ","	+ CPUFrequency + "," 
+				+ processorPower+ ","+ cumulativeProcessorEnergyJoules+ ","
+				+ cumulativeProcessorEnergyMhz + "," + IAPower+ "," 
+				+ cumulativeIAEnergy+ "," + cumulativeIA + ","
+				+ packageTemperature + "," + packageHot	+ "," 
+				+ packagePowerLimit + ","+ hostName + "," + 
+				registerDate ;
+	}
+	
+	
 }

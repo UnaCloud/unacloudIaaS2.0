@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 import com.losandes.connectionDb.enums.ItemCPUMetrics;
 import com.losandes.connectionDb.enums.ItemCPUReport;
 import com.losandes.connectionDb.enums.ItemEnergyReport;
@@ -15,7 +17,7 @@ public class MonitorQuery {
 	private MonitorDatabaseConnection connection;
 	
 	public MonitorQuery(MonitorDatabaseConnection c) {
-		this.connection = c;
+		this.connection = c;		
 	}
 	
 	public List<MonitorEnergyReport> getEnergyReportsByDate(Date start, Date end, String pm){
@@ -23,12 +25,15 @@ public class MonitorQuery {
 		MongoConnection m = null;
 		try {
 			m = connection.generateConnection();		
-			BasicDBObject query = new BasicDBObject(ItemEnergyReport.HOSTNAME.title(), pm).append(ItemEnergyReport.REGISTER_DATE.title(), new BasicDBObject("$gte",start.getTime()).append("$lte", end.getTime()));
+			
+			//BasicDBObject query = new BasicDBObject(ItemEnergyReport.HOSTNAME.title(), pm).append(ItemEnergyReport.REGISTER_DATE.title(), new BasicDBObject("$gte",start.getTime()).append("$lte", end.getTime()));
+			BasicDBObject query = new BasicDBObject(ItemEnergyReport.HOSTNAME.title(), pm).append("_id", new BasicDBObject("$gte",new ObjectId(start)).append("$lte", new ObjectId(end)));
+			
 			DBCursor cursor = m.energyCollection().find(query);
 			try {
 				while(cursor.hasNext()) {
 					BasicDBObject obj = (BasicDBObject) cursor.next();
-					reports.add(parseToEnergyReport(obj));
+					reports.add(parseToEnergyReport(obj,new Date(obj.getObjectId("_id").getTime())));
 				}
 			} finally {
 				 cursor.close();
@@ -46,7 +51,9 @@ public class MonitorQuery {
 		MongoConnection m = null;
 		try {
 			m = connection.generateConnection();		
-			BasicDBObject query = new BasicDBObject(ItemCPUReport.HOSTNAME.title(), pm).append(ItemCPUReport.TIME_MILLI.title(), new BasicDBObject("$gte",start.getTime()).append("$lte", end.getTime()));
+			//BasicDBObject query = new BasicDBObject(ItemCPUReport.HOSTNAME.title(), pm).append(ItemCPUReport.TIME_MILLI.title(), new BasicDBObject("$gte",start.getTime()).append("$lte", end.getTime()));
+			BasicDBObject query = new BasicDBObject(ItemCPUReport.HOSTNAME.title(), pm).append("_id", new BasicDBObject("$gte",new ObjectId(start)).append("$lte", new ObjectId(end)));
+			
 			DBCursor cursor = m.cpuCollection().find(query);
 			try {
 				while(cursor.hasNext()) {
@@ -63,9 +70,53 @@ public class MonitorQuery {
 		}
 		return reports;
 	}
-//	public static void main(String[] args) {
-//		MonitorQuery m = new MonitorQuery(new MonitoringDBServerConnection());
-//		m.getCPUMetrics("ISC218");
+	public static void main(String[] args) {
+//		MonitorQuery m = new MonitorQuery(new MonitorDatabaseConnection() {
+//			
+//			@Override
+//			public void callVariables() {
+//				ip = "172.24.98.119";
+//			    port = 27017;
+//			    name = "cloudMongo";
+//			    user = "cloudmonitoreo";
+//			    password = "cloudmonitoreo$#";	
+//				
+//			}
+//		});
+//		Date end = new Date();
+//		Date start = new Date(end.getTime()-1000*60*60*20*1);
+//		
+//		for (MonitorReport string : m.getCpuReportsByDate(start, end, "ISC202")) {
+//			System.out.println(string);
+//			System.out.println(string.getLine());
+//		}
+//		for (MonitorReport string : m.getCpuReports("ISC202")) {
+//			System.out.println(string);
+//		}
+		
+	}
+//	private List<MonitorReport> getCpuReports(String pm){
+//		List<MonitorReport> reports = new ArrayList<MonitorReport>();
+//		MongoConnection m = null;
+//		try {
+//			m = connection.generateConnection();		
+//			BasicDBObject query = new BasicDBObject(ItemCPUReport.HOSTNAME.title(), pm);
+//			DBCursor cursor = m.cpuCollection().find(query);
+//			try {
+//				while(cursor.hasNext()) {
+//					BasicDBObject obj = (BasicDBObject) cursor.next();
+//					System.out.println(obj);
+//					reports.add(parseToCpuReport(obj));
+//				}
+//			} finally {
+//				 cursor.close();
+//			}
+//			m.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			if(m!=null)m.close();
+//		}
+//		return reports;
 //	}
 	public MonitorInitialReport getCPUMetrics(String host){
 		MongoConnection m = null;
@@ -73,12 +124,10 @@ public class MonitorQuery {
 		try {
 			m = connection.generateConnection();
 			BasicDBObject obj = (BasicDBObject)m.infrastructureCollection().findOne(new BasicDBObject(ItemCPUMetrics.HOSTNAME.title(),host));
-			System.out.println(obj);
 			mi = parseToInitialReport(obj);
 			m.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			if(m!=null)m.close();			
 		}	
 		return mi;
@@ -106,7 +155,7 @@ public class MonitorQuery {
 		return mon;
 	}
 	
-	private MonitorEnergyReport parseToEnergyReport(BasicDBObject obj){
+	private MonitorEnergyReport parseToEnergyReport(BasicDBObject obj, Date objectId){
 		MonitorEnergyReport mon = new MonitorEnergyReport();
 		mon.setCPUFrequency(obj.getString(ItemEnergyReport.CPU_FRECUENCY.title()));
 		mon.setCumulativeIA(obj.getString(ItemEnergyReport.IA.title()));
@@ -121,8 +170,12 @@ public class MonitorQuery {
 		mon.setPackageTemperature(obj.getString(ItemEnergyReport.PACK_TEMP.title()));
 		mon.setProcessorPower(obj.getString(ItemEnergyReport.PROCESSOR_POWER.title()));
 		mon.setRDTSC(obj.getString(ItemEnergyReport.RDTSC.title()));
-		Long l = obj.getLong(ItemEnergyReport.REGISTER_DATE.title());
-		mon.setRegisterDate(l==null?null:new Date(l));
+		try {
+			Long l = obj.getLong(ItemEnergyReport.REGISTER_DATE.title());
+			mon.setRegisterDate(new Date(l));
+		} catch (Exception e) {	
+			mon.setRegisterDate(objectId);
+		}		
 		mon.setTime(obj.getString(ItemEnergyReport.TIME.title()));
 		return mon;
 	}

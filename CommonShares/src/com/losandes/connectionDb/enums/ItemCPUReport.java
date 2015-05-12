@@ -10,7 +10,7 @@ public enum ItemCPUReport {
 	MFLOPS("MFlops"),		
 	CPU_SECONDS("CPUTimeInSeconds"),	
 	CPU_IDLE("CPUIdle"),	
-	NO_CPU_IDLE("NoCPUIdle"),
+	NO_CPU_IDLE("NoCPUIdle "),
 	CPU_USER("CPUuser"),
 	CPU_SYS("CPUsys"),
 	CPU_NICE("CPUNice"),

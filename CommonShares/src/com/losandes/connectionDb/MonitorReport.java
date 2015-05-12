@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import com.losandes.connectionDb.enums.ItemCPUReport;
+
 
 public class MonitorReport{
 
@@ -523,6 +525,37 @@ public class MonitorReport{
 				+ ", txErrors=" + txErrors + ", rxPackets=" + rxPackets
 				+ ", txPackets=" + txPackets + ", processes={" + processes + "}]";
 	}
-    
-        
+	
+	public static String getHead(){
+		return ItemCPUReport.TIME.title()+"," + ItemCPUReport.TIME_MILLI.title()+ "," + ItemCPUReport.USERNAME.title()+ ","
+				+ ItemCPUReport.HOSTNAME.title() + ","+ ItemCPUReport.UP_TIME.title()+"," + ItemCPUReport.MFLOPS.title() + ","
+				+ ItemCPUReport.CPU_SECONDS.title()+"," + ItemCPUReport.CPU_IDLE.title() + "," + ItemCPUReport.NO_CPU_IDLE.title() + ","
+				+ ItemCPUReport.CPU_USER.title()+"," + ItemCPUReport.CPU_SYS.title() + "," + ItemCPUReport.CPU_NICE.title() + "," 
+				+ ItemCPUReport.CPU_WAIT.title()+"," + ItemCPUReport.CPU_COMBINED.title() + "," + ItemCPUReport.TOTAL_USER.title() + ","
+				+ ItemCPUReport.TOTAL_SYS.title() + "," + ItemCPUReport.TOTAL_NICE.title() + ","+ ItemCPUReport.TOTAL_WAIT.title() + "," 
+				+ ItemCPUReport.TOTAL_IDLE.title() + ","+ItemCPUReport.RAM_FREE.title()+"," + ItemCPUReport.RAM_USED.title()+ ","
+				+ ItemCPUReport.MEM_FREE.title() + ","+ ItemCPUReport.MEM_USED.title() + "," + ItemCPUReport.SWAP_FREE.title()+ ","
+				+ ItemCPUReport.SWAP_PAGE_IN.title()+ "," + ItemCPUReport.SWAP_PAGE_OUT.title()+ "," + ItemCPUReport.SWAP_USED.title()+ "," 
+				+ ItemCPUReport.HD_FREE.title() + ","+ ItemCPUReport.HD_USED.title() + ","+ ItemCPUReport.NET_IP.title() + "," 
+				+ ItemCPUReport.NET_INTERFACE.title()+ "," + ItemCPUReport.NET_MASK.title()+ "," + ItemCPUReport.NET_GATEWAY.title() + ","
+				+ ItemCPUReport.NET_RX_BYTES.title() + "," + ItemCPUReport.NET_TX_BYTES.title() + ","+ ItemCPUReport.NET_SPEED.title() + "," 
+				+ ItemCPUReport.NET_RX_ERRORS.title() + "," + ItemCPUReport.NET_TX_ERRORS.title()+ "," + ItemCPUReport.NET_RX_PACKETS.title() + "," 
+				+ ItemCPUReport.NET_TX_PACKETS.title()	+ "," + ItemCPUReport.PROCESSES.title();
+	}
+	public String getLine(){
+		return  timest+ "," + timeLong+ ","	+ UserName + ","
+				+ hostName+"," + uptime + "," + mflops+ "," 
+				+ timeinSecs + "," + idle + "," + d+ "," 
+				+ CPuser + "," + sys + "," + nice+ "," 
+				+ wait + ", " + combined + ","+ user + "," 
+				+ sys0 + "," + nice0 + ","+ wait0 + "," 
+				+ idle0 + ","+ rAMMemoryFree + "," + rAMMemoryUsed+ "," 
+				+ freePercent + "," + usedPercent + "," + swapMemoryFree+ "," 
+				+ swapMemoryPageIn+ "," + swapMemoryPageOut	+ "," + swapMemoryUsed + ","
+				+ hardDiskFreeSpace + ","+ hardDiskUsedSpace + "," + networkIPAddress+ "," 
+				+ networkInterface	+ "," + networkNetmask + ","+ networkGateway + "," 
+				+ rxBytes + ","	+ txBytes + "," + speed + ","
+				+ rxErrors+ "," + txErrors + "," + rxPackets+ ","
+				+ txPackets + "," + processes;
+	}
 }

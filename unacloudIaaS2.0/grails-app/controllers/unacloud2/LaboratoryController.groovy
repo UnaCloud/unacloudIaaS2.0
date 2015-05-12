@@ -17,12 +17,7 @@ class LaboratoryController {
 	/**
 	 * Representation of agent services
 	 */
-	AgentService agentService
-	
-	/**
-	 * Representation of monitoring services
-	 */
-	MonitoringService monitoringService
+	AgentService agentService	
 	
 	//-----------------------------------------------------------------
 	// Actions
@@ -269,11 +264,4 @@ class LaboratoryController {
 		render resp as JSON
 	}
 	
-	def machine(){
-		def pm = PhysicalMachine.get(params.id);
-		println params.labId;
-		def monitor = monitoringService.getMetricsCPU(pm.getName())
-		//def machineSet= lab.getOrderedMachines()
-		[machine: pm, components:monitor, lab:params.labId]
-	}
 }
