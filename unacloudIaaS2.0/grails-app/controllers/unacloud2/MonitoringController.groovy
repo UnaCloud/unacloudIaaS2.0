@@ -27,10 +27,9 @@ class MonitoringController {
 	
 	def index(){
 		def pm = PhysicalMachine.get(params.id);
-		println params.labId;
 		def monitor = monitoringService.getMetricsCPU(pm.getName())
 		//def machineSet= lab.getOrderedMachines()
-		[machine: pm, components:monitor, lab:params.labId]
+		[machine: pm, components:monitor, lab:pm.laboratory.id]
 	}	
 	
 	def getReports(){

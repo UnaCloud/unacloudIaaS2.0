@@ -40,7 +40,6 @@ public class MonitorQuery {
 			}
 			m.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			if(m!=null)m.close();
 		}
 		return reports;
@@ -65,7 +64,6 @@ public class MonitorQuery {
 			}
 			m.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			if(m!=null)m.close();
 		}
 		return reports;
@@ -127,7 +125,6 @@ public class MonitorQuery {
 			mi = parseToInitialReport(obj);
 			m.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			if(m!=null)m.close();			
 		}	
 		return mi;
