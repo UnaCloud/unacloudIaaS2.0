@@ -138,7 +138,13 @@ public class MonitorQuery {
 		MonitorInitialReport mi = null;
 		try {
 			m = connection.generateConnection();
-			BasicDBObject obj = (BasicDBObject)m.infrastructureCollection().findOne(new BasicDBObject(ItemCPUMetrics.HOSTNAME.title(),host));
+			BasicDBObject orQuery = new BasicDBObject();
+		    List<BasicDBObject> objects = new ArrayList<BasicDBObject>();
+			BasicDBObject query = new BasicDBObject(ItemCPUReport.HOSTNAME.title(), host.toLowerCase());
+			BasicDBObject query2 = new BasicDBObject(ItemCPUReport.HOSTNAME.title(), host.toUpperCase());
+			objects.add(query2);objects.add(query);
+			orQuery.put("$or", objects);
+			BasicDBObject obj = (BasicDBObject)m.infrastructureCollection().findOne(orQuery);
 			mi = parseToInitialReport(obj);
 			m.close();
 		} catch (Exception e) {
