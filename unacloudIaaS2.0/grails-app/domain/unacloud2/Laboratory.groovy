@@ -44,4 +44,12 @@ class Laboratory {
 		ArrayList <PhysicalMachine> array = new ArrayList(physicalMachines).sort(true,c)
 		return array
 	}
+	/**
+	 * Gets database object's id
+	 * @return database id
+	 */
+	def long getDatabaseId(){
+		return id;
+	}
+	
 }

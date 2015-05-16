@@ -1,6 +1,5 @@
 package allocatorTest;
 
-import unacloud2.IP;
 import unacloud2.PhysicalMachine;
 
 public class PhysicalMachineTest extends PhysicalMachine{

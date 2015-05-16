@@ -540,7 +540,7 @@ public class MonitorReport{
 				+ ItemCPUReport.NET_INTERFACE.title()+ "," + ItemCPUReport.NET_MASK.title()+ "," + ItemCPUReport.NET_GATEWAY.title() + ","
 				+ ItemCPUReport.NET_RX_BYTES.title() + "," + ItemCPUReport.NET_TX_BYTES.title() + ","+ ItemCPUReport.NET_SPEED.title() + "," 
 				+ ItemCPUReport.NET_RX_ERRORS.title() + "," + ItemCPUReport.NET_TX_ERRORS.title()+ "," + ItemCPUReport.NET_RX_PACKETS.title() + "," 
-				+ ItemCPUReport.NET_TX_PACKETS.title()	+ "," + ItemCPUReport.PROCESSES.title();
+				+ ItemCPUReport.NET_TX_PACKETS.title()	+ "," + ItemCPUReport.PROCESSES.title()+"(Name;VirtualMemorySize;ResidentMemorySize;CPUPercentage)";
 	}
 	public String getLine(){
 		return  timest+ "," + timeLong+ ","	+ UserName + ","

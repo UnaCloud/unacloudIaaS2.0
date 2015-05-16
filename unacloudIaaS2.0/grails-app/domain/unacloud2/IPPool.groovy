@@ -24,4 +24,20 @@ class IPPool {
 	
     static constraints = {
     }
+	/**
+	 * Gets database object's id
+	 * @return database id
+	 */
+	def long getDatabaseId(){
+		return id;
+	}
+	
+	
+	/**
+	 * Method to return the ips segment quantity
+	 */
+	def int getIpsQuantity(){
+		return ips.size();
+	}
+	
 }

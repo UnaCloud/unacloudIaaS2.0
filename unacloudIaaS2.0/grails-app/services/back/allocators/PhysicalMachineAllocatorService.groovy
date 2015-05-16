@@ -50,7 +50,7 @@ class PhysicalMachineAllocatorService {
 		/*
 		 * Calls the correspondent allocation method 
 		 */
-		allocator.getAllocator().allocateVirtualMachines(vms,pms,pmDescriptions);
+		allocator.getAllocator().startAllocation(vms,pms,pmDescriptions);
 	}
 	
 	

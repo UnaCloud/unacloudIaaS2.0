@@ -8,7 +8,7 @@ public enum ItemEnergyReport {
 	ELAPSED_TIME("elapsedTime"),
 	CPU_FRECUENCY("CPUFrequency"),
 	PROCESSOR_POWER("processorPower"),
-	ENERGY_JOULES("cumulativeProcessorEnergyJoules"),
+	ENERGY_JOULES("cumulativeProcessorEnergyJoules "),
 	ENERGY_MHZ("cumulativeProcessorEnergyMhz"),
 	IA_POWER("IAPower"),
 	IA_ENERGY("cumulativeIAEnergy"),

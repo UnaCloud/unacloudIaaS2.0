@@ -10,8 +10,9 @@ import unacloud2.VirtualMachineExecution;
 
 public class RandomAllocator extends VirtualMachineAllocator {
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void allocateVirtualMachines(List<VirtualMachineExecution> virtualMachineList,List<PhysicalMachine> physicalMachines,Map<Long,PhysicalMachineAllocationDescription> physicalMachineDescriptions) throws AllocatorException{
+	protected void allocateVirtualMachines(List<VirtualMachineExecution> virtualMachineList,List<PhysicalMachine> physicalMachines,Map<Long,PhysicalMachineAllocationDescription> physicalMachineDescriptions) throws AllocatorException{
 		if(virtualMachineList.size()>2*physicalMachines.size()){
 		}else{
 			Collections.shuffle(virtualMachineList);

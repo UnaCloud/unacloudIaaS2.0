@@ -9,7 +9,7 @@ import unacloud2.VirtualMachineExecution;
 public class SingletonAllocator extends VirtualMachineAllocator{
 
 	@Override
-	public void allocateVirtualMachines(
+	protected void allocateVirtualMachines(
 			List<VirtualMachineExecution> virtualMachineList,
 			List<PhysicalMachine> physicalMachines,
 			Map<Long, PhysicalMachineAllocationDescription> physicalMachineDescriptions)

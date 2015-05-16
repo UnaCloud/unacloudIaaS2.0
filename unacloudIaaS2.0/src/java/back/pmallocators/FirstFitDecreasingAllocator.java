@@ -27,7 +27,7 @@ public class FirstFitDecreasingAllocator extends VirtualMachineAllocator {
 	}
 	
 	@Override
-	public void allocateVirtualMachines(List<VirtualMachineExecution> virtualMachineList,List<PhysicalMachine> physicalMachines,final Map<Long, PhysicalMachineAllocationDescription> physicalMachineDescriptions)throws AllocatorException{
+	protected void allocateVirtualMachines(List<VirtualMachineExecution> virtualMachineList,List<PhysicalMachine> physicalMachines,final Map<Long, PhysicalMachineAllocationDescription> physicalMachineDescriptions)throws AllocatorException{
 		Collections.sort(physicalMachines, new PhysicalMachineComparator(physicalMachineDescriptions));
 		Collections.sort(virtualMachineList, new Comparator<VirtualMachineExecution>() {
 			public int compare(VirtualMachineExecution v1, VirtualMachineExecution v2) {

@@ -98,13 +98,13 @@ public class PhysicalMachineMonitor {
 	}
 	
 	public void disableService(boolean energy, boolean cpu){
-		if(cpu)if(mc.getStatus()==MonitoringStatus.OFF){
-			VariableManager.local.setBooleanValue("MONITORING_ENABLE_CPU", false);
-			mc.setStatus(MonitoringStatus.DISABLE);
-		}if(energy)if(me.getStatus()==MonitoringStatus.OFF){
-			VariableManager.local.setBooleanValue("MONITORING_ENABLE_ENERGY", false);
-			me.setStatus(MonitoringStatus.DISABLE);
-		}	
+//		if(cpu)if(mc.getStatus()==MonitoringStatus.OFF){
+//			VariableManager.local.setBooleanValue("MONITORING_ENABLE_CPU", false);
+//			mc.setStatus(MonitoringStatus.DISABLE);
+//		}if(energy)if(me.getStatus()==MonitoringStatus.OFF){
+//			VariableManager.local.setBooleanValue("MONITORING_ENABLE_ENERGY", false);
+//			me.setStatus(MonitoringStatus.DISABLE);
+//		}	
 	}
 	
 	public void updateService(int frE, int frC, int wsCpu, int wsEnergy, boolean energy, boolean cpu){
@@ -133,10 +133,10 @@ public class PhysicalMachineMonitor {
 		}		
 	}
 	public MonitoringStatus getStatusEnergy(){
-		return me==null?MonitoringStatus.DISABLE:me.getStatus();
+		return me==null?MonitoringStatus.NONE:me.getStatus();
 	}
 	public MonitoringStatus getStatusCpu(){
-		return mc==null?MonitoringStatus.DISABLE:mc.getStatus();
+		return mc==null?MonitoringStatus.NONE:mc.getStatus();
 	}
 	
 	private class Controller extends Thread{

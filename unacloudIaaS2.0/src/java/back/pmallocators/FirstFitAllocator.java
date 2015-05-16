@@ -10,7 +10,7 @@ import unacloud2.VirtualMachineExecution;
 
 public class FirstFitAllocator extends VirtualMachineAllocator {
 	@Override
-	public void allocateVirtualMachines(List<VirtualMachineExecution> virtualMachineList,List<PhysicalMachine> physicalMachines,final Map<Long, PhysicalMachineAllocationDescription> physicalMachineDescriptions)throws AllocatorException{
+	protected void allocateVirtualMachines(List<VirtualMachineExecution> virtualMachineList,List<PhysicalMachine> physicalMachines,final Map<Long, PhysicalMachineAllocationDescription> physicalMachineDescriptions)throws AllocatorException{
 		Collections.sort(physicalMachines, new Comparator<PhysicalMachine>() {
 			public int compare(PhysicalMachine p1, PhysicalMachine p2) {
 				return Long.compare(p1.getDatabaseId(),p2.getDatabaseId());

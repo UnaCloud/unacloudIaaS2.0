@@ -61,7 +61,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
             }
             org.hyperic.sigar.CpuInfo CPU1 = infos[0];
             return new MonitorInitialReport(UUID, timest,date.getTime(),
-                    Network.getHostname(),
+                    Network.getHostname().toUpperCase(),
                     monitor.operatingSystem.getOperatingSystemName(),
                     monitor.operatingSystem.getOperatingSystemVersion(),
                     monitor.operatingSystem.getOperatingSystemArchitect(),
@@ -139,7 +139,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
             NetInterfaceStat NET = instance.sigar
                     .getNetInterfaceStat(monitor.network.getNetworkInterface());
             return new MonitorReport(UUID, timest,date.getTime(), contadorRegistros, 
-            		OperatingSystem.getUserName(),Network.getHostname(),
+            		OperatingSystem.getUserName(),Network.getHostname().toUpperCase(),
                     UPTIME.getUptime(), CPUMflops.getMflops(),
                     CPUMflops.getTimeinSecs(), CPU2.getIdle() * 100,
                     (100 - (CPU2.getIdle() * 100)), CPU2.getUser() * 100,

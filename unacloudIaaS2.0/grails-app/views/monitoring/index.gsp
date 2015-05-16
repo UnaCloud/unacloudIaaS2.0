@@ -143,7 +143,7 @@
 		</div>
 		<div role="tabpanel" class="tab-pane tab-monitor container span9" id="report" style="background:white ; padding: 20px">
 			<form id="form_report" action="../getReports">
-				<input type="hidden" name="machine" value="${machine.name}">	
+				<input type="hidden" name="host" value="${machine.name}">	
 				<input id="input-report" type="hidden" name="report" value="">
 				<div class=" form-group span6">
 					<label for="year">Select Year:</label>

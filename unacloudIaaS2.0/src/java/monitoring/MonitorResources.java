@@ -34,6 +34,7 @@ public class MonitorResources {
 		return query.getEnergyReportsByDate(start, end, host);		
 	}
 	
+	@SuppressWarnings("deprecation")
 	public File createReportEnergy(String host, Date start, Date end){
 		Date d = new Date();
 		try
@@ -57,6 +58,7 @@ public class MonitorResources {
 		     return null;
 		} 
 	}
+	@SuppressWarnings("deprecation")
 	public File createReportCPU(String host, Date start, Date end){
 		Date d = new Date();
 		try

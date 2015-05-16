@@ -1,7 +1,5 @@
 package allocatorTest;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +44,7 @@ public class FirstFitTest {
 				vms.add(vme);
 			}
 			try {
-				ffa.allocateVirtualMachines(vms,pms,pmds);
+				ffa.startAllocation(vms,pms,pmds);
 			} catch (AllocatorException e1) {
 				e1.printStackTrace();
 			}
