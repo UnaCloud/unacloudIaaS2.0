@@ -131,20 +131,26 @@ class WebServicesService {
 	 */
 	
 	def startHeterogeneousCluster(String login,String apiKey,JSONObject cluster) throws Exception{
-		println 'StartDeployment Heterogeneous'
-		if(login==null||apiKey==null)return new WebServiceException("invalid request")
-		User user= User.findByUsername(login)
-		if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
-		if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
-		JSONArray images= cluster.getJSONArray("images")
-		ImageRequestOptions[] options= new ImageRequestOptions[images.length()]
-		for(int i=0; i<images.length();i++){
-			JSONObject image=images.get(i)
-			options[i]= new ImageRequestOptions(image.getLong("imageId"), HardwareProfile.findByName(image.get("hardwareProfile")), image.getInt("instances"),image.getString("hostname"))
+		try {
+			println 'StartDeployment Heterogeneous'
+			if(login==null||apiKey==null)return new WebServiceException("invalid request")
+			User user= User.findByUsername(login)
+			if(user==null||user.apiKey==null)return new WebServiceException("Invalid User")
+			if(!apiKey.equals(user.apiKey))return new WebServiceException("Invalid Key")
+			JSONArray images= cluster.getJSONArray("images")
+			ImageRequestOptions[] options= new ImageRequestOptions[images.length()]
+			for(int i=0; i<images.length();i++){
+				JSONObject image=images.get(i)
+				options[i]= new ImageRequestOptions(image.getLong("imageId"), HardwareProfile.findByName(image.get("hardwareProfile")), image.getInt("instances"),image.getString("hostname"))
+			}
+			def userCluster= Cluster.get(cluster.get("clusterId"))
+			if (userCluster.isDeployed()) return new WebServiceException("Cluster already deployed")
+			else return deploymentService.deployHeterogeneous(userCluster, user, cluster.getInt("execTime")*60000,options)
+			
+		} catch (Exception e) {
+			e.printStackTrace()
+			throw e
 		}
-		def userCluster= Cluster.get(cluster.get("clusterId"))
-		if (userCluster.isDeployed()) return new WebServiceException("Cluster already deployed")
-		else return deploymentService.deployHeterogeneous(userCluster, user, cluster.getInt("execTime")*60000,options)
 		
 	}
 	

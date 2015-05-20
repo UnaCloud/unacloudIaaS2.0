@@ -83,6 +83,7 @@ class DeploymentService {
 			depCluster.images.add(depImage)
 		}
 		depCluster.save(failOnError: true)
+		println "Imagenes resultantes "+depCluster.images.size()
 		/*
 		 * Makes allocation and user restriction validations for each image
 		 */

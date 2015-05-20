@@ -7,8 +7,7 @@ beans = {
 		
 				//20Gb Max upload size
 				maxUploadSize=21474836480
-				//1Gb 9192000000 
-				
+				//1Gb 9192000000 				
 				//uploadTempDir="/tmp"
 		
 			}
