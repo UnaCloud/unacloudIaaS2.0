@@ -13,20 +13,16 @@
 			<div id="remaining" class="alert alert-info">
 				<table>
 					<tr>
-						<td rowspan="3"><i class="icon-exclamation-sign"></i>&nbsp;&nbsp;&nbsp;
-						</td>
-						<td><label class="info">Remaining Common Instances: ${limit}</label>
-						</td>
+						<td rowspan="3"><i class="icon-exclamation-sign"></i>&nbsp;&nbsp;&nbsp;</td>
+						<td><label class="info">Remaining Common Instances: <strong>${limit}</strong> <small>(Physical Machines)</small></label></td>
 					</tr>
 					<tr>
-						<td><label> Remaining High Availability Instances: ${limitHA }</label>
-						</td>
+						<td><label> Remaining High Availability Instances: <strong>${limitHA}</strong> <small>(Physical Machines)</small></label></td>
 					</tr>
 					<g:if test="${limit==0 && account!= null}">
 						<tr>
-						<td><label> There are no remaining local physical machines, but you can deploy on ${account.provider.name } </label>
-						</td>
-					</tr> 
+							<td><label> There are no remaining local physical machines, but you can deploy on ${account.provider.name } </label></td>
+						</tr> 
 					</g:if>
 				</table>
 			</div>			
@@ -59,13 +55,14 @@
 								</option>
 								</g:each>
 							</select>
-						</td>
-						
+						</td>						
 					</tr>
-					<tr>
-						<td><label>High Availability</label></td>
-						<td><input type="checkbox" name="highAvailability${image.id.toString()}"></td>
-					</tr>
+					<g:if test="${limitHA > 0}">
+						<tr>
+							<td><label>High Availability</label></td>
+							<td><input type="checkbox" name="highAvailability${image.id.toString()}"></td>
+						</tr>
+					</g:if>			
 					
 					<tr>
 						<td><label>Hostname</label></td>
@@ -87,9 +84,11 @@
 					</select>
 				</div>
 			</div>
-			<div class="controls">
-				<g:actionSubmit name="deploy" class="btn" value="Deploy" action="deploy"/>
-			</div>
+			<g:if test="${limit > 0}">
+				<div class="controls">
+					<g:actionSubmit name="deploy" class="btn" value="Deploy" action="deploy"/>
+				</div>
+			</g:if>
 		</g:form>
 		
 	</div>

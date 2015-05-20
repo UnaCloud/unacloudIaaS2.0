@@ -1,6 +1,16 @@
 package unacloud2
 
+import back.userRestrictions.UserRestrictionProcessorService;
+
 class ClusterService {
+	//-----------------------------------------------------------------
+	// Services
+	//-----------------------------------------------------------------
+	
+	/**
+	 * Representation of UserRestriction services
+	 */
+	UserRestrictionProcessorService userRestrictionProcessorService
 	
 	//-----------------------------------------------------------------
 	// Methods
@@ -38,15 +48,26 @@ class ClusterService {
 	def deleteCluster(Cluster cluster, User user){
 		for (depCluster in DeployedCluster.getAll()){
 			if(depCluster.cluster!= null){
-			if (depCluster.cluster.equals(cluster)){
-				depCluster.cluster=null
-				depCluster.save()
+				if (depCluster.cluster.equals(cluster)){
+					depCluster.cluster=null
+					depCluster.save()
+				}
 			}
-			}
-		}
-		
+		}		
 		user.userClusters.remove(cluster)
 		user.save()
 		cluster.delete()	
+	}
+	
+	/**
+	 * TODO
+	 */
+	def calculateMaxDeployments(User user, HardwareProfile hwp){
+		def machines = userRestrictionProcessorService.getAvoidedMachines(user)
+		def labs = userRestrictionProcessorService.getAvoidedLabs(user)
+		int ips = 0;
+	    for(Laboratory lab: labs){
+			ips += lab.virtualMachinesIPs.ips.size()
+		}
 	}
 }

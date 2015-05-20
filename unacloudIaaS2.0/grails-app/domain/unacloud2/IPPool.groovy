@@ -37,7 +37,7 @@ class IPPool {
 	 * Method to return the ips segment quantity
 	 */
 	def int getIpsQuantity(){
-		return ips.size();
+		return ips.findAll{it.used == false}
 	}
 	
 }

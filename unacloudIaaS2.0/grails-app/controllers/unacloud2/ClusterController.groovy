@@ -1,5 +1,7 @@
 package unacloud2
 
+import back.userRestrictions.UserRestrictionEnum;
+import back.userRestrictions.UserRestrictionProcessorService;
 import webutils.ImageRequestOptions;
 import grails.converters.JSON
 
@@ -15,6 +17,10 @@ class ClusterController {
 	
 	ClusterService clusterService
 	
+	/**
+	 * Representation of UserRestriction services
+	 */
+	UserRestrictionProcessorService userRestrictionProcessorService
 	//-----------------------------------------------------------------
 	// Actions
 	//-----------------------------------------------------------------
@@ -75,14 +81,10 @@ class ClusterController {
 		def cluster=Cluster.get(params.id);
 		int limit
 		int limitHA
-		def machines=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON)
-		for (machine in machines)
-		{
-			if(machine.highAvailability)
-			limitHA++
-			else
-			limit++
-		}
+		def user = User.get(session.user.id)		
+		def machines = userRestrictionProcessorService.getAvoidedMachines(user)
+		limitHA = machines.findAll{it.highAvailability==true}.size()
+		limit = machines.size() - limitHA;
 		[cluster: cluster,limit: limit, limitHA: limitHA, hardwareProfiles: HardwareProfile.list()]
 		
 	}
