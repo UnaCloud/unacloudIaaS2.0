@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import virtualMachineManager.LocalProcessExecutor;
+import com.losandes.utils.LocalProcessExecutor;
+
 import static com.losandes.utils.Constants.*;
 
 /**

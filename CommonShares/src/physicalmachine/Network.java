@@ -8,9 +8,9 @@ import org.hyperic.sigar.SigarException;
 import org.hyperic.sigar.cmd.Shell;
 import org.hyperic.sigar.cmd.SigarCommandBase;
 
+import com.losandes.utils.LocalProcessExecutor;
 import com.losandes.utils.VariableManager;
 
-import virtualMachineManager.LocalProcessExecutor;
 import static com.losandes.utils.Constants.*;
 
 /**

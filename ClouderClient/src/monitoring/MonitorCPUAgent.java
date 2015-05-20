@@ -14,10 +14,11 @@ import java.util.List;
 import unacloudEnums.MonitoringStatus;
 
 import com.losandes.connectionDb.MongoConnection;
-import com.losandes.connectionDb.MonitorInitialReport;
-import com.losandes.connectionDb.MonitorReport;
 import com.losandes.connectionDb.enums.ItemCPUMetrics;
 import com.losandes.connectionDb.enums.ItemCPUReport;
+import com.losandes.monitoring.MonitorInitialReport;
+import com.losandes.monitoring.MonitorReport;
+import com.losandes.monitoring.MonitorReportGenerator;
 import com.mongodb.BasicDBObject;
 import com.mongodb.BulkWriteOperation;
 
@@ -117,7 +118,9 @@ public class MonitorCPUAgent extends AbstractMonitor {
 				.append(ItemCPUMetrics.TIME_MILLI.title(),initialReport.getTimeLong())
 				.append(ItemCPUMetrics.OS_NAME.title(), initialReport.getOperatingSystemName())
 				.append(ItemCPUMetrics.OS_VERSION.title(), initialReport.getOperatingSystemVersion())
-				.append(ItemCPUMetrics.OS_ARQUITECTURE.title(), initialReport.getOperatingSystemArchitect())
+				.append(ItemCPUMetrics.OS_ARQUITECTURE.title(), initialReport.getOperatingSystemArchitect())				
+				.append(ItemCPUMetrics.MFLOPS.title(), initialReport.getMflops())
+				.append(ItemCPUMetrics.CPU_SECONDS.title(), initialReport.getTimeinSecs())
 				.append(ItemCPUMetrics.CPU_MODEL.title(), initialReport.getcPUModel())
 				.append(ItemCPUMetrics.CPU_VENDOR.title(), initialReport.getcPUVendor())
 				.append(ItemCPUMetrics.CPU_CORES.title(), initialReport.getcPUCores())
@@ -155,8 +158,6 @@ public class MonitorCPUAgent extends AbstractMonitor {
 			.append(ItemCPUReport.TIME_MILLI.title(),statusReport.getTimeLong())
 			.append(ItemCPUReport.USERNAME.title(), statusReport.getUserName())
 			.append(ItemCPUReport.UP_TIME.title(), statusReport.getUptime())
-			.append(ItemCPUReport.MFLOPS.title(), statusReport.getMflops())
-			.append(ItemCPUReport.CPU_SECONDS.title(), statusReport.getTimeinSecs())
 			.append(ItemCPUReport.CPU_IDLE.title(), statusReport.getIdle())
 			.append(ItemCPUReport.NO_CPU_IDLE.title(), statusReport.getD())
 			.append(ItemCPUReport.CPU_USER.title(), statusReport.getCPuser())
@@ -225,6 +226,12 @@ public class MonitorCPUAgent extends AbstractMonitor {
 		 else if(!object.get(ItemCPUMetrics.HD_SPACE.title()).equals(m1.getHardDiskSpace()))return true;
 		 else if(!object.get(ItemCPUMetrics.HD_FILESYSTEM.title()).equals(m1.getHardDiskFileSystem()))return true;
 		 else if(!object.get(ItemCPUMetrics.MAC.title()).equals(m1.getNetworkMACAddress()))return true;
+		 else try {
+			 if(!object.get(ItemCPUMetrics.MFLOPS.title()).equals(m1.getMflops()))return true;
+			 else if(!object.get(ItemCPUMetrics.CPU_SECONDS.title()).equals(m1.getTimeinSecs()))return true;
+		 } catch (Exception e) {
+			 return false;
+		 }		
 		 return false;
 	 }
 }

@@ -1,4 +1,4 @@
-package com.losandes.connectionDb;
+package com.losandes.monitoring;
 
 import java.util.Date;
 

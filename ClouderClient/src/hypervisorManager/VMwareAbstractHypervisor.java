@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import virtualMachineManager.LocalProcessExecutor;
+import com.losandes.utils.LocalProcessExecutor;
 
 /**
  * Implementation of hypervisor abstract class to give support for

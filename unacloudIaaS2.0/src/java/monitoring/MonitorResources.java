@@ -9,10 +9,11 @@ import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
 
-import com.losandes.connectionDb.MonitorEnergyReport;
-import com.losandes.connectionDb.MonitorInitialReport;
-import com.losandes.connectionDb.MonitorQuery;
-import com.losandes.connectionDb.MonitorReport;
+import com.losandes.monitoring.MonitorEnergyReport;
+import com.losandes.monitoring.MonitorInitialReport;
+import com.losandes.monitoring.MonitorQuery;
+import com.losandes.monitoring.MonitorReport;
+
 
 public class MonitorResources {
 	

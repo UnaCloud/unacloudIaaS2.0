@@ -7,6 +7,8 @@ public enum ItemCPUMetrics {
 	TIME_MILLI("TimeMilli"),
 	OS_NAME("OSName"),
 	OS_VERSION("OSVersion"),
+	MFLOPS("MFlops"),		
+	CPU_SECONDS("CPUTimeInSeconds"),	
 	OS_ARQUITECTURE("OSArquitecture"),	
 	CPU_MODEL("CPUModel"),
 	CPU_VENDOR("CPUVendor"),

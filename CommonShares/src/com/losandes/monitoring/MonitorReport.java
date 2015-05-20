@@ -1,4 +1,4 @@
-package com.losandes.connectionDb;
+package com.losandes.monitoring;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -16,7 +16,7 @@ public class MonitorReport{
 	long timeLong;
 	int ContadorRegistros;
 	String UserName, hostName;
-	double uptime,mflops,timeinSecs,idle,d,CPuser,sys,nice,wait,combined;
+	double uptime,idle,d,CPuser,sys,nice,wait,combined;
 	long user,sys0,nice0,wait0,idle0;
 	float rAMMemoryFree,rAMMemoryUsed;
 	double freePercent,usedPercent;
@@ -39,7 +39,7 @@ public class MonitorReport{
     public MonitorReport() {
 	}
     
-	public MonitorReport(String uUID, Timestamp timest, long timeLong, int contadorRegistros, String userName, String host , double uptime, double mflops, double timeinSecs, double idle, double d, double cPuser, double sys, double nice, double wait, double combined, long user, long sys0, long nice0, long wait0, long idle0, float rAMMemoryFree, float rAMMemoryUsed, double freePercent, double usedPercent, float swapMemoryFree, float swapMemoryPageIn, float swapMemoryPageOut, float swapMemoryUsed, long hardDiskFreeSpace, long hardDiskUsedSpace, String networkIPAddress, String networkInterface, String networkNetmask, String networkGateway, long rxBytes, long txBytes, long speed, long rxErrors, long txErrors, long rxPackets, long txPackets,String processes){
+	public MonitorReport(String uUID, Timestamp timest, long timeLong, int contadorRegistros, String userName, String host , double uptime, double idle, double d, double cPuser, double sys, double nice, double wait, double combined, long user, long sys0, long nice0, long wait0, long idle0, float rAMMemoryFree, float rAMMemoryUsed, double freePercent, double usedPercent, float swapMemoryFree, float swapMemoryPageIn, float swapMemoryPageOut, float swapMemoryUsed, long hardDiskFreeSpace, long hardDiskUsedSpace, String networkIPAddress, String networkInterface, String networkNetmask, String networkGateway, long rxBytes, long txBytes, long speed, long rxErrors, long txErrors, long rxPackets, long txPackets,String processes){
 		
 		UUID = uUID;
 		this.timest = timest;
@@ -48,8 +48,6 @@ public class MonitorReport{
 		UserName = userName;
 		hostName = host;
 		this.uptime = uptime;
-		this.mflops = mflops;
-		this.timeinSecs = timeinSecs;
 		this.idle = idle;
 		this.d = d;
 		CPuser = cPuser;
@@ -104,8 +102,6 @@ public class MonitorReport{
 			else if(components[0].trim().startsWith("UserName")) UserName = components[1];
 			else if(components[0].trim().startsWith("hostName")) hostName = components[1];
 			else if(components[0].trim().startsWith("uptime")) uptime = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("mflops")) mflops = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("timeinSecs")) timeinSecs = Double.parseDouble(components[1]);
 			else if(components[0].trim().startsWith("idle")) idle = Double.parseDouble(components[1]);
 			else if(components[0].trim().startsWith("d")) d = Double.parseDouble(components[1]);
 			else if(components[0].trim().startsWith("CPuser")) CPuser = Double.parseDouble(components[1]);
@@ -193,22 +189,6 @@ public class MonitorReport{
 
 	public void setUptime(double uptime) {
 		this.uptime = uptime;
-	}
-
-	public double getMflops() {
-		return mflops;
-	}
-
-	public void setMflops(double mflops) {
-		this.mflops = mflops;
-	}
-
-	public double getTimeinSecs() {
-		return timeinSecs;
-	}
-
-	public void setTimeinSecs(double timeinSecs) {
-		this.timeinSecs = timeinSecs;
 	}
 
 	public double getIdle() {
@@ -504,8 +484,7 @@ public class MonitorReport{
 	public String toString() {
 		return "MonitorReport [ContadorRegistros=" + ContadorRegistros + ", timest=" + timest
 				+ ", timeLong=" + timeLong+ ", UserName="
-				+ UserName + ", hostName="+ hostName+", uptime=" + uptime + ", mflops=" + mflops
-				+ ", timeinSecs=" + timeinSecs + ", idle=" + idle + ", d=" + d
+				+ UserName + ", hostName="+ hostName+", uptime=" + uptime + ", idle=" + idle + ", d=" + d
 				+ ", CPuser=" + CPuser + ", sys=" + sys + ", nice=" + nice
 				+ ", wait=" + wait + ", combined=" + combined + ", user="
 				+ user + ", sys0=" + sys0 + ", nice0=" + nice0 + ", wait0="
@@ -528,8 +507,8 @@ public class MonitorReport{
 	
 	public static String getHead(){
 		return ItemCPUReport.TIME.title()+"," + ItemCPUReport.TIME_MILLI.title()+ "," + ItemCPUReport.USERNAME.title()+ ","
-				+ ItemCPUReport.HOSTNAME.title() + ","+ ItemCPUReport.UP_TIME.title()+"," + ItemCPUReport.MFLOPS.title() + ","
-				+ ItemCPUReport.CPU_SECONDS.title()+"," + ItemCPUReport.CPU_IDLE.title() + "," + ItemCPUReport.NO_CPU_IDLE.title() + ","
+				+ ItemCPUReport.HOSTNAME.title() + ","+ ItemCPUReport.UP_TIME.title()+"," 
+				+ ItemCPUReport.CPU_IDLE.title() + "," + ItemCPUReport.NO_CPU_IDLE.title() + ","
 				+ ItemCPUReport.CPU_USER.title()+"," + ItemCPUReport.CPU_SYS.title() + "," + ItemCPUReport.CPU_NICE.title() + "," 
 				+ ItemCPUReport.CPU_WAIT.title()+"," + ItemCPUReport.CPU_COMBINED.title() + "," + ItemCPUReport.TOTAL_USER.title() + ","
 				+ ItemCPUReport.TOTAL_SYS.title() + "," + ItemCPUReport.TOTAL_NICE.title() + ","+ ItemCPUReport.TOTAL_WAIT.title() + "," 
@@ -544,8 +523,7 @@ public class MonitorReport{
 	}
 	public String getLine(){
 		return  timest+ "," + timeLong+ ","	+ UserName + ","
-				+ hostName+"," + uptime + "," + mflops+ "," 
-				+ timeinSecs + "," + idle + "," + d+ "," 
+				+ hostName+"," + uptime + "," + idle + "," + d+ "," 
 				+ CPuser + "," + sys + "," + nice+ "," 
 				+ wait + ", " + combined + ","+ user + "," 
 				+ sys0 + "," + nice0 + ","+ wait0 + "," 

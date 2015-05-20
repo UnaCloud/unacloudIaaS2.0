@@ -1,11 +1,14 @@
-package com.losandes.connectionDb;
+package com.losandes.monitoring;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
 
+import com.losandes.connectionDb.MongoConnection;
+import com.losandes.connectionDb.MonitorDatabaseConnection;
 import com.losandes.connectionDb.enums.ItemCPUMetrics;
 import com.losandes.connectionDb.enums.ItemCPUReport;
 import com.losandes.connectionDb.enums.ItemEnergyReport;
@@ -68,8 +71,10 @@ public class MonitorQuery {
 			try {
 				while(cursor.hasNext()) {
 					BasicDBObject obj = (BasicDBObject) cursor.next();
-//					System.out.println(obj);
-//					System.out.println(parseToCpuReport(obj));
+					if(obj.getString(ItemCPUReport.USERNAME.title()).equals("dc.bonilla10")){
+						System.out.println(obj);
+						System.out.println(parseToCpuReport(obj));
+					}					
 					reports.add(parseToCpuReport(obj));
 				}
 			} finally {
@@ -82,8 +87,7 @@ public class MonitorQuery {
 		return reports;
 	}
 	public static void main(String[] args) {
-		MonitorQuery m = new MonitorQuery(new MonitorDatabaseConnection() {
-			
+		MonitorQuery m = new MonitorQuery(new MonitorDatabaseConnection() {			
 			@Override
 			public void callVariables() {
 				ip = "172.24.98.119";
@@ -94,17 +98,26 @@ public class MonitorQuery {
 				
 			}
 		});
-		Date end = new Date();
-		Date start = new Date(end.getTime()-1000*60*60*20*3);
-		
-		for (MonitorReport string : m.getCpuReportsByDate(start, end, "ISC412")) {
-			System.out.println(string);
-//			if(string.UserName!=null){
-//
+//		Date end = new Date();
+//		Date start = new Date(end.getTime()-1000*60*60*20*3);
+		try {
+			
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+		    Date start = dateFormat.parse("2015-05-05 16:00:00.000");
+		    Date end = new Date(start.getTime()+1000*60*60*6);
+		    System.out.println(start);
+		    System.out.println(end);
+		    m.getCpuReportsByDate(start, end, "ISC210");
+//			for (MonitorReport string : m.getCpuReportsByDate(start, end, "ISC210")) {
 //				System.out.println(string);
-//				System.out.println(string.getLine());
 //			}
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
+		
+	    
+		
+
 //		for (MonitorReport string : m.getCpuReports("ISC202")) {
 //			System.out.println(string);
 //		}
@@ -172,6 +185,13 @@ public class MonitorQuery {
 		mon.setTimeLong(obj.getInt(ItemCPUMetrics.TIME_MILLI.title()));
 		mon.setTimestString(obj.getString(ItemCPUMetrics.TIME.title()));
 		mon.setTotalSockets(obj.getInt(ItemCPUMetrics.CPU_SOCKETS.title()));
+		try {
+			 mon.setMflops(obj.getDouble(ItemCPUMetrics.MFLOPS.title()));
+			 mon.setTimeinSecs(obj.getDouble(ItemCPUMetrics.CPU_SECONDS.title()));
+		} catch (Exception e) {//XXX en caso de no tener representación en la bd.
+			 mon.setMflops(-1);
+			 mon.setTimeinSecs(-1);
+		}	
 		return mon;
 	}
 	
@@ -210,7 +230,6 @@ public class MonitorQuery {
 		mon.setHostName(obj.getString(ItemCPUReport.HOSTNAME.title()));
 		mon.setIdle(obj.getDouble(ItemCPUReport.CPU_IDLE.title()));
 		mon.setIdle0(obj.getLong(ItemCPUReport.TOTAL_IDLE.title()));
-		mon.setMflops(obj.getDouble(ItemCPUReport.MFLOPS.title()));
 		mon.setNetworkGateway(obj.getString(ItemCPUReport.NET_GATEWAY.title()));
 		mon.setNetworkInterface(obj.getString(ItemCPUReport.NET_INTERFACE.title()));
 		mon.setNetworkIPAddress(obj.getString(ItemCPUReport.NET_IP.title()));
@@ -230,7 +249,6 @@ public class MonitorQuery {
 		mon.setSwapMemoryUsed(obj.getInt(ItemCPUReport.SWAP_USED.title()));
 		mon.setSys(obj.getDouble(ItemCPUReport.CPU_SYS.title()));
 		mon.setSys0(obj.getLong(ItemCPUReport.TOTAL_SYS.title()));
-		mon.setTimeinSecs(obj.getDouble(ItemCPUReport.CPU_SECONDS.title()));
 		mon.setTimeLong(obj.getLong(ItemCPUReport.TIME_MILLI.title()));
 		mon.setTimestString(obj.getString(ItemCPUReport.TIME.title()));
 		mon.setTxBytes(obj.getLong(ItemCPUReport.NET_TX_BYTES.title()));

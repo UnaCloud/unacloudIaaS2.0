@@ -11,13 +11,13 @@ import java.util.Date;
 import physicalmachine.Network;
 
 import com.losandes.connectionDb.MongoConnection;
-import com.losandes.connectionDb.MonitorEnergyReport;
 import com.losandes.connectionDb.enums.ItemEnergyReport;
+import com.losandes.monitoring.MonitorEnergyReport;
+import com.losandes.utils.LocalProcessExecutor;
 import com.mongodb.BasicDBObject;
 import com.mongodb.BulkWriteOperation;
 
 import unacloudEnums.MonitoringStatus;
-import virtualMachineManager.LocalProcessExecutor;
 
 
 /** 

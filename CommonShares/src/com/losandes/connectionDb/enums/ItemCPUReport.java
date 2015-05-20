@@ -7,8 +7,6 @@ public enum ItemCPUReport {
 	TIME_MILLI("TimeMilli"),
 	USERNAME("Username"),
 	UP_TIME("UpTime"),
-	MFLOPS("MFlops"),		
-	CPU_SECONDS("CPUTimeInSeconds"),	
 	CPU_IDLE("CPUIdle"),	
 	NO_CPU_IDLE("NoCPUIdle "),
 	CPU_USER("CPUuser"),

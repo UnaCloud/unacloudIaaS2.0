@@ -1,4 +1,4 @@
-package monitoring;
+package com.losandes.monitoring;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -11,9 +11,6 @@ import org.hyperic.sigar.NetInterfaceStat;
 import org.hyperic.sigar.SigarException;
 import org.hyperic.sigar.Uptime;
 import org.hyperic.sigar.cmd.SigarCommandBase;
-
-import com.losandes.connectionDb.MonitorInitialReport;
-import com.losandes.connectionDb.MonitorReport;
 
 import physicalmachine.Network;
 import physicalmachine.OperatingSystem;
@@ -39,6 +36,9 @@ public class MonitorReportGenerator extends SigarCommandBase {
 	 * @return initial report
 	 */
     public MonitorInitialReport generateInitialReport() {
+    	//This code war removed from State Report because generate use percentage in computer.
+    	LinpackJava.Linpack CPUMflops = new LinpackJava.Linpack();
+        CPUMflops.run_benchmark();
         PhysicalMachine monitor = new PhysicalMachine();
         java.util.Date date;
         date = new Date();
@@ -61,7 +61,8 @@ public class MonitorReportGenerator extends SigarCommandBase {
             }
             org.hyperic.sigar.CpuInfo CPU1 = infos[0];
             return new MonitorInitialReport(UUID, timest,date.getTime(),
-                    Network.getHostname().toUpperCase(),
+                    Network.getHostname().toUpperCase(), CPUMflops.getMflops(),
+                    CPUMflops.getTimeinSecs(),
                     monitor.operatingSystem.getOperatingSystemName(),
                     monitor.operatingSystem.getOperatingSystemVersion(),
                     monitor.operatingSystem.getOperatingSystemArchitect(),
@@ -112,8 +113,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
      * @return report collected
      */
     public  MonitorReport generateStateReport() {
-        LinpackJava.Linpack CPUMflops = new LinpackJava.Linpack();
-        CPUMflops.run_benchmark();
+        
         PhysicalMachine monitor = new PhysicalMachine();
         Date date = new Date();
         java.sql.Timestamp timest = new java.sql.Timestamp(date.getTime());
@@ -140,8 +140,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
                     .getNetInterfaceStat(monitor.network.getNetworkInterface());
             return new MonitorReport(UUID, timest,date.getTime(), contadorRegistros, 
             		OperatingSystem.getUserName(),Network.getHostname().toUpperCase(),
-                    UPTIME.getUptime(), CPUMflops.getMflops(),
-                    CPUMflops.getTimeinSecs(), CPU2.getIdle() * 100,
+                    UPTIME.getUptime(), CPU2.getIdle() * 100,
                     (100 - (CPU2.getIdle() * 100)), CPU2.getUser() * 100,
                     CPU2.getSys() * 100, CPU2.getNice() * 100,
                     CPU2.getWait() * 100, CPU2.getCombined() * 100, cpu.getUser(),

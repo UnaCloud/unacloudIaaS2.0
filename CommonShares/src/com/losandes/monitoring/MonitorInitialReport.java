@@ -1,4 +1,4 @@
-package com.losandes.connectionDb;
+package com.losandes.monitoring;
 
 
 import java.io.Serializable;
@@ -22,6 +22,7 @@ public class MonitorInitialReport implements Serializable{
 	private String UUID;
     private Timestamp timest;
     private long timeLong;
+    private double mflops,timeinSecs;
     private String hostname;
     private String operatingSystemName;
     private String operatingSystemVersion;
@@ -41,7 +42,7 @@ public class MonitorInitialReport implements Serializable{
     public MonitorInitialReport() {
 	}
 
-    public MonitorInitialReport(String uUID, Timestamp timest, Long time, String hostname, String operatingSystemName, String operatingSystemVersion, String operatingSystemArchitect, String cPUModel, String cPUVendor, int cPUCores, int totalSockets, String cPUMhz, int coresPerSocket, float rAMMemorySize, float swapMemorySize, long hardDiskSpace, String hardDiskFileSystem, String networkMACAddress) {
+    public MonitorInitialReport(String uUID, Timestamp timest, Long time, String hostname, double mflops, double timeinSecs, String operatingSystemName, String operatingSystemVersion, String operatingSystemArchitect, String cPUModel, String cPUVendor, int cPUCores, int totalSockets, String cPUMhz, int coresPerSocket, float rAMMemorySize, float swapMemorySize, long hardDiskSpace, String hardDiskFileSystem, String networkMACAddress) {
        // super(REGISTRATION_OPERATION,0);
         UUID = uUID;
         this.timest = timest;
@@ -61,6 +62,8 @@ public class MonitorInitialReport implements Serializable{
         this.hardDiskSpace = hardDiskSpace;
         this.hardDiskFileSystem = hardDiskFileSystem;
         this.networkMACAddress = networkMACAddress;
+        this.timeinSecs = timeinSecs;
+        this.mflops = mflops;
     }
     
     public MonitorInitialReport(String line) throws ParseException{
@@ -90,6 +93,8 @@ public class MonitorInitialReport implements Serializable{
 			else if(components[0].contains("hardDiskSpace")) hardDiskSpace = Long.parseLong(components[1]);
 			else if(components[0].contains("hardDiskFileSystem")) hardDiskFileSystem = components[1];
 			else if(components[0].contains("networkMACAddress")) networkMACAddress = components[1];
+			else if(components[0].trim().startsWith("mflops")) mflops = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("timeinSecs")) timeinSecs = Double.parseDouble(components[1]);
 		}
     }
 
@@ -250,20 +255,37 @@ public class MonitorInitialReport implements Serializable{
 		this.timeLong = timeLong;
 	}
 
+	public double getMflops() {
+		return mflops;
+	}
+
+	public void setMflops(double mflops) {
+		this.mflops = mflops;
+	}
+
+	public double getTimeinSecs() {
+		return timeinSecs;
+	}
+
+	public void setTimeinSecs(double timeinSecs) {
+		this.timeinSecs = timeinSecs;
+	}
+
 	@Override
 	public String toString() {
-		return "MonitorInitialReport [timest=" + timest+ ", timeLong=" + timeLong
-				+ ", hostname=" + hostname + ", operatingSystemName="
-				+ operatingSystemName + ", operatingSystemVersion="
-				+ operatingSystemVersion + ", operatingSystemArchitect="
-				+ operatingSystemArchitect + ", cPUModel=" + cPUModel
-				+ ", cPUVendor=" + cPUVendor + ", cPUCores=" + cPUCores
-				+ ", totalSockets=" + totalSockets + ", cPUMhz=" + cPUMhz
-				+ ", coresPerSocket=" + coresPerSocket + ", rAMMemorySize="
-				+ rAMMemorySize + ", swapMemorySize=" + swapMemorySize
-				+ ", hardDiskSpace=" + hardDiskSpace + ", hardDiskFileSystem="
-				+ hardDiskFileSystem + ", networkMACAddress="
-				+ networkMACAddress + "]";
-	}  
+		return "MonitorInitialReport [timest=" + timest
+				+ ", timeLong=" + timeLong + ", mflops=" + mflops
+				+ ", timeinSecs=" + timeinSecs + ", hostname=" + hostname
+				+ ", operatingSystemName=" + operatingSystemName
+				+ ", operatingSystemVersion=" + operatingSystemVersion
+				+ ", operatingSystemArchitect=" + operatingSystemArchitect
+				+ ", cPUModel=" + cPUModel + ", cPUVendor=" + cPUVendor
+				+ ", cPUCores=" + cPUCores + ", totalSockets=" + totalSockets
+				+ ", cPUMhz=" + cPUMhz + ", coresPerSocket=" + coresPerSocket
+				+ ", rAMMemorySize=" + rAMMemorySize + ", swapMemorySize="
+				+ swapMemorySize + ", hardDiskSpace=" + hardDiskSpace
+				+ ", hardDiskFileSystem=" + hardDiskFileSystem
+				+ ", networkMACAddress=" + networkMACAddress + "]";
+	}
 
 }

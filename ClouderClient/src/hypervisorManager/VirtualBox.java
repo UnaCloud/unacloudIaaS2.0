@@ -9,9 +9,9 @@ import java.util.Collections;
 import java.util.List;
 
 import com.losandes.utils.Constants;
+import com.losandes.utils.LocalProcessExecutor;
 
 import utils.AddressUtility;
-import virtualMachineManager.LocalProcessExecutor;
 
 /**
  * Implementation of hypervisor abstract class to give support for VMwarePlayer
