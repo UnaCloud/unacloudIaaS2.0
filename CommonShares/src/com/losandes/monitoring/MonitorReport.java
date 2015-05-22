@@ -18,9 +18,9 @@ public class MonitorReport{
 	String UserName, hostName;
 	double uptime,idle,d,CPuser,sys,nice,wait,combined;
 	long user,sys0,nice0,wait0,idle0;
-	float rAMMemoryFree,rAMMemoryUsed;
+	double rAMMemoryFree,rAMMemoryUsed;
 	double freePercent,usedPercent;
-	float swapMemoryFree,swapMemoryPageIn,swapMemoryPageOut,swapMemoryUsed;
+	double swapMemoryFree,swapMemoryPageIn,swapMemoryPageOut,swapMemoryUsed;
 	long hardDiskFreeSpace;
 	long hardDiskUsedSpace;
 	String networkIPAddress;
@@ -39,7 +39,7 @@ public class MonitorReport{
     public MonitorReport() {
 	}
     
-	public MonitorReport(String uUID, Timestamp timest, long timeLong, int contadorRegistros, String userName, String host , double uptime, double idle, double d, double cPuser, double sys, double nice, double wait, double combined, long user, long sys0, long nice0, long wait0, long idle0, float rAMMemoryFree, float rAMMemoryUsed, double freePercent, double usedPercent, float swapMemoryFree, float swapMemoryPageIn, float swapMemoryPageOut, float swapMemoryUsed, long hardDiskFreeSpace, long hardDiskUsedSpace, String networkIPAddress, String networkInterface, String networkNetmask, String networkGateway, long rxBytes, long txBytes, long speed, long rxErrors, long txErrors, long rxPackets, long txPackets,String processes){
+	public MonitorReport(String uUID, Timestamp timest, long timeLong, int contadorRegistros, String userName, String host , double uptime, double idle, double d, double cPuser, double sys, double nice, double wait, double combined, long user, long sys0, long nice0, long wait0, long idle0, double rAMMemoryFree, double rAMMemoryUsed, double freePercent, double usedPercent, double swapMemoryFree, double swapMemoryPageIn, double swapMemoryPageOut, double swapMemoryUsed, long hardDiskFreeSpace, long hardDiskUsedSpace, String networkIPAddress, String networkInterface, String networkNetmask, String networkGateway, long rxBytes, long txBytes, long speed, long rxErrors, long txErrors, long rxPackets, long txPackets,String processes){
 		
 		UUID = uUID;
 		this.timest = timest;
@@ -114,14 +114,14 @@ public class MonitorReport{
 			else if(components[0].trim().startsWith("nice0")) nice0 = Long.parseLong(components[1]);
 			else if(components[0].trim().startsWith("wait0")) wait0 = Long.parseLong(components[1]);
 			else if(components[0].trim().startsWith("idle0")) idle0 = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("rAMMemoryFree")) rAMMemoryFree = Float.parseFloat(components[1]);
-			else if(components[0].trim().startsWith("rAMMemoryUsed")) rAMMemoryUsed = Float.parseFloat(components[1]);
+			else if(components[0].trim().startsWith("rAMMemoryFree")) rAMMemoryFree = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("rAMMemoryUsed")) rAMMemoryUsed = Double.parseDouble(components[1]);
 			else if(components[0].trim().startsWith("freePercent")) freePercent = Double.parseDouble(components[1]);
 			else if(components[0].trim().startsWith("usedPercent")) usedPercent = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("swapMemoryFree")) swapMemoryFree = Float.parseFloat(components[1]);
-			else if(components[0].trim().startsWith("swapMemoryPageIn")) swapMemoryPageIn = Float.parseFloat(components[1]);
-			else if(components[0].trim().startsWith("swapMemoryPageOut")) swapMemoryPageOut = Float.parseFloat(components[1]);
-			else if(components[0].trim().startsWith("swapMemoryUsed")) swapMemoryUsed = Float.parseFloat(components[1]);
+			else if(components[0].trim().startsWith("swapMemoryFree")) swapMemoryFree = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("swapMemoryPageIn")) swapMemoryPageIn = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("swapMemoryPageOut")) swapMemoryPageOut = Double.parseDouble(components[1]);
+			else if(components[0].trim().startsWith("swapMemoryUsed")) swapMemoryUsed = Double.parseDouble(components[1]);
 			else if(components[0].trim().startsWith("hardDiskFreeSpace")) hardDiskFreeSpace = Long.parseLong(components[1]);
 			else if(components[0].trim().startsWith("hardDiskUsedSpace")) hardDiskUsedSpace = Long.parseLong(components[1]);
 			else if(components[0].trim().startsWith("networkIPAddress")) networkIPAddress = components[1];
@@ -287,19 +287,19 @@ public class MonitorReport{
 		this.idle0 = idle0;
 	}
 
-	public float getrAMMemoryFree() {
+	public double getrAMMemoryFree() {
 		return rAMMemoryFree;
 	}
 
-	public void setrAMMemoryFree(float rAMMemoryFree) {
+	public void setrAMMemoryFree(double rAMMemoryFree) {
 		this.rAMMemoryFree = rAMMemoryFree;
 	}
 
-	public float getrAMMemoryUsed() {
+	public double getrAMMemoryUsed() {
 		return rAMMemoryUsed;
 	}
 
-	public void setrAMMemoryUsed(float rAMMemoryUsed) {
+	public void setrAMMemoryUsed(double rAMMemoryUsed) {
 		this.rAMMemoryUsed = rAMMemoryUsed;
 	}
 
@@ -319,35 +319,35 @@ public class MonitorReport{
 		this.usedPercent = usedPercent;
 	}
 
-	public float getSwapMemoryFree() {
+	public double getSwapMemoryFree() {
 		return swapMemoryFree;
 	}
 
-	public void setSwapMemoryFree(float swapMemoryFree) {
+	public void setSwapMemoryFree( double swapMemoryFree) {
 		this.swapMemoryFree = swapMemoryFree;
 	}
 
-	public float getSwapMemoryPageIn() {
+	public double getSwapMemoryPageIn() {
 		return swapMemoryPageIn;
 	}
 
-	public void setSwapMemoryPageIn(float swapMemoryPageIn) {
+	public void setSwapMemoryPageIn(double swapMemoryPageIn) {
 		this.swapMemoryPageIn = swapMemoryPageIn;
 	}
 
-	public float getSwapMemoryPageOut() {
+	public double getSwapMemoryPageOut() {
 		return swapMemoryPageOut;
 	}
 
-	public void setSwapMemoryPageOut(float swapMemoryPageOut) {
+	public void setSwapMemoryPageOut(double swapMemoryPageOut) {
 		this.swapMemoryPageOut = swapMemoryPageOut;
 	}
 
-	public float getSwapMemoryUsed() {
+	public double getSwapMemoryUsed() {
 		return swapMemoryUsed;
 	}
 
-	public void setSwapMemoryUsed(float swapMemoryUsed) {
+	public void setSwapMemoryUsed(double swapMemoryUsed) {
 		this.swapMemoryUsed = swapMemoryUsed;
 	}
 

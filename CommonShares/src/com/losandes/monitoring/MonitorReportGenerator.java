@@ -23,7 +23,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
 		if(instance==null)instance=new MonitorReportGenerator();
 		return instance;
 	}
-	
+		
     private static String UUID = java.util.UUID.randomUUID().toString();
     
 	private static int contadorRegistros;

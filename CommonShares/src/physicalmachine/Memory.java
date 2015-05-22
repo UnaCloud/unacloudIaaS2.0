@@ -74,35 +74,35 @@ public class Memory extends SigarWrapper {
     /**
      * getter methods
      */
-     public float getRAMMemorySize() {
+     public double getRAMMemorySize() {
         return rAMMemorySize;
     }
 
-    public float getRAMMemoryFree() {
+    public double getRAMMemoryFree() {
         return rAMMemoryFree;
     }
 
-    public float getRAMMemoryUsed() {
+    public double getRAMMemoryUsed() {
         return rAMMemoryUsed;
     }
 
-    public float getSwapMemorySize() {
+    public double getSwapMemorySize() {
         return swapMemorySize;
     }
     
-    public float getSwapMemoryFree() {
+    public double getSwapMemoryFree() {
         return swapMemoryFree;
     }
     
-    public float getSwapMemoryPageIn() {
+    public double getSwapMemoryPageIn() {
         return swapMemoryPageIn;
     }
     
-    public float getSwapMemoryPageOut() {
+    public double getSwapMemoryPageOut() {
         return swapMemoryPageOut;
     }
     
-    public float getSwapMemoryUsed() {
+    public double getSwapMemoryUsed() {
         return swapMemoryUsed;
     }
 

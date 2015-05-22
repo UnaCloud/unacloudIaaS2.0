@@ -60,14 +60,39 @@ class ClusterService {
 	}
 	
 	/**
-	 * TODO
+	 * TODO documentation
 	 */
-	def calculateMaxDeployments(User user, HardwareProfile hwp){
-		def machines = userRestrictionProcessorService.getAvoidedMachines(user)
-		def labs = userRestrictionProcessorService.getAvoidedLabs(user)
-		int ips = 0;
-	    for(Laboratory lab: labs){
-			ips += lab.virtualMachinesIPs.ips.size()
-		}
+	def int calculateMaxDeployments(User user, HardwareProfile hwp){
+		try {
+			if(hwp.cores>0&&hwp.ram>0){
+				def labs = userRestrictionProcessorService.getAvoidedLabs(user)
+				int cantidad = 0;
+				for(lab in labs){
+					int cantidadLab = 0
+					int ips = lab.virtualMachinesIPs.getIpsQuantity()
+					def machines = lab.physicalMachines.find{it.state == PhysicalMachineStateEnum.ON}
+					for(PhysicalMachine mac in machines.list()){
+						int macCores = mac.cores
+						int macRam = mac.ram
+						while(macCores>0&&macRam>0&&cantidadLab<ips){
+							if(macCores>=hwp.cores&&macRam>=hwp.ram){
+								cantidadLab++;
+							}
+							macCores-=hwp.cores
+							macRam-=hwp.ram
+						}
+						if(cantidadLab>=ips){
+							cantidadLab = ips
+							break
+						}
+					}
+					cantidad += cantidadLab
+				}
+				return cantidad;
+			}else return -1;
+		} catch (Exception e) {
+			e.printStackTrace()
+			return -1
+		}		
 	}
 }

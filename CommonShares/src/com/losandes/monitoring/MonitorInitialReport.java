@@ -33,8 +33,8 @@ public class MonitorInitialReport implements Serializable{
     private int totalSockets;
     private String cPUMhz;
     private int coresPerSocket;
-    private float rAMMemorySize;
-    private float swapMemorySize;
+    private double rAMMemorySize;
+    private double swapMemorySize;
     private long hardDiskSpace;
     private String hardDiskFileSystem;
     private String networkMACAddress;
@@ -42,7 +42,7 @@ public class MonitorInitialReport implements Serializable{
     public MonitorInitialReport() {
 	}
 
-    public MonitorInitialReport(String uUID, Timestamp timest, Long time, String hostname, double mflops, double timeinSecs, String operatingSystemName, String operatingSystemVersion, String operatingSystemArchitect, String cPUModel, String cPUVendor, int cPUCores, int totalSockets, String cPUMhz, int coresPerSocket, float rAMMemorySize, float swapMemorySize, long hardDiskSpace, String hardDiskFileSystem, String networkMACAddress) {
+    public MonitorInitialReport(String uUID, Timestamp timest, Long time, String hostname, double mflops, double timeinSecs, String operatingSystemName, String operatingSystemVersion, String operatingSystemArchitect, String cPUModel, String cPUVendor, int cPUCores, int totalSockets, String cPUMhz, int coresPerSocket, double rAMMemorySize, double swapMemorySize, long hardDiskSpace, String hardDiskFileSystem, String networkMACAddress) {
        // super(REGISTRATION_OPERATION,0);
         UUID = uUID;
         this.timest = timest;
@@ -88,8 +88,8 @@ public class MonitorInitialReport implements Serializable{
 			else if(components[0].contains("cPUMhz")) cPUMhz = components[1];
 			else if(components[0].contains("coresPerSocket")) coresPerSocket = Integer.parseInt(components[1]);
 			else if(components[0].contains("totalSockets")) totalSockets = Integer.parseInt(components[1]);
-			else if(components[0].contains("rAMMemorySize")) rAMMemorySize = Float.parseFloat(components[1]);
-			else if(components[0].contains("swapMemorySize")) swapMemorySize = Float.parseFloat(components[1]);
+			else if(components[0].contains("rAMMemorySize")) rAMMemorySize = Double.parseDouble(components[1]);
+			else if(components[0].contains("swapMemorySize")) swapMemorySize = Double.parseDouble(components[1]);
 			else if(components[0].contains("hardDiskSpace")) hardDiskSpace = Long.parseLong(components[1]);
 			else if(components[0].contains("hardDiskFileSystem")) hardDiskFileSystem = components[1];
 			else if(components[0].contains("networkMACAddress")) networkMACAddress = components[1];
@@ -195,19 +195,19 @@ public class MonitorInitialReport implements Serializable{
         this.coresPerSocket = coresPerSocket;
     }
 
-    public float getrAMMemorySize() {
+    public double getrAMMemorySize() {
         return rAMMemorySize;
     }
 
-    public void setrAMMemorySize(float rAMMemorySize) {
+    public void setrAMMemorySize(double rAMMemorySize) {
         this.rAMMemorySize = rAMMemorySize;
     }
 
-    public float getSwapMemorySize() {
+    public double getSwapMemorySize() {
         return swapMemorySize;
     }
 
-    public void setSwapMemorySize(float swapMemorySize) {
+    public void setSwapMemorySize(double swapMemorySize) {
         this.swapMemorySize = swapMemorySize;
     }
 

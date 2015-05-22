@@ -5,6 +5,7 @@ import java.io.File;
 import org.hyperic.sigar.Cpu;
 import org.hyperic.sigar.CpuInfo;
 import org.hyperic.sigar.CpuPerc;
+import org.hyperic.sigar.MultiProcCpu;
 import org.hyperic.sigar.SigarException;
 public class CPU extends SigarWrapper {
 	/**
@@ -134,7 +135,10 @@ public class CPU extends SigarWrapper {
         getCPUCores();
         return cpu.getTotal();
     }
-    
+    /**
+     * TODO Documentation 
+     * @return
+     */    
     public static long getSpaceDirVMS(){
         try {
 			long space = new File("E:\\").getFreeSpace();

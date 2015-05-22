@@ -87,35 +87,36 @@ public class MonitorQuery {
 		return reports;
 	}
 	public static void main(String[] args) {
-		MonitorQuery m = new MonitorQuery(new MonitorDatabaseConnection() {			
-			@Override
-			public void callVariables() {
-				ip = "172.24.98.119";
-			    port = 27017;
-			    name = "cloudMongo";
-			    user = "cloudmonitoreo";
-			    password = "cloudmonitoreo$#";	
-				
-			}
-		});
-//		Date end = new Date();
-//		Date start = new Date(end.getTime()-1000*60*60*20*3);
-		try {
-			
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-		    Date start = dateFormat.parse("2015-05-05 16:00:00.000");
-		    Date end = new Date(start.getTime()+1000*60*60*6);
-		    System.out.println(start);
-		    System.out.println(end);
-		    m.getCpuReportsByDate(start, end, "ISC210");
-//			for (MonitorReport string : m.getCpuReportsByDate(start, end, "ISC210")) {
-//				System.out.println(string);
+//		MonitorQuery m = new MonitorQuery(new MonitorDatabaseConnection() {			
+//			@Override
+//			public void callVariables() {
+//				ip = "172.24.98.119";
+//			    port = 27017;
+//			    name = "cloudMongo";
+//			    user = "cloudmonitoreo";
+//			    password = "cloudmonitoreo$#";	
+//				
 //			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-	    
+//		});
+////		Date end = new Date();
+////		Date start = new Date(end.getTime()-1000*60*60*20*3);
+//		try {
+//			
+//			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+//		    Date start = dateFormat.parse("2015-05-05 16:00:00.000");
+//		    Date end = new Date(start.getTime()+1000*60*60*6);
+//		    System.out.println(start);
+//		    System.out.println(end);
+//		    m.getCpuReportsByDate(start, end, "ISC210");
+////			for (MonitorReport string : m.getCpuReportsByDate(start, end, "ISC210")) {
+////				System.out.println(string);
+////			}
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+//		
+	
+	   
 		
 
 //		for (MonitorReport string : m.getCpuReports("ISC202")) {
@@ -174,15 +175,15 @@ public class MonitorQuery {
 		mon.setcPUModel(obj.getString(ItemCPUMetrics.CPU_MODEL.title()));
 		mon.setcPUVendor(obj.getString(ItemCPUMetrics.CPU_VENDOR.title()));
 		mon.setHardDiskFileSystem(obj.getString(ItemCPUMetrics.HD_FILESYSTEM.title()));
-		mon.setHardDiskSpace(obj.getInt(ItemCPUMetrics.HD_SPACE.title()));
+		mon.setHardDiskSpace(obj.getLong(ItemCPUMetrics.HD_SPACE.title()));
 		mon.setHostname(obj.getString(ItemCPUMetrics.HOSTNAME.title()));
 		mon.setNetworkMACAddress(obj.getString(ItemCPUMetrics.MAC.title()));
 		mon.setOperatingSystemArchitect(obj.getString(ItemCPUMetrics.OS_ARQUITECTURE.title()));
 		mon.setOperatingSystemName(obj.getString(ItemCPUMetrics.OS_NAME.title()));
 		mon.setOperatingSystemVersion(obj.getString(ItemCPUMetrics.OS_VERSION.title()));
-		mon.setrAMMemorySize(obj.getInt(ItemCPUMetrics.RAM_SIZE.title()));
-		mon.setSwapMemorySize(obj.getInt(ItemCPUMetrics.SWAP_SIZE.title()));
-		mon.setTimeLong(obj.getInt(ItemCPUMetrics.TIME_MILLI.title()));
+		mon.setrAMMemorySize(obj.getDouble(ItemCPUMetrics.RAM_SIZE.title()));
+		mon.setSwapMemorySize(obj.getDouble(ItemCPUMetrics.SWAP_SIZE.title()));
+		mon.setTimeLong(obj.getLong(ItemCPUMetrics.TIME_MILLI.title()));
 		mon.setTimestString(obj.getString(ItemCPUMetrics.TIME.title()));
 		mon.setTotalSockets(obj.getInt(ItemCPUMetrics.CPU_SOCKETS.title()));
 		try {
@@ -236,17 +237,17 @@ public class MonitorQuery {
 		mon.setNetworkNetmask(obj.getString(ItemCPUReport.NET_MASK.title()));
 		mon.setNice(obj.getDouble(ItemCPUReport.CPU_NICE.title()));
 		mon.setNice0(obj.getLong(ItemCPUReport.TOTAL_NICE.title()));
-		mon.setrAMMemoryFree(obj.getInt(ItemCPUReport.RAM_FREE.title()));
-		mon.setrAMMemoryUsed(obj.getInt(ItemCPUReport.RAM_USED.title()));
+		mon.setrAMMemoryFree(obj.getDouble(ItemCPUReport.RAM_FREE.title()));
+		mon.setrAMMemoryUsed(obj.getDouble(ItemCPUReport.RAM_USED.title()));
 		mon.setProcesses(RefactorUtils.refactorString(obj.getString(ItemCPUReport.PROCESSES.title())));
 		mon.setRxBytes(obj.getLong(ItemCPUReport.NET_RX_BYTES.title()));
 		mon.setRxErrors(obj.getLong(ItemCPUReport.NET_RX_ERRORS.title()));
 		mon.setRxPackets(obj.getLong(ItemCPUReport.NET_RX_PACKETS.title()));
 		mon.setSpeed(obj.getLong(ItemCPUReport.NET_SPEED.title()));
-		mon.setSwapMemoryFree(obj.getInt(ItemCPUReport.SWAP_FREE.title()));
-		mon.setSwapMemoryPageIn(obj.getInt(ItemCPUReport.SWAP_PAGE_IN.title()));
-		mon.setSwapMemoryPageOut(obj.getInt(ItemCPUReport.SWAP_PAGE_OUT.title()));
-		mon.setSwapMemoryUsed(obj.getInt(ItemCPUReport.SWAP_USED.title()));
+		mon.setSwapMemoryFree(obj.getDouble(ItemCPUReport.SWAP_FREE.title()));
+		mon.setSwapMemoryPageIn(obj.getDouble(ItemCPUReport.SWAP_PAGE_IN.title()));
+		mon.setSwapMemoryPageOut(obj.getDouble(ItemCPUReport.SWAP_PAGE_OUT.title()));
+		mon.setSwapMemoryUsed(obj.getDouble(ItemCPUReport.SWAP_USED.title()));
 		mon.setSys(obj.getDouble(ItemCPUReport.CPU_SYS.title()));
 		mon.setSys0(obj.getLong(ItemCPUReport.TOTAL_SYS.title()));
 		mon.setTimeLong(obj.getLong(ItemCPUReport.TIME_MILLI.title()));

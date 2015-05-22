@@ -43,12 +43,12 @@
 				<table border="0" cellpadding="10"">
 					<tr>
 						<td><label>Instances to deploy</label></td>
-						<td><input name="instances" class="input-small" type="text">
-						</td>					
+						<td><input name="instances" class="input-medium" type="text"></td>
+						<td><label style="font-size: 18px"><span> <= </span><strong id="max-${image.id}">${max}</strong></label></td>					
 					</tr>
 					<tr>
 						<td><label>Hardware Profile</label></td>
-						<td><select name="hardwareProfile" class="input-small">
+						<td><select id="option-hw" data-img="max-${image.id}" name="hardwareProfile" class="input-medium">
 								<g:each in="${hardwareProfiles}" status="j" var="hp">
 								<option value="${hp.id}">
 									${hp.name}
@@ -66,7 +66,7 @@
 					
 					<tr>
 						<td><label>Hostname</label></td>
-						<td colspan="2"><input type="text" name="hostname" value="${image.name}"></td>
+						<td colspan="2"><input type="text" class="input-medium" name="hostname" value="${image.name}"></td>
 					</tr>
 				</table>
 				<br>
@@ -92,5 +92,8 @@
 		</g:form>
 		
 	</div>
+	
+<g:javascript src="cluster.js" />
+ <script>$(document).ready(function(){calculateDeploy();});</script>
 </body>
 </html>

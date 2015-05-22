@@ -41,6 +41,11 @@ class UserRestrictionProcessorService {
 			}
 		}
 	}
+	/**
+	 * TODO documentation
+	 * @param user
+	 * @return
+	 */
 	
 	def getAvoidedMachines(User user){
 		UserRestriction rest = user.restrictions.find{it.name==UserRestrictionEnum.ALLOWED_LABS.name}
@@ -49,7 +54,11 @@ class UserRestrictionProcessorService {
 			return PhysicalMachine.where{state == PhysicalMachineStateEnum.ON && laboratory.name in values}
 		}else return PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON)		
 	}
-	
+	/**
+	 * TODO documentation
+	 * @param user
+	 * @return
+	 */
 	def getAvoidedLabs(User user){
 		UserRestriction rest = user.restrictions.find{it.name==UserRestrictionEnum.ALLOWED_LABS.name}
 		if(rest!=null&&rest.name!=null&&!rest.name.isEmpty()){
