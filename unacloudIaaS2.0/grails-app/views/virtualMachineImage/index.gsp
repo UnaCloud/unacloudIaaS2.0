@@ -6,7 +6,7 @@
 <body>
 
 <div class="hero-unit span9">
-
+<h3>My Images</h3>
 <table class="table table-bordered table-condensed text-center" style="background:white">
   <tr class="info">
   	<td class="info" colspan="6">

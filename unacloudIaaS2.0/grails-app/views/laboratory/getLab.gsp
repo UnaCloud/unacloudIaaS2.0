@@ -10,6 +10,8 @@
 <body>
 
 <div class="hero-unit span9">
+	<g:link controller="laboratory" action="index" style="display: -webkit-box;"><i class="icon-chevron-left" title="Back"></i><h5 style="margin: 3px;">Back to Laboratory list</h5></g:link>
+	<h3>${lab.name}</h3>
 	<form id="form_machines">
 		<div id="label-message"></div>
 		<table class="table table-bordered"  style="background:white" >

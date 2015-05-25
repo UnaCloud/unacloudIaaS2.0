@@ -11,6 +11,7 @@
 </head>
 <body>
 	<div class="hero-unit span9">
+	<h3>Server Variables</h3>
 		<g:form name="instancesDeploy" class="form-horizontal"
 			controller="unaCloudServices" action="changeServerVariables">
 			<g:each in="${ServerVariable.all}" status="i" var="serverVariable">

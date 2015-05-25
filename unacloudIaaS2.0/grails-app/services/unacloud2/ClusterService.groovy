@@ -67,11 +67,11 @@ class ClusterService {
 			if(hwp.cores>0&&hwp.ram>0){
 				def labs = userRestrictionProcessorService.getAvoidedLabs(user)
 				int cantidad = 0;
-				for(lab in labs){
+				for(Laboratory lab in labs){
 					int cantidadLab = 0
 					int ips = lab.virtualMachinesIPs.getIpsQuantity()
-					def machines = lab.physicalMachines.find{it.state == PhysicalMachineStateEnum.ON}
-					for(PhysicalMachine mac in machines.list()){
+					def machines = lab.physicalMachines.findAll{it.state == PhysicalMachineStateEnum.ON}
+					for(PhysicalMachine mac in machines){
 						int macCores = mac.cores
 						int macRam = mac.ram
 						while(macCores>0&&macRam>0&&cantidadLab<ips){
