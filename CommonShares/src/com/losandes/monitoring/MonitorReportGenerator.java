@@ -24,9 +24,9 @@ public class MonitorReportGenerator extends SigarCommandBase {
 		return instance;
 	}
 		
-    private static String UUID = java.util.UUID.randomUUID().toString();
+   // private static String UUID = java.util.UUID.randomUUID().toString();
     
-	private static int contadorRegistros;
+	//private static int contadorRegistros;
 	
 	public MonitorReportGenerator() {
 		//System.out.println( System.getProperty("java.library.path"));
@@ -60,7 +60,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
 
             }
             org.hyperic.sigar.CpuInfo CPU1 = infos[0];
-            return new MonitorInitialReport(UUID, timest,date.getTime(),
+            return new MonitorInitialReport(timest,date.getTime(),
                     Network.getHostname().toUpperCase(), CPUMflops.getMflops(),
                     CPUMflops.getTimeinSecs(),
                     monitor.operatingSystem.getOperatingSystemName(),
@@ -117,7 +117,6 @@ public class MonitorReportGenerator extends SigarCommandBase {
         PhysicalMachine monitor = new PhysicalMachine();
         Date date = new Date();
         java.sql.Timestamp timest = new java.sql.Timestamp(date.getTime());
-        contadorRegistros++;
 
         String processes = "";
         try {
@@ -138,7 +137,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
             Mem MEM = instance.sigar.getMem();
             NetInterfaceStat NET = instance.sigar
                     .getNetInterfaceStat(monitor.network.getNetworkInterface());
-            return new MonitorReport(UUID, timest,date.getTime(), contadorRegistros, 
+            return new MonitorReport(timest,date.getTime(),  
             		OperatingSystem.getUserName(),Network.getHostname().toUpperCase(),
                     UPTIME.getUptime(), CPU2.getIdle() * 100,
                     (100 - (CPU2.getIdle() * 100)), CPU2.getUser() * 100,

@@ -36,7 +36,8 @@ class MachineStateController {
 		String hostname=params['hostname']
 		String status = params['monitorStatus']
 		String statusEnergy = params['monitorStatusEnergy']
-		physicalMachineStateManagerService.reportPhysicalMachine(hostname,null,request.getRemoteAddr(),status,statusEnergy)
+		String dataSpace = params['dataFreeSpace']
+		physicalMachineStateManagerService.reportPhysicalMachine(hostname,null,request.getRemoteAddr(),status,statusEnergy,dataSpace)
 		render "succeeded"
 	}
 	
@@ -60,8 +61,9 @@ class MachineStateController {
 		String hostname=params['hostname']
 		String status = params['monitorStatus']
 		String statusEnergy = params['monitorStatusEnergy']
+		String dataSpace = params['dataFreeSpace']
 		try{
-			physicalMachineStateManagerService.reportPhysicalMachine(hostname,null,request.getRemoteAddr(),status,statusEnergy)
+			physicalMachineStateManagerService.reportPhysicalMachine(hostname,null,request.getRemoteAddr(),status,statusEnergy,dataSpace)
 		}catch(Exception ex){
 			//println "  Error on reportPhysicalMachineLogin "+ hostname+" "+hostuser+" "+ex.getMessage();
 		}
@@ -78,8 +80,9 @@ class MachineStateController {
 		String hostuser=params['hostuser']
 		String status = params['monitorStatus']
 		String statusEnergy = params['monitorStatusEnergy']		
+		String dataSpace = params['dataFreeSpace']
 		try{
-			physicalMachineStateManagerService.reportPhysicalMachine(hostname,hostuser,request.getRemoteAddr(),status,statusEnergy)
+			physicalMachineStateManagerService.reportPhysicalMachine(hostname,hostuser,request.getRemoteAddr(),status,statusEnergy,dataSpace)
 		}catch(Exception ex){
 			println "  Error on reportPhysicalMachineLogin "+ hostname+" "+hostuser+" "+ex.getMessage();
 		}

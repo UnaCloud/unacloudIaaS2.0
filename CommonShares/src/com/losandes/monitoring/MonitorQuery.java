@@ -1,6 +1,5 @@
 package com.losandes.monitoring;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -222,45 +221,49 @@ public class MonitorQuery {
 	}
 	private MonitorReport parseToCpuReport(BasicDBObject obj){
 		MonitorReport mon = new MonitorReport();
-		mon.setCombined(obj.getDouble(ItemCPUReport.CPU_COMBINED.title()));
-		mon.setCPuser(obj.getDouble(ItemCPUReport.CPU_USER.title()));
-		mon.setD(obj.getDouble(ItemCPUReport.NO_CPU_IDLE.title()));
-		mon.setFreePercent(obj.getDouble(ItemCPUReport.MEM_FREE.title()));
+		mon.setCpuCombined(obj.getDouble(ItemCPUReport.CPU_COMBINED.title()));
+		mon.setCpuUser(obj.getDouble(ItemCPUReport.CPU_USER.title()));
+		try {//Some data has an space at the end of NoCpuIdle
+			mon.setNoCpuIdle(obj.getDouble(ItemCPUReport.NO_CPU_IDLE.title()));
+		} catch (Exception e) {
+			mon.setNoCpuIdle(obj.getDouble(ItemCPUReport.NO_CPU_IDLE.title()+" "));
+		}		
+		mon.setMemFreePercent(obj.getDouble(ItemCPUReport.MEM_FREE.title()));
 		mon.setHardDiskFreeSpace(obj.getLong(ItemCPUReport.HD_FREE.title()));
 		mon.setHardDiskUsedSpace(obj.getLong(ItemCPUReport.HD_USED.title()));
 		mon.setHostName(obj.getString(ItemCPUReport.HOSTNAME.title()));
-		mon.setIdle(obj.getDouble(ItemCPUReport.CPU_IDLE.title()));
-		mon.setIdle0(obj.getLong(ItemCPUReport.TOTAL_IDLE.title()));
+		mon.setCpuIdle(obj.getDouble(ItemCPUReport.CPU_IDLE.title()));
+		mon.setTotalCpuIdleTime(obj.getLong(ItemCPUReport.TOTAL_IDLE.title()));
 		mon.setNetworkGateway(obj.getString(ItemCPUReport.NET_GATEWAY.title()));
 		mon.setNetworkInterface(obj.getString(ItemCPUReport.NET_INTERFACE.title()));
 		mon.setNetworkIPAddress(obj.getString(ItemCPUReport.NET_IP.title()));
 		mon.setNetworkNetmask(obj.getString(ItemCPUReport.NET_MASK.title()));
-		mon.setNice(obj.getDouble(ItemCPUReport.CPU_NICE.title()));
-		mon.setNice0(obj.getLong(ItemCPUReport.TOTAL_NICE.title()));
-		mon.setrAMMemoryFree(obj.getDouble(ItemCPUReport.RAM_FREE.title()));
-		mon.setrAMMemoryUsed(obj.getDouble(ItemCPUReport.RAM_USED.title()));
+		mon.setCpuNice(obj.getDouble(ItemCPUReport.CPU_NICE.title()));
+		mon.setTotalCpuNiceTime(obj.getLong(ItemCPUReport.TOTAL_NICE.title()));
+		mon.setRamMemoryFree(obj.getDouble(ItemCPUReport.RAM_FREE.title()));
+		mon.setRamMemoryUsed(obj.getDouble(ItemCPUReport.RAM_USED.title()));
 		mon.setProcesses(RefactorUtils.refactorString(obj.getString(ItemCPUReport.PROCESSES.title())));
-		mon.setRxBytes(obj.getLong(ItemCPUReport.NET_RX_BYTES.title()));
-		mon.setRxErrors(obj.getLong(ItemCPUReport.NET_RX_ERRORS.title()));
-		mon.setRxPackets(obj.getLong(ItemCPUReport.NET_RX_PACKETS.title()));
-		mon.setSpeed(obj.getLong(ItemCPUReport.NET_SPEED.title()));
+		mon.setNetRxBytes(obj.getLong(ItemCPUReport.NET_RX_BYTES.title()));
+		mon.setNetRxErrors(obj.getLong(ItemCPUReport.NET_RX_ERRORS.title()));
+		mon.setNetRxPackets(obj.getLong(ItemCPUReport.NET_RX_PACKETS.title()));
+		mon.setNetSpeed(obj.getLong(ItemCPUReport.NET_SPEED.title()));
 		mon.setSwapMemoryFree(obj.getDouble(ItemCPUReport.SWAP_FREE.title()));
 		mon.setSwapMemoryPageIn(obj.getDouble(ItemCPUReport.SWAP_PAGE_IN.title()));
 		mon.setSwapMemoryPageOut(obj.getDouble(ItemCPUReport.SWAP_PAGE_OUT.title()));
 		mon.setSwapMemoryUsed(obj.getDouble(ItemCPUReport.SWAP_USED.title()));
-		mon.setSys(obj.getDouble(ItemCPUReport.CPU_SYS.title()));
-		mon.setSys0(obj.getLong(ItemCPUReport.TOTAL_SYS.title()));
+		mon.setCpuSys(obj.getDouble(ItemCPUReport.CPU_SYS.title()));
+		mon.setTotalCpuSysTime(obj.getLong(ItemCPUReport.TOTAL_SYS.title()));
 		mon.setTimeLong(obj.getLong(ItemCPUReport.TIME_MILLI.title()));
 		mon.setTimestString(obj.getString(ItemCPUReport.TIME.title()));
-		mon.setTxBytes(obj.getLong(ItemCPUReport.NET_TX_BYTES.title()));
-		mon.setTxErrors(obj.getLong(ItemCPUReport.NET_TX_ERRORS.title()));
-		mon.setTxPackets(obj.getLong(ItemCPUReport.NET_TX_PACKETS.title()));
-		mon.setUptime(obj.getDouble(ItemCPUReport.UP_TIME.title()));
-		mon.setUsedPercent(obj.getDouble(ItemCPUReport.MEM_USED.title()));
-		mon.setUser(obj.getLong(ItemCPUReport.TOTAL_USER.title()));
+		mon.setNetTxBytes(obj.getLong(ItemCPUReport.NET_TX_BYTES.title()));
+		mon.setNetTxErrors(obj.getLong(ItemCPUReport.NET_TX_ERRORS.title()));
+		mon.setNetTxPackets(obj.getLong(ItemCPUReport.NET_TX_PACKETS.title()));
+		mon.setCpuUptime(obj.getDouble(ItemCPUReport.UP_TIME.title()));
+		mon.setMemUsedPercent(obj.getDouble(ItemCPUReport.MEM_USED.title()));
+		mon.setTotalCpuUserTime(obj.getLong(ItemCPUReport.TOTAL_USER.title()));
 		mon.setUserName(obj.getString(ItemCPUReport.USERNAME.title()));
-		mon.setWait(obj.getDouble(ItemCPUReport.CPU_WAIT.title()));
-		mon.setWait0(obj.getLong(ItemCPUReport.TOTAL_WAIT.title()));
+		mon.setCpuWait(obj.getDouble(ItemCPUReport.CPU_WAIT.title()));
+		mon.setTotalCpuWaitTime(obj.getLong(ItemCPUReport.TOTAL_WAIT.title()));
 		return mon;
 	}
 

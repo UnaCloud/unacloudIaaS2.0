@@ -75,6 +75,11 @@ class PhysicalMachine {
 	 */
 	MonitoringStatus monitorStatusEnergy;
 	
+	/**
+	 * Free space in data directory: current virtual machine directory
+	 */
+	long dataSpace;
+	
 	//-----------------------------------------------------------------
 	// Methods
 	//-----------------------------------------------------------------

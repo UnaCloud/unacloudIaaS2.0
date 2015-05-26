@@ -8,7 +8,7 @@ public enum ItemCPUReport {
 	USERNAME("Username"),
 	UP_TIME("UpTime"),
 	CPU_IDLE("CPUIdle"),	
-	NO_CPU_IDLE("NoCPUIdle "),
+	NO_CPU_IDLE("NoCPUIdle"),
 	CPU_USER("CPUuser"),
 	CPU_SYS("CPUsys"),
 	CPU_NICE("CPUNice"),

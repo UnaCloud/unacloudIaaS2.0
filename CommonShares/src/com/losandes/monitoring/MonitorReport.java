@@ -11,15 +11,13 @@ import com.losandes.connectionDb.enums.ItemCPUReport;
 
 public class MonitorReport{
 
-	String UUID;
 	Timestamp timest;
 	long timeLong;
-	int ContadorRegistros;
-	String UserName, hostName;
-	double uptime,idle,d,CPuser,sys,nice,wait,combined;
-	long user,sys0,nice0,wait0,idle0;
-	double rAMMemoryFree,rAMMemoryUsed;
-	double freePercent,usedPercent;
+	String userName, hostName;
+	double cpuUptime,cpuIdle,noCpuIdle,cpuUser,cpuSys,cpuNice,cpuWait,cpuCombined;
+	long totalCpuUserTime,totalCpuSysTime,totalCpuNiceTime,totalCpuWaitTime,totalCpuIdleTime;
+	double ramMemoryFree,ramMemoryUsed;
+	double memFreePercent,memUsedPercent;
 	double swapMemoryFree,swapMemoryPageIn,swapMemoryPageOut,swapMemoryUsed;
 	long hardDiskFreeSpace;
 	long hardDiskUsedSpace;
@@ -27,43 +25,41 @@ public class MonitorReport{
 	String networkInterface;
 	String networkNetmask;
 	String networkGateway;
-	long rxBytes;
-	long txBytes;
-	long speed;
-	long rxErrors;
-	long txErrors;
-	long rxPackets;
-	long txPackets;
+	long netRxBytes;
+	long netTxBytes;
+	long netSpeed;
+	long netRxErrors;
+	long netTxErrors;
+	long netRxPackets;
+	long netTxPackets;
     String processes;
     
     public MonitorReport() {
 	}
     
-	public MonitorReport(String uUID, Timestamp timest, long timeLong, int contadorRegistros, String userName, String host , double uptime, double idle, double d, double cPuser, double sys, double nice, double wait, double combined, long user, long sys0, long nice0, long wait0, long idle0, double rAMMemoryFree, double rAMMemoryUsed, double freePercent, double usedPercent, double swapMemoryFree, double swapMemoryPageIn, double swapMemoryPageOut, double swapMemoryUsed, long hardDiskFreeSpace, long hardDiskUsedSpace, String networkIPAddress, String networkInterface, String networkNetmask, String networkGateway, long rxBytes, long txBytes, long speed, long rxErrors, long txErrors, long rxPackets, long txPackets,String processes){
+	public MonitorReport(Timestamp timest, long timeLong, String userName, String host , double uptime, double idle, double d, double cPuser, double sys, double nice, double wait, double combined, long user, long sys0, long nice0, long wait0, long idle0, double rAMMemoryFree, double rAMMemoryUsed, double freePercent, double usedPercent, double swapMemoryFree, double swapMemoryPageIn, double swapMemoryPageOut, double swapMemoryUsed, long hardDiskFreeSpace, long hardDiskUsedSpace, String networkIPAddress, String networkInterface, String networkNetmask, String networkGateway, long rxBytes, long txBytes, long speed, long rxErrors, long txErrors, long rxPackets, long txPackets,String processes){
 		
-		UUID = uUID;
 		this.timest = timest;
 		this.timeLong = timeLong;
-		ContadorRegistros = contadorRegistros;
-		UserName = userName;
-		hostName = host;
-		this.uptime = uptime;
-		this.idle = idle;
-		this.d = d;
-		CPuser = cPuser;
-		this.sys = sys;
-		this.nice = nice;
-		this.wait = wait;
-		this.combined = combined;
-		this.user = user;
-		this.sys0 = sys0;
-		this.nice0 = nice0;
-		this.wait0 = wait0;
-		this.idle0 = idle0;
-		this.rAMMemoryFree = rAMMemoryFree;
-		this.rAMMemoryUsed = rAMMemoryUsed;
-		this.freePercent = freePercent;
-		this.usedPercent = usedPercent;
+		this.userName = userName;
+		hostName = host; 
+		this.cpuUptime = uptime;
+		this.cpuIdle = idle;
+		this.noCpuIdle = d;
+		cpuUser = cPuser;
+		this.cpuSys = sys;
+		this.cpuNice = nice;
+		this.cpuWait = wait;
+		this.cpuCombined = combined;
+		this.totalCpuUserTime = user;
+		this.totalCpuSysTime = sys0;
+		this.totalCpuNiceTime = nice0;
+		this.totalCpuWaitTime = wait0;
+		this.totalCpuIdleTime = idle0;
+		this.ramMemoryFree = rAMMemoryFree;
+		this.ramMemoryUsed = rAMMemoryUsed;
+		this.memFreePercent = freePercent;
+		this.memUsedPercent = usedPercent;
 		this.swapMemoryFree = swapMemoryFree;
 		this.swapMemoryPageIn = swapMemoryPageIn;
 		this.swapMemoryPageOut = swapMemoryPageOut;
@@ -74,13 +70,13 @@ public class MonitorReport{
 		this.networkInterface = networkInterface;
 		this.networkNetmask = networkNetmask;
 		this.networkGateway = networkGateway;
-		this.rxBytes = rxBytes;
-		this.txBytes = txBytes;
-		this.speed = speed;
-		this.rxErrors = rxErrors;
-		this.txErrors = txErrors;
-		this.rxPackets = rxPackets;
-		this.txPackets = txPackets;
+		this.netRxBytes = rxBytes;
+		this.netTxBytes = txBytes;
+		this.netSpeed = speed;
+		this.netRxErrors = rxErrors;
+		this.netTxErrors = txErrors;
+		this.netRxPackets = rxPackets;
+		this.netTxPackets = txPackets;
         this.processes=processes;
 	}
 	
@@ -88,64 +84,54 @@ public class MonitorReport{
 			
 		line = line.replace("MonitorReport [", "").replace("]", "");
 		processes = line.substring(line.indexOf("{")+1, line.indexOf("}"));
-		line = line.substring(0,line.indexOf(", processes"));
+		line = line.substring(0,line.indexOf(","+ItemCPUReport.PROCESSES.title()));
     	String [] elements = line.split(",");
     	for (String elem : elements) {
 			String [] components = elem.split("=");			
-			if(components[0].trim().startsWith("ContadorRegistros"))ContadorRegistros = Integer.parseInt(components[1]);
-			else if(components[0].trim().startsWith("timest")){
+			if(components[0].trim().equals(ItemCPUReport.TIME.title())){
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
 			    Date parsedDate = dateFormat.parse(components[1]);
 			    timest = new java.sql.Timestamp(parsedDate.getTime());
 			}
-			else if(components[0].trim().startsWith("timeLong")) timeLong = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("UserName")) UserName = components[1];
-			else if(components[0].trim().startsWith("hostName")) hostName = components[1];
-			else if(components[0].trim().startsWith("uptime")) uptime = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("idle")) idle = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("d")) d = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("CPuser")) CPuser = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("sys")) sys = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("nice")) nice = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("wait")) wait = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("combined")) combined = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("user")) user = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("sys0")) sys0 = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("nice0")) nice0 = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("wait0")) wait0 = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("idle0")) idle0 = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("rAMMemoryFree")) rAMMemoryFree = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("rAMMemoryUsed")) rAMMemoryUsed = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("freePercent")) freePercent = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("usedPercent")) usedPercent = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("swapMemoryFree")) swapMemoryFree = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("swapMemoryPageIn")) swapMemoryPageIn = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("swapMemoryPageOut")) swapMemoryPageOut = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("swapMemoryUsed")) swapMemoryUsed = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("hardDiskFreeSpace")) hardDiskFreeSpace = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("hardDiskUsedSpace")) hardDiskUsedSpace = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("networkIPAddress")) networkIPAddress = components[1];
-			else if(components[0].trim().startsWith("networkInterface")) networkInterface = components[1];
-			else if(components[0].trim().startsWith("networkNetmask")) networkNetmask = components[1];
-			else if(components[0].trim().startsWith("networkGateway")) networkGateway = components[1];
-			else if(components[0].trim().startsWith("rxBytes")) rxBytes = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("txBytes")) txBytes = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("speed")) speed = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("rxErrors")) rxErrors = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("txErrors")) txErrors = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("rxPackets")) rxPackets = Long.parseLong(components[1]);
-			else if(components[0].trim().startsWith("txPackets")) txPackets = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.TIME_MILLI.title())) timeLong = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.USERNAME.title())) userName = components[1];
+			else if(components[0].trim().equals(ItemCPUReport.HOSTNAME.title())) hostName = components[1];
+			else if(components[0].trim().equals(ItemCPUReport.UP_TIME.title())) cpuUptime = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.CPU_IDLE.title())) cpuIdle = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.NO_CPU_IDLE.title())) noCpuIdle = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.CPU_USER.title())) cpuUser = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.CPU_SYS.title())) cpuSys = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.CPU_NICE.title())) cpuNice = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.CPU_WAIT.title())) cpuWait = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.CPU_COMBINED.title())) cpuCombined = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.TOTAL_USER.title())) totalCpuUserTime = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.TOTAL_SYS.title())) totalCpuSysTime = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.TOTAL_NICE.title())) totalCpuNiceTime = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.TOTAL_WAIT.title())) totalCpuWaitTime = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.TOTAL_IDLE.title())) totalCpuIdleTime = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.RAM_FREE.title())) ramMemoryFree = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.RAM_USED.title())) ramMemoryUsed = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.MEM_FREE.title())) memFreePercent = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.MEM_USED.title())) memUsedPercent = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.SWAP_FREE.title())) swapMemoryFree = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.SWAP_PAGE_IN.title())) swapMemoryPageIn = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.SWAP_PAGE_OUT.title())) swapMemoryPageOut = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.SWAP_USED.title())) swapMemoryUsed = Double.parseDouble(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.HD_FREE.title())) hardDiskFreeSpace = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.HD_USED.title())) hardDiskUsedSpace = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.NET_IP.title())) networkIPAddress = components[1];
+			else if(components[0].trim().equals(ItemCPUReport.NET_INTERFACE.title())) networkInterface = components[1];
+			else if(components[0].trim().equals(ItemCPUReport.NET_MASK.title())) networkNetmask = components[1];
+			else if(components[0].trim().equals(ItemCPUReport.NET_GATEWAY.title())) networkGateway = components[1];
+			else if(components[0].trim().equals(ItemCPUReport.NET_RX_BYTES.title())) netRxBytes = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.NET_TX_BYTES.title())) netTxBytes = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.NET_SPEED.title())) netSpeed = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.NET_RX_ERRORS.title())) netRxErrors = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.NET_TX_ERRORS.title())) netTxErrors = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.NET_RX_PACKETS.title())) netRxPackets = Long.parseLong(components[1]);
+			else if(components[0].trim().equals(ItemCPUReport.NET_TX_PACKETS.title())) netTxPackets = Long.parseLong(components[1]);
 		}
 	}
-
-	public String getUUID() {
-		return UUID;
-	}
-
-	public void setUUID(String uUID) {
-		UUID = uUID;
-	}
-
 	public Timestamp getTimest() {
 		return timest;
 	}
@@ -161,169 +147,178 @@ public class MonitorReport{
 			parsedDate = dateFormat.parse(t);
 			timest = new java.sql.Timestamp(parsedDate.getTime());
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    
 	}
 
-	public int getContadorRegistros() {
-		return ContadorRegistros;
-	}
-
-	public void setContadorRegistros(int contadorRegistros) {
-		ContadorRegistros = contadorRegistros;
-	}
-
 	public String getUserName() {
-		return UserName;
+		return userName;
 	}
 
 	public void setUserName(String userName) {
-		UserName = userName;
+		this.userName = userName;
 	}
 
-	public double getUptime() {
-		return uptime;
+	
+
+	public long getTimeLong() {
+		return timeLong;
 	}
 
-	public void setUptime(double uptime) {
-		this.uptime = uptime;
+	public void setTimeLong(long timeLong) {
+		this.timeLong = timeLong;
 	}
 
-	public double getIdle() {
-		return idle;
+	public String getHostName() {
+		return hostName;
 	}
 
-	public void setIdle(double idle) {
-		this.idle = idle;
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
 	}
 
-	public double getD() {
-		return d;
+	public double getCpuUptime() {
+		return cpuUptime;
 	}
 
-	public void setD(double d) {
-		this.d = d;
+	public void setCpuUptime(double cpuUptime) {
+		this.cpuUptime = cpuUptime;
 	}
 
-	public double getCPuser() {
-		return CPuser;
+	public double getCpuIdle() {
+		return cpuIdle;
 	}
 
-	public void setCPuser(double cPuser) {
-		CPuser = cPuser;
+	public void setCpuIdle(double cpuIdle) {
+		this.cpuIdle = cpuIdle;
 	}
 
-	public double getSys() {
-		return sys;
+	public double getNoCpuIdle() {
+		return noCpuIdle;
 	}
 
-	public void setSys(double sys) {
-		this.sys = sys;
+	public void setNoCpuIdle(double noCpuIdle) {
+		this.noCpuIdle = noCpuIdle;
 	}
 
-	public double getNice() {
-		return nice;
+	public double getCpuUser() {
+		return cpuUser;
 	}
 
-	public void setNice(double nice) {
-		this.nice = nice;
+	public void setCpuUser(double cpuUser) {
+		this.cpuUser = cpuUser;
 	}
 
-	public double getWait() {
-		return wait;
+	public double getCpuSys() {
+		return cpuSys;
 	}
 
-	public void setWait(double wait) {
-		this.wait = wait;
+	public void setCpuSys(double cpuSys) {
+		this.cpuSys = cpuSys;
 	}
 
-	public double getCombined() {
-		return combined;
+	public double getCpuNice() {
+		return cpuNice;
 	}
 
-	public void setCombined(double combined) {
-		this.combined = combined;
+	public void setCpuNice(double cpuNice) {
+		this.cpuNice = cpuNice;
 	}
 
-	public long getUser() {
-		return user;
+	public double getCpuWait() {
+		return cpuWait;
 	}
 
-	public void setUser(long user) {
-		this.user = user;
+	public void setCpuWait(double cpuWait) {
+		this.cpuWait = cpuWait;
 	}
 
-	public long getSys0() {
-		return sys0;
+	public double getCpuCombined() {
+		return cpuCombined;
 	}
 
-	public void setSys0(long sys0) {
-		this.sys0 = sys0;
+	public void setCpuCombined(double cpuCombined) {
+		this.cpuCombined = cpuCombined;
 	}
 
-	public long getNice0() {
-		return nice0;
+	public long getTotalCpuUserTime() {
+		return totalCpuUserTime;
 	}
 
-	public void setNice0(long nice0) {
-		this.nice0 = nice0;
+	public void setTotalCpuUserTime(long totalCpuUserTime) {
+		this.totalCpuUserTime = totalCpuUserTime;
 	}
 
-	public long getWait0() {
-		return wait0;
+	public long getTotalCpuSysTime() {
+		return totalCpuSysTime;
 	}
 
-	public void setWait0(long wait0) {
-		this.wait0 = wait0;
+	public void setTotalCpuSysTime(long totalCpuSysTime) {
+		this.totalCpuSysTime = totalCpuSysTime;
 	}
 
-	public long getIdle0() {
-		return idle0;
+	public long getTotalCpuNiceTime() {
+		return totalCpuNiceTime;
 	}
 
-	public void setIdle0(long idle0) {
-		this.idle0 = idle0;
+	public void setTotalCpuNiceTime(long totalCpuNiceTime) {
+		this.totalCpuNiceTime = totalCpuNiceTime;
 	}
 
-	public double getrAMMemoryFree() {
-		return rAMMemoryFree;
+	public long getTotalCpuWaitTime() {
+		return totalCpuWaitTime;
 	}
 
-	public void setrAMMemoryFree(double rAMMemoryFree) {
-		this.rAMMemoryFree = rAMMemoryFree;
+	public void setTotalCpuWaitTime(long totalCpuWaitTime) {
+		this.totalCpuWaitTime = totalCpuWaitTime;
 	}
 
-	public double getrAMMemoryUsed() {
-		return rAMMemoryUsed;
+	public long getTotalCpuIdleTime() {
+		return totalCpuIdleTime;
 	}
 
-	public void setrAMMemoryUsed(double rAMMemoryUsed) {
-		this.rAMMemoryUsed = rAMMemoryUsed;
+	public void setTotalCpuIdleTime(long totalCpuIdleTime) {
+		this.totalCpuIdleTime = totalCpuIdleTime;
 	}
 
-	public double getFreePercent() {
-		return freePercent;
+	public double getRamMemoryFree() {
+		return ramMemoryFree;
 	}
 
-	public void setFreePercent(double freePercent) {
-		this.freePercent = freePercent;
+	public void setRamMemoryFree(double ramMemoryFree) {
+		this.ramMemoryFree = ramMemoryFree;
 	}
 
-	public double getUsedPercent() {
-		return usedPercent;
+	public double getRamMemoryUsed() {
+		return ramMemoryUsed;
 	}
 
-	public void setUsedPercent(double usedPercent) {
-		this.usedPercent = usedPercent;
+	public void setRamMemoryUsed(double ramMemoryUsed) {
+		this.ramMemoryUsed = ramMemoryUsed;
+	}
+
+	public double getMemFreePercent() {
+		return memFreePercent;
+	}
+
+	public void setMemFreePercent(double memFreePercent) {
+		this.memFreePercent = memFreePercent;
+	}
+
+	public double getMemUsedPercent() {
+		return memUsedPercent;
+	}
+
+	public void setMemUsedPercent(double memUsedPercent) {
+		this.memUsedPercent = memUsedPercent;
 	}
 
 	public double getSwapMemoryFree() {
 		return swapMemoryFree;
 	}
 
-	public void setSwapMemoryFree( double swapMemoryFree) {
+	public void setSwapMemoryFree(double swapMemoryFree) {
 		this.swapMemoryFree = swapMemoryFree;
 	}
 
@@ -399,82 +394,65 @@ public class MonitorReport{
 		this.networkGateway = networkGateway;
 	}
 
-	public long getRxBytes() {
-		return rxBytes;
+	public long getNetRxBytes() {
+		return netRxBytes;
 	}
 
-	public void setRxBytes(long rxBytes) {
-		this.rxBytes = rxBytes;
+	public void setNetRxBytes(long netRxBytes) {
+		this.netRxBytes = netRxBytes;
 	}
 
-	public long getTxBytes() {
-		return txBytes;
+	public long getNetTxBytes() {
+		return netTxBytes;
 	}
 
-	public void setTxBytes(long txBytes) {
-		this.txBytes = txBytes;
+	public void setNetTxBytes(long netTxBytes) {
+		this.netTxBytes = netTxBytes;
 	}
 
-	public long getSpeed() {
-		return speed;
+	public long getNetSpeed() {
+		return netSpeed;
 	}
 
-	public void setSpeed(long speed) {
-		this.speed = speed;
+	public void setNetSpeed(long netSpeed) {
+		this.netSpeed = netSpeed;
 	}
 
-	public long getRxErrors() {
-		return rxErrors;
+	public long getNetRxErrors() {
+		return netRxErrors;
 	}
 
-	public void setRxErrors(long rxErrors) {
-		this.rxErrors = rxErrors;
+	public void setNetRxErrors(long netRxErrors) {
+		this.netRxErrors = netRxErrors;
 	}
 
-	public long getTxErrors() {
-		return txErrors;
+	public long getNetTxErrors() {
+		return netTxErrors;
 	}
 
-	public void setTxErrors(long txErrors) {
-		this.txErrors = txErrors;
+	public void setNetTxErrors(long netTxErrors) {
+		this.netTxErrors = netTxErrors;
 	}
 
-	public long getRxPackets() {
-		return rxPackets;
+	public long getNetRxPackets() {
+		return netRxPackets;
 	}
 
-	public void setRxPackets(long rxPackets) {
-		this.rxPackets = rxPackets;
+	public void setNetRxPackets(long netRxPackets) {
+		this.netRxPackets = netRxPackets;
 	}
 
-	public long getTxPackets() {
-		return txPackets;
+	public long getNetTxPackets() {
+		return netTxPackets;
 	}
 
-	public void setTxPackets(long txPackets) {
-		this.txPackets = txPackets;
+	public void setNetTxPackets(long netTxPackets) {
+		this.netTxPackets = netTxPackets;
 	}
 
-    public String getProcesses() {
-        return processes;
-    }
-    
-    public String getHostName() {
-		return hostName;
+	public String getProcesses() {
+		return processes;
 	}
-    
-    public void setHostName(String hostName) {
-		this.hostName = hostName;
-	}
-    
-    public long getTimeLong() {
-		return timeLong;
-	}
-    
-    public void setTimeLong(long timeLong) {
-		this.timeLong = timeLong;
-	}
-    
 
 	public void setProcesses(String processes) {
 		this.processes = processes;
@@ -482,27 +460,45 @@ public class MonitorReport{
 
 	@Override
 	public String toString() {
-		return "MonitorReport [ContadorRegistros=" + ContadorRegistros + ", timest=" + timest
-				+ ", timeLong=" + timeLong+ ", UserName="
-				+ UserName + ", hostName="+ hostName+", uptime=" + uptime + ", idle=" + idle + ", d=" + d
-				+ ", CPuser=" + CPuser + ", sys=" + sys + ", nice=" + nice
-				+ ", wait=" + wait + ", combined=" + combined + ", user="
-				+ user + ", sys0=" + sys0 + ", nice0=" + nice0 + ", wait0="
-				+ wait0 + ", idle0=" + idle0 + ", rAMMemoryFree="
-				+ rAMMemoryFree + ", rAMMemoryUsed=" + rAMMemoryUsed
-				+ ", freePercent=" + freePercent + ", usedPercent="
-				+ usedPercent + ", swapMemoryFree=" + swapMemoryFree
-				+ ", swapMemoryPageIn=" + swapMemoryPageIn
-				+ ", swapMemoryPageOut=" + swapMemoryPageOut
-				+ ", swapMemoryUsed=" + swapMemoryUsed + ", hardDiskFreeSpace="
-				+ hardDiskFreeSpace + ", hardDiskUsedSpace="
-				+ hardDiskUsedSpace + ", networkIPAddress=" + networkIPAddress
-				+ ", networkInterface=" + networkInterface
-				+ ", networkNetmask=" + networkNetmask + ", networkGateway="
-				+ networkGateway + ", rxBytes=" + rxBytes + ", txBytes="
-				+ txBytes + ", speed=" + speed + ", rxErrors=" + rxErrors
-				+ ", txErrors=" + txErrors + ", rxPackets=" + rxPackets
-				+ ", txPackets=" + txPackets + ", processes={" + processes + "}]";
+		return "MonitorReport ["+ItemCPUReport.TIME.title()+"=" + timest+","
+				+ItemCPUReport.TIME_MILLI.title()+"=" +timeLong+ ","
+				+ItemCPUReport.USERNAME.title()+"="+ userName + ","
+				+ItemCPUReport.HOSTNAME.title()+"="+ hostName+","
+				+ItemCPUReport.UP_TIME.title()+"="+ cpuUptime + ","
+				+ItemCPUReport.CPU_IDLE.title()+"=" + cpuIdle + ","
+				+ItemCPUReport.NO_CPU_IDLE.title()+"=" + noCpuIdle+","
+				+ItemCPUReport.CPU_USER.title()+"=" + cpuUser + ","
+				+ItemCPUReport.CPU_SYS.title()+"=" + cpuSys + ","
+				+ItemCPUReport.CPU_NICE.title()+"=" + cpuNice+ ","
+				+ItemCPUReport.CPU_WAIT.title()+"=" + cpuWait + ","
+				+ItemCPUReport.CPU_COMBINED.title()+"=" + cpuCombined + ","
+				+ItemCPUReport.TOTAL_USER.title()+"=" + totalCpuUserTime + ","
+				+ItemCPUReport.TOTAL_SYS.title()+"=" + totalCpuSysTime + ","
+				+ItemCPUReport.TOTAL_NICE.title()+"=" + totalCpuNiceTime + ","
+				+ItemCPUReport.TOTAL_WAIT.title()+"=" + totalCpuWaitTime + ","
+				+ItemCPUReport.TOTAL_IDLE.title()+"=" + totalCpuIdleTime + ","
+				+ItemCPUReport.RAM_FREE.title()+"=" + ramMemoryFree + ","
+				+ItemCPUReport.RAM_USED.title()+"=" + ramMemoryUsed + ","
+				+ItemCPUReport.MEM_FREE.title()+"=" + memFreePercent + ","
+				+ItemCPUReport.MEM_USED.title()+"=" + memUsedPercent + ","
+				+ItemCPUReport.SWAP_FREE.title()+"=" + swapMemoryFree+ ","
+				+ItemCPUReport.SWAP_PAGE_IN.title()+"=" + swapMemoryPageIn+ ","
+				+ItemCPUReport.SWAP_PAGE_OUT.title()+"=" + swapMemoryPageOut+ ","
+				+ItemCPUReport.SWAP_USED.title()+"=" + swapMemoryUsed + ","
+				+ItemCPUReport.HD_FREE.title()+"=" + hardDiskFreeSpace + ","
+				+ItemCPUReport.HD_USED.title()+"=" + hardDiskUsedSpace + ","
+				+ItemCPUReport.NET_IP.title()+"=" + networkIPAddress+ ","
+				+ItemCPUReport.NET_INTERFACE.title()+"=" + networkInterface+","
+				+ItemCPUReport.NET_MASK.title()+"=" + networkNetmask + ","
+				+ItemCPUReport.NET_GATEWAY.title()+"=" + networkGateway + ","
+				+ItemCPUReport.NET_RX_BYTES.title()+"=" + netRxBytes + ","
+				+ItemCPUReport.NET_TX_BYTES.title()+"=" + netTxBytes + ","
+				+ItemCPUReport.NET_SPEED.title()+"=" + netSpeed + ","
+				+ItemCPUReport.NET_RX_ERRORS.title()+"=" + netRxErrors	+ ","
+				+ItemCPUReport.NET_TX_ERRORS.title()+"=" + netTxErrors + ","
+				+ItemCPUReport.NET_RX_PACKETS.title()+"=" + netRxPackets+ ","
+				+ItemCPUReport.NET_TX_PACKETS.title()+"=" + netTxPackets + ","
+				+ItemCPUReport.PROCESSES.title()+"={" + processes + "}]";
 	}
 	
 	public static String getHead(){
@@ -522,18 +518,18 @@ public class MonitorReport{
 				+ ItemCPUReport.NET_TX_PACKETS.title()	+ "," + ItemCPUReport.PROCESSES.title()+"(Name;VirtualMemorySize;ResidentMemorySize;CPUPercentage)";
 	}
 	public String getLine(){
-		return  timest+ "," + timeLong+ ","	+ UserName + ","
-				+ hostName+"," + uptime + "," + idle + "," + d+ "," 
-				+ CPuser + "," + sys + "," + nice+ "," 
-				+ wait + ", " + combined + ","+ user + "," 
-				+ sys0 + "," + nice0 + ","+ wait0 + "," 
-				+ idle0 + ","+ rAMMemoryFree + "," + rAMMemoryUsed+ "," 
-				+ freePercent + "," + usedPercent + "," + swapMemoryFree+ "," 
+		return  timest+ "," + timeLong+ ","	+ userName + ","
+				+ hostName+"," + cpuUptime + "," + cpuIdle + "," + noCpuIdle+ "," 
+				+ cpuUser + "," + cpuSys + "," + cpuNice+ "," 
+				+ cpuWait + ", " + cpuCombined + ","+ totalCpuUserTime + "," 
+				+ totalCpuSysTime + "," + totalCpuNiceTime + ","+ totalCpuWaitTime + "," 
+				+ totalCpuIdleTime + ","+ ramMemoryFree + "," + ramMemoryUsed+ "," 
+				+ memFreePercent + "," + memUsedPercent + "," + swapMemoryFree+ "," 
 				+ swapMemoryPageIn+ "," + swapMemoryPageOut	+ "," + swapMemoryUsed + ","
 				+ hardDiskFreeSpace + ","+ hardDiskUsedSpace + "," + networkIPAddress+ "," 
 				+ networkInterface	+ "," + networkNetmask + ","+ networkGateway + "," 
-				+ rxBytes + ","	+ txBytes + "," + speed + ","
-				+ rxErrors+ "," + txErrors + "," + rxPackets+ ","
-				+ txPackets + "," + processes;
+				+ netRxBytes + ","	+ netTxBytes + "," + netSpeed + ","
+				+ netRxErrors+ "," + netTxErrors + "," + netRxPackets+ ","
+				+ netTxPackets + "," + processes;
 	}
 }

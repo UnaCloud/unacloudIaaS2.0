@@ -19,7 +19,6 @@ import java.util.Locale;
 public class MonitorInitialReport implements Serializable{
 
 	private static final long serialVersionUID = -2738566841932331498L;
-	private String UUID;
     private Timestamp timest;
     private long timeLong;
     private double mflops,timeinSecs;
@@ -42,9 +41,8 @@ public class MonitorInitialReport implements Serializable{
     public MonitorInitialReport() {
 	}
 
-    public MonitorInitialReport(String uUID, Timestamp timest, Long time, String hostname, double mflops, double timeinSecs, String operatingSystemName, String operatingSystemVersion, String operatingSystemArchitect, String cPUModel, String cPUVendor, int cPUCores, int totalSockets, String cPUMhz, int coresPerSocket, double rAMMemorySize, double swapMemorySize, long hardDiskSpace, String hardDiskFileSystem, String networkMACAddress) {
+    public MonitorInitialReport(Timestamp timest, Long time, String hostname, double mflops, double timeinSecs, String operatingSystemName, String operatingSystemVersion, String operatingSystemArchitect, String cPUModel, String cPUVendor, int cPUCores, int totalSockets, String cPUMhz, int coresPerSocket, double rAMMemorySize, double swapMemorySize, long hardDiskSpace, String hardDiskFileSystem, String networkMACAddress) {
        // super(REGISTRATION_OPERATION,0);
-        UUID = uUID;
         this.timest = timest;
         this.timeLong = time;
         this.hostname = hostname;
@@ -98,14 +96,6 @@ public class MonitorInitialReport implements Serializable{
 		}
     }
 
-
-	public String getUUID() {
-        return UUID;
-    }
-
-    public void setUUID(String uUID) {
-        UUID = uUID;
-    }
 
     public Timestamp getTimest() {
         return timest;

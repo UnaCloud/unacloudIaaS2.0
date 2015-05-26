@@ -1,6 +1,7 @@
 package monitoring;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -15,8 +16,6 @@ public class PhysicalMachineMonitor {
 		if(instance==null)instance=new PhysicalMachineMonitor();
 		return instance;
 	}
-	//private static ArrayList<AbstractMonitor> services;
-	//ArrayList<AbstractMonitor> services = new ArrayList<AbstractMonitor>();
 	private MonitorCPUAgent mc;
 	private MonitorEnergyAgent me;
 	private Controller c;
@@ -165,7 +164,6 @@ public class PhysicalMachineMonitor {
 					mc.setStatus(MonitoringStatus.STOPPED);
 					me.setStatus(MonitoringStatus.STOPPED);
 					e.printStackTrace();
-					break;
 				}				
 			}	
 			if(mc.isStopped())mc.turnOff();
@@ -181,11 +179,12 @@ public class PhysicalMachineMonitor {
 			this.me=me;			
 		}
 	}
-	//To testing
-	
-	//MonitorCPUAgent m = new MonitorCPUAgent("logCPU.txt");
-	//private static int LIMIT_TIME = 60;
-	//	int frE = 10;
-	//	int frC = 10;
-	//	String path = "C:\\Program Files\\Intel\\Power Gadget 3.0\\PowerLog3.0.exe";
+	public long getSpaceDirVMS(){
+        try {
+			long space = new File(VariableManager.local.getStringValue("DATA_PATH")).getFreeSpace();
+			return space;
+		} catch (Exception e) {
+			return -1;
+		}
+    }
 }

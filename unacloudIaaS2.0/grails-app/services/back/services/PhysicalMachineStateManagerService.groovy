@@ -22,11 +22,18 @@ class PhysicalMachineStateManagerService {
 	 * @param hostUser physical machine logged in user
 	 * @param requestAddress physical machine address
 	 */
-    def reportPhysicalMachine(String hostname,String hostUser,String requestAddress, String monitorStatus, String monitorStatusEnergy){
+    def reportPhysicalMachine(String hostname,String hostUser,String requestAddress, String monitorStatus, String monitorStatusEnergy,String dataFree){
 		boolean update=StateManager.registerPhysicalMachineReport(hostname, hostUser);
+		long space;
+		try {
+			if(dataFree==null||dataFree.isEmpty())space = 0;
+			else space = Long.parseLong(dataFree);
+		} catch (Exception e) {
+			space = 0;
+		}		
 		if(update){			
 			PhysicalMachine.executeUpdate("update PhysicalMachine m set m.monitorStatus=:monitorStatus,m.monitorStatusEnergy=:monitorStatusEnergy, m.state=:newState, m.withUser=:newWithUser,m.lastReport=:time where m.name=:pmname",
-				[time: new Date(), monitorStatus: MonitoringStatus.getEnum(monitorStatus), monitorStatusEnergy: MonitoringStatus.getEnum(monitorStatusEnergy),newState: PhysicalMachineStateEnum.ON, newWithUser: (hostUser!=null&&!hostUser.isEmpty()&&!(hostUser.replace(">","").replace(" ","")).equals("null")), pmname:hostname])
+				[time: new Date(),dataSpace:space, monitorStatus: MonitoringStatus.getEnum(monitorStatus), monitorStatusEnergy: MonitoringStatus.getEnum(monitorStatusEnergy),newState: PhysicalMachineStateEnum.ON, newWithUser: (hostUser!=null&&!hostUser.isEmpty()&&!(hostUser.replace(">","").replace(" ","")).equals("null")), pmname:hostname])
 		}
 		
 	}

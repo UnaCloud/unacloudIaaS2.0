@@ -13,7 +13,7 @@ public class PhysicalMachineState {
 	 * reports a start operation
 	 */
 	public static void reportPhyisicalMachineStart(){
-		AbstractGrailsCommunicator.pushInfo("machineState/physicalMachineStart","hostname",Network.getHostname(),"monitorStatus",PhysicalMachineMonitor.getInstance().getStatusCpu().getTitle(),"monitorStatusEnergy",PhysicalMachineMonitor.getInstance().getStatusEnergy().getTitle());
+		AbstractGrailsCommunicator.pushInfo("machineState/physicalMachineStart","hostname",Network.getHostname(),"monitorStatus",PhysicalMachineMonitor.getInstance().getStatusCpu().getTitle(),"monitorStatusEnergy",PhysicalMachineMonitor.getInstance().getStatusEnergy().getTitle(),"dataFreeSpace",PhysicalMachineMonitor.getInstance().getSpaceDirVMS());
 	}
 	/**
 	 * reports a stop operation
@@ -25,13 +25,13 @@ public class PhysicalMachineState {
 	 * reports a log off event
 	 */
 	public static void reportPhyisicalMachineUserLogoff(){
-		AbstractGrailsCommunicator.pushInfo("machineState/physicalMachineLogoff","hostname",Network.getHostname(),"monitorStatus",PhysicalMachineMonitor.getInstance().getStatusCpu().getTitle(),"monitorStatusEnergy",PhysicalMachineMonitor.getInstance().getStatusEnergy().getTitle());
+		AbstractGrailsCommunicator.pushInfo("machineState/physicalMachineLogoff","hostname",Network.getHostname(),"monitorStatus",PhysicalMachineMonitor.getInstance().getStatusCpu().getTitle(),"monitorStatusEnergy",PhysicalMachineMonitor.getInstance().getStatusEnergy().getTitle(),"dataFreeSpace",PhysicalMachineMonitor.getInstance().getSpaceDirVMS());
 	}
 	/**
 	 * reports a log in event
 	 */
 	public static void reportPhyisicalMachineUserLogin(){
-		AbstractGrailsCommunicator.pushInfo("machineState/reportPhysicalMachineLogin","hostname",Network.getHostname(),"hostuser",OperatingSystem.getUserName(),"monitorStatus",PhysicalMachineMonitor.getInstance().getStatusCpu().getTitle(),"monitorStatusEnergy",PhysicalMachineMonitor.getInstance().getStatusEnergy().getTitle());
+		AbstractGrailsCommunicator.pushInfo("machineState/reportPhysicalMachineLogin","hostname",Network.getHostname(),"hostuser",OperatingSystem.getUserName(),"monitorStatus",PhysicalMachineMonitor.getInstance().getStatusCpu().getTitle(),"monitorStatusEnergy",PhysicalMachineMonitor.getInstance().getStatusEnergy().getTitle(),"dataFreeSpace",PhysicalMachineMonitor.getInstance().getSpaceDirVMS());
 	}
 	/**
 	 * sends a registration request with machine info

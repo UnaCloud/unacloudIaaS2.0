@@ -48,14 +48,18 @@ public class Main {
         		//Validate if the user that is executing agent is system user
         		String user=OperatingSystem.getWhoAmI();
             	if(user!=null&&!user.toLowerCase().contains("system")){
-            		System.out.println("No se puede ejecutar el agente como "+user);
+            		System.out.println("You can't execute the agent as "+user);
             		System.exit(0);
             	}
+        	}
+        	String dataPath = VariableManager.local.getStringValue("DATA_PATH");
+        	if(dataPath==null||dataPath.isEmpty()){
+        		VariableManager.local.setStringValue("DATA_PATH", "E:\\");
         	}
         	try {
         		//TODO
         		//Create agent log file
-            	PrintStream ps=new PrintStream(new FileOutputStream("E:\\log.txt",true),true){
+            	PrintStream ps=new PrintStream(new FileOutputStream(VariableManager.local.getStringValue("DATA_PATH")+"log.txt",true),true){
             		@Override
             		public void println(String x) {
             			super.println(new Date()+" "+x);

@@ -33,6 +33,7 @@
 			  	<th>User</th>
 			  	<th>Monitor<br> CPU</th>
 			  	<th>Monitor<br> Energy</th>	  
+			  	<th>Free Space</th>	  
 				<th>Options</th>
 			</tr>		 
 			<g:each in="${machineSet}" status="i" var="machine">    
@@ -104,9 +105,13 @@
 				   		</g:if>
 			   		</td>
 			   		<td>
+			   			<small>${machine.dataSpace}</small>
+			   		</td>
+			   		<td>
 			   		    <g:link controller="monitoring" params="${[id: machine.id] }" ><i class="icon-eye-open" title="Show Monitoring"></i></g:link>
 			   			<g:link action="editMachine" params="${[id: machine.id, labId: lab.id] }" ><i class="icon-pencil" title="Edit Machine"></i></g:link>
 			   		</td>
+			   		
 		       </tr>	   	
 			</g:each>
 		</table>
