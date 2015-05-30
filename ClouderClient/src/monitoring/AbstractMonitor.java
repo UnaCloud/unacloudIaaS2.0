@@ -50,6 +50,7 @@ public abstract class AbstractMonitor implements Runnable{
 		try {
 			if(recordPath!=null){
 				status = MonitoringStatus.RUNNING;
+				System.out.println("Lets work for "+windowSizeTime);
 				doMonitoring();
 				doFinal();
 				if(status==MonitoringStatus.RUNNING)status=MonitoringStatus.INIT;

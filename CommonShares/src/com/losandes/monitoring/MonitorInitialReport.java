@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import com.losandes.connectionDb.enums.ItemCPUMetrics;
+
 /**
  * This class provides the attributes to encapsulate the result of a monitor
  * test. Among others, it includes cpu usage, memory usage and other
@@ -37,11 +39,15 @@ public class MonitorInitialReport implements Serializable{
     private long hardDiskSpace;
     private String hardDiskFileSystem;
     private String networkMACAddress;
+    private String networkIPAddress;
+    private String networkInterface;
+    private String networkNetmask;
+    private String networkGateway;
     
     public MonitorInitialReport() {
 	}
 
-    public MonitorInitialReport(Timestamp timest, Long time, String hostname, double mflops, double timeinSecs, String operatingSystemName, String operatingSystemVersion, String operatingSystemArchitect, String cPUModel, String cPUVendor, int cPUCores, int totalSockets, String cPUMhz, int coresPerSocket, double rAMMemorySize, double swapMemorySize, long hardDiskSpace, String hardDiskFileSystem, String networkMACAddress) {
+    public MonitorInitialReport(Timestamp timest, Long time, String hostname, double mflops, double timeinSecs, String operatingSystemName, String operatingSystemVersion, String operatingSystemArchitect, String cPUModel, String cPUVendor, int cPUCores, int totalSockets, String cPUMhz, int coresPerSocket, double rAMMemorySize, double swapMemorySize, long hardDiskSpace, String hardDiskFileSystem, String networkMACAddress, String networkIPAddress, String networkInterface, String networkNetmask, String networkGateway) {
        // super(REGISTRATION_OPERATION,0);
         this.timest = timest;
         this.timeLong = time;
@@ -62,6 +68,10 @@ public class MonitorInitialReport implements Serializable{
         this.networkMACAddress = networkMACAddress;
         this.timeinSecs = timeinSecs;
         this.mflops = mflops;
+		this.networkIPAddress = networkIPAddress;
+		this.networkInterface = networkInterface;
+		this.networkNetmask = networkNetmask;
+		this.networkGateway = networkGateway;
     }
     
     public MonitorInitialReport(String line) throws ParseException{
@@ -70,29 +80,33 @@ public class MonitorInitialReport implements Serializable{
     	String [] elements = line.split(",");
     	for (String elem : elements) {
 			String [] components = elem.split("=");
-			if(components[0].contains("timest")){
+			if(components[0].equals(ItemCPUMetrics.TIME.title())){
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
 			    Date parsedDate = dateFormat.parse(components[1]);
 			    timest = new java.sql.Timestamp(parsedDate.getTime());
 			}
-			else if(components[0].contains("timeLong")) timeLong = Long.parseLong(components[1]);
-			else if(components[0].contains("hostname")) hostname = components[1];
-			else if(components[0].contains("operatingSystemName")) operatingSystemName = components[1];
-			else if(components[0].contains("operatingSystemVersion")) operatingSystemVersion = components[1];
-			else if(components[0].contains("operatingSystemArchitect")) operatingSystemArchitect = components[1];
-			else if(components[0].contains("cPUModel")) cPUModel = components[1];
-			else if(components[0].contains("cPUVendor")) cPUVendor = components[1];
-			else if(components[0].contains("cPUCores")) cPUCores = Integer.parseInt(components[1]);
-			else if(components[0].contains("cPUMhz")) cPUMhz = components[1];
-			else if(components[0].contains("coresPerSocket")) coresPerSocket = Integer.parseInt(components[1]);
-			else if(components[0].contains("totalSockets")) totalSockets = Integer.parseInt(components[1]);
-			else if(components[0].contains("rAMMemorySize")) rAMMemorySize = Double.parseDouble(components[1]);
-			else if(components[0].contains("swapMemorySize")) swapMemorySize = Double.parseDouble(components[1]);
-			else if(components[0].contains("hardDiskSpace")) hardDiskSpace = Long.parseLong(components[1]);
-			else if(components[0].contains("hardDiskFileSystem")) hardDiskFileSystem = components[1];
-			else if(components[0].contains("networkMACAddress")) networkMACAddress = components[1];
-			else if(components[0].trim().startsWith("mflops")) mflops = Double.parseDouble(components[1]);
-			else if(components[0].trim().startsWith("timeinSecs")) timeinSecs = Double.parseDouble(components[1]);
+			else if(components[0].equals(ItemCPUMetrics.TIME_MILLI.title())) timeLong = Long.parseLong(components[1]);
+			else if(components[0].equals(ItemCPUMetrics.HOSTNAME.title())) hostname = components[1];
+			else if(components[0].equals(ItemCPUMetrics.OS_NAME.title())) operatingSystemName = components[1];
+			else if(components[0].equals(ItemCPUMetrics.OS_VERSION.title())) operatingSystemVersion = components[1];
+			else if(components[0].equals(ItemCPUMetrics.OS_ARQUITECTURE.title())) operatingSystemArchitect = components[1];
+			else if(components[0].equals(ItemCPUMetrics.CPU_MODEL.title())) cPUModel = components[1];
+			else if(components[0].equals(ItemCPUMetrics.CPU_VENDOR.title())) cPUVendor = components[1];
+			else if(components[0].equals(ItemCPUMetrics.CPU_CORES.title())) cPUCores = Integer.parseInt(components[1]);
+			else if(components[0].equals(ItemCPUMetrics.CPU_MHZ.title())) cPUMhz = components[1];
+			else if(components[0].equals(ItemCPUMetrics.CORES_X_SOCKETS.title()))coresPerSocket = Integer.parseInt(components[1]);
+			else if(components[0].equals(ItemCPUMetrics.CPU_SOCKETS.title())) totalSockets = Integer.parseInt(components[1]);
+			else if(components[0].equals(ItemCPUMetrics.RAM_SIZE.title())) rAMMemorySize = Double.parseDouble(components[1]);
+			else if(components[0].equals(ItemCPUMetrics.SWAP_SIZE.title())) swapMemorySize = Double.parseDouble(components[1]);
+			else if(components[0].equals(ItemCPUMetrics.HD_SPACE.title())) hardDiskSpace = Long.parseLong(components[1]);
+			else if(components[0].equals(ItemCPUMetrics.HD_FILESYSTEM.title())) hardDiskFileSystem = components[1];
+			else if(components[0].equals(ItemCPUMetrics.MAC.title())) networkMACAddress = components[1];
+			else if(components[0].equals(ItemCPUMetrics.MFLOPS.title())) mflops = Double.parseDouble(components[1]);
+			else if(components[0].equals(ItemCPUMetrics.CPU_SECONDS.title())) timeinSecs = Double.parseDouble(components[1]);
+			else if(components[0].equals(ItemCPUMetrics.NET_IP.title())) networkIPAddress = components[1];
+			else if(components[0].equals(ItemCPUMetrics.NET_INTERFACE.title())) networkInterface = components[1];
+			else if(components[0].equals(ItemCPUMetrics.NET_MASK.title())) networkNetmask = components[1];
+			else if(components[0].equals(ItemCPUMetrics.NET_GATEWAY.title())) networkGateway = components[1];
 		}
     }
 
@@ -261,21 +275,64 @@ public class MonitorInitialReport implements Serializable{
 		this.timeinSecs = timeinSecs;
 	}
 
+	
+	public String getNetworkIPAddress() {
+		return networkIPAddress;
+	}
+
+	public void setNetworkIPAddress(String networkIPAddress) {
+		this.networkIPAddress = networkIPAddress;
+	}
+
+	public String getNetworkInterface() {
+		return networkInterface;
+	}
+
+	public void setNetworkInterface(String networkInterface) {
+		this.networkInterface = networkInterface;
+	}
+
+	public String getNetworkNetmask() {
+		return networkNetmask;
+	}
+
+	public void setNetworkNetmask(String networkNetmask) {
+		this.networkNetmask = networkNetmask;
+	}
+
+	public String getNetworkGateway() {
+		return networkGateway;
+	}
+
+	public void setNetworkGateway(String networkGateway) {
+		this.networkGateway = networkGateway;
+	}
+
 	@Override
 	public String toString() {
-		return "MonitorInitialReport [timest=" + timest
-				+ ", timeLong=" + timeLong + ", mflops=" + mflops
-				+ ", timeinSecs=" + timeinSecs + ", hostname=" + hostname
-				+ ", operatingSystemName=" + operatingSystemName
-				+ ", operatingSystemVersion=" + operatingSystemVersion
-				+ ", operatingSystemArchitect=" + operatingSystemArchitect
-				+ ", cPUModel=" + cPUModel + ", cPUVendor=" + cPUVendor
-				+ ", cPUCores=" + cPUCores + ", totalSockets=" + totalSockets
-				+ ", cPUMhz=" + cPUMhz + ", coresPerSocket=" + coresPerSocket
-				+ ", rAMMemorySize=" + rAMMemorySize + ", swapMemorySize="
-				+ swapMemorySize + ", hardDiskSpace=" + hardDiskSpace
-				+ ", hardDiskFileSystem=" + hardDiskFileSystem
-				+ ", networkMACAddress=" + networkMACAddress + "]";
+		return "MonitorInitialReport ["+ItemCPUMetrics.TIME.title()+"=" + timest
+				+ ","+ItemCPUMetrics.TIME_MILLI.title()+"=" + timeLong 
+				+ ","+ItemCPUMetrics.MFLOPS.title()+"=" + mflops
+				+ ","+ItemCPUMetrics.CPU_SECONDS.title()+"=" + timeinSecs 
+				+ ","+ItemCPUMetrics.HOSTNAME.title()+"=" + hostname
+				+ ","+ItemCPUMetrics.OS_NAME.title()+"=" + operatingSystemName
+				+ ","+ItemCPUMetrics.OS_VERSION.title()+"=" + operatingSystemVersion
+				+ ","+ItemCPUMetrics.OS_ARQUITECTURE.title()+"=" + operatingSystemArchitect
+				+ ","+ItemCPUMetrics.CPU_MODEL.title()+"=" + cPUModel 
+				+ ","+ItemCPUMetrics.CPU_VENDOR.title()+"=" + cPUVendor
+				+ ","+ItemCPUMetrics.CPU_CORES.title()+"=" + cPUCores 
+				+ ","+ItemCPUMetrics.CPU_SOCKETS.title()+"=" + totalSockets
+				+ ","+ItemCPUMetrics.CPU_MHZ.title()+"=" + cPUMhz 
+				+ ","+ItemCPUMetrics.CORES_X_SOCKETS.title()+"=" + coresPerSocket
+				+ ","+ItemCPUMetrics.RAM_SIZE.title()+"=" + rAMMemorySize 
+				+ ","+ItemCPUMetrics.SWAP_SIZE.title()+"=" + swapMemorySize 
+				+ ","+ItemCPUMetrics.HD_SPACE.title()+"=" + hardDiskSpace
+				+ ","+ItemCPUMetrics.HD_FILESYSTEM.title()+"=" + hardDiskFileSystem
+				+ ","+ItemCPUMetrics.MAC.title()+"=" + networkMACAddress 				
+				+ ","+ItemCPUMetrics.NET_IP.title()+"=" + networkIPAddress
+				+ ","+ItemCPUMetrics.NET_INTERFACE.title()+"=" + networkInterface
+				+ ","+ItemCPUMetrics.NET_MASK.title()+"=" + networkNetmask
+				+ ","+ItemCPUMetrics.NET_GATEWAY.title()+"=" + networkGateway +"]";
 	}
 
 }

@@ -1,4 +1,6 @@
 Boolean.REGISTERED=true
+Boolean.MONITORING_ENABLE_CPU=false
+Boolean.MONITORING_ENABLE_ENERGY=false
 String.VBOX_PATH=C:\Program Files\Oracle\VirtualBox\VBoxManage.exe
 String.VMRUN_PATH=C:\Program Files (x86)\VMware\VMware VIX\vmrun.exe
 String.VM_REPO_PATH=E:\GRID\

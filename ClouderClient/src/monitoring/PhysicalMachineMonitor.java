@@ -22,6 +22,7 @@ public class PhysicalMachineMonitor {
 	
 	
 	private void monitorError() {
+		System.out.println("Error in monitoring service");
 		VariableManager.local.setBooleanValue("MONITORING_ENABLE_CPU", false);
 		VariableManager.local.setBooleanValue("MONITORING_ENABLE_ENERGY", false);
 		mc.setStatus(MonitoringStatus.DISABLE);
@@ -29,10 +30,13 @@ public class PhysicalMachineMonitor {
 	}
 	
 	public void initService() {			
+		System.out.println("Init monitoring service");
 		try {
 			mc = new MonitorCPUAgent(VariableManager.local.getStringValue("LOG_CPU_PATH"));	
 			me  = new MonitorEnergyAgent(VariableManager.local.getStringValue("LOG_ENERGY_PATH"));
-		
+			if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_CPU"))mc.setStatus(MonitoringStatus.OFF);
+			if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_ENERGY"))me.setStatus(MonitoringStatus.OFF);
+			startService(true, true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			monitorError();
@@ -40,7 +44,10 @@ public class PhysicalMachineMonitor {
 	}	
 	public void startService(boolean energy, boolean cpu){
 		try {
+			System.out.println("Start monitoring service");
 			int time  = (int)(Math.random()*60*60);	
+			boolean startCpu = false;
+			boolean startEnergy = false;
 			if(cpu)
 				if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_CPU")
 					&&mc.getStatus()==MonitoringStatus.OFF){	
@@ -50,7 +57,8 @@ public class PhysicalMachineMonitor {
 						mc.setFrecuency(frC); 
 						mc.setWindowSizeTime(wsCpu);
 						mc.setReduce(time);
-						mc.setStatus(MonitoringStatus.INIT);	
+						mc.setStatus(MonitoringStatus.INIT);
+						startCpu = true;
 					}						
 			}
 		    if(energy)
@@ -66,14 +74,16 @@ public class PhysicalMachineMonitor {
 							me.setWindowSizeTime(wsEnergy);
 							me.setReduce(time);		
 							me.setStatus(MonitoringStatus.INIT);
+							startEnergy = true;
 						}						
 					}	
 				}
-		    if(c==null||!c.isAlive()){
-		    	c = new Controller();
-				c.add(mc);c.add(me);
-				c.letsGo();
-		    }
+		    if(startCpu||startEnergy)
+			    if(c==null||!c.isAlive()){
+			    	c = new Controller();
+					c.add(mc);c.add(me);
+					c.letsGo();
+			    }
 		} catch (Exception e) {
 			e.printStackTrace();
 			monitorError();
@@ -81,11 +91,13 @@ public class PhysicalMachineMonitor {
 	}
 
 	public void stopService(boolean energy, boolean cpu){
+		System.out.println("Stop monitoring service");
 		if(energy)me.stopMonitor();
 		if(cpu)mc.stopMonitor();				
 	}
 	
-	public void enabledService(boolean energy, boolean cpu) {		
+	public void enabledService(boolean energy, boolean cpu) {	
+		System.out.println("Enable monitoring service");
 		if(cpu&&mc.isDisable()){
 			VariableManager.local.setBooleanValue("MONITORING_ENABLE_CPU", true);
 			mc.setStatus(MonitoringStatus.OFF);
@@ -107,6 +119,7 @@ public class PhysicalMachineMonitor {
 	}
 	
 	public void updateService(int frE, int frC, int wsCpu, int wsEnergy, boolean energy, boolean cpu){
+		System.out.println("Update monitoring service");
 		int time  = (int)(Math.random()*60*60);	
 		if(frE>0&&frC>0&&wsCpu>0&&wsEnergy>0&&frE<wsEnergy&&frC<wsCpu){
 			if(energy){

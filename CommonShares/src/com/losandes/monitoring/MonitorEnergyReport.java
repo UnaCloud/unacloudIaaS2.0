@@ -19,19 +19,19 @@ public class MonitorEnergyReport {
 	
 	public MonitorEnergyReport(String line){
 		String[] data = line.split(",");
-		time = data[0];
-		RDTSC = data[1];
-		elapsedTime = data[2];
-		CPUFrequency = data[3];
-		processorPower = data[4];
-		cumulativeProcessorEnergyJoules = data[5];
-		cumulativeProcessorEnergyMhz = data[6];
-		IAPower = data[7];
-		cumulativeIAEnergy = data[8];
-		cumulativeIA = data[9];
-		packageTemperature = data[10];
-		packageHot = data[11];
-		packagePowerLimit = data[12];
+		time = data[0].trim();
+		RDTSC = data[1].trim();
+		elapsedTime = data[2].trim();
+		CPUFrequency = data[3].trim();
+		processorPower = data[4].trim();
+		cumulativeProcessorEnergyJoules = data[5].trim();
+		cumulativeProcessorEnergyMhz = data[6].trim();
+		IAPower = data[7].trim();
+		cumulativeIAEnergy = data[8].trim();
+		cumulativeIA = data[9].trim();
+		packageTemperature = data[10].trim();
+		packageHot = data[11].trim();
+		packagePowerLimit = data[12].trim();
 	}
 	public String getHostName() {
 		return hostName;

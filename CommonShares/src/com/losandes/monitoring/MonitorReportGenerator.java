@@ -73,7 +73,11 @@ public class MonitorReportGenerator extends SigarCommandBase {
                     monitor.memory.getSwapMemorySize(),
                     monitor.hardDisk.getHardDiskSpace(),
                     monitor.hardDisk.getHardDiskFileSystem(),
-                    monitor.network.getNetworkMACAddress());
+                    monitor.network.getNetworkMACAddress(),
+		            monitor.network.getNetworkIPAddress(),
+		            monitor.network.getNetworkInterface(),
+		            monitor.network.getNetworkNetmask(),
+		            monitor.network.getNetworkGateway());
         } catch (SigarException e) {
             e.printStackTrace();
         }
@@ -151,11 +155,7 @@ public class MonitorReportGenerator extends SigarCommandBase {
                     monitor.memory.getSwapMemoryPageOut(),
                     monitor.memory.getSwapMemoryUsed(),
                     monitor.hardDisk.getHardDiskFreeSpace(),
-                    monitor.hardDisk.getHardDiskUsedSpace(),
-                    monitor.network.getNetworkIPAddress(),
-                    monitor.network.getNetworkInterface(),
-                    monitor.network.getNetworkNetmask(),
-                    monitor.network.getNetworkGateway(), NET.getRxBytes(),
+                    monitor.hardDisk.getHardDiskUsedSpace(), NET.getRxBytes(),
                     NET.getTxBytes(), NET.getSpeed(), NET.getRxErrors(),
                     NET.getTxErrors(), NET.getRxPackets(), NET.getTxPackets(), processes);
         } catch (SigarException e) {

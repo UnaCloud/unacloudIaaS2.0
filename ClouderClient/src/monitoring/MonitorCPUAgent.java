@@ -26,9 +26,9 @@ import com.mongodb.BulkWriteOperation;
 /** 
  * @author Cesar
  * 
- * This class represent a process to monitoring CPU. To monitoring cpu, it uses the library Sigar by Hyperic, and has three process;
+ * This class represent a process to monitoring CPU. To monitoring cpu, it uses the library Sigar by Hyperic and has three processes;
  * Do initial: to validate if there are files to record in database and delete those files, Do Monitoring: to sense cpu and record in a file, and Do final: to record en db
- * This class only work in Windows
+ * This class has been only tested in Windows OS
  */
 
 public class MonitorCPUAgent extends AbstractMonitor {
@@ -131,7 +131,11 @@ public class MonitorCPUAgent extends AbstractMonitor {
 				.append(ItemCPUMetrics.SWAP_SIZE.title(), initialReport.getSwapMemorySize())
 				.append(ItemCPUMetrics.HD_SPACE.title(), initialReport.getHardDiskSpace())
 				.append(ItemCPUMetrics.HD_FILESYSTEM.title(), initialReport.getHardDiskFileSystem())
-				.append(ItemCPUMetrics.MAC.title(), initialReport.getNetworkMACAddress());       
+				.append(ItemCPUMetrics.MAC.title(), initialReport.getNetworkMACAddress())
+				.append(ItemCPUMetrics.NET_IP.title(), initialReport.getNetworkIPAddress())
+				.append(ItemCPUMetrics.NET_INTERFACE.title(), initialReport.getNetworkInterface())
+				.append(ItemCPUMetrics.NET_MASK.title(), initialReport.getNetworkNetmask())
+				.append(ItemCPUMetrics.NET_GATEWAY.title(), initialReport.getNetworkGateway());       
 			    System.out.println(db.infrastructureCollection().insert(doc).getN());
 		    }				
 	 }
@@ -180,10 +184,6 @@ public class MonitorCPUAgent extends AbstractMonitor {
 			.append(ItemCPUReport.SWAP_USED.title(), statusReport.getSwapMemoryUsed())
 			.append(ItemCPUReport.HD_FREE.title(), statusReport.getHardDiskFreeSpace())
 			.append(ItemCPUReport.HD_USED.title(), statusReport.getHardDiskUsedSpace())
-			.append(ItemCPUReport.NET_IP.title(), statusReport.getNetworkIPAddress())
-			.append(ItemCPUReport.NET_INTERFACE.title(), statusReport.getNetworkInterface())
-			.append(ItemCPUReport.NET_MASK.title(), statusReport.getNetworkNetmask())
-			.append(ItemCPUReport.NET_GATEWAY.title(), statusReport.getNetworkGateway())
 			.append(ItemCPUReport.NET_RX_BYTES.title(),statusReport.getNetRxBytes())
 			.append(ItemCPUReport.NET_TX_BYTES.title(), statusReport.getNetTxBytes())
 			.append(ItemCPUReport.NET_SPEED.title(), statusReport.getNetSpeed())
@@ -194,9 +194,6 @@ public class MonitorCPUAgent extends AbstractMonitor {
             .append(ItemCPUReport.PROCESSES.title(),listProcesses);		
 			builder.insert(doc);
         }		
-		
-//		BasicDBObject[] array = new BasicDBObject[listReports.size()];
-//		for (int i = 0; i < array.length; i++) array[i] = listReports.get(i);
 		System.out.println("Insert: "+builder.execute().getInsertedCount());
 	 }
 	 
@@ -229,6 +226,10 @@ public class MonitorCPUAgent extends AbstractMonitor {
 		 else try {
 			 if(!object.get(ItemCPUMetrics.MFLOPS.title()).equals(m1.getMflops()))return true;
 			 else if(!object.get(ItemCPUMetrics.CPU_SECONDS.title()).equals(m1.getTimeinSecs()))return true;
+			 else if(!object.get(ItemCPUMetrics.NET_IP.title()).equals(m1.getNetworkIPAddress()))return true;
+			 else if(!object.get(ItemCPUMetrics.NET_INTERFACE.title()).equals(m1.getNetworkInterface()))return true;
+			 else if(!object.get(ItemCPUMetrics.NET_MASK.title()).equals(m1.getNetworkNetmask()))return true;
+			 else if(!object.get(ItemCPUMetrics.NET_GATEWAY.title()).equals(m1.getNetworkGateway()))return true;   
 		 } catch (Exception e) {
 			 return false;
 		 }		

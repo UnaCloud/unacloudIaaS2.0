@@ -21,10 +21,6 @@ public class MonitorReport{
 	double swapMemoryFree,swapMemoryPageIn,swapMemoryPageOut,swapMemoryUsed;
 	long hardDiskFreeSpace;
 	long hardDiskUsedSpace;
-	String networkIPAddress;
-	String networkInterface;
-	String networkNetmask;
-	String networkGateway;
 	long netRxBytes;
 	long netTxBytes;
 	long netSpeed;
@@ -37,7 +33,7 @@ public class MonitorReport{
     public MonitorReport() {
 	}
     
-	public MonitorReport(Timestamp timest, long timeLong, String userName, String host , double uptime, double idle, double d, double cPuser, double sys, double nice, double wait, double combined, long user, long sys0, long nice0, long wait0, long idle0, double rAMMemoryFree, double rAMMemoryUsed, double freePercent, double usedPercent, double swapMemoryFree, double swapMemoryPageIn, double swapMemoryPageOut, double swapMemoryUsed, long hardDiskFreeSpace, long hardDiskUsedSpace, String networkIPAddress, String networkInterface, String networkNetmask, String networkGateway, long rxBytes, long txBytes, long speed, long rxErrors, long txErrors, long rxPackets, long txPackets,String processes){
+	public MonitorReport(Timestamp timest, long timeLong, String userName, String host , double uptime, double idle, double d, double cPuser, double sys, double nice, double wait, double combined, long user, long sys0, long nice0, long wait0, long idle0, double rAMMemoryFree, double rAMMemoryUsed, double freePercent, double usedPercent, double swapMemoryFree, double swapMemoryPageIn, double swapMemoryPageOut, double swapMemoryUsed, long hardDiskFreeSpace, long hardDiskUsedSpace, long rxBytes, long txBytes, long speed, long rxErrors, long txErrors, long rxPackets, long txPackets,String processes){
 		
 		this.timest = timest;
 		this.timeLong = timeLong;
@@ -66,10 +62,6 @@ public class MonitorReport{
 		this.swapMemoryUsed = swapMemoryUsed;
 		this.hardDiskFreeSpace = hardDiskFreeSpace;
 		this.hardDiskUsedSpace = hardDiskUsedSpace;
-		this.networkIPAddress = networkIPAddress;
-		this.networkInterface = networkInterface;
-		this.networkNetmask = networkNetmask;
-		this.networkGateway = networkGateway;
 		this.netRxBytes = rxBytes;
 		this.netTxBytes = txBytes;
 		this.netSpeed = speed;
@@ -119,10 +111,6 @@ public class MonitorReport{
 			else if(components[0].trim().equals(ItemCPUReport.SWAP_USED.title())) swapMemoryUsed = Double.parseDouble(components[1]);
 			else if(components[0].trim().equals(ItemCPUReport.HD_FREE.title())) hardDiskFreeSpace = Long.parseLong(components[1]);
 			else if(components[0].trim().equals(ItemCPUReport.HD_USED.title())) hardDiskUsedSpace = Long.parseLong(components[1]);
-			else if(components[0].trim().equals(ItemCPUReport.NET_IP.title())) networkIPAddress = components[1];
-			else if(components[0].trim().equals(ItemCPUReport.NET_INTERFACE.title())) networkInterface = components[1];
-			else if(components[0].trim().equals(ItemCPUReport.NET_MASK.title())) networkNetmask = components[1];
-			else if(components[0].trim().equals(ItemCPUReport.NET_GATEWAY.title())) networkGateway = components[1];
 			else if(components[0].trim().equals(ItemCPUReport.NET_RX_BYTES.title())) netRxBytes = Long.parseLong(components[1]);
 			else if(components[0].trim().equals(ItemCPUReport.NET_TX_BYTES.title())) netTxBytes = Long.parseLong(components[1]);
 			else if(components[0].trim().equals(ItemCPUReport.NET_SPEED.title())) netSpeed = Long.parseLong(components[1]);
@@ -158,9 +146,7 @@ public class MonitorReport{
 
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-
-	
+	}	
 
 	public long getTimeLong() {
 		return timeLong;
@@ -362,38 +348,6 @@ public class MonitorReport{
 		this.hardDiskUsedSpace = hardDiskUsedSpace;
 	}
 
-	public String getNetworkIPAddress() {
-		return networkIPAddress;
-	}
-
-	public void setNetworkIPAddress(String networkIPAddress) {
-		this.networkIPAddress = networkIPAddress;
-	}
-
-	public String getNetworkInterface() {
-		return networkInterface;
-	}
-
-	public void setNetworkInterface(String networkInterface) {
-		this.networkInterface = networkInterface;
-	}
-
-	public String getNetworkNetmask() {
-		return networkNetmask;
-	}
-
-	public void setNetworkNetmask(String networkNetmask) {
-		this.networkNetmask = networkNetmask;
-	}
-
-	public String getNetworkGateway() {
-		return networkGateway;
-	}
-
-	public void setNetworkGateway(String networkGateway) {
-		this.networkGateway = networkGateway;
-	}
-
 	public long getNetRxBytes() {
 		return netRxBytes;
 	}
@@ -487,10 +441,6 @@ public class MonitorReport{
 				+ItemCPUReport.SWAP_USED.title()+"=" + swapMemoryUsed + ","
 				+ItemCPUReport.HD_FREE.title()+"=" + hardDiskFreeSpace + ","
 				+ItemCPUReport.HD_USED.title()+"=" + hardDiskUsedSpace + ","
-				+ItemCPUReport.NET_IP.title()+"=" + networkIPAddress+ ","
-				+ItemCPUReport.NET_INTERFACE.title()+"=" + networkInterface+","
-				+ItemCPUReport.NET_MASK.title()+"=" + networkNetmask + ","
-				+ItemCPUReport.NET_GATEWAY.title()+"=" + networkGateway + ","
 				+ItemCPUReport.NET_RX_BYTES.title()+"=" + netRxBytes + ","
 				+ItemCPUReport.NET_TX_BYTES.title()+"=" + netTxBytes + ","
 				+ItemCPUReport.NET_SPEED.title()+"=" + netSpeed + ","
@@ -511,8 +461,7 @@ public class MonitorReport{
 				+ ItemCPUReport.TOTAL_IDLE.title() + ","+ItemCPUReport.RAM_FREE.title()+"," + ItemCPUReport.RAM_USED.title()+ ","
 				+ ItemCPUReport.MEM_FREE.title() + ","+ ItemCPUReport.MEM_USED.title() + "," + ItemCPUReport.SWAP_FREE.title()+ ","
 				+ ItemCPUReport.SWAP_PAGE_IN.title()+ "," + ItemCPUReport.SWAP_PAGE_OUT.title()+ "," + ItemCPUReport.SWAP_USED.title()+ "," 
-				+ ItemCPUReport.HD_FREE.title() + ","+ ItemCPUReport.HD_USED.title() + ","+ ItemCPUReport.NET_IP.title() + "," 
-				+ ItemCPUReport.NET_INTERFACE.title()+ "," + ItemCPUReport.NET_MASK.title()+ "," + ItemCPUReport.NET_GATEWAY.title() + ","
+				+ ItemCPUReport.HD_FREE.title() + ","+ ItemCPUReport.HD_USED.title() + ","
 				+ ItemCPUReport.NET_RX_BYTES.title() + "," + ItemCPUReport.NET_TX_BYTES.title() + ","+ ItemCPUReport.NET_SPEED.title() + "," 
 				+ ItemCPUReport.NET_RX_ERRORS.title() + "," + ItemCPUReport.NET_TX_ERRORS.title()+ "," + ItemCPUReport.NET_RX_PACKETS.title() + "," 
 				+ ItemCPUReport.NET_TX_PACKETS.title()	+ "," + ItemCPUReport.PROCESSES.title()+"(Name;VirtualMemorySize;ResidentMemorySize;CPUPercentage)";
@@ -526,8 +475,7 @@ public class MonitorReport{
 				+ totalCpuIdleTime + ","+ ramMemoryFree + "," + ramMemoryUsed+ "," 
 				+ memFreePercent + "," + memUsedPercent + "," + swapMemoryFree+ "," 
 				+ swapMemoryPageIn+ "," + swapMemoryPageOut	+ "," + swapMemoryUsed + ","
-				+ hardDiskFreeSpace + ","+ hardDiskUsedSpace + "," + networkIPAddress+ "," 
-				+ networkInterface	+ "," + networkNetmask + ","+ networkGateway + "," 
+				+ hardDiskFreeSpace + ","+ hardDiskUsedSpace + ","  
 				+ netRxBytes + ","	+ netTxBytes + "," + netSpeed + ","
 				+ netRxErrors+ "," + netTxErrors + "," + netRxPackets+ ","
 				+ netTxPackets + "," + processes;

@@ -20,7 +20,11 @@ public enum ItemCPUMetrics {
 	SWAP_SIZE("SwapMemorySize"),
 	HD_SPACE("HDSpace"),
 	HD_FILESYSTEM("HDFileSystem"),
-	MAC("MACAddress");
+	MAC("MACAddress"),
+	NET_IP("NetworkIpAddress"),
+	NET_INTERFACE("NetworkInterface"),
+	NET_MASK("NetworkNetMask"),
+	NET_GATEWAY("NetworkGateway");
 	
 	private String title;	
 	private ItemCPUMetrics(String t) {

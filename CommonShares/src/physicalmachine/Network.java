@@ -9,7 +9,6 @@ import org.hyperic.sigar.cmd.Shell;
 import org.hyperic.sigar.cmd.SigarCommandBase;
 
 import com.losandes.utils.LocalProcessExecutor;
-import com.losandes.utils.VariableManager;
 
 import static com.losandes.utils.Constants.*;
 
