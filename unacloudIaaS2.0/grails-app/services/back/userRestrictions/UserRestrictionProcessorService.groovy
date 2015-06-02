@@ -48,10 +48,10 @@ class UserRestrictionProcessorService {
 	 */
 	
 	def getAvoidedMachines(User user){
-		UserRestriction rest = user.restrictions.find{it.name==UserRestrictionEnum.ALLOWED_LABS.name}
-		if(rest!=null&&rest.name!=null&&!rest.name.isEmpty()){
-			String[] values= rest.name.split(":");
-			return PhysicalMachine.where{state == PhysicalMachineStateEnum.ON && laboratory.name in values}
+		UserRestriction rest = user.restrictions.find{it.name.equals(UserRestrictionEnum.ALLOWED_LABS.toString())}
+		if(rest!=null&&rest.value!=null&&!rest.value.isEmpty()){
+			String[] values= rest.value.split(":");
+			return PhysicalMachine.where{state == PhysicalMachineStateEnum.ON && laboratory.name in values}.findAll()
 		}else return PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON)		
 	}
 	/**
@@ -60,10 +60,10 @@ class UserRestrictionProcessorService {
 	 * @return
 	 */
 	def getAvoidedLabs(User user){
-		UserRestriction rest = user.restrictions.find{it.name==UserRestrictionEnum.ALLOWED_LABS.name}
-		if(rest!=null&&rest.name!=null&&!rest.name.isEmpty()){
-			String[] values= rest.name.split(":");
-			return Laboratory.where{name in values}
+		UserRestriction rest = user.restrictions.find{it.name.equals(UserRestrictionEnum.ALLOWED_LABS.toString())}	
+		if(rest!=null&&rest.value!=null&&!rest.value.isEmpty()){
+			String[] values= rest.value.split(":");
+			return Laboratory.where{name in values}.findAll()
 		}else return Laboratory.findAll();
 	}
 	
