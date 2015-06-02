@@ -22,26 +22,27 @@ public class MonitorQuery {
 	public MonitorQuery(MonitorDatabaseConnection c) {
 		this.connection = c;		
 	}
-//	public static void main(String[] args) throws ParseException {
-//		MonitorQuery m = new MonitorQuery(new MonitorDatabaseConnection() {			
-//			@Override
-//			public void callVariables() {
-//				ip = "172.24.98.119";
-//			    port = 27017;
-//			    name = "cloudMongo";
-//			    user = "cloudmonitoreo";
-//			    password = "cloudmonitoreo$#";	
-//				
-//			}
-//		});
+	public static void main(String[] args) {
+		MonitorQuery m = new MonitorQuery(new MonitorDatabaseConnection() {			
+			@Override
+			public void callVariables() {
+				ip = "172.24.98.119";
+			    port = 27017;
+			    name = "cloudMongo";
+			    user = "cloudmonitoreo";
+			    password = "cloudmonitoreo$#";	
+				
+			}
+		});
+		System.out.println(m.getCPUMetrics("ISC201"));
 //	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");	
 //		Date start = dateFormat.parse("2015-05-15 07:00:00.000");
 //    	Date end = dateFormat.parse("2015-05-15 13:00:00.000");
 //		for (MonitorEnergyReport string : m.getEnergyReportsByDate(start, end, "ISC210")) {
 //			//System.out.println(string);
 //		}
-//		//m.getReports("ISC403");
-//	}
+		//m.getReports("ISC403");
+	}
 	public List<MonitorEnergyReport> getEnergyReportsByDate(Date start, Date end, String pm){
 		List<MonitorEnergyReport> reports = new ArrayList<MonitorEnergyReport>();
 		MongoConnection m = null;
@@ -107,8 +108,8 @@ public class MonitorQuery {
 			m = connection.generateConnection();
 			BasicDBObject orQuery = new BasicDBObject();
 		    List<BasicDBObject> objects = new ArrayList<BasicDBObject>();
-			BasicDBObject query = new BasicDBObject(ItemCPUReport.HOSTNAME.title(), host.toLowerCase());
-			BasicDBObject query2 = new BasicDBObject(ItemCPUReport.HOSTNAME.title(), host.toUpperCase());
+			BasicDBObject query = new BasicDBObject(ItemCPUMetrics.HOSTNAME.title(), host.toLowerCase());
+			BasicDBObject query2 = new BasicDBObject(ItemCPUMetrics.HOSTNAME.title(), host.toUpperCase());
 			objects.add(query2);objects.add(query);
 			orQuery.put("$or", objects);
 			BasicDBObject obj = (BasicDBObject)m.infrastructureCollection().findOne(orQuery);

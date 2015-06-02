@@ -231,7 +231,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
 			 else if(!object.get(ItemCPUMetrics.NET_MASK.title()).equals(m1.getNetworkNetmask()))return true;
 			 else if(!object.get(ItemCPUMetrics.NET_GATEWAY.title()).equals(m1.getNetworkGateway()))return true;   
 		 } catch (Exception e) {
-			 return false;
+			 return true;
 		 }		
 		 return false;
 	 }
