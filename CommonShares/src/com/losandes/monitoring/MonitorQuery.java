@@ -1,5 +1,7 @@
 package com.losandes.monitoring;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,27 +24,7 @@ public class MonitorQuery {
 	public MonitorQuery(MonitorDatabaseConnection c) {
 		this.connection = c;		
 	}
-	public static void main(String[] args) {
-		MonitorQuery m = new MonitorQuery(new MonitorDatabaseConnection() {			
-			@Override
-			public void callVariables() {
-				ip = "172.24.98.119";
-			    port = 27017;
-			    name = "cloudMongo";
-			    user = "cloudmonitoreo";
-			    password = "cloudmonitoreo$#";	
-				
-			}
-		});
-		System.out.println(m.getCPUMetrics("ISC201"));
-//	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");	
-//		Date start = dateFormat.parse("2015-05-15 07:00:00.000");
-//    	Date end = dateFormat.parse("2015-05-15 13:00:00.000");
-//		for (MonitorEnergyReport string : m.getEnergyReportsByDate(start, end, "ISC210")) {
-//			//System.out.println(string);
-//		}
-		//m.getReports("ISC403");
-	}
+	
 	public List<MonitorEnergyReport> getEnergyReportsByDate(Date start, Date end, String pm){
 		List<MonitorEnergyReport> reports = new ArrayList<MonitorEnergyReport>();
 		MongoConnection m = null;
@@ -112,8 +94,22 @@ public class MonitorQuery {
 			BasicDBObject query2 = new BasicDBObject(ItemCPUMetrics.HOSTNAME.title(), host.toUpperCase());
 			objects.add(query2);objects.add(query);
 			orQuery.put("$or", objects);
-			BasicDBObject obj = (BasicDBObject)m.infrastructureCollection().findOne(orQuery);
-			mi = parseToInitialReport(obj);
+//			DBCursor cursor = m.infrastructureCollection().find(orQuery).sort(new BasicDBObject("_id", -1));
+//			try {
+//				while(cursor.hasNext()) {
+//					BasicDBObject obj = (BasicDBObject) cursor.next();
+//					System.out.println(obj);
+//				
+//				}
+//			} finally {
+//				 cursor.close();
+//			}
+			DBCursor cursor = m.infrastructureCollection().find(orQuery).sort(new BasicDBObject("_id",-1)).limit(1);
+			if(cursor.hasNext()){
+				BasicDBObject obj = (BasicDBObject) cursor.next();
+				//System.out.println(obj);
+				mi = parseToInitialReport(obj);
+			}			
 			m.close();
 		} catch (Exception e) {
 			if(m!=null)m.close();			
@@ -144,8 +140,8 @@ public class MonitorQuery {
 			 mon.setMflops(obj.getDouble(ItemCPUMetrics.MFLOPS.title()));
 			 mon.setTimeinSecs(obj.getDouble(ItemCPUMetrics.CPU_SECONDS.title()));
 		} catch (Exception e) {//XXX en caso de no tener representación en la bd.
-			 mon.setMflops(-1);
-			 mon.setTimeinSecs(-1);
+			 mon.setMflops(0);
+			 mon.setTimeinSecs(0);
 		}	
 		try {
 			mon.setNetworkGateway(obj.getString(ItemCPUMetrics.NET_GATEWAY.title()));
