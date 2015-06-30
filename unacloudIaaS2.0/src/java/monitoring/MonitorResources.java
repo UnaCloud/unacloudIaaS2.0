@@ -18,25 +18,31 @@ import com.losandes.monitoring.MonitorReport;
 public class MonitorResources {
 	
 	private MonitoringDBServerConnection connection;
+	private boolean connect;
 	
 	public MonitorResources() throws UnknownHostException {
 		connection = new MonitoringDBServerConnection();
+		connect = connection.testConnection();
 	}
-	public MonitorInitialReport getCPUMetrics(String host){
+	public MonitorInitialReport getCPUMetrics(String host) throws Exception{
+		if(!connect)throw new Exception("There is not configured a mongo connection, add credentials to bd an restart app");
 		MonitorQuery query = new MonitorQuery(connection);
 		return query.getCPUMetrics(host);
 	}
-	public List<MonitorReport> getListCPUReports(Date start, Date end, String host){
+	public List<MonitorReport> getListCPUReports(Date start, Date end, String host)throws Exception{
+		if(!connect)throw new Exception("There is not configured a mongo connection, add credentials to bd an restart app");
 		MonitorQuery query = new MonitorQuery(connection);
 		return query.getCpuReportsByDate(start, end, host);		
 	}
-	public List<MonitorEnergyReport> getListEnergyReports(Date start, Date end, String host){
+	public List<MonitorEnergyReport> getListEnergyReports(Date start, Date end, String host)throws Exception{
+		if(!connect)throw new Exception("There is not configured a mongo connection, add credentials to bd an restart app");
 		MonitorQuery query = new MonitorQuery(connection);
 		return query.getEnergyReportsByDate(start, end, host);		
 	}
 	
 	@SuppressWarnings("deprecation")
-	public File createReportEnergy(String host, Date start, Date end){
+	public File createReportEnergy(String host, Date start, Date end)throws Exception{
+		if(!connect)throw new Exception("There is not configured a mongo connection, add credentials to bd an restart app");
 		Date d = new Date();
 		try
 		{
@@ -60,7 +66,8 @@ public class MonitorResources {
 		} 
 	}
 	@SuppressWarnings("deprecation")
-	public File createReportCPU(String host, Date start, Date end){
+	public File createReportCPU(String host, Date start, Date end)throws Exception{
+		if(!connect)throw new Exception("There is not configured a mongo connection, add credentials to bd an restart app");
 		Date d = new Date();
 		try
 		{

@@ -16,4 +16,13 @@ public class MonitoringDBServerConnection extends MonitorDatabaseConnection{
 	    password = variableManagerService.getStringValue("MONITORING_DATABASE_PASSWORD");
 	}
 
+	public boolean testConnection(){
+		if(ip==null||name==null)return false;
+		try {
+			this.generateConnection();
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
 }

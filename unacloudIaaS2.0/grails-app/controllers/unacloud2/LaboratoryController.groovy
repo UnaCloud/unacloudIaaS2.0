@@ -1,5 +1,6 @@
 package unacloud2
 
+import javassist.bytecode.stackmap.BasicBlock.Catch;
 import back.services.AgentService;
 import grails.converters.JSON
 
@@ -72,8 +73,14 @@ class LaboratoryController {
 	 * Save created lab action. Redirects to index when finished 
 	 */
 	def createLab(){
-		laboratoryService.createLab(params.name, (params.highAvailability!=null),params.netConfig, (params.virtual!=null),params.netGateway, params.netMask);
-		redirect(action: "index");
+		try{
+			laboratoryService.createLab(params.name, (params.highAvailability!=null),params.netConfig, (params.virtual!=null),params.netGateway, params.netMask,params.ipInit,params.ipEnd);
+			redirect(action: "index");
+		}catch(Exception e){
+			flash.message="Error in fields to create lab: "+e.getMessage()
+			redirect(action: "addLab");
+		}
+		
 	}
 	
 	/**

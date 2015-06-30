@@ -33,14 +33,8 @@ class BootStrap {
 	def init = { servletContext ->
 		Properties prop = new Properties();
 		String propFileName = "config.properties";
-		InputStream inputStream = new FileInputStream(propFileName);
-		
-		if (inputStream != null) {
-			prop.load(inputStream);
-		} else {
-			throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
-		}
-		
+		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+		prop.load(inputStream);
 		if(HardwareProfile.count() ==0){
 			new HardwareProfile(name:'small', cores:1, ram:1024).save()
 			new HardwareProfile(name:'medium', cores:2, ram:2048).save()

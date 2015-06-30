@@ -1,5 +1,7 @@
 package unacloud2
 
+import com.losandes.utils.Ip4Validator;
+
 class LaboratoryService {
 	
 	//-----------------------------------------------------------------
@@ -69,8 +71,26 @@ class LaboratoryService {
 	 * @param netMask laboratory network's mask
 	 */
 	
-	def createLab(name, highAvailability,netConfig, virtual, netGateway, netMask){
+	def createLab(name, highAvailability,netConfig, virtual, netGateway, netMask, ipInit, ipEnd){
+		Ip4Validator validator = new Ip4Validator();
+		if(!validator.validate(ipInit)||!validator.validate(ipEnd)||!validator.validateRange(ipInit,ipEnd))throw new Exception("Ip range is not valid")
+		String[] components = ipInit.split(".");
+		String[] components2 = ipEnd.split(".");
+		ArrayList<String> ips = new ArrayList<String>();
+		String ip = ipInit;		
+		while(validator.inRange(ipInit, ipEnd, ip)){
+		    ips.add(ip);
+			long ipnumber = validator.transformIp(ip)+1;
+			int b1 = (ipnumber >> 24) & 0xff;
+			int b2 = (ipnumber >> 16) & 0xff;
+			int b3 = (ipnumber >>  8) & 0xff;
+			int b4 = (ipnumber      ) & 0xff;
+			ip=b1+"."+b2+"."+b3+"."+b4
+		}	
 		def ipPool=new IPPool(virtual:virtual,gateway: netGateway, mask: netMask).save()
 		new Laboratory (virtualMachinesIPs: ipPool, name: name, highAvailability: highAvailability,networkQuality: netConfig ).save();
+		for(String ipFind: ips){
+			new IP(ip:ipFind,ipPool:ipPool,used:false).save()
+		}
 	}
 }
