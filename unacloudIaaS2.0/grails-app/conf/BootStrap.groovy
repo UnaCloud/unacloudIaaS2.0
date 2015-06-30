@@ -31,6 +31,16 @@ class BootStrap {
 	VariableManagerService variableManagerService
 
 	def init = { servletContext ->
+		Properties prop = new Properties();
+		String propFileName = "\\resources\\config.properties";
+		InputStream inputStream = new FileInputStream(propFileName);
+		
+		if (inputStream != null) {
+			prop.load(inputStream);
+		} else {
+			throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
+		}
+		
 		if(HardwareProfile.count() ==0){
 			new HardwareProfile(name:'small', cores:1, ram:1024).save()
 			new HardwareProfile(name:'medium', cores:2, ram:2048).save()
@@ -57,7 +67,7 @@ class BootStrap {
 		}
 
 		if(Repository.count()==0){
-			new Repository(name: "Main Repository", capacity: 20, root: "C:\\images\\").save();
+			new Repository(name: "Main Repository", capacity: 20, root: prop.getProperty("repository")).save();
 		}
 		if(ExternalCloudProvider.count()==0){
 			new ExternalCloudProvider(name:'Amazon EC2', endpoint: 'https://ec2.amazonaws.com', type: ExternalCloudTypeEnum.COMPUTING).save()
@@ -65,24 +75,24 @@ class BootStrap {
 			
 		}
 		if(ServerVariable.count() ==0){
-			new ServerVariable(name:'CLOUDER_SERVER_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable:'26').save()
-			new ServerVariable(name:'CLOUDER_CLIENT_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable:'81').save()
-			new ServerVariable(name:'DATA_SOCKET',serverVariableType: ServerVariableTypeEnum.INT,variable:'27').save()
-			new ServerVariable(name:'FILE_TRANSFER_SOCKET',serverVariableType: ServerVariableTypeEnum.INT,variable:'1575').save()
-			new ServerVariable(name:'LOG_SOCKET',serverVariableType: ServerVariableTypeEnum.INT,variable:'1575').save()			
-			new ServerVariable(name:'VERSION_MANAGER_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable:'2003').save()
-			new ServerVariable(name:'CLOUDER_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable:'157.253.236.163').save()
-			new ServerVariable(name:'MONITOR_FREQUENCY_CPU',serverVariableType: ServerVariableTypeEnum.INT,variable:'60').save()
-			new ServerVariable(name:'MONITOR_REGISTER_FREQUENCY_CPU',serverVariableType: ServerVariableTypeEnum.INT,variable:'10800').save()
-			new ServerVariable(name:'MONITORING_DATABASE_NAME',serverVariableType: ServerVariableTypeEnum.STRING,variable:'cloudTest').save()
-			new ServerVariable(name:'MONITORING_DATABASE_PASSWORD',serverVariableType: ServerVariableTypeEnum.STRING,variable:'cloudmonitoreo$#').save()
-			new ServerVariable(name:'MONITORING_DATABASE_USER',serverVariableType: ServerVariableTypeEnum.STRING,variable:'cloudmonitoreo').save()
-			new ServerVariable(name:'MONITORING_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable: '172.24.98.119').save()
-			new ServerVariable(name:'MONITORING_SERVER_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable: '27017').save()
-			new ServerVariable(name:'MONITOR_FREQUENCY_ENERGY',serverVariableType: ServerVariableTypeEnum.INT,variable:'60').save()
-			new ServerVariable(name:'MONITOR_REGISTER_FREQUENCY_ENERGY',serverVariableType: ServerVariableTypeEnum.INT,variable:'10800').save()
-			new ServerVariable(name:'AGENT_VERSION',serverVariableType: ServerVariableTypeEnum.STRING,variable: '2.0.1').save()
-			new ServerVariable(name:'SERVER_URL',serverVariableType: ServerVariableTypeEnum.STRING,variable: 'http://'+InetAddress.getLocalHost().getHostAddress()+'/Unacloud2').save()
+			new ServerVariable(name:'CLOUDER_SERVER_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("CLOUDER_SERVER_PORT")).save()
+			new ServerVariable(name:'CLOUDER_CLIENT_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("CLOUDER_CLIENT_PORT")).save()
+			new ServerVariable(name:'DATA_SOCKET',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("DATA_SOCKET")).save()
+			new ServerVariable(name:'FILE_TRANSFER_SOCKET',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("FILE_TRANSFER_SOCKET")).save()
+			new ServerVariable(name:'LOG_SOCKET',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("LOG_SOCKET")).save()			
+			new ServerVariable(name:'VERSION_MANAGER_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("VERSION_MANAGER_PORT")).save()
+			new ServerVariable(name:'CLOUDER_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable:prop.getProperty("CLOUDER_SERVER_IP")).save()
+			new ServerVariable(name:'MONITOR_FREQUENCY_CPU',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("MONITOR_FREQUENCY_CPU")).save()
+			new ServerVariable(name:'MONITOR_REGISTER_FREQUENCY_CPU',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("MONITOR_REGISTER_FREQUENCY_CPU")).save()
+			new ServerVariable(name:'MONITORING_DATABASE_NAME',serverVariableType: ServerVariableTypeEnum.STRING,variable:prop.getProperty("MONITORING_DATABASE_NAME")).save()
+			new ServerVariable(name:'MONITORING_DATABASE_PASSWORD',serverVariableType: ServerVariableTypeEnum.STRING,variable:prop.getProperty("MONITORING_DATABASE_PASSWORD")).save()
+			new ServerVariable(name:'MONITORING_DATABASE_USER',serverVariableType: ServerVariableTypeEnum.STRING,variable:prop.getProperty("MONITORING_DATABASE_USER")).save()
+			new ServerVariable(name:'MONITORING_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable: prop.getProperty("MONITORING_SERVER_IP")).save()
+			new ServerVariable(name:'MONITORING_SERVER_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable: prop.getProperty("MONITORING_SERVER_PORT")).save()
+			new ServerVariable(name:'MONITOR_FREQUENCY_ENERGY',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("MONITOR_FREQUENCY_ENERGY")).save()
+			new ServerVariable(name:'MONITOR_REGISTER_FREQUENCY_ENERGY',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("MONITOR_REGISTER_FREQUENCY_ENERGY")).save()
+			new ServerVariable(name:'AGENT_VERSION',serverVariableType: ServerVariableTypeEnum.STRING,variable: prop.getProperty("AGENT_VERSION")).save()
+			new ServerVariable(name:'SERVER_URL',serverVariableType: ServerVariableTypeEnum.STRING,variable: 'http://'+InetAddress.getLocalHost().getHostAddress()+'/'+prop.getProperty("SERVER_URL")).save()
 			new ServerVariable(name:'VM_ALLOCATOR_NAME',serverVariableType: ServerVariableTypeEnum.STRING,variable: AllocatorEnum.RANDOM).save()
 		}
 		if(ServerVariable.findByName('EXTERNAL_COMPUTING_ACCOUNT')==null)
