@@ -32,7 +32,7 @@ class BootStrap {
 
 	def init = { servletContext ->
 		Properties prop = new Properties();
-		String propFileName = "\\resources\\config.properties";
+		String propFileName = "config.properties";
 		InputStream inputStream = new FileInputStream(propFileName);
 		
 		if (inputStream != null) {
