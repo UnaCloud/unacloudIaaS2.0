@@ -56,6 +56,17 @@ public class Main {
         		local.setStringValue("VM_REPO_PATH", input);
         	}
     	}
+    	String dataPath=local.getStringValue("DATA_PATH");
+    	System.out.println("Variable DATA_PATH value: "+ dataPath);
+    	System.out.println("Do you wanna change this value? (Y/N)");
+    	input = br.readLine();
+    	if (input.equalsIgnoreCase("y")){
+    		System.out.println("Enter new value for DATA_PATH:");
+        	input = br.readLine();
+        	if(!(input.isEmpty())){
+        		local.setStringValue("DATA_PATH", input);
+        	}
+    	}
     	String path_power=local.getStringValue("PATH_POWERLOG");
     	System.out.println("Variable PATH_POWERLOG: "+ path_power);
     	System.out.println("Do you wanna change this value? (Y/N)");

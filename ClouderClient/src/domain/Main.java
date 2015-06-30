@@ -7,15 +7,14 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Date;
 
+import com.losandes.utils.VariableManager;
+
 import physicalmachine.OperatingSystem;
 import hypervisorManager.HypervisorFactory;
 import monitoring.PhysicalMachineMonitor;
 import monitoring.PhysicalMachineState;
 import monitoring.PhysicalMachineStateReporter;
 import virtualMachineManager.PersistentExecutionManager;
-
-import com.losandes.utils.VariableManager;
-
 import communication.ClouderClientAttention;
 
 /**
@@ -54,10 +53,10 @@ public class Main {
         	}
         	String dataPath = VariableManager.local.getStringValue("DATA_PATH");
         	if(dataPath==null||dataPath.isEmpty()){
-        		VariableManager.local.setStringValue("DATA_PATH", "E:\\");
+        		System.out.println("DATA_PATH in local file is empty");
+        		System.exit(0);
         	}
         	try {
-        		//TODO
         		//Create agent log file
             	PrintStream ps=new PrintStream(new FileOutputStream(VariableManager.local.getStringValue("DATA_PATH")+"log.txt",true),true){
             		@Override

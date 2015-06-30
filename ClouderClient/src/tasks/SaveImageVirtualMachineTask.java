@@ -7,10 +7,9 @@ import java.net.Socket;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import Exceptions.VirtualMachineExecutionException;
-
 import com.losandes.utils.VariableManager;
 
+import Exceptions.VirtualMachineExecutionException;
 import communication.ServerMessageSender;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import virtualMachineManager.ImageCacheManager;
@@ -84,7 +83,7 @@ public class SaveImageVirtualMachineTask implements Runnable{
 				throw new VirtualMachineExecutionException("Error opening connection",e);
 			}
 			
-			System.out.println("Eliminar Imagen");
+			System.out.println("Delete Image");
 			PersistentExecutionManager.removeExecution(machineExecution.getId(), false);
 			if(machineExecution.getImage().getMainFile().getParentFile().equals("base")){
 				ImageCacheManager.deleteImage(machineExecution.getId());

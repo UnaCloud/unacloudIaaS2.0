@@ -1,7 +1,8 @@
-package com.losandes.dataChannel;
+package dataChannel;
 
 import com.losandes.utils.ByteUtils;
 import com.losandes.utils.VariableManager;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;

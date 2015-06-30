@@ -69,7 +69,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	protected void doFinal() throws Exception{
 		recordData();
 		cleanFile();
-		System.out.println(new Date()+"Termine cpu");
+		System.out.println(new Date()+" end cpu");
 	}
 
 	@Override

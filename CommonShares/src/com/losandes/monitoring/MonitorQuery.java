@@ -1,7 +1,5 @@
 package com.losandes.monitoring;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,12 +35,9 @@ public class MonitorQuery {
 			objects.add(query2);objects.add(query);
 			orQuery.put("$or", objects);
 			DBCursor cursor = m.energyCollection().find(orQuery);
-			//BasicDBObject query = new BasicDBObject(ItemEnergyReport.HOSTNAME.title(), pm).append(ItemEnergyReport.REGISTER_DATE.title(), new BasicDBObject("$gte",start.getTime()).append("$lte", end.getTime()));
-			//BasicDBObject query = new BasicDBObject(ItemEnergyReport.HOSTNAME.title(), pm).append("_id", new BasicDBObject("$gte",new ObjectId(start)).append("$lte", new ObjectId(end)));
 			try {
 				while(cursor.hasNext()) {
 					BasicDBObject obj = (BasicDBObject) cursor.next();
-					//System.out.println(obj);
 					reports.add(parseToEnergyReport(obj,new Date(obj.getObjectId("_id").getTime())));
 				}
 			} finally {
@@ -62,7 +57,6 @@ public class MonitorQuery {
 			m = connection.generateConnection();
 			BasicDBObject orQuery = new BasicDBObject();
 		    List<BasicDBObject> objects = new ArrayList<BasicDBObject>();
-			//BasicDBObject query = new BasicDBObject(ItemCPUReport.HOSTNAME.title(), pm).append(ItemCPUReport.TIME_MILLI.title(), new BasicDBObject("$gte",start.getTime()).append("$lte", end.getTime()));
 			BasicDBObject query = new BasicDBObject(ItemCPUReport.HOSTNAME.title(), pm.toLowerCase()).append("_id", new BasicDBObject("$gte",new ObjectId(start)).append("$lte", new ObjectId(end)));
 			BasicDBObject query2 = new BasicDBObject(ItemCPUReport.HOSTNAME.title(), pm.toUpperCase()).append("_id", new BasicDBObject("$gte",new ObjectId(start)).append("$lte", new ObjectId(end)));
 			objects.add(query2);objects.add(query);
@@ -71,7 +65,6 @@ public class MonitorQuery {
 			try {
 				while(cursor.hasNext()) {
 					BasicDBObject obj = (BasicDBObject) cursor.next();
-					//System.out.println(obj);
 					reports.add(parseToCpuReport(obj));
 				}
 			} finally {
@@ -94,20 +87,9 @@ public class MonitorQuery {
 			BasicDBObject query2 = new BasicDBObject(ItemCPUMetrics.HOSTNAME.title(), host.toUpperCase());
 			objects.add(query2);objects.add(query);
 			orQuery.put("$or", objects);
-//			DBCursor cursor = m.infrastructureCollection().find(orQuery).sort(new BasicDBObject("_id", -1));
-//			try {
-//				while(cursor.hasNext()) {
-//					BasicDBObject obj = (BasicDBObject) cursor.next();
-//					System.out.println(obj);
-//				
-//				}
-//			} finally {
-//				 cursor.close();
-//			}
 			DBCursor cursor = m.infrastructureCollection().find(orQuery).sort(new BasicDBObject("_id",-1)).limit(1);
 			if(cursor.hasNext()){
 				BasicDBObject obj = (BasicDBObject) cursor.next();
-				//System.out.println(obj);
 				mi = parseToInitialReport(obj);
 			}			
 			m.close();
@@ -139,7 +121,7 @@ public class MonitorQuery {
 		try {
 			 mon.setMflops(obj.getDouble(ItemCPUMetrics.MFLOPS.title()));
 			 mon.setTimeinSecs(obj.getDouble(ItemCPUMetrics.CPU_SECONDS.title()));
-		} catch (Exception e) {//XXX en caso de no tener representación en la bd.
+		} catch (Exception e) {
 			 mon.setMflops(0);
 			 mon.setTimeinSecs(0);
 		}	
@@ -148,7 +130,7 @@ public class MonitorQuery {
 			mon.setNetworkInterface(obj.getString(ItemCPUMetrics.NET_INTERFACE.title()));
 			mon.setNetworkIPAddress(obj.getString(ItemCPUMetrics.NET_IP.title()));
 			mon.setNetworkNetmask(obj.getString(ItemCPUMetrics.NET_MASK.title()));
-		} catch (Exception e) {//XXX en caso de no tener representación en la bd.
+		} catch (Exception e) {
 			mon.setNetworkGateway(null);
 			mon.setNetworkInterface(null);
 			mon.setNetworkIPAddress(null);

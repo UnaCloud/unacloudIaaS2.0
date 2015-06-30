@@ -1,7 +1,5 @@
 package tasks;
 
-import java.util.Date;
-
 import communication.ServerMessageSender;
 
 import Exceptions.VirtualMachineExecutionException;

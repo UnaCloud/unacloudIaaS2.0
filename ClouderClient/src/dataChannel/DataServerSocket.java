@@ -2,11 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.losandes.dataChannel;
+package dataChannel;
 
 import com.losandes.fileTransfer.Destination;
 import com.losandes.utils.ByteUtils;
 import com.losandes.utils.VariableManager;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;

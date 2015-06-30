@@ -5,9 +5,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
-import unacloudEnums.MonitoringStatus;
-
 import com.losandes.utils.VariableManager;
+
+import unacloudEnums.MonitoringStatus;
 
 public class PhysicalMachineMonitor {	
 

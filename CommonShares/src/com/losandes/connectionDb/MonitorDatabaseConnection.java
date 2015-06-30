@@ -47,26 +47,4 @@ public abstract class MonitorDatabaseConnection {
         MongoConnection con = new MongoConnection(conexion,name);
         return con;
     }
-//    public static void main(String[] args) throws UnknownHostException {
-//    	MongoClient conexion ;
-////        String ip = VariableManager.global.getStringValue("MONITORING_SERVER_IP");
-////        int port = VariableManager.global.getIntValue("MONITORING_SERVER_PORT");
-////        String name = VariableManager.global.getStringValue("MONITORING_DATABASE_NAME");
-////        String user = VariableManager.global.getStringValue("MONITORING_DATABASE_USER");
-////        String password = VariableManager.global.getStringValue("MONITORING_DATABASE_PASSWORD");
-//    	  String ip = "172.24.98.119";
-//          int port = 27017;
-//          String name = "cloudMongo";
-//          String user = "cloudmonitoreo";
-//          String password = "cloudmonitoreo$#";
-//        MongoCredential credential = MongoCredential.createCredential(user, name, password.toCharArray());
-//        ServerAddress address = new ServerAddress(ip, port);
-//        conexion = new MongoClient(ip,port);
-//        System.out.println(conexion);
-//       // MongoConnection con = new MongoConnection(conexion,name);
-//        DB db = conexion.getDB("otra");
-//        System.out.println(db.getCollection("Test").insert(new BasicDBObject("test","uno")));
-//        
-//        System.out.println(db);
-//	}
 }

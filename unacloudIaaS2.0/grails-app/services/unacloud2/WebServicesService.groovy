@@ -105,14 +105,14 @@ class WebServicesService {
 		def belongsToUser= false
 		for (dep in deps){
 			if(dep.isActive()){
-			for(image in dep.cluster.images){
-				for (vm in image.virtualMachines){
-					if(vm.equals(vme)){
-						belongsToUser=true
-						break
+				for(image in dep.cluster.images){
+					for (vm in image.virtualMachines){
+						if(vm.equals(vme)){
+							belongsToUser=true
+							break
+						}
 					}
 				}
-			}
 			}
 		}
 		if(!apiKey.equals(user.apiKey))return new WebServiceException("Cannot stop that machine because it doesn´t belong to user")
@@ -208,7 +208,7 @@ class WebServicesService {
 				return deploymentService.externalDeploy(cluster,user,rir)
 			}
 			else return new WebServiceException( "Image id '"+image.id+"' not found" )
-			}				
+		}				
 	}
 	
 	/**
