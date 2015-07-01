@@ -20,34 +20,35 @@ hibernate {
     cache.use_query_cache = false
     cache.region.factory_class = 'org.hibernate.cache.ehcache.EhCacheRegionFactory'
 }
+Properties prop = new Properties();
+String propFileName = "config.properties";
+InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+prop.load(inputStream);
 // environment specific settings
 environments {
     development {
         dataSource {
-			username = "iaasprod"
-			password = "6659a954f47c63b4bbd296c0efe0b73a"
-            dbCreate = "create-drop"
-            url = "jdbc:mysql://157.253.236.160:3306/iaas2dev?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
-//			username = "root"
-//			password = "root"
-//            dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-//            url = "jdbc:mysql://127.0.0.1:3306/unacloud2?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
+			//using properties file
+			username = prop.getProperty("dev.username");
+			password = prop.getProperty("dev.password");
+			dbCreate = prop.getProperty("dev.dbCreate");// one of 'create', 'create-drop', 'update', 'validate', ''
+			url = prop.getProperty("dev.url");
         }
     }
     test {
         dataSource {
-			username = "iaasprod"
-			password = "6659a954f47c63b4bbd296c0efe0b73a"
-            dbCreate = "update"
-            url = "jdbc:mysql://157.253.236.160:3306/iaas2test?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
+			username = prop.getProperty("test.username");
+			password = prop.getProperty("test.password");
+            dbCreate = prop.getProperty("test.dbCreate");
+            url = prop.getProperty("test.url");
         }
     }
     production {
         dataSource {
-			username = "iaasprod"
-			password = "6659a954f47c63b4bbd296c0efe0b73a"
-            dbCreate = "update"
-            url = "jdbc:mysql://157.253.236.160:3306/iaas2prod?useUnicode=yes&characterEncoding=UTF-8"
+			username = prop.getProperty("prod.username");
+			password = prop.getProperty("prod.password");
+            dbCreate = prop.getProperty("prod.dbCreate");
+            url = prop.getProperty("prod.url");
             pooled = true
             properties {
                maxActive = -1
