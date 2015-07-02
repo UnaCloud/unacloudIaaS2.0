@@ -131,13 +131,13 @@ class AgentService {
 		ZipOutputStream zos=new ZipOutputStream(outputStream);
 		copyFile(zos,"ClientUpdater.jar",new File(appDir,"agentSources/ClientUpdater.jar"),true);
 		copyFile(zos,"ClouderClient.jar",new File(appDir,"agentSources/ClouderClient.jar"),true);
-		copyFile(zos,"sigar-amd64-winnt.dll",new File(appDir,"agentSources/sigar-amd64-winnt.dll"),true);
-		copyFile(zos,"sigar-x86-winnt.dll",new File(appDir,"agentSources/sigar-x86-winnt.dll"),true);
-		copyFile(zos,"local",new File(appDir,"agentSources/local"),true);
+		File local = new File(appDir,"agentSources/local");
+		if(local.exists())copyFile(zos,"local",local,true);
 		zos.putNextEntry(new ZipEntry("vars"));
 		PrintWriter pw=new PrintWriter(zos);
 		for(ServerVariable sv:ServerVariable.all)if(!sv.isServerOnly())pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
 		pw.flush();
+		pw.close();
 		zos.closeEntry();
 		zos.close();
 	}
