@@ -32,8 +32,7 @@
 			  	<th>State</th>
 			  	<th>User</th>
 			  	<th>Monitor<br> CPU</th>
-			  	<th>Monitor<br> Energy</th>	  
-			  	<th>Free Space</th>	  
+			  	<th>Monitor<br> Energy</th>	
 				<th>Options</th>
 			</tr>		 
 			<g:each in="${machineSet}" status="i" var="machine">    
@@ -103,9 +102,6 @@
 				   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.INIT) }">
 				   			<g:img file="blue.png" title="${machine.monitorStatusEnergy.getTitle()}"/>
 				   		</g:if>
-			   		</td>
-			   		<td>
-			   			<small>${machine.dataSpace}</small>
 			   		</td>
 			   		<td>
 			   		    <g:link controller="monitoring" params="${[id: machine.id] }" ><i class="icon-eye-open" title="Show Monitoring"></i></g:link>

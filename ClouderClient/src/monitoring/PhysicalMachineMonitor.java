@@ -30,7 +30,7 @@ public class PhysicalMachineMonitor {
 	}
 	
 	public void initService() {			
-		System.out.println("Init monitoring service");
+		System.out.println("Config monitoring service");
 		try {
 			mc = new MonitorCPUAgent(VariableManager.local.getStringValue("LOG_CPU_PATH"));	
 			me  = new MonitorEnergyAgent(VariableManager.local.getStringValue("LOG_ENERGY_PATH"));
@@ -49,35 +49,37 @@ public class PhysicalMachineMonitor {
 			boolean startCpu = false;
 			boolean startEnergy = false;
 			if(cpu)
-				if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_CPU")
-					&&mc.getStatus()==MonitoringStatus.OFF){	
-					int wsCpu = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU");
-					int frC = VariableManager.global.getIntValue("MONITOR_FREQUENCY_CPU");
-					if(frC>0&&wsCpu>0&&frC<wsCpu){	
-						mc.setFrecuency(frC); 
-						mc.setWindowSizeTime(wsCpu);
-						mc.setReduce(time);
-						mc.setStatus(MonitoringStatus.INIT);
-						startCpu = true;
-					}						
-			}
+				if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_CPU")){
+					if(mc.getStatus()==MonitoringStatus.OFF){	
+						int wsCpu = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU");
+						int frC = VariableManager.global.getIntValue("MONITOR_FREQUENCY_CPU");
+						if(frC>0&&wsCpu>0&&frC<wsCpu){	
+							mc.setFrecuency(frC); 
+							mc.setWindowSizeTime(wsCpu);
+							mc.setReduce(time);
+							mc.setStatus(MonitoringStatus.INIT);
+							startCpu = true;
+						}	
+					}
+				}else System.out.println("Monitoring CPU is disable");
 		    if(energy)
-		    	if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_ENERGY")
-					&&me.getStatus()==MonitoringStatus.OFF){	
-		    		int wsEnergy = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY");
-		    		int frE = VariableManager.global.getIntValue("MONITOR_FREQUENCY_ENERGY");
-		    		if(frE>0&&wsEnergy>0&&frE<wsEnergy){
-		    			String path = VariableManager.local.getStringValue("PATH_POWERLOG");		    													
-		    			if(path!=null&&frE>0){
-		    				me.setPowerlogPath(path);
-							me.setFrecuency(frE);			
-							me.setWindowSizeTime(wsEnergy);
-							me.setReduce(time);		
-							me.setStatus(MonitoringStatus.INIT);
-							startEnergy = true;
-						}						
-					}	
-				}
+		    	if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_ENERGY")){
+					if(me.getStatus()==MonitoringStatus.OFF){	
+			    		int wsEnergy = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY");
+			    		int frE = VariableManager.global.getIntValue("MONITOR_FREQUENCY_ENERGY");
+			    		if(frE>0&&wsEnergy>0&&frE<wsEnergy){
+			    			String path = VariableManager.local.getStringValue("PATH_POWERLOG");		    													
+			    			if(path!=null&&frE>0){
+			    				me.setPowerlogPath(path);
+								me.setFrecuency(frE);			
+								me.setWindowSizeTime(wsEnergy);
+								me.setReduce(time);		
+								me.setStatus(MonitoringStatus.INIT);
+								startEnergy = true;
+							}						
+						}	
+					}
+		    	}else System.out.println("Monitoring energy is disable");
 		    if(startCpu||startEnergy)
 			    if(c==null||!c.isAlive()){
 			    	c = new Controller();
