@@ -1,5 +1,7 @@
 package unacloud2
 
+import unacloudEnums.MonitoringStatus;
+
 import com.losandes.utils.Ip4Validator;
 
 class LaboratoryService {
@@ -27,7 +29,7 @@ class LaboratoryService {
 		println "creating machine in laboratory"+ lab.name+"-"+lab.highAvailability
 		def physicalMachine = new PhysicalMachine( lastReport: new Date(),name:name, state: PhysicalMachineStateEnum.OFF, cores:cores,
 			ram: ram, hardDisk: disk, highAvailability:(lab.highAvailability), 
-			ip:machineIP, operatingSystem: OperatingSystem.get(osId), mac:mac)
+			ip:machineIP, operatingSystem: OperatingSystem.get(osId), mac:mac,monitorStatus:MonitoringStatus.DISABLE,monitorStatusEnergy:MonitoringStatus.DISABLE)
 		
 		physicalMachine.laboratory=lab
 		physicalMachine.save(failOnError:true)

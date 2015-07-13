@@ -78,7 +78,7 @@ class PhysicalMachine {
 	/**
 	 * Free space in data directory: current virtual machine directory
 	 */
-	long dataSpace;
+	long dataSpace = 0;
 	
 	//-----------------------------------------------------------------
 	// Methods

@@ -32,7 +32,7 @@ environments {
 			username = prop.getProperty("dev.username");
 			password = prop.getProperty("dev.password");
 			dbCreate = prop.getProperty("dev.dbCreate");// one of 'create', 'create-drop', 'update', 'validate', ''
-			url = prop.getProperty("dev.url");
+			url = prop.getProperty("dev.url").replace('\\', '');
         }
     }
     test {
@@ -40,7 +40,7 @@ environments {
 			username = prop.getProperty("test.username");
 			password = prop.getProperty("test.password");
             dbCreate = prop.getProperty("test.dbCreate");
-            url = prop.getProperty("test.url");
+            url = prop.getProperty("test.url").replace('\\', '');
         }
     }
     production {
@@ -48,7 +48,7 @@ environments {
 			username = prop.getProperty("prod.username");
 			password = prop.getProperty("prod.password");
             dbCreate = prop.getProperty("prod.dbCreate");
-            url = prop.getProperty("prod.url");
+            url = prop.getProperty("prod.url").replace('\\', '');
             pooled = true
             properties {
                maxActive = -1

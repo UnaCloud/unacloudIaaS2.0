@@ -46,7 +46,7 @@ class BootStrap {
 			String charset = (('A'..'Z') + ('0'..'9')).join()
 			Integer length = 32
 			String randomString = RandomStringUtils.random(length, charset.toCharArray())
-			new User(name:'Guest',username:'admin',password:'admin', userType: 'Administrator',apiKey: randomString).save()
+			new User(name:'Guest',username:'admin',password:prop.getProperty("admin"), userType: 'Administrator',apiKey: randomString).save()
 		}
 		if(OperatingSystem.count() == 0){
 			new OperatingSystem(name:'Windows 7',configurer:'Windows').save();
