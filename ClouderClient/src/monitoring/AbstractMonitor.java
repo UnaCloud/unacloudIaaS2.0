@@ -62,6 +62,7 @@ public abstract class AbstractMonitor implements Runnable{
 	}
 	public void stopMonitor(){
 		if(status==MonitoringStatus.RUNNING)status = MonitoringStatus.STOPPED;
+		else if(status==MonitoringStatus.ERROR)status = MonitoringStatus.OFF;
 	}
 	public void turnOff(){
 		if(status!=MonitoringStatus.DISABLE)status=MonitoringStatus.OFF;
@@ -133,8 +134,11 @@ public abstract class AbstractMonitor implements Runnable{
 	public boolean isStopped(){
 		return status==MonitoringStatus.STOPPED;
 	}
+	public boolean isError(){
+		return status==MonitoringStatus.ERROR;
+	}
 	public boolean isDisable(){
-		return status==MonitoringStatus.DISABLE||status==MonitoringStatus.NONE;
+		return status==MonitoringStatus.DISABLE;
 	}
 	public boolean isReady(){
 		return status==MonitoringStatus.INIT;

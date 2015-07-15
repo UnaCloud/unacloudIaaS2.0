@@ -259,7 +259,7 @@ function getLab(){
 		hideLoading(); 
 		showLoading();
 		$.post('../updateMonitoring', formSend.serialize(), function(data){
-			  showMessage(data,'All selected agents has been request to <b>'+option+'</b> monitoring processes.');		
+			  showMessage(data,'All selected agents have been requested to <b>'+option+'</b> monitoring processes.');		
 			  hideLoading();
 		}, 'json');		
 	}

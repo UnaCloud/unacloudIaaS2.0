@@ -44,7 +44,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	protected void doInitial() throws Exception{
 		if(status==MonitoringStatus.INIT){
 			 PrintWriter pw = new PrintWriter(new FileOutputStream(f,true),true);
-		     pw.println(MonitorReportGenerator.getInstance().generateInitialReport());
+		     pw.println(MonitorReportGenerator.getInstance().getInitialReport());
 		     pw.close();
 		}	     
 	}
@@ -58,7 +58,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	     d.setTime(d.getTime()+(windowSizeTime*1000)-(reduce*1000));	     
 	     PrintWriter pw = new PrintWriter(new FileOutputStream(f,true),true);
 	     while(d.after(new Date())){  
-	    	pw.println(MonitorReportGenerator.getInstance().generateStateReport());
+	    	pw.println(MonitorReportGenerator.getInstance().getStateReport());
 	        Thread.sleep(localFrecuency);
 	     }
 	     if(reduce>0)reduce = 0;
@@ -74,8 +74,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
 
 	@Override
 	protected void sendError(Exception e) {
-		// TODO Send error message to server
-		
+		this.status=MonitoringStatus.ERROR;
 	}	
 	
 	private void checkFile() throws Exception{

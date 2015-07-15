@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.losandes.monitoring.LoaderDll;
 import com.losandes.utils.VariableManager;
 
 import unacloudEnums.MonitoringStatus;
@@ -35,7 +36,7 @@ public class PhysicalMachineMonitor {
 			mc = new MonitorCPUAgent(VariableManager.local.getStringValue("LOG_CPU_PATH"));	
 			me  = new MonitorEnergyAgent(VariableManager.local.getStringValue("LOG_ENERGY_PATH"));
 			if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_CPU"))mc.setStatus(MonitoringStatus.OFF);
-			if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_ENERGY"))me.setStatus(MonitoringStatus.OFF);
+			if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_ENERGY"))me.setStatus(MonitoringStatus.OFF);			
 			startService(true, true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -50,6 +51,7 @@ public class PhysicalMachineMonitor {
 			boolean startEnergy = false;
 			if(cpu)
 				if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_CPU")){
+					LoaderDll.getInstance().loadLibrary();
 					if(mc.getStatus()==MonitoringStatus.OFF){	
 						int wsCpu = VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU");
 						int frC = VariableManager.global.getIntValue("MONITOR_FREQUENCY_CPU");
@@ -94,7 +96,7 @@ public class PhysicalMachineMonitor {
 
 	public void stopService(boolean energy, boolean cpu){
 		System.out.println("Stop monitoring service");
-		if(energy)me.stopMonitor();
+		if(energy)me.stopMonitor();		
 		if(cpu)mc.stopMonitor();				
 	}
 	
@@ -147,10 +149,10 @@ public class PhysicalMachineMonitor {
 		}		
 	}
 	public MonitoringStatus getStatusEnergy(){
-		return me==null?MonitoringStatus.NONE:me.getStatus();
+		return me==null?MonitoringStatus.ERROR:me.getStatus();
 	}
 	public MonitoringStatus getStatusCpu(){
-		return mc==null?MonitoringStatus.NONE:mc.getStatus();
+		return mc==null?MonitoringStatus.ERROR:mc.getStatus();
 	}
 	
 	private class Controller extends Thread{
@@ -158,12 +160,18 @@ public class PhysicalMachineMonitor {
 		MonitorCPUAgent mc;
 		MonitorEnergyAgent me;
 		@Override
-		public void run() {			
+		public void run() {	
 			try {
 				mc.doInitial();
+			} catch (Exception e) {
+				e.printStackTrace();
+				mc.setStatus(MonitoringStatus.ERROR);
+			}
+			try {				
 				me.doInitial();
 			} catch (Exception e1) {
 				e1.printStackTrace();
+				me.setStatus(MonitoringStatus.ERROR);
 			}
 			
 			while(me.isReady()||mc.isReady()){
@@ -176,8 +184,8 @@ public class PhysicalMachineMonitor {
 					for (Thread thread : processes) thread.join();
 					System.out.println(new Date()+" Finish monitor processes");
 				} catch (Exception e) {
-					mc.setStatus(MonitoringStatus.STOPPED);
-					me.setStatus(MonitoringStatus.STOPPED);
+					mc.setStatus(MonitoringStatus.ERROR);
+					me.setStatus(MonitoringStatus.ERROR);
 					e.printStackTrace();
 				}				
 			}	

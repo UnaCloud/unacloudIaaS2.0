@@ -70,7 +70,7 @@
 				   		<g:if test="${machine.monitorStatus.equals(MonitoringStatus.OFF) }">
 				   			<g:img file="red.png" title="${machine.monitorStatus.getTitle()}"/>
 				   		</g:if>
-				   		<g:if test="${machine.monitorStatus.equals(MonitoringStatus.NONE) }">
+				   		<g:if test="${machine.monitorStatus.equals(MonitoringStatus.ERROR) }">
 				   			<g:img file="red.png" title="${machine.monitorStatus.getTitle()}"/>
 				   		</g:if>
 				   		<g:if test="${machine.monitorStatus.equals(MonitoringStatus.DISABLE)}">
@@ -90,7 +90,7 @@
 				   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.OFF)}">
 				   			<g:img file="red.png" title="${machine.monitorStatusEnergy.getTitle()}"/>
 				   		</g:if>
-				   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.NONE) }">
+				   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.ERROR) }">
 				   			<g:img file="red.png" title="${machine.monitorStatusEnergy.getTitle()}"/>
 				   		</g:if>
 				   		<g:if test="${machine.monitorStatusEnergy.equals(MonitoringStatus.DISABLE) }">

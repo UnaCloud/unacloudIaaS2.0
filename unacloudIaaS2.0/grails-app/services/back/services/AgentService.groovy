@@ -75,7 +75,7 @@ class AgentService {
 		PhysicalMachineMonitorMessage pmm = new PhysicalMachineMonitorMessage();
 		if(option.equals("start")&&pm.monitorStatus==MonitoringStatus.OFF){
 		    pmm.operation = PhysicalMachineMonitorMessage.M_START;
-		}else if(option.equals("stop")&&pm.monitorStatus==MonitoringStatus.RUNNING){
+		}else if(option.equals("stop")&&(pm.monitorStatus==MonitoringStatus.RUNNING||pm.monitorStatus==MonitoringStatus.ERROR)){
 		    pmm.operation = PhysicalMachineMonitorMessage.M_STOP;
 		}else if(option.equals("update")){
 		    pmm.operation = PhysicalMachineMonitorMessage.M_UPDATE;

@@ -93,7 +93,6 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 	private void saveReports(ArrayList<MonitorEnergyReport> reports, MongoConnection db) {
 		BulkWriteOperation builder = db.energyCollection().initializeOrderedBulkOperation();		
 		
-		
 		 for (MonitorEnergyReport statusReport : reports)if(statusReport!=null){			
 			BasicDBObject doc = new BasicDBObject(ItemEnergyReport.HOSTNAME.title(),statusReport.getHostName())
 			.append(ItemEnergyReport.TIME.title(), statusReport.getTime())
@@ -125,8 +124,7 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 
 	@Override
 	protected void sendError(Exception e) {
-		// TODO Auto-generated method stub
-		
+		this.status=MonitoringStatus.ERROR;
 	}
 	
 	private void cleanFile(File f) throws FileNotFoundException{
