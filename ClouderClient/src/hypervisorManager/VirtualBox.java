@@ -77,7 +77,7 @@ public class VirtualBox extends Hypervisor {
      */
     @Override
 	public void startVirtualMachine(ImageCopy image) throws HypervisorOperationException {
-		setPriority();
+		setPriority(image);
         String h;
         if((h=LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "startvm", image.getVirtualMachineName(), "--type", "headless")).contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
@@ -87,11 +87,13 @@ public class VirtualBox extends Hypervisor {
         sleep(1000);
     }
 
-	private void setPriority() throws HypervisorOperationException {
+	private void setPriority(ImageCopy image) throws HypervisorOperationException {
 		//To correct executions in Vbox 4.3 and forward
     	try {
-    		 LocalProcessExecutor.executeCommandOutput("wmic","process","where","name=\"VBoxSVC.exe\"","CALL","setpriority","64");
-    		 sleep(1000);
+    		LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"showvminfo",image.getVirtualMachineName());
+    		sleep(1000);
+    		LocalProcessExecutor.executeCommandOutput("wmic","process","where","name=\"VBoxSVC.exe\"","CALL","setpriority","64");
+    		sleep(1000);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -107,7 +109,6 @@ public class VirtualBox extends Hypervisor {
     public void configureVirtualMachineHardware(int cores, int ram, ImageCopy image) throws HypervisorOperationException {
     	if(cores!=0&&ram!=0){
             LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "modifyvm", image.getVirtualMachineName(),"--memory",""+ram,"--cpus",""+cores);
-            setPriority();
             sleep(20000);
         }
     }
