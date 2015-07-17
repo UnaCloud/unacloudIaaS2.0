@@ -74,9 +74,10 @@ public class Main {
     		} catch (FileNotFoundException e) {
     			e.printStackTrace();
     		}
-        	PhysicalMachineState.reportPhyisicalMachineStart();    	
-     	    PhysicalMachineMonitor.getInstance().initService();
+        	
+        	PhysicalMachineState.reportPhyisicalMachineStart();   
             //DataServerSocket.init();
+        	PhysicalMachineMonitor.getInstance().initService();
             PhysicalMachineStateReporter.getInstance().start();
             PersistentExecutionManager.loadData();
            

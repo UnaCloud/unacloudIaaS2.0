@@ -36,6 +36,7 @@ public class PhysicalMachineStateReporter extends Thread{
            try{
                sleep(REPORT_DELAY);
            }catch(Exception e){
+        	   e.printStackTrace();
         	   break;
            }
        }

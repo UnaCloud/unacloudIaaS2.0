@@ -17,8 +17,6 @@ import com.losandes.utils.LocalProcessExecutor;
 import com.mongodb.BasicDBObject;
 import com.mongodb.BulkWriteOperation;
 
-import unacloudEnums.MonitoringStatus;
-
 
 /** 
  * @author Cesar
@@ -31,15 +29,12 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 	
 	private String powerlogPath;
 	
-	public MonitorEnergyAgent(String path) throws Exception {
-		super(path);
+	public MonitorEnergyAgent() throws Exception {
+		super();
 	}
-
 	@Override
 	protected void doInitial() throws Exception {
-		if(status==MonitoringStatus.INIT){
-			LocalProcessExecutor.executeCommand("taskkill /IMF PowerLog3.0.exe");
-		}		
+		if(isReady())LocalProcessExecutor.executeCommand("taskkill /IMF PowerLog3.0.exe");
 	}
 
 	@Override
@@ -124,7 +119,7 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 
 	@Override
 	protected void sendError(Exception e) {
-		this.status=MonitoringStatus.ERROR;
+		toError();
 	}
 	
 	private void cleanFile(File f) throws FileNotFoundException{
@@ -135,4 +130,9 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 		}
     }
 
+	public void addEnergyPath(String path) {
+		if(!isReady())return;
+		if(path==null||path.isEmpty())toDisable();
+		else setPowerlogPath(path);
+	}
 }

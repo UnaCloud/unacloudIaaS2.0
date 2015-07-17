@@ -8,6 +8,7 @@ import com.losandes.utils.VariableManager;
 import fileManager.DataServerSocket;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.junit.Before;
 import org.junit.internal.runners.statements.FailOnTimeout;
 
 import unacloud2.ExternalCloudProvider;
@@ -76,6 +77,7 @@ class BootStrap {
 			new ServerVariable(name:'LOG_SOCKET',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("LOG_SOCKET")).save()			
 			new ServerVariable(name:'VERSION_MANAGER_PORT',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("VERSION_MANAGER_PORT")).save()
 			new ServerVariable(name:'CLOUDER_SERVER_IP',serverVariableType: ServerVariableTypeEnum.STRING,variable:prop.getProperty("CLOUDER_SERVER_IP")).save()
+			new ServerVariable(name:'MONITORING_ENABLE',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("MONITORING_ENABLE"), serverOnly: true).save()
 			new ServerVariable(name:'MONITOR_FREQUENCY_CPU',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("MONITOR_FREQUENCY_CPU")).save()
 			new ServerVariable(name:'MONITOR_REGISTER_FREQUENCY_CPU',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("MONITOR_REGISTER_FREQUENCY_CPU")).save()
 			new ServerVariable(name:'MONITORING_DATABASE_NAME',serverVariableType: ServerVariableTypeEnum.STRING,variable:prop.getProperty("MONITORING_DATABASE_NAME")).save()
@@ -87,7 +89,7 @@ class BootStrap {
 			new ServerVariable(name:'MONITOR_REGISTER_FREQUENCY_ENERGY',serverVariableType: ServerVariableTypeEnum.INT,variable:prop.getProperty("MONITOR_REGISTER_FREQUENCY_ENERGY")).save()
 			new ServerVariable(name:'AGENT_VERSION',serverVariableType: ServerVariableTypeEnum.STRING,variable: prop.getProperty("AGENT_VERSION")).save()
 			new ServerVariable(name:'SERVER_URL',serverVariableType: ServerVariableTypeEnum.STRING,variable: 'http://'+InetAddress.getLocalHost().getHostAddress()+'/'+prop.getProperty("SERVER_URL")).save()
-			new ServerVariable(name:'VM_ALLOCATOR_NAME',serverVariableType: ServerVariableTypeEnum.STRING,variable: AllocatorEnum.RANDOM).save()
+			new ServerVariable(name:'VM_ALLOCATOR_NAME',serverVariableType: ServerVariableTypeEnum.STRING,variable: AllocatorEnum.RANDOM, serverOnly: true).save()
 		}
 		if(ServerVariable.findByName('EXTERNAL_COMPUTING_ACCOUNT')==null)
 			new ServerVariable(name:'EXTERNAL_COMPUTING_ACCOUNT', serverVariableType: ServerVariableTypeEnum.STRING, variable:'None', serverOnly: true).save()

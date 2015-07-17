@@ -129,13 +129,21 @@ class AgentService {
 	
 	def copyAgentOnStream(OutputStream outputStream,File appDir){
 		ZipOutputStream zos=new ZipOutputStream(outputStream);
-		copyFile(zos,"ClientUpdater.jar",new File(appDir,"agentSources/ClientUpdater.jar"),true);
+		//copyFile(zos,"ClientUpdater.jar",new File(appDir,"agentSources/ClientUpdater.jar"),true);
 		copyFile(zos,"ClouderClient.jar",new File(appDir,"agentSources/ClouderClient.jar"),true);
 		File local = new File(appDir,"agentSources/local");
 		if(local.exists())copyFile(zos,"local",local,true);
 		zos.putNextEntry(new ZipEntry("vars"));
 		PrintWriter pw=new PrintWriter(zos);
-		for(ServerVariable sv:ServerVariable.all)if(!sv.isServerOnly())pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
+		ServerVariable monitor = ServerVariable.findByName("MONITORING_ENABLE");
+		boolean monitoring = monitor.variable.equals("1")?true:false;
+		for(ServerVariable sv:ServerVariable.all)
+		    if(!sv.isServerOnly()){
+				if(sv.name.startsWith("MONITOR")){
+					if(monitoring)
+						pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
+				}else pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
+		    }
 		pw.flush();
 		pw.close();
 		zos.closeEntry();
@@ -147,18 +155,22 @@ class AgentService {
 	 * @param outputStream file output stream for download
 	 * @param appDir directory where the zip will be stored
 	 */
-	
+	 
 	def copyUpdaterOnStream(OutputStream outputStream,File appDir){
 		ZipOutputStream zos=new ZipOutputStream(outputStream);
 		copyFile(zos,"ClientUpdater.jar",new File(appDir,"agentSources/ClientUpdater.jar"),true);
 		copyFile(zos,"ClientConfigurer.jar",new File(appDir,"agentSources/ClientConfigurer.jar"),true);
 		zos.putNextEntry(new ZipEntry("vars"));
 		PrintWriter pw=new PrintWriter(zos);
-		for(ServerVariable sv:ServerVariable.all){
-			if(!sv.name.equals("AGENT_VERSION")&&!sv.isServerOnly()){
-				pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
-			}
-		}
+		ServerVariable monitor = ServerVariable.findByName("MONITORING_ENABLE");
+		boolean monitoring = monitor.variable.equals("1")?true:false;
+		for(ServerVariable sv:ServerVariable.all)
+		    if(!sv.isServerOnly()){
+				if(sv.name.startsWith("MONITOR")){
+					if(monitoring)
+						pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
+				}else pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
+		    }
 		pw.flush();
 		zos.closeEntry();
 		zos.close();

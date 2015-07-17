@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import unacloudEnums.MonitoringStatus;
-
 import com.losandes.connectionDb.MongoConnection;
 import com.losandes.connectionDb.enums.ItemCPUMetrics;
 import com.losandes.connectionDb.enums.ItemCPUReport;
@@ -33,16 +31,23 @@ import com.mongodb.BulkWriteOperation;
 
 public class MonitorCPUAgent extends AbstractMonitor {
 	
-	private File f;
+	//private File f;
 	
-	public MonitorCPUAgent(String path) throws Exception {
-		super(path);
-		f = new File(recordPath);
+	public MonitorCPUAgent() throws Exception {
+		super();
+		
+	}
+	
+	@Override
+	public void toEnable(String record) throws Exception {	
+		super.toEnable(record);
+		//f = new File(recordPath);
 	}
 	    
 	@Override
 	protected void doInitial() throws Exception{
-		if(status==MonitoringStatus.INIT){
+		if(isReady()){
+			 File f = new File(recordPath);
 			 PrintWriter pw = new PrintWriter(new FileOutputStream(f,true),true);
 		     pw.println(MonitorReportGenerator.getInstance().getInitialReport());
 		     pw.close();
@@ -55,7 +60,8 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	     int localFrecuency = 1000*frecuency;  
 	     Date d = new Date();
 	     if(reduce>windowSizeTime)reduce= 0;
-	     d.setTime(d.getTime()+(windowSizeTime*1000)-(reduce*1000));	     
+	     d.setTime(d.getTime()+(windowSizeTime*1000)-(reduce*1000));	
+	     File f = new File(recordPath);
 	     PrintWriter pw = new PrintWriter(new FileOutputStream(f,true),true);
 	     while(d.after(new Date())){  
 	    	pw.println(MonitorReportGenerator.getInstance().getStateReport());
@@ -74,10 +80,11 @@ public class MonitorCPUAgent extends AbstractMonitor {
 
 	@Override
 	protected void sendError(Exception e) {
-		this.status=MonitoringStatus.ERROR;
+		toError();
 	}	
 	
 	private void checkFile() throws Exception{
+		File f = new File(recordPath);
 		if(!f.exists())f.createNewFile();
 		else{
 			if(f.length()>0){
@@ -88,6 +95,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	}
 	
 	private void recordData() throws Exception{		
+		File f = new File(recordPath);
 		BufferedReader bf = new BufferedReader(new FileReader(f));
 		String line = null;
 		MonitorInitialReport initial = null; 
@@ -197,6 +205,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
 	 }
 	 
 	 private void cleanFile() throws FileNotFoundException{
+		File f = new File(recordPath);
 		PrintWriter writer = new PrintWriter(f);
 		writer.print("");
 		writer.close();

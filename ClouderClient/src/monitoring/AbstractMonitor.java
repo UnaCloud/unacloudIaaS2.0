@@ -31,17 +31,14 @@ public abstract class AbstractMonitor implements Runnable{
 	/**
 	 * Status of monitoring process; Check MonitoringStatus Enum to more info
 	 */
-	protected MonitoringStatus status;
+	private MonitoringStatus status;
 	/**
 	 * Connection to DB from Agent
 	 */
 	protected MonitorDBAgentConnection connection;
 	
-	public AbstractMonitor(String record) throws Exception {
-		if(record==null)throw new Exception("record path is missing");
-		recordPath=record;
+	protected AbstractMonitor() throws Exception {		
 		status = MonitoringStatus.DISABLE;
-		connection = new MonitorDBAgentConnection();
 	}
 	
 	@Override
@@ -60,12 +57,43 @@ public abstract class AbstractMonitor implements Runnable{
 			sendError(e);
 		}		
 	}
-	public void stopMonitor(){
+	public void toStop(){
 		if(status==MonitoringStatus.RUNNING)status = MonitoringStatus.STOPPED;
 		else if(status==MonitoringStatus.ERROR)status = MonitoringStatus.OFF;
 	}
-	public void turnOff(){
-		if(status!=MonitoringStatus.DISABLE)status=MonitoringStatus.OFF;
+	public void toEnable(String record)throws Exception{
+		if(!isDisable())return;
+		if(record==null)throw new Exception("record path is missing");
+		recordPath=record;
+		this.status = MonitoringStatus.OFF;
+		connection = new MonitorDBAgentConnection();
+	}
+	public void offToInit(int frecuency, int window, int time){
+		if(!isOff())return;
+		if(updateVariables(frecuency, window, time))		
+		    status = MonitoringStatus.INIT;		
+	}
+	public void toDisable(){
+		if(isOff())status = MonitoringStatus.DISABLE;
+	}
+	public void toOff(){
+		if(isStopped())status = MonitoringStatus.OFF;
+	}
+	protected void toError() {
+		this.status = MonitoringStatus.ERROR;
+	}
+	public boolean updateVariables(int frecuency, int window, int time){
+		if(frecuency>0&&window>0&&frecuency<window){	
+			this.frecuency = frecuency; 
+		    this.windowSizeTime = window;
+			this.reduce = time;
+		    return true;		
+		}	
+		System.out.println("Frecuency is greater than window");
+		return false;
+	}
+	public void setRecordPath(String recordPath) {
+		this.recordPath = recordPath;
 	}
 	/**
      * Do initial task to control monitoring
@@ -88,59 +116,41 @@ public abstract class AbstractMonitor implements Runnable{
 	/**
 	 * check frequency in seconds
 	 */
-	public int getFrecuency() {
+	protected int getFrecuency() {
 		return frecuency;
-	}
-	/**
-	 * check frequency in seconds
-	 * @param frecuency
-	 */
-	public void setFrecuency(int frecuency) {
-		this.frecuency = frecuency;
 	}
 	/** 
 	 * @return size time in seconds
 	 */
-	public int getWindowSizeTime() {
+	protected int getWindowSizeTime() {
 		return windowSizeTime;
 	}
-	/** 
-	 * @param windowSizeTime: size time in seconds
-	 */
-	public void setWindowSizeTime(int windowSizeTime) {
-		this.windowSizeTime = windowSizeTime;
-	}
-	public long getReduce() {
+	protected long getReduce() {
 		return reduce;
 	}
-	public void setReduce(long reduce) {
-		this.reduce = reduce;
-	}
-	public String getRecordPath() {
+	protected String getRecordPath() {
 		return recordPath;
 	}
-	public void setRecordPath(String recordPath) {
-		this.recordPath = recordPath;
-	}
-	public MonitoringStatus getStatus() {
-		return status;
-	}
-	public void setStatus(MonitoringStatus status) {
-		this.status = status;
-	}
-	public boolean isRunning(){
+	protected boolean isRunning(){
 		return status==MonitoringStatus.RUNNING;
 	}
-	public boolean isStopped(){
+	protected boolean isStopped(){
 		return status==MonitoringStatus.STOPPED;
 	}
-	public boolean isError(){
+	protected boolean isError(){
 		return status==MonitoringStatus.ERROR;
 	}
-	public boolean isDisable(){
+	protected boolean isDisable(){
 		return status==MonitoringStatus.DISABLE;
 	}
-	public boolean isReady(){
+	protected boolean isReady(){
 		return status==MonitoringStatus.INIT;
+	}
+	protected boolean isOff(){
+		return status==MonitoringStatus.OFF;
+	}
+	
+	public MonitoringStatus getStatus(){
+		return status;
 	}
 }
