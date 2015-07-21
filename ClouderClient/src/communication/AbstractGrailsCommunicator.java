@@ -3,10 +3,7 @@ package communication;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.losandes.utils.VariableManager;
@@ -36,7 +33,7 @@ public class AbstractGrailsCommunicator{
 			for(;br.readLine()!=null;);
 			http.disconnect();
 		} catch (IOException e){
-			System.out.println(" Error en: "+serverUrl+"/"+serviceName+urlParams);
+			System.out.println(" Error en: "+serverUrl+"/"+serviceName+urlParams+" "+e.getMessage());
 			return false;
 		}
 		return true;

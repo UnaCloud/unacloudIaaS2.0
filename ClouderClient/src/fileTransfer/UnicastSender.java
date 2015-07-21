@@ -1,7 +1,5 @@
 package fileTransfer;
 
-import com.losandes.dataChannel.DataServerSocket;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,6 +9,7 @@ import java.util.ArrayList;
 
 import communication.UnaCloudMessage;
 import communication.security.utils.AbstractCommunicator;
+import dataChannel.DataServerSocket;
 
 /**
  * Class responsible for attending requests to retrieve the contens of a local folder and send it to UnaCloud server

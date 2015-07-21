@@ -5,6 +5,7 @@ import unacloud2.DeploymentService
 import unacloud2.PhysicalMachine;
 import unacloud2.PhysicalMachineStateEnum;
 import unacloud2.VirtualMachineExecution;
+import unacloudEnums.MonitoringStatus;
 
 class PhysicalMachineStateManagerService {
 	
@@ -21,11 +22,12 @@ class PhysicalMachineStateManagerService {
 	 * @param hostUser physical machine logged in user
 	 * @param requestAddress physical machine address
 	 */
-    def reportPhysicalMachine(String hostname,String hostUser,String requestAddress){
+    def reportPhysicalMachine(String hostname,String hostUser,String requestAddress, String monitorStatus, String monitorStatusEnergy){
 		boolean update=StateManager.registerPhysicalMachineReport(hostname, hostUser);
-		if(update){
-			PhysicalMachine.executeUpdate("update PhysicalMachine m set m.state=:newState, m.withUser=:newWithUser,m.lastReport=:time where m.name=:pmname",
-				[time: new Date(), newState: PhysicalMachineStateEnum.ON, newWithUser: (hostUser!=null&&!hostUser.isEmpty()&&!(hostUser.replace(">","").replace(" ","")).equals("null")), pmname:hostname])
+			
+		if(update){			
+			PhysicalMachine.executeUpdate("update PhysicalMachine m set m.monitorStatus=:monitorStatus,m.monitorStatusEnergy=:monitorStatusEnergy, m.state=:newState, m.withUser=:newWithUser,m.lastReport=:time where m.name=:pmname",
+				[time: new Date(), monitorStatus: MonitoringStatus.getEnum(monitorStatus), monitorStatusEnergy: MonitoringStatus.getEnum(monitorStatusEnergy),newState: PhysicalMachineStateEnum.ON, newWithUser: (hostUser!=null&&!hostUser.isEmpty()&&!(hostUser.replace(">","").replace(" ","")).equals("null")), pmname:hostname])
 		}
 		
 	}

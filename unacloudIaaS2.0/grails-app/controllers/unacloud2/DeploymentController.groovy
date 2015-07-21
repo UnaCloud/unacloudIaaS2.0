@@ -117,6 +117,7 @@ class DeploymentController {
 					totalInstances+=params.instances.getAt(i).toInteger()
 				}
 			}
+			//Validate if images are available in the platform
 			def unavailable = cluster.images.findAll {it.state==VirtualMachineImageEnum.AVAILABLE}
 			if(unavailable.size()!=cluster.images.size()){
 				flash.message= "Some images of this cluster are not available at this moment. Please, change cluster to deploy or images in cluster."

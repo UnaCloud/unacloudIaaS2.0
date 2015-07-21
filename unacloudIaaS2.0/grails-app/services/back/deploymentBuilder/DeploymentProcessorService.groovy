@@ -92,6 +92,13 @@ class DeploymentProcessorService {
 		
 		physicalMachineAllocatorService.allocatePhysicalMachines(vms,pms,addInstancesDeployment)
 		ipAllocatorService.allocateIPAddresses(image, addInstancesDeployment)
+		
+		//Code to show allocation results on screen
+		println '******RESULTS******'
+		for(VirtualMachineExecution vm: image.virtualMachines){			
+		    println vm.id +'-'+vm.name+' '+vm.executionNode.name;		 
+		}	
+		
 	}
 	
 	def doHeterogeneousDeployment(DeployedCluster cluster,User user,boolean addInstancesDeployment) throws UserRestrictionException, AllocatorException{
@@ -116,6 +123,7 @@ class DeploymentProcessorService {
 				vms.addAll(virtualMachines)
 			}
 		}
+		println "Preparo un total de "+vms.size()
 		/*
 		 * selects the physical machine list and applies user restrictions
 		 */
@@ -133,5 +141,11 @@ class DeploymentProcessorService {
 		physicalMachineAllocatorService.allocatePhysicalMachines(vms,pms,addInstancesDeployment)
 		for(image in cluster.images)
 		ipAllocatorService.allocateIPAddresses(image, addInstancesDeployment)
+		
+		println '******RESULTS******'
+		for(image in cluster.images)
+		for(VirtualMachineExecution vm: image.virtualMachines){
+			println vm.id +'-'+vm.name+' '+vm.executionNode.name;
+		}
 	}
 }

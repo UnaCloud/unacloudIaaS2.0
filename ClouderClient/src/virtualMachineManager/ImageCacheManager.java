@@ -27,10 +27,6 @@ import com.losandes.utils.Constants;
 import com.losandes.utils.RandomUtils;
 import com.losandes.utils.VariableManager;
 
-import communication.UnaCloudAbstractResponse;
-import communication.messages.InvalidOperationResponse;
-import communication.messages.vmo.VirtualMachineSaveImageMessage;
-
 public class ImageCacheManager {
 	
 	

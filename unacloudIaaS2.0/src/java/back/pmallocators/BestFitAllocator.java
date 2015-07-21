@@ -27,7 +27,7 @@ public class BestFitAllocator extends VirtualMachineAllocator {
 	}
 	
 	@Override
-	public void allocateVirtualMachines(List<VirtualMachineExecution> virtualMachineList,List<PhysicalMachine> physicalMachines,final Map<Long, PhysicalMachineAllocationDescription> physicalMachineDescriptions)throws AllocatorException{
+	protected void allocateVirtualMachines(List<VirtualMachineExecution> virtualMachineList,List<PhysicalMachine> physicalMachines,final Map<Long, PhysicalMachineAllocationDescription> physicalMachineDescriptions)throws AllocatorException{
 		Collections.sort(physicalMachines, new PhysicalMachineComparator(physicalMachineDescriptions));
 		Collections.sort(virtualMachineList, new Comparator<VirtualMachineExecution>() {
 			public int compare(VirtualMachineExecution v1, VirtualMachineExecution v2) {
@@ -37,7 +37,7 @@ public class BestFitAllocator extends VirtualMachineAllocator {
 		vmCycle:for(VirtualMachineExecution vme:virtualMachineList){
 			for(PhysicalMachine pm:physicalMachines){
 				PhysicalMachineAllocationDescription pmad = physicalMachineDescriptions.get(pm.getDatabaseId());
-				System.out.println("Evaluating "+pm.getName()+" "+pmad+" "+vme.getHardwareProfile().getCores()+" "+vme.getHardwareProfile().getRam());
+				//System.out.println("Evaluating "+pm.getName()+" "+pmad+" "+vme.getHardwareProfile().getCores()+" "+vme.getHardwareProfile().getRam());
 				if(fitVMonPM(vme, pm, pmad)){
 					vme.setExecutionNode(pm);
 					if(pmad==null){
@@ -45,7 +45,7 @@ public class BestFitAllocator extends VirtualMachineAllocator {
 						physicalMachineDescriptions.put(pmad.getNodeId(),pmad);
 					}
 					pmad.addResources(vme.getHardwareProfile().getCores(),vme.getHardwareProfile().getRam(), 1);
-					System.out.println("");
+					//System.out.println("");
 					Collections.sort(physicalMachines, new PhysicalMachineComparator(physicalMachineDescriptions));
 					continue vmCycle;
 				}else{

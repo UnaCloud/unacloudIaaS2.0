@@ -50,6 +50,7 @@ public class Main {
         }
         if(opcion==1)doUpdate();
         try {
+        	System.out.println("executing Agent");
             Runtime.getRuntime().exec(new String[]{"java","-jar","ClouderClient.jar",opcion+""});
         } catch (Throwable t) {
             System.out.println("EXE: "+t.getMessage());

@@ -83,6 +83,7 @@ class DeploymentService {
 			depCluster.images.add(depImage)
 		}
 		depCluster.save(failOnError: true)
+		println "Imagenes resultantes "+depCluster.images.size()
 		/*
 		 * Makes allocation and user restriction validations for each image
 		 */
@@ -180,18 +181,21 @@ class DeploymentService {
 		 */
 		long stopTimeMillis= new Date().getTime()
 		def stopTime= new Date(stopTimeMillis +time)
-		Deployment dep= new Deployment(cluster: depCluster, startTime: new Date(),stopTime: stopTime,status: DeploymentStateEnum.ACTIVE)
-		dep.save(failOnError: true)
-		if(user.deployments==null)
-			user.deployments=[]
-		user.deployments.add(dep)
-		user.save(failOnError: true)
-		/*
-		 * Finally it sends the deployment message to the agents
-		 */
 		
-		if(!Environment.isDevelopmentMode())
-		runAsync{ deployerService.deploy(dep) }
+		Deployment dep
+		if(!Environment.isDevelopmentMode()){
+			dep = new Deployment(cluster: depCluster, startTime: new Date(),stopTime: stopTime,status: DeploymentStateEnum.ACTIVE)
+		
+			dep.save(failOnError: true)
+			if(user.deployments==null)
+				user.deployments=[]
+			user.deployments.add(dep)
+			user.save(failOnError: true)
+			/*
+			 * Finally it sends the deployment message to the agents
+			 */
+			runAsync{ deployerService.deploy(dep) }
+		}		
 		
 		return dep
 	}

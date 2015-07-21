@@ -9,10 +9,13 @@ import java.util.zip.ZipOutputStream;
 
 import communication.UnaCloudAbstractMessage;
 import communication.messages.ao.*;
+import communication.messages.pmo.PhysicalMachineMonitorMessage
 import javassist.bytecode.stackmap.BasicBlock.Catch;
 import unacloud2.PhysicalMachine;
 import unacloud2.ServerVariable;
 import unacloud2.VirtualMachineImage;
+
+import unacloudEnums.MonitoringStatus;
 
 class AgentService {
 	
@@ -67,6 +70,27 @@ class AgentService {
 		return sendMessage(pm,new ClearVMCacheMessage());
 	}
 	
+	def updateMonitoring(PhysicalMachine pm, String option, boolean energy, boolean cpu){
+		
+		PhysicalMachineMonitorMessage pmm = new PhysicalMachineMonitorMessage();
+		if(option.equals("start")&&pm.monitorStatus==MonitoringStatus.OFF){
+		    pmm.operation = PhysicalMachineMonitorMessage.M_START;
+		}else if(option.equals("stop")&&(pm.monitorStatus==MonitoringStatus.RUNNING||pm.monitorStatus==MonitoringStatus.ERROR)){
+		    pmm.operation = PhysicalMachineMonitorMessage.M_STOP;
+		}else if(option.equals("update")){
+		    pmm.operation = PhysicalMachineMonitorMessage.M_UPDATE;
+			pmm.monitorFrecuencyEnergy = variableManagerService.getIntValue("MONITOR_FREQUENCY_ENERGY")
+			pmm.registerFrecuencyEnergy = variableManagerService.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY")
+			pmm.monitorFrequency = variableManagerService.getIntValue("MONITOR_FREQUENCY_CPU")
+			pmm.registerFrequency = variableManagerService.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU")			
+		}else if(option.equals("enable")&&pm.monitorStatus==MonitoringStatus.DISABLE){
+			pmm.operation = PhysicalMachineMonitorMessage.M_ENABLE;
+		}else return false;		
+	    pmm.energy=energy;
+		pmm.cpu=cpu
+		return sendMessage(pm,pmm);
+	}
+	
 	/**
 	 * Sends a generic message to the agent
 	 * @param pm Physical machine to which message will be sent
@@ -82,9 +106,10 @@ class AgentService {
 			ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
 			oos.writeObject(message);
 			oos.flush();
-			ois.readObject();
+			println ois.readObject();
 			s.close();
 		}catch(Exception e){
+			e.printStackTrace();
 			println "Error conectando a "+ipAddress;	
 			res= false;		
 		}
@@ -104,13 +129,23 @@ class AgentService {
 	
 	def copyAgentOnStream(OutputStream outputStream,File appDir){
 		ZipOutputStream zos=new ZipOutputStream(outputStream);
-		copyFile(zos,"ClientUpdater.jar",new File(appDir,"agentSources/ClientUpdater.jar"),true);
+		//copyFile(zos,"ClientUpdater.jar",new File(appDir,"agentSources/ClientUpdater.jar"),true);
 		copyFile(zos,"ClouderClient.jar",new File(appDir,"agentSources/ClouderClient.jar"),true);
-		copyFile(zos,"local",new File(appDir,"agentSources/local"),true);
+		File local = new File(appDir,"agentSources/local");
+		if(local.exists())copyFile(zos,"local",local,true);
 		zos.putNextEntry(new ZipEntry("vars"));
 		PrintWriter pw=new PrintWriter(zos);
-		for(ServerVariable sv:ServerVariable.all)if(!sv.isServerOnly())pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
+		ServerVariable monitor = ServerVariable.findByName("MONITORING_ENABLE");
+		boolean monitoring = monitor.variable.equals("1")?true:false;
+		for(ServerVariable sv:ServerVariable.all)
+		    if(!sv.isServerOnly()){
+				if(sv.name.startsWith("MONITOR")){
+					if(monitoring)
+						pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
+				}else pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
+		    }
 		pw.flush();
+		pw.close();
 		zos.closeEntry();
 		zos.close();
 	}
@@ -120,18 +155,22 @@ class AgentService {
 	 * @param outputStream file output stream for download
 	 * @param appDir directory where the zip will be stored
 	 */
-	
+	 
 	def copyUpdaterOnStream(OutputStream outputStream,File appDir){
 		ZipOutputStream zos=new ZipOutputStream(outputStream);
 		copyFile(zos,"ClientUpdater.jar",new File(appDir,"agentSources/ClientUpdater.jar"),true);
 		copyFile(zos,"ClientConfigurer.jar",new File(appDir,"agentSources/ClientConfigurer.jar"),true);
 		zos.putNextEntry(new ZipEntry("vars"));
 		PrintWriter pw=new PrintWriter(zos);
-		for(ServerVariable sv:ServerVariable.all){
-			if(!sv.name.equals("AGENT_VERSION")&&!sv.isServerOnly()){
-				pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
-			}
-		}
+		ServerVariable monitor = ServerVariable.findByName("MONITORING_ENABLE");
+		boolean monitoring = monitor.variable.equals("1")?true:false;
+		for(ServerVariable sv:ServerVariable.all)
+		    if(!sv.isServerOnly()){
+				if(sv.name.startsWith("MONITOR")){
+					if(monitoring)
+						pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
+				}else pw.println(sv.serverVariableType.type+"."+sv.name+"="+sv.variable);
+		    }
 		pw.flush();
 		zos.closeEntry();
 		zos.close();

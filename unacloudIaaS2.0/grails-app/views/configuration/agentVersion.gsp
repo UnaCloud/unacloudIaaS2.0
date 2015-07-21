@@ -8,7 +8,8 @@
 </head>
 <body>
 	<div class="hero-unit span9">
-<g:link action="updateAgentVersion" controller="unaCloudServices">
+	<h3>Agent Version</h3>
+		<g:link action="updateAgentVersion" controller="unaCloudServices">
 			<button class="btn">Update Agent Version</button>
 		</g:link>
 	</div>

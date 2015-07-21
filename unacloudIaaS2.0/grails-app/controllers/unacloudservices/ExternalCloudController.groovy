@@ -99,13 +99,13 @@ class ExternalCloudController {
 		}
 		if(account==null){
 			flash.message= "There isn't any configured account for external storage"
-			redirect( uri: "/error",absolute: true )
+			[endpoint:null]
+			//redirect( uri: "/error",absolute: true )
 		}
 		else{
-		User u = User.get(session.user.id)
-		List<S3ObjectSummary> ol= externalCloudCallerService.listUserObjects(u)
-		
-		[content:ol, endpoint:account.provider.endpoint]
+			User u = User.get(session.user.id)
+			List<S3ObjectSummary> ol= externalCloudCallerService.listUserObjects(u)			
+			[content:ol, endpoint:account.provider.endpoint]
 		}	
 	}
 	

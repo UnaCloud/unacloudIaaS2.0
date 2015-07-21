@@ -9,9 +9,9 @@ import java.util.Collections;
 import java.util.List;
 
 import com.losandes.utils.Constants;
+import com.losandes.utils.LocalProcessExecutor;
 
 import utils.AddressUtility;
-import virtualMachineManager.LocalProcessExecutor;
 
 /**
  * Implementation of hypervisor abstract class to give support for VMwarePlayer
@@ -77,6 +77,7 @@ public class VirtualBox extends Hypervisor {
      */
     @Override
 	public void startVirtualMachine(ImageCopy image) throws HypervisorOperationException {
+		setPriority(image);
         String h;
         if((h=LocalProcessExecutor.executeCommandOutput(getExecutablePath(), "startvm", image.getVirtualMachineName(), "--type", "headless")).contains(ERROR_MESSAGE)) {
             throw new HypervisorOperationException(h.length() < 100 ? h : h.substring(0, 100));
@@ -85,6 +86,18 @@ public class VirtualBox extends Hypervisor {
         LocalProcessExecutor.executeCommandOutput("wmic","process","where","name=\"VBoxHeadless.exe\"","CALL","setpriority","64");
         sleep(1000);
     }
+
+	private void setPriority(ImageCopy image) throws HypervisorOperationException {
+		//To correct executions in Vbox 4.3 and forward
+    	try {
+    		LocalProcessExecutor.executeCommandOutput(getExecutablePath(),"showvminfo",image.getVirtualMachineName());
+    		sleep(1000);
+    		LocalProcessExecutor.executeCommandOutput("wmic","process","where","name=\"VBoxSVC.exe\"","CALL","setpriority","64");
+    		sleep(1000);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
     
     /**
      * Changes VM configuration

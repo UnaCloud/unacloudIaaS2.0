@@ -53,7 +53,7 @@ var page={
 				    	window.location="../index.html";
 				    } 
 				    if(response.status=='505'){
-				    	 bootbox.alert("Error: the image that you want to copy is not available in this momento.");
+				    	 bootbox.alert("Error: the image that you want to copy is not available in this moment.");
 				    } 
 				});
 			}

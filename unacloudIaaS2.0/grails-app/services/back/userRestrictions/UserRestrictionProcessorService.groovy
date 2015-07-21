@@ -9,9 +9,12 @@ import org.springframework.aop.ThrowsAdvice;
 
 import unacloud2.DeployedCluster;
 import unacloud2.PhysicalMachine;
-import unacloud2.User
+import unacloud2.User;
+import unacloud2.Laboratory;
 import unacloud2.UserRestriction;
 import unacloud2.VirtualMachineExecution;
+
+import unacloud2.PhysicalMachineStateEnum;
 
 class UserRestrictionProcessorService {
 	
@@ -38,4 +41,30 @@ class UserRestrictionProcessorService {
 			}
 		}
 	}
+	/**
+	 * TODO documentation
+	 * @param user
+	 * @return
+	 */
+	
+	def getAvoidedMachines(User user){
+		UserRestriction rest = user.restrictions.find{it.name.equals(UserRestrictionEnum.ALLOWED_LABS.toString())}
+		if(rest!=null&&rest.value!=null&&!rest.value.isEmpty()){
+			String[] values= rest.value.split(":");
+			return PhysicalMachine.where{state == PhysicalMachineStateEnum.ON && laboratory.name in values}.findAll()
+		}else return PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON)		
+	}
+	/**
+	 * TODO documentation
+	 * @param user
+	 * @return
+	 */
+	def getAvoidedLabs(User user){
+		UserRestriction rest = user.restrictions.find{it.name.equals(UserRestrictionEnum.ALLOWED_LABS.toString())}	
+		if(rest!=null&&rest.value!=null&&!rest.value.isEmpty()){
+			String[] values= rest.value.split(":");
+			return Laboratory.where{name in values}.findAll()
+		}else return Laboratory.findAll();
+	}
+	
 }

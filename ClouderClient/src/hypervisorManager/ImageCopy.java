@@ -79,7 +79,7 @@ public class ImageCopy implements Serializable{
     			hypervisor.startVirtualMachine(this);
     			configurator.configureHostname();
     			configurator.configureIP();
-    			System.out.println("imagen configurada "+new Date());
+    			System.out.println("image config "+new Date());
     	        PersistentExecutionManager.startUpMachine(machineExecution,!configurator.doPostConfigure());
 			}else ServerMessageSender.reportVirtualMachineState(machineExecution.getId(), VirtualMachineExecutionStateEnum.FAILED,"Invalid virtual machine configurator.");
 		} catch (Exception e) {

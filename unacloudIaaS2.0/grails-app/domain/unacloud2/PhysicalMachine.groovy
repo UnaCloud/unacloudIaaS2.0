@@ -2,6 +2,7 @@ package unacloud2
 
 import org.codehaus.groovy.grails.resolve.config.RepositoriesConfigurer;
 
+import unacloudEnums.MonitoringStatus
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 
 class PhysicalMachine {
@@ -64,6 +65,20 @@ class PhysicalMachine {
 	 * Laboratory to which the physical machine belongs
 	 */
 	Laboratory laboratory;
+	/**
+	 * Status of monitoring cpu process in agent
+	 */
+	MonitoringStatus monitorStatus;
+	
+	/**
+	 * Status of monitoring energy process in agent
+	 */
+	MonitoringStatus monitorStatusEnergy;
+	
+	/**
+	 * Free space in data directory: current virtual machine directory
+	 */
+	long dataSpace = 0;
 	
 	//-----------------------------------------------------------------
 	// Methods

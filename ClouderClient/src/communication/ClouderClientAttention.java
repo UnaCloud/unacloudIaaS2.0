@@ -1,12 +1,11 @@
 package communication;
 
 import java.io.IOException;
-
-import com.losandes.utils.VariableManager;
-
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+
+import com.losandes.utils.VariableManager;
 
 import tasks.ExecutorService;
 

@@ -8,6 +8,7 @@ import java.net.Socket;
 
 public class NodeAttender extends Thread{
 	public static final String SEPARATOR=";";
+	@SuppressWarnings("unused")
 	private Tracker track;
 	Socket s;
 	public NodeAttender(Socket s) {

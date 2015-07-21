@@ -65,13 +65,13 @@ public class ClouderServerAttentionThread implements Runnable {
     public void run() {
         try(Socket s=communication;ObjectInputStream ois=new ObjectInputStream(communication.getInputStream());ObjectOutputStream oos=new ObjectOutputStream(communication.getOutputStream())){
         	UnaCloudAbstractMessage clouderServerRequest=(UnaCloudAbstractMessage)ois.readObject();
-            System.out.println(clouderServerRequest);
+            System.out.println("message: "+clouderServerRequest);
             switch (clouderServerRequest.getMainOp()) {
 		        case UnaCloudAbstractMessage.VIRTUAL_MACHINE_OPERATION:
 		            oos.writeObject(attendVirtualMachineOperation(clouderServerRequest,ois,oos));
 		            break;
 		        case UnaCloudAbstractMessage.PHYSICAL_MACHINE_OPERATION:
-		            attendPhysicalMachineOperation(clouderServerRequest);
+		        	oos.writeObject(attendPhysicalMachineOperation(clouderServerRequest));
 		            break;
 		        case UnaCloudAbstractMessage.AGENT_OPERATION:
 		            oos.writeObject(attendAgentOperation(clouderServerRequest));
@@ -182,14 +182,20 @@ public class ClouderServerAttentionThread implements Runnable {
             case PhysicalMachineOperationMessage.PM_MONITOR:
                     PhysicalMachineMonitorMessage monitor=(PhysicalMachineMonitorMessage)message;
                     switch (monitor.getOperation()) {
-	                    case "STOP":
-                            PhysicalMachineMonitor.stop();
+	                    case PhysicalMachineMonitorMessage.M_STOP:
+                            PhysicalMachineMonitor.getInstance().stopService(monitor.isEnergy(), monitor.isCpu());
                             break;
-	                    case "START":
-                            PhysicalMachineMonitor.start(monitor.getMonitorFrequency(),monitor.getRegisterFrequency());
+	                    case PhysicalMachineMonitorMessage.M_START:
+                            PhysicalMachineMonitor.getInstance().startService(monitor.isEnergy(), monitor.isCpu());
+                            break;
+	                    case PhysicalMachineMonitorMessage.M_UPDATE:
+                            PhysicalMachineMonitor.getInstance().updateService(monitor.getMonitorFrequency(), monitor.getMonitorFrecuencyEnergy(),monitor.getRegisterFrequency(), monitor.getRegisterFrecuencyEnergy(),monitor.isEnergy(), monitor.isCpu());
+                            break;
+	                    case PhysicalMachineMonitorMessage.M_ENABLE:
+                            PhysicalMachineMonitor.getInstance().enabledService(monitor.isEnergy(), monitor.isCpu());                           
                             break;
                     }
-                    return "Successful operation";
+                    return PhysicalMachineMonitor.getInstance().getStatusCpu().getTitle()+"-"+PhysicalMachineMonitor.getInstance().getStatusEnergy().getTitle();
                 //TODO do something
             /*case PM_RETRIEVE_FOLDER:
                 clouderClientOperationResult = "MACHINE_RESTORE";

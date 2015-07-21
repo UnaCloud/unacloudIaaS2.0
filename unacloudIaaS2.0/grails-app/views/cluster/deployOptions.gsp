@@ -13,20 +13,16 @@
 			<div id="remaining" class="alert alert-info">
 				<table>
 					<tr>
-						<td rowspan="3"><i class="icon-exclamation-sign"></i>&nbsp;&nbsp;&nbsp;
-						</td>
-						<td><label class="info">Remaining Common Instances: ${limit}</label>
-						</td>
+						<td rowspan="3"><i class="icon-exclamation-sign"></i>&nbsp;&nbsp;&nbsp;</td>
+						<td><label class="info">Remaining Common Instances: <strong>${limit}</strong> <small>(Physical Machines)</small></label></td>
 					</tr>
 					<tr>
-						<td><label> Remaining High Availability Instances: ${limitHA }</label>
-						</td>
+						<td><label> Remaining High Availability Instances: <strong>${limitHA}</strong> <small>(Physical Machines)</small></label></td>
 					</tr>
 					<g:if test="${limit==0 && account!= null}">
 						<tr>
-						<td><label> There are no remaining local physical machines, but you can deploy on ${account.provider.name } </label>
-						</td>
-					</tr> 
+							<td><label> There are no remaining local physical machines, but you can deploy on ${account.provider.name } </label></td>
+						</tr> 
 					</g:if>
 				</table>
 			</div>			
@@ -47,29 +43,30 @@
 				<table border="0" cellpadding="10"">
 					<tr>
 						<td><label>Instances to deploy</label></td>
-						<td><input name="instances" class="input-small" type="text">
-						</td>					
+						<td><input name="instances" class="input-medium" type="text"></td>
+						<td><label style="font-size: 18px"><span> <= </span><strong id="max-${image.id}">${max}</strong></label></td>					
 					</tr>
 					<tr>
 						<td><label>Hardware Profile</label></td>
-						<td><select name="hardwareProfile" class="input-small">
+						<td><select id="option-hw" data-img="max-${image.id}" name="hardwareProfile" class="input-medium">
 								<g:each in="${hardwareProfiles}" status="j" var="hp">
 								<option value="${hp.id}">
 									${hp.name}
 								</option>
 								</g:each>
 							</select>
-						</td>
-						
+						</td>						
 					</tr>
-					<tr>
-						<td><label>High Availability</label></td>
-						<td><input type="checkbox" name="highAvailability${image.id.toString()}"></td>
-					</tr>
+					<g:if test="${limitHA > 0}">
+						<tr>
+							<td><label>High Availability</label></td>
+							<td><input type="checkbox" name="highAvailability${image.id.toString()}"></td>
+						</tr>
+					</g:if>			
 					
 					<tr>
 						<td><label>Hostname</label></td>
-						<td colspan="2"><input type="text" name="hostname" value="${image.name}"></td>
+						<td colspan="2"><input type="text" class="input-medium" name="hostname" value="${image.name}"></td>
 					</tr>
 				</table>
 				<br>
@@ -87,11 +84,16 @@
 					</select>
 				</div>
 			</div>
-			<div class="controls">
-				<g:actionSubmit name="deploy" class="btn" value="Deploy" action="deploy"/>
-			</div>
+			<g:if test="${limit > 0}">
+				<div class="controls">
+					<g:actionSubmit name="deploy" class="btn" value="Deploy" action="deploy"/>
+				</div>
+			</g:if>
 		</g:form>
 		
 	</div>
+	
+<g:javascript src="cluster.js" />
+ <script>$(document).ready(function(){calculateDeploy();});</script>
 </body>
 </html>

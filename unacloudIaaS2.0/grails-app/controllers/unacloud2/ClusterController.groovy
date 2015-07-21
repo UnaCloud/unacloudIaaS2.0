@@ -1,5 +1,7 @@
 package unacloud2
 
+import back.userRestrictions.UserRestrictionEnum;
+import back.userRestrictions.UserRestrictionProcessorService;
 import webutils.ImageRequestOptions;
 import grails.converters.JSON
 
@@ -15,6 +17,10 @@ class ClusterController {
 	
 	ClusterService clusterService
 	
+	/**
+	 * Representation of UserRestriction services
+	 */
+	UserRestrictionProcessorService userRestrictionProcessorService
 	//-----------------------------------------------------------------
 	// Actions
 	//-----------------------------------------------------------------
@@ -75,16 +81,12 @@ class ClusterController {
 		def cluster=Cluster.get(params.id);
 		int limit
 		int limitHA
-		def machines=PhysicalMachine.findAllByState(PhysicalMachineStateEnum.ON)
-		for (machine in machines)
-		{
-			if(machine.highAvailability)
-			limitHA++
-			else
-			limit++
-		}
-		[cluster: cluster,limit: limit, limitHA: limitHA, hardwareProfiles: HardwareProfile.list()]
-		
+		def user = User.get(session.user.id)		
+		def machines = userRestrictionProcessorService.getAvoidedMachines(user)
+		limitHA = machines.findAll{it.highAvailability==true}.size()
+		limit = machines.size() - limitHA;
+		int maxDeploys = clusterService.calculateMaxDeployments(user, HardwareProfile.findByName("small"))
+		[cluster: cluster,limit: limit, limitHA: limitHA, hardwareProfiles: HardwareProfile.list(), max:maxDeploys]		
 	}
 	
 	def externalDeployOptions(){
@@ -131,6 +133,22 @@ class ClusterController {
 			resp = [success:true,'redirect':'index'];
 			//redirect(action:"index")
 		}
+		render resp as JSON;
+	}
+	/**
+	 * TODO Documentation and manage High Avaliability
+	 * @return
+	 */
+	def maxDeploys(){
+		def resp;
+		try{
+			def user = User.get(session.user.id)
+			def hwp = HardwareProfile.get(Long.parseLong(params.hwp))
+			resp = [max:clusterService.calculateMaxDeployments(user, hwp)];
+		}catch(Exception e){
+			e.printStackTrace()
+			resp = [max:-1];
+		}		
 		render resp as JSON;
 	}
 		
