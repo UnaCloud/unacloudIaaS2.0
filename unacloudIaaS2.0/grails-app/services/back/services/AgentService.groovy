@@ -73,9 +73,11 @@ class AgentService {
 	def updateMonitoring(PhysicalMachine pm, String option, boolean energy, boolean cpu){
 		
 		PhysicalMachineMonitorMessage pmm = new PhysicalMachineMonitorMessage();
-		if(option.equals("start")&&pm.monitorStatus==MonitoringStatus.OFF){
+		if(option.equals("start")&&(pm.monitorStatus==MonitoringStatus.OFF||pm.monitorStatusEnergy==MonitoringStatus.OFF)){
 		    pmm.operation = PhysicalMachineMonitorMessage.M_START;
-		}else if(option.equals("stop")&&(pm.monitorStatus==MonitoringStatus.RUNNING||pm.monitorStatus==MonitoringStatus.ERROR)){
+		}else if(option.equals("stop")&&
+			((pm.monitorStatus==MonitoringStatus.RUNNING||pm.monitorStatus==MonitoringStatus.ERROR)||
+				(pm.monitorStatusEnergy==MonitoringStatus.RUNNING||pm.monitorStatusEnergy==MonitoringStatus.ERROR))){
 		    pmm.operation = PhysicalMachineMonitorMessage.M_STOP;
 		}else if(option.equals("update")){
 		    pmm.operation = PhysicalMachineMonitorMessage.M_UPDATE;
@@ -83,7 +85,7 @@ class AgentService {
 			pmm.registerFrecuencyEnergy = variableManagerService.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY")
 			pmm.monitorFrequency = variableManagerService.getIntValue("MONITOR_FREQUENCY_CPU")
 			pmm.registerFrequency = variableManagerService.getIntValue("MONITOR_REGISTER_FREQUENCY_CPU")			
-		}else if(option.equals("enable")&&pm.monitorStatus==MonitoringStatus.DISABLE){
+		}else if(option.equals("enable")&&(pm.monitorStatus==MonitoringStatus.DISABLE||pm.monitorStatusEnergy==MonitoringStatus.DISABLE)){
 			pmm.operation = PhysicalMachineMonitorMessage.M_ENABLE;
 		}else return false;		
 	    pmm.energy=energy;

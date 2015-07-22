@@ -21,13 +21,13 @@ public class PhysicalMachineMonitor {
 	private Controller c;
 
 	private PhysicalMachineMonitor(){
-		c = new Controller();
+		
 	}
 	public void initService() {			
 		System.out.println("Config monitoring service");
 		try {
 			mc = new MonitorCPUAgent();	
-			c.addMonitor(mc);
+			
 			if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_CPU"))mc.toEnable(VariableManager.local.getStringValue("LOG_CPU_PATH"));
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -35,7 +35,7 @@ public class PhysicalMachineMonitor {
 		}
 		try {			
 			me  = new MonitorEnergyAgent();
-			c.addMonitor(me);
+			
 			if(VariableManager.local.getBooleanValue("MONITORING_ENABLE_ENERGY"))me.toEnable(VariableManager.local.getStringValue("LOG_ENERGY_PATH"));			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -60,7 +60,10 @@ public class PhysicalMachineMonitor {
 		    				VariableManager.global.getIntValue("MONITOR_REGISTER_FREQUENCY_ENERGY"), time);
 		    		me.addEnergyPath(VariableManager.local.getStringValue("PATH_POWERLOG"));					
 		    	}else System.out.println("Monitoring energy is disable");
-		    if(!c.isAlive()&&c.isReady()){
+		    if(c==null||!c.isAlive()){
+		    	c = new Controller();
+		    	c.addMonitor(mc);
+		    	c.addMonitor(me);
 		    	c.start();
 			}
 		} catch (Exception e) {
