@@ -49,7 +49,8 @@ public class LoaderDll {
 	    	if(isPpc64())load("libsigar-ppc64-aix-5.so");
 	    	else if(isPpc())load("libsigar-ppc-aix-5.so");			
 		//System.setProperty("java.library.path", System.getProperty("java.io.tmpdir")+";"+System.getProperty("java.library.path"));
-		System.setProperty("java.library.path", VariableManager.local.getStringValue("DATA_PATH")+";"+System.getProperty("java.library.path"));
+		if(!System.getProperty("java.library.path").contains(VariableManager.local.getStringValue("DATA_PATH")))
+			System.setProperty("java.library.path", VariableManager.local.getStringValue("DATA_PATH")+";"+System.getProperty("java.library.path"));
 	}
 	
 	private void load(String file){

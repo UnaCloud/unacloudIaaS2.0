@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import unacloud2.HardwareProfile;
 import unacloud2.PhysicalMachine;
-import unacloud2.PhysicalMachineStateEnum;
 import unacloud2.VirtualMachineExecution;
+import unacloud2.enums.PhysicalMachineStateEnum;
 import back.pmallocators.AllocatorException;
 import back.pmallocators.FirstFitAllocator;
 import back.pmallocators.PhysicalMachineAllocationDescription;

@@ -6,7 +6,10 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 
 import back.pmallocators.AllocatorEnum;
 import back.services.ExternalCloudCallerService
+
 import com.amazonaws.services.ec2.model.RunInstancesResult
+
+import unacloud2.enums.DeploymentStateEnum;
 import webutils.ImageRequestOptions;
 import wsEntities.WebServiceException
 

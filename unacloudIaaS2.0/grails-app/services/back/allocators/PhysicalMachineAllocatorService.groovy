@@ -2,6 +2,7 @@ package back.allocators
 
 import groovy.sql.Sql
 import unacloud2.*
+import unacloud2.enums.PhysicalMachineStateEnum;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import back.pmallocators.AllocatorEnum
 import back.pmallocators.PhysicalMachineAllocationDescription

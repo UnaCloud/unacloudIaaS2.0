@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintWriter;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -116,7 +115,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
 		}	  	
 	}
 	
-	 private void saveInitialReport(MonitorInitialReport initialReport, MongoConnection db) throws UnknownHostException { 
+	 private void saveInitialReport(MonitorInitialReport initialReport, MongoConnection db) throws Exception { 
 		    BasicDBObject doc = (BasicDBObject) db.infrastructureCollection().findOne(new BasicDBObject(ItemCPUMetrics.HOSTNAME.title(),initialReport.getHostname()));
 		    if(doc!=null&&compareInitialReport(initialReport, doc))doc = null; 		  
 		    if(doc == null){
@@ -142,12 +141,12 @@ public class MonitorCPUAgent extends AbstractMonitor {
 				.append(ItemCPUMetrics.NET_IP.title(), initialReport.getNetworkIPAddress())
 				.append(ItemCPUMetrics.NET_INTERFACE.title(), initialReport.getNetworkInterface())
 				.append(ItemCPUMetrics.NET_MASK.title(), initialReport.getNetworkNetmask())
-				.append(ItemCPUMetrics.NET_GATEWAY.title(), initialReport.getNetworkGateway());       
-			    System.out.println(db.infrastructureCollection().insert(doc).getN());
+				.append(ItemCPUMetrics.NET_GATEWAY.title(), initialReport.getNetworkGateway());    
+			    sendObjectData(db.infrastructureCollection(), doc);
 		    }				
 	 }
 	 
-	 private void saveReports(ArrayList<MonitorReport>reports, MongoConnection db){
+	 private void saveReports(ArrayList<MonitorReport>reports, MongoConnection db) throws Exception{
 		 BulkWriteOperation builder = db.cpuCollection().initializeOrderedBulkOperation();
 		 for (MonitorReport statusReport : reports)if(statusReport!=null){
 			String[] pros = statusReport.getProcesses().split(",");
@@ -201,7 +200,7 @@ public class MonitorCPUAgent extends AbstractMonitor {
             .append(ItemCPUReport.PROCESSES.title(),listProcesses);		
 			builder.insert(doc);
         }		
-		System.out.println("Insert: "+builder.execute().getInsertedCount());
+		sendBulkData(builder);
 	 }
 	 
 	 private void cleanFile() throws FileNotFoundException{

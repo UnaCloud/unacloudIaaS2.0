@@ -1,5 +1,6 @@
 package unacloud2
 
+import unacloud2.enums.PhysicalMachineStateEnum;
 import unacloudEnums.MonitoringStatus;
 
 import com.losandes.utils.Ip4Validator;

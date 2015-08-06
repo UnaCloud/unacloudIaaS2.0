@@ -1,5 +1,10 @@
 package monitoring;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.BulkWriteOperation;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoException;
+
 import unacloudEnums.MonitoringStatus;
 
 /** 
@@ -152,5 +157,33 @@ public abstract class AbstractMonitor implements Runnable{
 	
 	public MonitoringStatus getStatus(){
 		return status;
+	}
+	
+	protected void sendObjectData(DBCollection col, BasicDBObject obj) throws Exception{
+		int times = 5;
+		for(int i = 0; i<times; i++){
+			try {
+				System.out.println("Insert object "+col.insert(obj).getN());
+				return;
+			} catch (MongoException e) {
+				e.printStackTrace();
+				Thread.sleep(2000);
+			}
+		}
+		throw new Exception("Problems connecting with mongo");
+	}
+	
+	protected void sendBulkData(BulkWriteOperation objs) throws Exception{
+		int times = 5;
+		for(int i = 0; i<times; i++){
+			try {
+				System.out.println("Insert: "+objs.execute().getInsertedCount());
+				return;
+			} catch (MongoException e) {
+				e.printStackTrace();
+				Thread.sleep(2000);
+			}
+		}
+		throw new Exception("Problems connecting with mongo");
 	}
 }

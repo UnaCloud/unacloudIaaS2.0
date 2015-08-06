@@ -1,6 +1,7 @@
 package back.deploymentBuilder;
 
 import javax.websocket.DeploymentException
+
 import org.springframework.aop.ThrowsAdvice;
 
 import back.allocators.IpAllocatorService;
@@ -11,9 +12,9 @@ import back.userRestrictions.UserRestrictionProcessorService;
 import unacloud2.DeployedCluster;
 import unacloud2.DeployedImage
 import unacloud2.PhysicalMachine;
-import unacloud2.PhysicalMachineStateEnum;
 import unacloud2.User;
 import unacloud2.VirtualMachineExecution;
+import unacloud2.enums.PhysicalMachineStateEnum;
 
 class DeploymentProcessorService {
 	

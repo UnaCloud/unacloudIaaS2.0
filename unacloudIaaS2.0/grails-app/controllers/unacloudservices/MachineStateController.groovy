@@ -5,7 +5,7 @@ import java.util.Date;
 import javassist.bytecode.stackmap.BasicBlock.Catch;
 import unacloud2.IP;
 import unacloud2.OperatingSystem;
-import unacloud2.PhysicalMachineStateEnum;
+import unacloud2.enums.PhysicalMachineStateEnum;
 
 import com.amazonaws.services.ec2.model.MonitoringState;
 import com.losandes.utils.VirtualMachineCPUStates;

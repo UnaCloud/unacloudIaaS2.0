@@ -12,20 +12,20 @@ import org.junit.Before;
 import org.junit.internal.runners.statements.FailOnTimeout;
 
 import unacloud2.ExternalCloudProvider;
-import unacloud2.ExternalCloudTypeEnum;
 import unacloud2.HardwareProfile;
 import unacloud2.Hypervisor;
 import unacloud2.IP
 import unacloud2.IPPool;
 import unacloud2.Laboratory;
-import unacloud2.NetworkQualityEnum;
 import unacloud2.OperatingSystem;
 import unacloud2.PhysicalMachine;
-import unacloud2.PhysicalMachineStateEnum;
 import unacloud2.ServerVariable
-import unacloud2.ServerVariableTypeEnum
 import unacloud2.User
 import unacloud2.Repository
+import unacloud2.enums.ExternalCloudTypeEnum;
+import unacloud2.enums.NetworkQualityEnum;
+import unacloud2.enums.PhysicalMachineStateEnum;
+import unacloud2.enums.ServerVariableTypeEnum;
 
 class BootStrap {
 	DatabaseService databaseService

@@ -3,8 +3,8 @@ package back.services
 import pmStateManager.StateManager;
 import unacloud2.DeploymentService
 import unacloud2.PhysicalMachine;
-import unacloud2.PhysicalMachineStateEnum;
 import unacloud2.VirtualMachineExecution;
+import unacloud2.enums.PhysicalMachineStateEnum;
 import unacloudEnums.MonitoringStatus;
 
 class PhysicalMachineStateManagerService {

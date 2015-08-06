@@ -13,8 +13,7 @@ import unacloud2.User;
 import unacloud2.Laboratory;
 import unacloud2.UserRestriction;
 import unacloud2.VirtualMachineExecution;
-
-import unacloud2.PhysicalMachineStateEnum;
+import unacloud2.enums.PhysicalMachineStateEnum;
 
 class UserRestrictionProcessorService {
 	

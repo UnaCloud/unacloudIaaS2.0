@@ -85,7 +85,7 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 	}
 	
 	
-	private void saveReports(ArrayList<MonitorEnergyReport> reports, MongoConnection db) {
+	private void saveReports(ArrayList<MonitorEnergyReport> reports, MongoConnection db) throws Exception {
 		BulkWriteOperation builder = db.energyCollection().initializeOrderedBulkOperation();		
 		
 		 for (MonitorEnergyReport statusReport : reports)if(statusReport!=null){			
@@ -106,7 +106,7 @@ public class MonitorEnergyAgent extends AbstractMonitor {
 			.append(ItemEnergyReport.PACK_POWER.title(),statusReport.getPackagePowerLimit());
 			builder.insert(doc);
        }				
-		System.out.println("Insert energy: "+builder.execute().getInsertedCount());
+	   sendBulkData(builder);System.out.println("Insert Energy");
 	}
 
 	public String getPowerlogPath() {

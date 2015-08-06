@@ -1,10 +1,12 @@
 package unacloud2
 
 import grails.transaction.Transactional;
+
 import com.losandes.utils.RandomUtils;
 import com.amazonaws.services.ec2.model.RunInstancesResult;
 
 import grails.util.Environment;
+import unacloud2.enums.DeploymentStateEnum;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 import webutils.ImageRequestOptions;
 import back.deployers.DeployerService;

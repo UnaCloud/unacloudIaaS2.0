@@ -1,5 +1,7 @@
 package unacloud2
 
+import unacloud2.enums.ServerVariableTypeEnum;
+
 class ServerVariable {
 	
 	//-----------------------------------------------------------------

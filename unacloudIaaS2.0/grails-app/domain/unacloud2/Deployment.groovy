@@ -2,9 +2,10 @@ package unacloud2
 
 import com.amazonaws.services.ec2.model.DescribeInstancesResult;
 import com.amazonaws.services.ec2.model.Instance;
-import communication.messages.vmo.VirtualMachineStartResponse.VirtualMachineState;
 
+import communication.messages.vmo.VirtualMachineStartResponse.VirtualMachineState;
 import back.services.ExternalCloudCallerService;
+import unacloud2.enums.DeploymentStateEnum;
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 
 class Deployment {

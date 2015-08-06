@@ -1,5 +1,6 @@
 package unacloud2
 
+import unacloud2.enums.PhysicalMachineStateEnum;
 import javassist.bytecode.stackmap.BasicBlock.Catch;
 import back.services.AgentService;
 import grails.converters.JSON

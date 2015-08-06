@@ -1,5 +1,8 @@
 package unacloud2
 
+import unacloud2.enums.DeploymentStateEnum;
+import unacloud2.enums.VirtualMachineImageEnum;
+
 class VirtualMachineImage {
 	
 	//-----------------------------------------------------------------

@@ -2,6 +2,8 @@ package unacloud2
 
 import java.util.ArrayList;
 
+import unacloud2.enums.DeploymentStateEnum;
+
 class Cluster {
 	
 	//-----------------------------------------------------------------

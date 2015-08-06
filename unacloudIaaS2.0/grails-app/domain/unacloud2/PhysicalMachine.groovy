@@ -2,6 +2,7 @@ package unacloud2
 
 import org.codehaus.groovy.grails.resolve.config.RepositoriesConfigurer;
 
+import unacloud2.enums.PhysicalMachineStateEnum;
 import unacloudEnums.MonitoringStatus
 import unacloudEnums.VirtualMachineExecutionStateEnum;
 

@@ -1,5 +1,6 @@
 package unacloud2
 
+import unacloud2.enums.ExternalCloudTypeEnum;
 import grails.transaction.Transactional
 
 @Transactional
