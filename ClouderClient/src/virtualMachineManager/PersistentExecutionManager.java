@@ -132,16 +132,20 @@ public class PersistentExecutionManager {
 			checker = new Thread(){
 			   @Override
 			   public void run() {
-				   while(executionList.values().size()>0){
-					   for(VirtualMachineExecution vm: executionList.values()){
-						   new VirtualMachineStateViewer(vm.getId(), vm.getIp(),"Virtual Machine does not response",false);
-					   }
-					   try {
-						   Thread.sleep(1000*60*2);//TWO MINUTES TO REPORT AGAIN
-					   } catch (InterruptedException e) {
-						   e.printStackTrace();
-					   }
-				   }
+				   try {
+					   while(executionList.values().size()>0){
+						   for(VirtualMachineExecution vm: executionList.values()){
+							   new VirtualMachineStateViewer(vm.getId(), vm.getIp(),"Virtual Machine does not response",false);
+					       }
+						   try {
+							   Thread.sleep(1000*60*2);//TWO MINUTES TO REPORT AGAIN
+						   } catch (InterruptedException e) {
+							   e.printStackTrace();
+						   }
+					   }		
+				   } catch (Exception e) {
+						e.printStackTrace();
+				   }				  
 			   }				
 			};
 			checker.start();
