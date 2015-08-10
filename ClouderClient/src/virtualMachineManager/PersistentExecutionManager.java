@@ -44,6 +44,8 @@ public class PersistentExecutionManager {
     
     private static final Map<Long,VirtualMachineExecution> executionList=new TreeMap<>();
     
+    private static Thread checker;
+    
     /**
      * Timer used to schedule shutdown events
      */
@@ -110,7 +112,9 @@ public class PersistentExecutionManager {
             if(!started)execution.getImage().startVirtualMachine();
             executionList.put(execution.getId(),execution);
             timer.schedule(new Schedule(execution.getId()),new Date(execution.getShutdownTime()+100l));
-            new VirtualMachineStateViewer(execution.getId(),execution.getIp());
+            ServerMessageSender.reportVirtualMachineState(execution.getId(),VirtualMachineExecutionStateEnum.DEPLOYING,"Starting virtual machine");
+            new VirtualMachineStateViewer(execution.getId(),execution.getIp(),"Machine not configured",true);
+            checkingMachines();
         } catch (HypervisorOperationException e) {
         	e.printStackTrace();
         	execution.getImage().stopAndUnregister();
@@ -120,8 +124,31 @@ public class PersistentExecutionManager {
         saveData();
         return "";
     }
-    
     /**
+     * TODO: documentation
+     */
+    private static void checkingMachines() {
+		if(checker==null||!checker.isAlive()){
+			checker = new Thread(){
+			   @Override
+			   public void run() {
+				   while(executionList.values().size()>0){
+					   for(VirtualMachineExecution vm: executionList.values()){
+						   new VirtualMachineStateViewer(vm.getId(), vm.getIp(),"Virtual Machine does not response",false);
+					   }
+					   try {
+						   Thread.sleep(1000*60*2);//TWO MINUTES TO REPORT AGAIN
+					   } catch (InterruptedException e) {
+						   e.printStackTrace();
+					   }
+				   }
+			   }				
+			};
+			checker.start();
+		}		
+	}
+
+	/**
      * Extends the time that the virtual machine must be up
      * @param id The execution id to find the corresponding virtual machine
      * @param executionTime The additional time that must be added to the virtual machine execution
