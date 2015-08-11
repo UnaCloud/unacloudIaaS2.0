@@ -37,6 +37,11 @@ class VirtualMachineExecution {
 	Date stopTime
 	
 	/**
+	 * Date of last report
+	 */
+	Date reportTime
+	
+	/**
 	 * Actual node state (COPYING,CONFIGURING,DEPLOYING,DEPLOYED,FAILED,FINISHED)
 	 */
 	VirtualMachineExecutionStateEnum status
@@ -55,6 +60,7 @@ class VirtualMachineExecution {
 		executionNode nullable: true
 		ip nullable: true
 		stopTime nullable: true 
+		reportTime nullable: true
 	}
 	
 	//-----------------------------------------------------------------

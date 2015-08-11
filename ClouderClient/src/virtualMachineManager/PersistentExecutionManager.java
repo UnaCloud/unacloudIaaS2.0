@@ -113,7 +113,7 @@ public class PersistentExecutionManager {
             executionList.put(execution.getId(),execution);
             timer.schedule(new Schedule(execution.getId()),new Date(execution.getShutdownTime()+100l));
             ServerMessageSender.reportVirtualMachineState(execution.getId(),VirtualMachineExecutionStateEnum.DEPLOYING,"Starting virtual machine");
-            new VirtualMachineStateViewer(execution.getId(),execution.getIp(),"Machine not configured",true);
+            new VirtualMachineStateViewer(execution.getId(),execution.getIp(),"Machine not configured");
             checkingMachines();
         } catch (HypervisorOperationException e) {
         	e.printStackTrace();
@@ -135,10 +135,10 @@ public class PersistentExecutionManager {
 				   try {
 					   while(executionList.values().size()>0){
 						   for(VirtualMachineExecution vm: executionList.values()){
-							   new VirtualMachineStateViewer(vm.getId(), vm.getIp(),"Virtual Machine does not response",false);
+							   new VirtualMachineStateViewer(vm.getId(), vm.getIp(),"Execution does not respond");
 					       }
 						   try {
-							   Thread.sleep(1000*60*2);//TWO MINUTES TO REPORT AGAIN
+							   Thread.sleep(1000*60);//ONE MINUTE TO REPORT AGAIN
 						   } catch (InterruptedException e) {
 							   e.printStackTrace();
 						   }

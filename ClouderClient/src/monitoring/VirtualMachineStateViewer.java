@@ -25,12 +25,12 @@ public class VirtualMachineStateViewer {
      * @param vmPath The path of the virtual machine that must be checked
      * @param hypervisorName The type of hypervisor used to deploy the virtual machine
      */
-    public VirtualMachineStateViewer(long virtualMachineCode,String vmIP, String message, boolean report){
+    public VirtualMachineStateViewer(long virtualMachineCode,String vmIP, String message){
         boolean red=false;
         for(int e=0;e<8&&!red;e++){
             if(!(red=pingVerification(vmIP)))try{Thread.sleep(30000);}catch(Exception ex){}
         }
-        if(red)if(report)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.DEPLOYED,"Machine started");
+        if(red)ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.DEPLOYED,"Machine started");
         else{
             PersistentExecutionManager.removeExecution(virtualMachineCode,false);
             ServerMessageSender.reportVirtualMachineState(virtualMachineCode,VirtualMachineExecutionStateEnum.FAILED,message);

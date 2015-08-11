@@ -39,6 +39,7 @@ class BackPersistenceService {
 		if(vm!=null){
 			vm.putAt("status", state)
 			vm.putAt("message", message)
+			vm.putAt("reportTime", new Date())
 		}
 	}
 
