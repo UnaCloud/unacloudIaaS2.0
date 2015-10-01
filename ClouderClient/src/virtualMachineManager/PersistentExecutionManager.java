@@ -114,7 +114,7 @@ public class PersistentExecutionManager {
             timer.schedule(new Schedule(execution.getId()),new Date(execution.getShutdownTime()+100l));
             ServerMessageSender.reportVirtualMachineState(execution.getId(),VirtualMachineExecutionStateEnum.DEPLOYING,"Starting virtual machine");
             new VirtualMachineStateViewer(execution.getId(),execution.getIp(),"Machine not configured");
-            checkingMachines();
+            //checkingMachines();
         } catch (HypervisorOperationException e) {
         	e.printStackTrace();
         	execution.getImage().stopAndUnregister();

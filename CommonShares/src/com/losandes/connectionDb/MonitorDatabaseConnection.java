@@ -27,12 +27,12 @@ public abstract class MonitorDatabaseConnection {
 	 * Class Constructor
 	 */
     public MonitorDatabaseConnection() {
-    	callVariables();    	
+    	loadConfig();    	
     }
     /**
-     * This method should be implemented in each factor to colaborate  
+     * Load the connection variables
      */
-    public abstract void callVariables();
+    protected abstract void loadConfig();
 
 	/**
      * Connects to monitoring database

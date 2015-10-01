@@ -8,6 +8,7 @@ public class MongoConnection {
 	private static final String ENERGY_COLLECTION = "EnergyMetrics";
 	private static final String INFRASTRUCTURE_COLLECTION = "Infrastructure";
 	private static final String CPU_COLLECTION = "CpuMetrics";
+	private static final String SYNC_COLLECTION = "SyncMetrics";
 	
 	private MongoClient client;
 	private DB db;
@@ -25,6 +26,9 @@ public class MongoConnection {
 	}
 	public DBCollection cpuCollection(){
 		return db.getCollection(CPU_COLLECTION);
+	}
+	public DBCollection syncCollection(){
+		return db.getCollection(SYNC_COLLECTION);
 	}
 	
 	public void close(){
