@@ -1,0 +1,6 @@
+Fri Oct 16 16:25:57 COT 2015 java.io.FileNotFoundException: AgentFileCollector.properties (No such file or directory)
+Fri Oct 16 16:25:58 COT 2015 	at java.io.FileInputStream.open(Native Method)
+Fri Oct 16 16:25:58 COT 2015 	at java.io.FileInputStream.<init>(FileInputStream.java:146)
+Fri Oct 16 16:25:58 COT 2015 	at mongoDB.MongoConnection.<init>(MongoConnection.java:44)
+Fri Oct 16 16:25:58 COT 2015 	at mongoDB.SyncedFileMongoRecorder.<init>(SyncedFileMongoRecorder.java:42)
+Fri Oct 16 16:25:58 COT 2015 	at mongoDB.SyncedFileMongoRecorder.main(SyncedFileMongoRecorder.java:187)
